@@ -46,14 +46,14 @@ function KCartList({
 
             <Row gutter={16}>
                 <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')} cardLoading={cardLoading} color='rgb(83, 29, 171)' title={L('TotalNormFillingRequest')} icon='FileDoneOutlined' number={getTotalNormFillingRequest !== undefined ? getTotalNormFillingRequest.length : 0} />
-                <KCart onClick={() => onOpenModal('getPendingNormFillRequest')} cardLoading={cardLoading} color='rgb(250, 173, 20)' title={L('PendingNormFillRequest')} icon='ClockCircleOutlined' number={getPendingNormFillRequest !== undefined ? getPendingNormFillRequest.length : 0} />
+                <KCart onClick={() => onOpenModal('getPendingNormFillRequest')}  cardLoading={cardLoading} color='rgb(250, 173, 20)' title={L('PendingNormFillRequest')} icon='ClockCircleOutlined' number={getPendingNormFillRequest !== undefined ? getPendingNormFillRequest.length : 0} />
                 <KCart onClick={() => onOpenModal('getAcceptedNormFillRequest')} cardLoading={cardLoading} color='#1DA57A' title={L('AcceptedNormFillRequest')} icon='CheckCircleOutlined' number={getAcceptedNormFillRequest !== undefined ? getAcceptedNormFillRequest.length : 0} />
                 <KCart onClick={() => onOpenModal('getCanceledNormFillRequest')} cardLoading={cardLoading} color='#fa541c' title={L('CanceledNormFillRequest')} icon='StopOutlined' number={getCanceledNormFillRequest !== undefined ? getCanceledNormFillRequest.length : 0} />
             </Row>
 
             <Row gutter={16}>
-                <KCart onClick={() => onOpenModal('getTotalNormUpdateRequest')} cardLoading={cardLoading} color='rgb(83, 29, 171)' title={L('TotalNormUpdateRequest')} icon='FileDoneOutlined' number={getTotalNormUpdateRequest !== undefined ? getTotalNormUpdateRequest.length : 0} />
-                <KCart onClick={() => onOpenModal('getPendingNormUpdateRequest')} cardLoading={cardLoading} color='rgb(250, 173, 20)' title={L('PendingNormUpdateRequest')} icon='ClockCircleOutlined' number={getPendingNormUpdateRequest !== undefined ? getPendingNormUpdateRequest.length : 0} />
+                <KCart onClick={() => onOpenModal('getTotalNormUpdateRequest')}    cardLoading={cardLoading} color='rgb(83, 29, 171)' title={L('TotalNormUpdateRequest')} icon='FileDoneOutlined' number={getTotalNormUpdateRequest !== undefined ? getTotalNormUpdateRequest.length : 0} />
+                <KCart onClick={() => onOpenModal('getPendingNormUpdateRequest')}  cardLoading={cardLoading} color='rgb(250, 173, 20)' title={L('PendingNormUpdateRequest')} icon='ClockCircleOutlined' number={getPendingNormUpdateRequest !== undefined ? getPendingNormUpdateRequest.length : 0} />
                 <KCart onClick={() => onOpenModal('getAcceptedNormUpdateRequest')} cardLoading={cardLoading} color='#1DA57A' title={L('AcceptedNormUpdateRequest')} icon='CheckCircleOutlined' number={getAcceptedNormUpdateRequest !== undefined ? getAcceptedNormUpdateRequest.length : 0} />
                 <KCart onClick={() => onOpenModal('getCanceledNormUpdateRequest')} cardLoading={cardLoading} color='#fa541c' title={L('CanceledNormUpdateRequest')} icon='StopOutlined' number={getCanceledNormUpdateRequest !== undefined ? getCanceledNormUpdateRequest.length : 0} />
             </Row>

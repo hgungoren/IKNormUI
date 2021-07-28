@@ -23,7 +23,7 @@ class KNormService {
         return result.data.result;
     }
 
-    public async setStatusAsync(createKNormInput: CreateKNormInput) { 
+    public async setStatusAsync(createKNormInput: CreateKNormInput) {
         let result = await http.post('api/services/app/KNorm/SetStatus', createKNormInput);
         return result.data.result;
     }

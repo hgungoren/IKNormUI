@@ -93,7 +93,6 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequestsAll());
         } else
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
-
     };
 
     async detailModalOpen(id: number) {
@@ -116,17 +115,17 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         const form = this.formRef.current;
         form!.validateFields()
             .then(async (values: any) => {
-
-                await this.props.kNormDetailStore.create(values).then(() => {
-                    this.props.kNormStore.setStatusAsync({
-                        id: this.state.requestId,
-                        normStatus: NormStatus.Iptal
-                    }).then(() => { this.getNormRequestsAll(); });
-
-                }).catch((err) => {
-                    this.openNotificationWithIcon('error')
-                    return;
-                });
+                await this.props.kNormDetailStore.create(values)
+                    .then(() => {
+                        this.props.kNormStore.setStatusAsync({
+                            id: this.state.requestId,
+                            normStatus: NormStatus.Iptal
+                        })
+                            .then(() => { this.getNormRequestsAll(); });
+                    }).catch((err) => {
+                        this.openNotificationWithIcon('error')
+                        return;
+                    });
 
                 this.openNotificationWithIcon('success')
                 form!.resetFields();
@@ -140,8 +139,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 this.props.kNormStore.setStatusAsync({
                     id: id,
                     normStatus: NormStatus.Onaylandi
-                }).then(() => { this.getNormRequestsAll(); });
-
+                })
+                    .then(() => { this.getNormRequestsAll(); });
             }).catch((err) => {
                 this.openNotificationWithIcon('error')
                 return;
@@ -252,7 +251,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     rowKey={(record) => record.id}
                                     bordered={false}
                                     columns={columnsNorm}
-                                    pagination={{ 
+                                    pagination={{
                                         pageSize: 5,
                                         total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1
                                     }}

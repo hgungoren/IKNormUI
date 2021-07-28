@@ -32,7 +32,7 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
 
 NormRequestListTableModal.propTypes = {
     title: PropTypes.string,
-    table: PropTypes.any,
+    table: PropTypes.string,
     onCancel: PropTypes.func,
     kNormStore: PropTypes.any,
     subeObjId: PropTypes.number,
