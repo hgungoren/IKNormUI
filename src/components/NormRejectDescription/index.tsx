@@ -7,7 +7,7 @@ import { Button, Form, Input, Modal } from 'antd';
 
 
 const { TextArea } = Input;
-function NormRejectDescription({
+function NormRejectDescription({ 
     rejectRequestClick,
     reuestId,
     formRef,
@@ -27,7 +27,7 @@ function NormRejectDescription({
                 width={'50%'}
             >
                 <Form ref={formRef}>
-                    <Form.Item initialValue={reuestId} name='id' rules={rules.reuestId}>
+                    <Form.Item initialValue={reuestId} name='kNormId' rules={rules.reuestId}>
                         <Input style={{ display: 'none' }} />
                     </Form.Item>
                     <Form.Item

@@ -3,8 +3,8 @@ import TalepTuru from "../../kNorm/dto/talepTuru";
 
 
 export interface CreateKNormDetailInput {
-    kNormId:     number,
-    description: string,
-    talepDurumu: TalepDurumu,
-    talepTuru:   TalepTuru
+    kNormId: number,
+    description?: string,
+    talepDurumu?: TalepDurumu,
+    talepTuru?: TalepTuru
 }

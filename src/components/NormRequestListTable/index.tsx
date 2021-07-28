@@ -103,7 +103,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     async normRejectDescriptionModalOpen(id: number) {
         this.setState({ normRejectDescriptionModalVisible: !this.state.normRejectDescriptionModalVisible, requestId: id });
     }
- 
+
     openNotificationWithIcon = type => {
         notification[type]({
             message: L('NormRejectNotificationMessageTitle'),
@@ -113,20 +113,42 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     };
 
     rejectRequestClick = async () => {
-        if (this.state.requestId > 0) { }
-        else { }
-
         const form = this.formRef.current;
         form!.validateFields()
             .then(async (values: any) => {
 
-                await this.props.kNormDetailStore.create(values);
-                this.openNotificationWithIcon('success')
+                await this.props.kNormDetailStore.create(values).then(() => {
+                    this.props.kNormStore.setStatusAsync({
+                        id: this.state.requestId,
+                        normStatus: NormStatus.Iptal
+                    }).then(() => { this.getNormRequestsAll(); });
 
+                }).catch((err) => {
+                    this.openNotificationWithIcon('error')
+                    return;
+                });
+
+                this.openNotificationWithIcon('success')
                 form!.resetFields();
+                this.setState({ normRejectDescriptionModalVisible: false })
             });
     }
 
+    approveRequestClick = async (id: number) => {
+        await this.props.kNormDetailStore.create({ kNormId: id })
+            .then(() => {
+                this.props.kNormStore.setStatusAsync({
+                    id: id,
+                    normStatus: NormStatus.Onaylandi
+                }).then(() => { this.getNormRequestsAll(); });
+
+            }).catch((err) => {
+                this.openNotificationWithIcon('error')
+                return;
+            });
+        this.openNotificationWithIcon('success')
+    }
+ 
     render() {
 
         const { kNorms } = this.props.kNormStore;
@@ -152,8 +174,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     <Tag className={'tag'} color={NormStatus[text] === NormStatus.Onaylandi ? 'rgb(29, 165, 122)' : NormStatus[text] === NormStatus.Iptal ? 'rgb(250, 84, 28)' : 'rgb(250, 173, 20)'} >
                         {text}
                     </Tag>
-                </>)
-
+                </>) 
             },
             { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
@@ -163,25 +184,21 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 dataIndex: 'id',
                 key: 'id',
                 width: 50,
-                render: (text: number) => (
+                render: (text, norm) => (
                     <>
                         <Space size={'small'}>
                             <Tooltip placement="topLeft" title={L('Detail')}>
-                                <Button style={{
-                                    "color": "#fff",
-                                    "background": "#1890ff",
-                                    "borderColor": "#1890ff"
-                                }} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                                <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
                             </Tooltip>
                             {
-                                (this.props.isConfirmOrCancel && (!tableTitle.search('Pending') || !tableTitle.search('Total'))) && (
+                                (this.props.isConfirmOrCancel && (!tableTitle.search('Pending') || !tableTitle.search('Total')) && NormStatus[norm.normStatusValue] === NormStatus.Beklemede) && (
                                     <>
                                         <Tooltip placement="topLeft" title={L('Accept')}>
-                                            <Button onClick={() => this.detailModalOpen(text)} icon={<CheckCircleOutlined />} type="primary"></Button>
+                                            <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
                                         </Tooltip>
 
                                         <Tooltip placement="topLeft" title={L('Reject')}>
-                                            <Button danger onClick={() => this.normRejectDescriptionModalOpen(text)} icon={<StopOutlined />} type="primary"></Button>
+                                            <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary"></Button>
                                         </Tooltip>
                                     </>
                                 )
@@ -261,7 +278,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
                 <NormRejectDescription
                     rejectRequestClick={this.rejectRequestClick}
-                    reuestId={1}
+                    reuestId={this.state.requestId}
                     formRef={this.formRef}
                     title={L('RequestRejectForm')}
                     visible={this.state.normRejectDescriptionModalVisible}

@@ -28,15 +28,17 @@ class KNormStore {
     @action
     async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
         let result = await kNormService.getAll(pagedFilterAndSortedRequest);
+
         this.getTotalNormFillingRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
-        this.getPendingNormFillRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma && NormStatus[x.normStatusValue] === NormStatus.Beklemede);
-        this.getAcceptedNormFillRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma && NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
-        this.getCanceledNormFillRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma && NormStatus[x.normStatusValue] === NormStatus.Iptal);
+        this.getPendingNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
+        this.getAcceptedNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
+        this.getCanceledNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
+
 
         this.getTotalNormUpdateRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir);
-        this.getPendingNormUpdateRequest = result.items.filter(x => TalepTuru[x.turu] === (TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir) && NormStatus[x.normStatusValue] === NormStatus.Beklemede);
-        this.getAcceptedNormUpdateRequest = result.items.filter(x => TalepTuru[x.turu] === (TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir) && NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
-        this.getCanceledNormUpdateRequest = result.items.filter(x => TalepTuru[x.turu] === (TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir) && NormStatus[x.normStatusValue] === NormStatus.Iptal);
+        this.getPendingNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
+        this.getAcceptedNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
+        this.getCanceledNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
     }
 
     @action
@@ -50,12 +52,17 @@ class KNormStore {
         let result = await kNormService.get(entityDto);
         this.editKNorm = result;
     }
- 
+
     @action
     async create(createKNormInput: CreateKNormInput) {
         let result = await kNormService.create(createKNormInput);
         this.kNorms.items.push(result);
-    } 
+    }
+
+    @action
+    async setStatusAsync(createKNormInput: CreateKNormInput) {
+        await kNormService.setStatusAsync(createKNormInput);  
+    }
 }
 
 export default KNormStore;
