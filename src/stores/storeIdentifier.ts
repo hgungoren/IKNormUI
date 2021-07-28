@@ -11,4 +11,5 @@ export default class Stores {
   static KInkaLookUpTableStore  : string = 'kInkaLookUpTableStore';
   static KSubeNormStore         : string = 'kSubeNormStore';
   static KNormStore             : string = 'kNormStore';
+  static KNormDetailStore       : string = 'kNormDetailStore';
 }

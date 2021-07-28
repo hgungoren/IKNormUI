@@ -1,28 +1,34 @@
+import './index.less';
 import * as React from 'react';
 import { Row, Col, Card } from 'antd';
-import './index.less';
-import TinyLineChartExample from './components/TinyLineChartExample';
+import { L } from '../../lib/abpUtility';
+import { inject, observer } from 'mobx-react';
+import KNormStore from '../../stores/kNormStore';
+import Stores from '../../stores/storeIdentifier';
+import ListExample from './components/ListExample';
+import KCartList from '../../components/KCartList';
+import KPersonelStore from '../../stores/kPersonelStore';
+import KSubeNormStore from '../../stores/kSubeNormStore';
 import BarChartExample from './components/BarChartExample';
 import PieChartExample from './components/PieChartExample';
 import LineChartExample from './components/LineChartExample';
-import ListExample from './components/ListExample';
-import KCart from '../../components/KCart';
-import { L } from '../../lib/abpUtility';
-import KPersonelStore from '../../stores/kPersonelStore';
-import Stores from '../../stores/storeIdentifier';
-import { inject, observer } from 'mobx-react';
-import KSubeNormStore from '../../stores/kSubeNormStore'; 
+import KNormDetailStore from '../../stores/kNormDetailStore';
+import TinyLineChartExample from './components/TinyLineChartExample';
 
 
 export interface IDashboardProps {
+  kNormStore: KNormStore;
   kPersonelStore: KPersonelStore;
   kSubeNormStore: KSubeNormStore;
+  kNormDetailStore: KNormDetailStore;
 }
 
-export interface IBolgeState { }
 
+export interface IBolgeState { }
+@inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
+@inject(Stores.KNormDetailStore)
 
 @observer
 export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
@@ -33,8 +39,16 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   async getNormCount() {
     await this.props.kSubeNormStore.getNormCount();
-  }
+  } 
 
+  async getNormRequests() {
+    await this.props.kNormStore.getMaxAll({
+      maxResultCount: 100000,
+      skipCount: 0,
+      keyword: '',
+      id: 0,
+    });
+  }
 
   componentDidMount() {
     setTimeout(() => this.setState({ cardLoading: false }), 1000);
@@ -43,6 +57,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
     this.getEmployeeCount();
     this.getNormCount();
+    this.getNormRequests();
   }
 
   state = {
@@ -56,6 +71,16 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     const { cardLoading, lineChartLoading, barChartLoading, pieChartLoading } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
+    const {
+      getTotalNormFillingRequest,
+      getTotalNormUpdateRequest,
+      getPendingNormFillRequest,
+      getPendingNormUpdateRequest,
+      getAcceptedNormFillRequest,
+      getAcceptedNormUpdateRequest,
+      getCanceledNormFillRequest,
+      getCanceledNormUpdateRequest
+    } = this.props.kNormStore;
 
 
     const visitorStatisticList = [
@@ -66,15 +91,22 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     return (
       <React.Fragment>
-        <Row gutter={16}>
-          <KCart cardLoading={cardLoading} color='#00bcd4' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-          <KCart cardLoading={cardLoading} color='#8884d8' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
-          <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormIncreaseRequest')} icon='ClockCircleOutlined' number={0} />
-          <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormFillRequest')} icon='ClockCircleOutlined' number={0} />
-          <KCart cardLoading={cardLoading} color='#cf1322' title={L('CanceledNormRequest')} icon='CloseOutlined' number={0} />
-          <KCart cardLoading={cardLoading} color='#7cb305' title={L('PendingNormIncrease')} icon='PlusOutlined' number={0} />
-          <KCart cardLoading={cardLoading} color='#69c0ff' title={L('AcceptedNormIncreasing')} icon='QuestionCircleOutlined' number={0} />
-        </Row>
+        <KCartList
+          subeObjId={0}
+          normCount={normCount}
+          cardLoading={cardLoading}
+          kPersonelCount={kPersonelCount}
+          kNormStore={this.props.kNormStore}
+          kNormDetailStore={this.props.kNormDetailStore}
+          getTotalNormUpdateRequest={getTotalNormUpdateRequest}
+          getPendingNormFillRequest={getPendingNormFillRequest}
+          getTotalNormFillingRequest={getTotalNormFillingRequest}
+          getAcceptedNormFillRequest={getAcceptedNormFillRequest}
+          getCanceledNormFillRequest={getCanceledNormFillRequest}
+          getPendingNormUpdateRequest={getPendingNormUpdateRequest}
+          getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
+          getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+        />
 
         <Row>
           <Col span={24}>

@@ -4,6 +4,7 @@ import { L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
+import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
 import { EntityDto } from '../../services/dto/entityDto';
 import KSubeNormStore from '../../stores/kSubeNormStore';
@@ -12,12 +13,13 @@ import CreateNormForm from '../../components/CreateNormForm';
 import CreateNormDetail from '../../components/CreateNormDetail';
 import AppComponentBase from '../../components/AppComponentBase';
 import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
+import TalepTuru from '../../services/kNorm/dto/talepTuru';
+import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
+import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Descriptions } from 'antd';
-import KNormStore from '../../stores/kNormStore';
-import { TalepTuru } from '../../services/kNorm/dto/talepTuru';
-import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
-import { TalepDurumu } from '../../services/kNorm/dto/talepDurumu';
+
+
 
 export interface IKsubeDatayProps {
     kPersonelStore: KPersonelStore;
@@ -25,6 +27,16 @@ export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
     kNormStore: KNormStore;
+
+    location: {
+        hash: "",
+        key: "",
+        pathname: "",
+        search: "",
+        state: {
+            subeAdi: ""
+        }
+    }
 }
 
 export interface IKSubeDatayState {
@@ -37,16 +49,15 @@ export interface IKSubeDatayState {
     filterKNorm: string,
     filterNorm: string,
     skipCount: number,
-    groupEmployee: {},
     filter: string,
-    userId: number,
+    userId: number
+    groupEmployee: {},
     groupNorm: {},
     tip: string,
     id: number,
 }
 
 const Search = Input.Search;
-
 @inject(Stores.KSubeStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
@@ -62,12 +73,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         maxNormResultCount: 5,
         modalVisible: false,
         cardLoading: true,
-        groupEmployee: {},
         maxResultCount: 5,
         skipNormCount: 0,
         filterKNorm: '',
         filterNorm: '',
         groupNorm: {},
+        groupEmployee: {},
         skipCount: 0,
         filter: '',
         userId: 0,
@@ -86,7 +97,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             );
     }
 
-
     async getNormRequests() {
         this.props.kNormStore.getAll({
             id: this.state.id,
@@ -96,7 +106,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
     }
 
-
     async getAllSubeNorm() {
         await this.props.kSubeNormStore.getAllNorms({
             maxResultCount: 10000,
@@ -105,11 +114,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             id: this.state.id
         });
 
-        let groupNorm = this.props.kSubeNormStore.norms.items.reduce((r, a) => {
-            r[a.pozisyon] = [...r[a.pozisyon] || [], a];
-            return r;
+        let groupNorm = this.props.kSubeNormStore.norms.items.reduce((result, currentValue) => {
+            (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || [])
+                .push(
+                    currentValue
+                );
+            return result;
         }, {});
-        this.setState({ groupNorm: groupNorm, cardLoading: false })
+        this.setState({ groupNorm, cardLoading: false })
     }
 
     async getAllEmployees() {
@@ -121,12 +133,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             id: this.state.id
         });
 
-        let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((r, a) => {
-            r[a.gorevi] = [...r[a.gorevi] || [], a];
-            return r;
+        let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((result, currentValue) => {
+            (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
+                .push(
+                    currentValue
+                );
+            return result;
         }, {});
-
-        this.setState({ groupEmployee: groupEmployee, cardLoading: false })
+        this.setState({ groupEmployee, cardLoading: false })
     }
 
     async getAll() {
@@ -155,6 +169,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.getAllEmployees();
         await this.get({ id: this.state.id });
         await this.getNormRequests();
+
+
     }
 
     handleTableChange = (pagination: any) => {
@@ -204,16 +220,18 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     public render() {
+
         const { editKSube } = this.props.kSubeStore;
         const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
         const { norms } = this.props.kSubeNormStore;
         const { kNorms } = this.props.kNormStore;
+        const { location } = this.props;
 
         const columns = [
-            { title: L('Adi'), dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Soyadi'), dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Görevi'), dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Sicil No'), dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div> }
+            { title: 'Adi', dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Soyadi', dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Görevi', dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Sicil No', dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div> }
         ];
 
         const columnsNorm = [
@@ -243,7 +261,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             <Breadcrumb>
                                 <Breadcrumb.Item> {L('Dashboard')} </Breadcrumb.Item>
                                 <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
-                                <Breadcrumb.Item>  Bölge Adı Gelecek  </Breadcrumb.Item>
+                                <Breadcrumb.Item>  {location !== undefined && location.state.subeAdi}  </Breadcrumb.Item>
                                 <Breadcrumb.Item> {editKSube === undefined ? '' : editKSube.adi} </Breadcrumb.Item>
                             </Breadcrumb>
                         }  >
@@ -289,10 +307,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             <Table
                                 rowKey={(record) => record.objId.toString()}
                                 bordered={false}
+
                                 columns={columns}
                                 pagination={{ pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 }}
                                 loading={kPersonels === undefined ? true : false}
                                 dataSource={kPersonels === undefined ? [] : kPersonels.items}
+
+                                // columns={normColumn}
+                                // pagination={{ pageSize: 5, total: (Object.keys(this.state.groupEmployee).map((y, i) => ({ id: i, position: y, employeeCount: [...this.state.groupEmployee[y]].length }))).length, defaultCurrent: 1 }}
+                                // loading={kPersonels === undefined ? true : false}
+                                // dataSource={Object.keys(this.state.groupEmployee).map((y, i) => ({ id: i, position: y, employeeCount: [...this.state.groupEmployee[y]].length }))}
+
                                 onChange={this.handleTableChange}
                             />
                         </Col>
@@ -321,7 +346,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                rowKey={(record) => record.ObjId}
+                                rowKey={(record) => record.objId}
                                 bordered={false}
                                 columns={columnsNorm}
                                 pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}

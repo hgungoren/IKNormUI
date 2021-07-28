@@ -3,7 +3,7 @@ import { L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import rules from './createNormForm.validation';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
-import { TalepTuru } from '../../services/kNorm/dto/talepTuru';
+import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import { PagedResultDto } from '../../services/dto/pagedResultDto';
 import { Input, Modal, Tabs, Form, Select, Button, Timeline, Row, Col } from 'antd';
 import { GetKPersonelOutput } from '../../services/kPersonel/dto/getKPersonelOutput';
@@ -151,7 +151,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       },
     };
 
-    const { visible, onCancel, employees, position, onCreateNorm, subeId,   normCount } = this.props;
+    const { visible, onCancel, employees, position, onCreateNorm, subeId, normCount } = this.props;
 
     const mails = [
       {
@@ -278,7 +278,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                         //   ? ''
                         //   : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
 
-                               normCount <= employees.items.length  &&  value !== 'Ayrilma'? ''  : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
+                        normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
                       }</>)
                     }
                   </Select>

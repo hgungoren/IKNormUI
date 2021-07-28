@@ -2,25 +2,29 @@ import './index.less'
 import *  as React from 'react';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
-import KCart from '../../components/KCart';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
+import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
 import KBolgeStore from '../../stores/kBolgeStore';
+import KCartList from '../../components/KCartList';
 import { SettingOutlined } from '@ant-design/icons';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import { EntityDto } from '../../services/dto/entityDto';
 import KPersonelStore from '../../stores/kPersonelStore';
 import CreateKBolgeNorm from './components/createKBolgeNorm';
+import KNormDetailStore from '../../stores/kNormDetailStore';
 import AppComponentBase from '../../components/AppComponentBase';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
 
 
 export interface IBolgeProps {
+    kNormStore: KNormStore;
     kBolgeStore: KBolgeStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
+    kNormDetailStore: KNormDetailStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
 }
 
@@ -30,10 +34,11 @@ export interface IBolgeState {
     cardLoading: boolean
     skipCount: number;
     subeObjId: number;
+    subeAdi: string;
     userId: number;
     filter: string;
     normId: number;
-    id: number,
+    id: number;
 }
 
 const Search = Input.Search;
@@ -43,6 +48,8 @@ const confirm = Modal.confirm;
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 @inject(Stores.KInkaLookUpTableStore)
+@inject(Stores.KNormStore)
+@inject(Stores.KNormDetailStore)
 
 @observer
 class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
@@ -59,6 +66,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         cardLoading: true,
         maxResultCount: 5,
         modalVisible: false,
+        subeAdi: ''
     };
 
     // Şubeye ait norm listesini getirir
@@ -168,9 +176,9 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             );
     }
 
-    async createOrUpdateModalOpen(tip: string, id: number) {
+    async createOrUpdateModalOpen(tip: string, id: number, subeAdi: string) {
 
-        await this.setState({ subeObjId: id })
+        await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.getPosition(tip);
         await this.getKSubeNorms();
         this.setState({ modalVisible: !this.state.modalVisible });
@@ -180,6 +188,12 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     async getEmployeeCount() {
         await this.props.kPersonelStore.getEmployeeCount();
     }
+
+
+    async setPageState() {
+        this.setState({ id: this.props["match"].params["id"] });
+    }
+
 
     async componentDidMount() {
         this.state.id = this.props["match"].params["id"];
@@ -204,9 +218,21 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
 
+        const {
+            getTotalNormFillingRequest,
+            getTotalNormUpdateRequest,
+            getPendingNormFillRequest,
+            getPendingNormUpdateRequest,
+            getAcceptedNormFillRequest,
+            getAcceptedNormUpdateRequest,
+            getCanceledNormFillRequest,
+            getCanceledNormUpdateRequest
+        } = this.props.kNormStore;
+
+
         const columns = [
-            { title: L('Adi'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Tip'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('Type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('EmployeeCount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('NormCount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div> },
             { title: L('NormOpening'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
@@ -220,7 +246,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                             overlay={
                                 <Menu>
                                     <Menu.Item >
-                                        <Link to={`/ksubedetay/${item.objId}`}> {L('Detail')} </Link>
+                                        <Link to={
+
+                                            {
+                                                pathname: `/ksubedetay/${item.objId}`,
+                                                state: {
+                                                    subeAdi: item.adi
+                                                }
+                                            }
+
+                                        }> {L('Detail')} </Link>
                                     </Menu.Item>
 
                                     <Menu.Item key={"/ksube"} >
@@ -234,7 +269,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                                                 }
                                             }}> {L('Branches')} </Link>
                                     </Menu.Item>
-                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
                                 </Menu>
                             }
                             placement="bottomLeft">
@@ -260,17 +295,24 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         }  >
                     </PageHeader>
                 </Card>
-
-                <Row gutter={16}>
-                    <KCart cardLoading={cardLoading} color='#00bcd4' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-                    <KCart cardLoading={cardLoading} color='#8884d8' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
-                    <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormIncreaseRequest')} icon='ClockCircleOutlined' number={0} />
-                    <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormFillRequest')} icon='ClockCircleOutlined' number={0} />
-                    <KCart cardLoading={cardLoading} color='#7cb305' title={L('PendingNormIncrease')} icon='PlusOutlined' number={0} />
-                    <KCart cardLoading={cardLoading} color='#69c0ff' title={L('AcceptedNormIncreasing')} icon='QuestionCircleOutlined' number={0} />
-                    <KCart cardLoading={cardLoading} color='#cf1322' title={L('CanceledNormRequest')} icon='CloseOutlined' number={0} />
-                </Row>
-
+ 
+                <KCartList
+                    subeObjId={0}
+                    normCount={normCount}
+                    cardLoading={cardLoading}
+                    kPersonelCount={kPersonelCount}
+                    kNormStore={this.props.kNormStore}
+                    kNormDetailStore={this.props.kNormDetailStore}
+                    getTotalNormUpdateRequest={getTotalNormUpdateRequest}
+                    getPendingNormFillRequest={getPendingNormFillRequest}
+                    getTotalNormFillingRequest={getTotalNormFillingRequest}
+                    getAcceptedNormFillRequest={getAcceptedNormFillRequest}
+                    getCanceledNormFillRequest={getCanceledNormFillRequest}
+                    getPendingNormUpdateRequest={getPendingNormUpdateRequest}
+                    getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
+                    getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+                />
+ 
                 <Card hoverable>
                     <Row>
                         <Col xs={{ span: 6, offset: 0 }} sm={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} lg={{ span: 4, offset: 0 }} xl={{ span: 4, offset: 0 }} xxl={{ span: 4, offset: 0 }}  >
@@ -299,6 +341,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                 </Card>
 
                 <CreateKBolgeNorm
+                    // subeAdi={this.state.subeAdi}
                     kSubeNorms={this.props.kSubeNormStore.norms}
                     modalType={'create'}
                     formRef={this.formRef}

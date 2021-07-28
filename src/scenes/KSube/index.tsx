@@ -2,7 +2,6 @@ import './index.less'
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
-import KCart from '../../components/KCart';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
@@ -15,22 +14,28 @@ import CreateKSubeNorm from './components/createKSubeNorm';
 import AppComponentBase from '../../components/AppComponentBase';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
+import KNormStore from '../../stores/kNormStore';
+import KCartList from '../../components/KCartList';
+import KNormDetailStore from '../../stores/kNormDetailStore';
 
 
 export interface INormProps {
     kSubeStore: KSubeStore;
+    kNormStore: KNormStore;
     kSubeNormStore: KSubeNormStore;
     kPersonelStore: KPersonelStore;
+    kNormDetailStore: KNormDetailStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
 }
 
 export interface INormState {
-    id: number,
+    id: number;
     normId: number;
     filter: string;
+    subeAdi: string;
     subeObjId: number;
     skipCount: number;
-    cardLoading: boolean,
+    cardLoading: boolean;
     modalVisible: boolean;
     maxResultCount: number;
     kPersonelCount: number;
@@ -39,8 +44,10 @@ export interface INormState {
 const confirm = Modal.confirm;
 
 @inject(Stores.KSubeStore)
+@inject(Stores.KNormStore)
 @inject(Stores.KSubeNormStore)
 @inject(Stores.KPersonelStore)
+@inject(Stores.KNormDetailStore)
 @inject(Stores.KInkaLookUpTableStore)
 
 @observer
@@ -56,7 +63,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         cardLoading: true,
         maxResultCount: 5,
         modalVisible: false,
-        kPersonelCount: 0
+        kPersonelCount: 0,
+        subeAdi: ''
     };
 
     // Şubeye ait norm listesini getirir
@@ -168,7 +176,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             );
     }
 
-    async createOrUpdateModalOpen(tip: string, id: number) {
+    async createOrUpdateModalOpen(tip: string, id: number, subeAdi: string) {
+        await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.setState({ subeObjId: id })
         await this.getPosition(tip);
         await this.getKSubeNorms();
@@ -202,13 +211,24 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     public render() {
 
         const Search = Input.Search;
-        const { cardLoading } = this.state; 
+        const { cardLoading } = this.state;
         const { kSubes, editKSube, normCount } = this.props.kSubeStore;
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
+        const {
+            getTotalNormFillingRequest,
+            getTotalNormUpdateRequest,
+            getPendingNormFillRequest,
+            getPendingNormUpdateRequest,
+            getAcceptedNormFillRequest,
+            getAcceptedNormUpdateRequest,
+            getCanceledNormFillRequest,
+            getCanceledNormUpdateRequest
+        } = this.props.kNormStore;
+
 
         const columns = [
-            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{ editKSube === undefined ? '' : editKSube.adi }</div> },
+            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> },
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('Tip'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('EmployeeCount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
@@ -224,9 +244,18 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                             overlay={
                                 <Menu>
                                     <Menu.Item >
-                                        <Link to={`/ksubedetay/${item.objId}`}> {L('Detail')} </Link>
+                                        <Link to={
+
+                                            {
+                                                pathname: `/ksubedetay/${item.objId}`,
+                                                state: {
+                                                    subeAdi: editKSube === undefined ? '' : editKSube.adi
+                                                }
+                                            }
+
+                                        }> {L('Detail')} </Link>
                                     </Menu.Item>
-                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
                                 </Menu>
                             }
                             placement="bottomLeft">
@@ -255,34 +284,25 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </PageHeader>
                     </Card>
 
-                    <Row gutter={16}>
-                        <KCart cardLoading={cardLoading} color='#00bcd4' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-                        <KCart cardLoading={cardLoading} color='#8884d8' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
 
-                        <KCart cardLoading={cardLoading} color='#ff9800' title={ 'Toplam Yapılan Norm Güncelleme Talebi'} icon='ClockCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#ff9800' title={'Toplam Yapılan Norm Doldurma Talebi'} icon='ClockCircleOutlined' number={0} />
-
-                        
-                        <KCart cardLoading={cardLoading} color='#7cb305' title={'Bekleyen Norm Doldurma Talebi'} icon='PlusOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#69c0ff' title={'Kabul Edilen Norm Doldurma Talebi'} icon='QuestionCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#cf1322' title={'İptal Edilen Norm Doldurma Talebi'} icon='CloseOutlined' number={0} />
-
-
-                        <KCart cardLoading={cardLoading} color='#7cb305' title={'Bekleyen Norm Güncelleme Talebi'} icon='PlusOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#69c0ff' title={'Kabul Edilen Norm Güncelleme Talebi'} icon='QuestionCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#cf1322' title={'İptal Edilen Norm Güncelleme Talebi'} icon='CloseOutlined' number={0} />
-
-                        {/* <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormIncreaseRequest')} icon='ClockCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#ff9800' title={L('NormFillRequest')} icon='ClockCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#7cb305' title={L('PendingNormIncrease')} icon='PlusOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#69c0ff' title={L('AcceptedNormIncreasing')} icon='QuestionCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#cf1322' title={L('CanceledNormRequest')} icon='CloseOutlined' number={0} />
+                    <KCartList
+                        subeObjId={0}
+                        cardLoading={cardLoading}
+                        normCount={normCount}
+                        kPersonelCount={kPersonelCount}
+                        kNormStore={this.props.kNormStore}
+                        kNormDetailStore={this.props.kNormDetailStore}
+                        getTotalNormUpdateRequest={getTotalNormUpdateRequest}
+                        getPendingNormFillRequest={getPendingNormFillRequest}
+                        getTotalNormFillingRequest={getTotalNormFillingRequest}
+                        getAcceptedNormFillRequest={getAcceptedNormFillRequest}
+                        getCanceledNormFillRequest={getCanceledNormFillRequest}
+                        getPendingNormUpdateRequest={getPendingNormUpdateRequest}
+                        getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
+                        getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+                    />
 
 
-                        <KCart cardLoading={cardLoading} color='#7cb305' title={''} icon='PlusOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#69c0ff' title={''} icon='QuestionCircleOutlined' number={0} />
-                        <KCart cardLoading={cardLoading} color='#cf1322' title={''} icon='CloseOutlined' number={0} /> */}
-                    </Row>
 
                     <Card hoverable>
                         <Row>
@@ -324,6 +344,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </Row>
                     </Card>
                     <CreateKSubeNorm
+                        // subeAdi={this.state.subeAdi}
                         kSubeNorms={this.props.kSubeNormStore.norms}
                         modalType={'create'}
                         formRef={this.formRef}

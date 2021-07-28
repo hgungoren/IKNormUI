@@ -22,22 +22,36 @@ class KBolgeNormTable extends React.Component<ICreateNormTableProps> {
         const norms = this.props.kSubeNorms;
         const { kSubeNormDelete, kSubeNormEdit } = this.props;
 
-        const columns = [ 
-            { title: L('Position'),        dataIndex: 'pozisyon',     key: 'pozisyon',     width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('NormCount'),       dataIndex: 'adet',         key: 'adet',         width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Personel Sayısı'), dataIndex: 'adet',         key: 'adet',         width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('CreationTime'),    dataIndex: 'creationTime', key: 'creationTime', width: 150, render: (text: string) => <div>{text}</div> },
+        const columns = [
+            { title: L('Position'), dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('NormCount'), dataIndex: 'adet', key: 'adet', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('EmployeeCount'), dataIndex: 'adet', key: 'adet', width: 150, render: (text: string) => <div>{text}</div> },
+            {
+                title: L('CreationTime'), dataIndex: 'creationTime', key: 'creationTime', width: 150, render: (text: Date) => <div>{
+                    <div>{
+                        new Date(text).toLocaleDateString("tr-TR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        })
+                    }
+                    </div>
+                }</div>
+            },
             {
                 title: L('Actions'),
                 width: 150,
                 render: (text: string, item: any) => (
                     <div>
+
                         <Tooltip placement="topLeft" title={L('Delete')}>
-                            <Button onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
+                            <Button type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
                         </Tooltip>
 
                         <Tooltip placement="topRight" title={L('Edit')}>
-                            <Button style={{ borderColor: '#faad14', color: '#faad14', marginLeft: 2 }} onClick={() => kSubeNormEdit({ id: item.id })} icon={<EditOutlined />} ></Button>
+                            <Button style={{ backgroundColor: '#faad14', borderColor: '#faad14', color: 'white', marginLeft: 2 }} onClick={() => kSubeNormEdit({ id: item.id })} icon={<EditOutlined />} ></Button>
                         </Tooltip>
                     </div>
                 ),

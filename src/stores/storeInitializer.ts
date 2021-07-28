@@ -10,6 +10,7 @@ import KPersonelStore           from './kPersonelStore';
 import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
 import KSubeNormStore           from './kSubeNormStore';
 import KNormStore               from './kNormStore';
+import KNormDetailStore         from './kNormDetailStore';
 
 export default function initializeStores() {
   return {
@@ -25,5 +26,6 @@ export default function initializeStores() {
     kInkaLookUpTableStore:      new KInkaLookUpTableStore(),
     kSubeNormStore:             new KSubeNormStore(),
     kNormStore:                 new KNormStore(),
+    kNormDetailStore:           new KNormDetailStore(),
   };
 }

@@ -1,4 +1,4 @@
-export enum TalepDurumu {
+enum TalepDurumu {
     BolgeOperasyonOnayiBekleniyor,
     BolgeOperasyonTarafindanReddedildi,
     BolgeOperasyonTarafindanOnaylandi_GMOperasyonOnayiBekleniyor,
@@ -9,3 +9,4 @@ export enum TalepDurumu {
     IKGMYReddetti,
     IKGMYOnayladi_PersonelTalebiOnaylandi
 }
+export default TalepDurumu;

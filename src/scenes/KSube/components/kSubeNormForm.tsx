@@ -22,8 +22,8 @@ export interface IKSubeNorFormProps {
 class KSubeNormForm extends React.Component<IKSubeNorFormProps> {
     render() {
         const formItemLayout = {
-            labelCol: { xs: { span: 6 }, sm: { span: 6 }, md: { span: 6 }, lg: { span: 6 }, xl: { span: 6 }, xxl: { span: 6 }, },
-            wrapperCol: { xs: { span: 18 }, sm: { span: 18 }, md: { span: 18 }, lg: { span: 18 }, xl: { span: 18 }, xxl: { span: 18 }, },
+            labelCol: { xs: { span: 4 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 }, },
+            wrapperCol: { xs: { span: 20 }, sm: { span: 20 }, md: { span: 20 }, lg: { span: 20 }, xl: { span: 20 }, xxl: { span: 20 }, },
         };
         const { Option } = Select;
         const { kSubeNormCreate, kPosizyonKontrol, subeObjId, formRef, positionSelect } = this.props;

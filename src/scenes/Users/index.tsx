@@ -1,3 +1,4 @@
+/*eslint-disable */
 import * as React from 'react'; 
 import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table, Tag } from 'antd';
 import { inject, observer } from 'mobx-react'; 

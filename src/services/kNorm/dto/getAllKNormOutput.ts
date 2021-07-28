@@ -1,21 +1,23 @@
-import { TalepDurumu } from "./talepDurumu";
+import TalepDurumu from "./talepDurumu";
 import TalepNedeni from "./talepNedeni";
-import { TalepTuru } from "./talepTuru";
+import NormStatus from "./normStatus";
 
 export interface GetAllKNormOutput {
-    ObjId: number;
-    TelepNedeni: TalepNedeni;
-    TelepTuru: TalepTuru;
-    TalepDurumu: TalepDurumu;
-    Pozisyon: string;
-    YeniPozisyon: string;
-    PersonelId: number;
-    Aciklama: string;
-    SubeObjId: number;
-    CreationTime: Date;
-
-    Nedeni: string;
-    Turu: string;
-    Durumu: string;
+    objId: number;
+    aciklama: string;
+    creationTime: Date;
+    durumu: string;
+    id: number;
+    nedeni: string;
+    normStatus: NormStatus;
+    normStatusValue: string;
+    personelId: number;
+    pozisyon: string;
+    subeObjId: number;
+    talepDurumu: TalepDurumu;
+    talepNedeni: TalepNedeni;
+    talepTuru: number;
+    turu: string;
+    yeniPozisyon: null
 
 }
