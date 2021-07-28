@@ -76,7 +76,7 @@ KCartList.propTypes = {
     normCount: PropTypes.number,
     subeObjId: PropTypes.number,
     kNormStore: PropTypes.object,
-    kPersonelCount: PropTypes.number,
+    kPersonelCount: PropTypes.number
 };
 
 export default KCartList;

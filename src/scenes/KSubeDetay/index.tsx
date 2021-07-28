@@ -9,18 +9,16 @@ import Stores from '../../stores/storeIdentifier';
 import { EntityDto } from '../../services/dto/entityDto';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import KPersonelStore from '../../stores/kPersonelStore';
+import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import CreateNormForm from '../../components/CreateNormForm';
+import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
+import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import CreateNormDetail from '../../components/CreateNormDetail';
 import AppComponentBase from '../../components/AppComponentBase';
 import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
-import TalepTuru from '../../services/kNorm/dto/talepTuru';
-import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
-import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Descriptions } from 'antd';
-
-
-
+ 
 export interface IKsubeDatayProps {
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
@@ -246,7 +244,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 key: 'aktif',
                 width: 50,
                 render: (text: boolean) => (
-                    <Button onClick={() => this.detailModalOpen("test")} icon={<FileSearchOutlined />} type="primary">{L('Detail')}</Button>
+                    <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                    // <Button onClick={() => this.detailModalOpen("test")} icon={<FileSearchOutlined />} type="primary"> </Button>
                 ),
             }
         ];

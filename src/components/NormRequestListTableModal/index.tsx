@@ -5,9 +5,7 @@ import { Modal } from 'antd';
 import NormRequestListTable from '../NormRequestListTable';
 
 
-function NormRequestListTableModal({
-    title, table, onCancel, kNormStore, subeObjId, visible, kNormDetailStore
-}) {
+function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObjId, visible, kNormDetailStore }) {
 
     return (<>
         <Modal

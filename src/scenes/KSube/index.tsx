@@ -66,6 +66,16 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         kPersonelCount: 0,
         subeAdi: ''
     };
+ 
+    async getNormRequests(id: number) {
+        await this.props.kNormStore.getMaxAll({
+            maxResultCount: 100000,
+            skipCount: 0,
+            keyword: '',
+            id: id,
+        });
+    }
+
 
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
@@ -198,6 +208,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         await this.get({ id: this.state.id });
         await this.getEmployeeCount(this.state.id);
         await this.getNormCount(this.state.id);
+        await this.getNormRequests(this.state.id)
     }
 
     handleTableChange = (pagination: any) => {
@@ -286,9 +297,9 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
 
                     <KCartList
-                        subeObjId={0}
-                        cardLoading={cardLoading}
                         normCount={normCount}
+                        subeObjId={this.state.id}
+                        cardLoading={cardLoading}
                         kPersonelCount={kPersonelCount}
                         kNormStore={this.props.kNormStore}
                         kNormDetailStore={this.props.kNormDetailStore}

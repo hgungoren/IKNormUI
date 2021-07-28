@@ -148,7 +148,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             });
         this.openNotificationWithIcon('success')
     }
- 
+
     render() {
 
         const { kNorms } = this.props.kNormStore;
@@ -174,7 +174,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     <Tag className={'tag'} color={NormStatus[text] === NormStatus.Onaylandi ? 'rgb(29, 165, 122)' : NormStatus[text] === NormStatus.Iptal ? 'rgb(250, 84, 28)' : 'rgb(250, 173, 20)'} >
                         {text}
                     </Tag>
-                </>) 
+                </>)
             },
             { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
@@ -252,7 +252,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     rowKey={(record) => record.id}
                                     bordered={false}
                                     columns={columnsNorm}
-                                    pagination={{
+                                    pagination={{ 
                                         pageSize: 5,
                                         total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1
                                     }}
