@@ -48,13 +48,13 @@ class KSubeNormTable extends React.Component<ICreateNormTableProps> {
                 width: 150,
                 render: (text: string, item: any) => (
                     <div>
-                  <Tooltip placement="topLeft" title={L('Delete')}>
-                            <Button type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
+                        <Tooltip placement="topRight" title={L('Edit')}>
+                            <Button style={{ backgroundColor: '#faad14', borderColor: '#faad14', color: 'white' }} onClick={() => kSubeNormEdit({ id: item.id })} icon={<EditOutlined />} ></Button>
+                        </Tooltip>
+                        <Tooltip placement="topLeft" title={L('Delete')}>
+                            <Button style={{ marginLeft: 3 }} type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
                         </Tooltip>
 
-                        <Tooltip placement="topRight" title={L('Edit')}>
-                            <Button style={{ backgroundColor: '#faad14', borderColor: '#faad14', color: 'white', marginLeft: 2 }} onClick={() => kSubeNormEdit({ id: item.id })} icon={<EditOutlined />} ></Button>
-                        </Tooltip>
                     </div>
                 ),
             },

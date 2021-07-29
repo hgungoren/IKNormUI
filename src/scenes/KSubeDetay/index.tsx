@@ -13,12 +13,12 @@ import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import CreateNormForm from '../../components/CreateNormForm';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
-import CreateNormDetail from '../../components/CreateNormDetail';
+import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import AppComponentBase from '../../components/AppComponentBase';
 import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Descriptions } from 'antd';
- 
+
 export interface IKsubeDatayProps {
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
@@ -47,9 +47,9 @@ export interface IKSubeDatayState {
     filterKNorm: string,
     filterNorm: string,
     skipCount: number,
-    filter: string,
-    userId: number
     groupEmployee: {},
+    filter: string,
+    userId: number,
     groupNorm: {},
     tip: string,
     id: number,
@@ -57,10 +57,10 @@ export interface IKSubeDatayState {
 
 const Search = Input.Search;
 @inject(Stores.KSubeStore)
+@inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 @inject(Stores.KInkaLookUpTableStore)
-@inject(Stores.KNormStore)
 
 @observer
 class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
@@ -71,12 +71,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         maxNormResultCount: 5,
         modalVisible: false,
         cardLoading: true,
+        groupEmployee: {},
         maxResultCount: 5,
         skipNormCount: 0,
         filterKNorm: '',
         filterNorm: '',
         groupNorm: {},
-        groupEmployee: {},
         skipCount: 0,
         filter: '',
         userId: 0,
@@ -156,10 +156,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         this.setState({ tip: this.props.kSubeStore.editKSube.tip })
     }
 
-    async setPageState() {
-        this.setState({ id: this.props["match"].params["id"] });
-    }
-
+    setPageState = async () => this.setState({ id: this.props["match"].params["id"] });
+ 
     async componentDidMount() {
         await this.setPageState();
         await this.getAll();
@@ -167,8 +165,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.getAllEmployees();
         await this.get({ id: this.state.id });
         await this.getNormRequests();
-
-
     }
 
     handleTableChange = (pagination: any) => {
@@ -219,11 +215,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     public render() {
 
-        const { editKSube } = this.props.kSubeStore;
-        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
-        const { norms } = this.props.kSubeNormStore;
-        const { kNorms } = this.props.kNormStore;
         const { location } = this.props;
+        const { kNorms } = this.props.kNormStore;
+        const { editKSube } = this.props.kSubeStore;
+        const { norms } = this.props.kSubeNormStore;
+        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!; 
 
         const columns = [
             { title: 'Adi', dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
@@ -245,7 +241,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 width: 50,
                 render: (text: boolean) => (
                     <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
-                    // <Button onClick={() => this.detailModalOpen("test")} icon={<FileSearchOutlined />} type="primary"> </Button>
                 ),
             }
         ];
@@ -374,8 +369,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     onCreateNorm={this.createNorm}
                 />
 
-                <CreateNormDetail
-                    title="Şube Adi"
+                <NormDetailTimeLine
+                    title={location.state.subeAdi}
                     visible={this.state.detaillModalVisible}
                     onCancel={() => {
                         this.setState({

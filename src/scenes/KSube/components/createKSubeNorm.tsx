@@ -56,7 +56,7 @@ class CreateKSubeNorm extends React.Component<ICreateNormProps> {
               <Button onClick={onCancel} type="primary" danger key="1" >{L('Close')}</Button>
             ]
           }
-          width={1500}
+          width={'90%'}
           visible={visible}
           title={L('Position')}
           onCancel={onCancel}

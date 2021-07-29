@@ -5,7 +5,7 @@ import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
-import CreateNormDetail from '../CreateNormDetail';
+import NormDetailTimeLine from '../NormDetailTimeLine';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import NormRejectDescription from '../NormRejectDescription';
 import NormStatus from '../../services/kNorm/dto/normStatus';
@@ -44,54 +44,52 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     formRef = React.createRef<FormInstance>();
 
     state = {
+        filter: '',
+        requestId: 0,
+        subeObjId: 0,
         skipNormCount: 0,
         maxNormResultCount: 5,
-        filter: '',
-        subeObjId: 0,
         detaillModalVisible: false,
         normRejectDescriptionModalVisible: false,
-        requestId: 0,
     }
 
     getNormRequests = async () => {
         this.props.kNormStore.getAll({
+            maxResultCount: 5,
             id: this.props.subeObjId,
             keyword: this.state.filter,
-            maxResultCount: 5,
             skipCount: this.state.skipNormCount
         })
     }
 
     async getNormRequestsAll() {
         this.props.kNormStore.getMaxAll({
+            skipCount: 0,
             id: this.props.subeObjId,
             keyword: this.state.filter,
             maxResultCount: 1000000000,
-            skipCount: 0
         })
     }
 
     handleNormSearch = (value: string) => {
-        if (this.props.isModal) {
+        if (this.props.isModal)
             this.setState({ filter: value }, async () => await this.getNormRequestsAll());
-        }
         else
             this.setState({ filter: value }, async () => await this.getNormRequests());
     };
 
     async componentDidMount() {
 
-        if (this.props.isModal) {
+        if (this.props.isModal)
             this.getNormRequestsAll();
-        }
         else
             this.getNormRequests()
     }
 
     handleNormTableChange = (pagination: any) => {
-        if (this.props.isModal) {
+        if (this.props.isModal)
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequestsAll());
-        } else
+        else
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
     };
 
@@ -120,8 +118,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         this.props.kNormStore.setStatusAsync({
                             id: this.state.requestId,
                             normStatus: NormStatus.Iptal
-                        })
-                            .then(() => { this.getNormRequestsAll(); });
+                        }).then(() => { this.getNormRequestsAll(); });
                     }).catch((err) => {
                         this.openNotificationWithIcon('error')
                         return;
@@ -139,9 +136,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 this.props.kNormStore.setStatusAsync({
                     id: id,
                     normStatus: NormStatus.Onaylandi
-                })
-                    .then(() => { this.getNormRequestsAll(); });
-            }).catch((err) => {
+                }).then(() => { this.getNormRequestsAll(); });
+            })
+            .catch((err) => {
                 this.openNotificationWithIcon('error')
                 return;
             });
@@ -155,29 +152,25 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         const columnsNorm = [
             {
-                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: Date) => <div>{
-                    new Date(text).toLocaleDateString("tr-TR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    })
-                }
+                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: Date) => <div>
+                    {
+                        new Date(text).toLocaleDateString("tr-TR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        })
+                    }
                 </div>
             },
             {
                 title: "Talep Durumu", dataIndex: 'normStatusValue', key: 'normStatusValue', width: 250, render: (text: NormStatus) =>
-
-                (<>
-                    <Tag className={'tag'} color={NormStatus[text] === NormStatus.Onaylandi ? 'rgb(29, 165, 122)' : NormStatus[text] === NormStatus.Iptal ? 'rgb(250, 84, 28)' : 'rgb(250, 173, 20)'} >
-                        {text}
-                    </Tag>
-                </>)
+                    <Tag className={'tag'} color={NormStatus[text] === NormStatus.Onaylandi ? 'rgb(29, 165, 122)' : NormStatus[text] === NormStatus.Iptal ? 'rgb(250, 84, 28)' : 'rgb(250, 173, 20)'} > {text} </Tag>
             },
             { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+            { title: "Talep Türü", dataIndex: 'turu', key: 'turu',       width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
             {
                 title: "İşlem",
                 dataIndex: 'id',
@@ -233,40 +226,40 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             {
-                                isModal ? (<Table
-                                    rowKey={(record) => record.id}
-                                    bordered={false}
-                                    columns={columnsNorm}
-                                    pagination={{
-                                        pageSize: 5,
-                                        total: this.props.kNormStore[table] === undefined ? 0 : this.props.kNormStore[table].length, defaultCurrent: 1
-                                    }}
-                                    loading={this.props.kNormStore[table] === undefined ? true : false}
-                                    dataSource={
-
-                                        this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table]
-                                    }
-                                    onChange={this.handleNormTableChange}
-                                />) : (<Table
-                                    rowKey={(record) => record.id}
-                                    bordered={false}
-                                    columns={columnsNorm}
-                                    pagination={{
-                                        pageSize: 5,
-                                        total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1
-                                    }}
-                                    loading={kNorms === undefined ? true : false}
-                                    dataSource={
-                                        kNorms === undefined ? [] : kNorms.items
-                                    }
-                                    onChange={this.handleNormTableChange}
-                                />)
+                                isModal ? (
+                                    <Table
+                                        rowKey={(record) => record.id}
+                                        bordered={false}
+                                        columns={columnsNorm}
+                                        pagination={{
+                                            pageSize: 5,
+                                            total: this.props.kNormStore[table] === undefined ? 0 : this.props.kNormStore[table].length, defaultCurrent: 1
+                                        }}
+                                        loading={this.props.kNormStore[table] === undefined ? true : false}
+                                        dataSource={this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table]}
+                                        onChange={this.handleNormTableChange}
+                                    />
+                                ) : (
+                                    <Table
+                                        rowKey={(record) => record.id}
+                                        bordered={false}
+                                        columns={columnsNorm}
+                                        pagination={{
+                                            pageSize: 5,
+                                            total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1
+                                        }}
+                                        loading={kNorms === undefined ? true : false}
+                                        dataSource={
+                                            kNorms === undefined ? [] : kNorms.items
+                                        }
+                                        onChange={this.handleNormTableChange}
+                                    />
+                                )
                             }
-
                         </Col>
                     </Row>
                 </Card>
-                <CreateNormDetail
+                <NormDetailTimeLine
                     title="Ankara Bölge Md."
                     visible={this.state.detaillModalVisible}
                     onCancel={() => {

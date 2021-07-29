@@ -1,20 +1,17 @@
 import './index.less';
-
 import * as React from 'react';
-
-import { Button, Card, Checkbox, Col, Form, Input, Modal, Row } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { inject, observer } from 'mobx-react';
-
-import AccountStore from '../../stores/accountStore';
-import AuthenticationStore from '../../stores/authenticationStore';
-import { FormInstance } from 'antd/lib/form';
+import rules from './index.validation';
 import { L } from '../../lib/abpUtility';
 import { Redirect } from 'react-router-dom';
-import SessionStore from '../../stores/sessionStore';
+import { FormInstance } from 'antd/lib/form';
+import { inject, observer } from 'mobx-react';
 import Stores from '../../stores/storeIdentifier';
+import AccountStore from '../../stores/accountStore';
+import SessionStore from '../../stores/sessionStore';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, Input, Modal, Row } from 'antd';
+import AuthenticationStore from '../../stores/authenticationStore';
 import TenantAvailabilityState from '../../services/account/dto/tenantAvailabilityState';
-import rules from './index.validation';
 
 const FormItem = Form.Item;
 declare var abp: any;
@@ -74,7 +71,7 @@ class Login extends React.Component<ILoginProps> {
     const { loginModel } = this.props.authenticationStore!;
     return (
       <Form className="" onFinish={this.handleSubmit} ref={this.formRef}>
-        <Row style={{ marginTop: 100 }}>
+        {/* <Row style={{ marginTop: 100 }}>
           <Col span={8} offset={8}>
             <Card>
               <Row>
@@ -94,9 +91,9 @@ class Login extends React.Component<ILoginProps> {
               </Row>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row>
+        <Row style={{ marginTop: 150 }}>
           <Modal
             visible={loginModel.showModal}
             onCancel={loginModel.toggleShowModal}
@@ -131,15 +128,16 @@ class Login extends React.Component<ILoginProps> {
               <FormItem name={'password'} rules={rules.password}>
                 <Input placeholder={L('Password')} prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" size="large" />
               </FormItem>
-              <Row style={{ margin: '0px 0px 10px 15px ' }}>
-                <Col span={12} offset={0}>
+              {/* <Row style={{ margin: '0px 0px 10px 15px ' }}> */}
+              <Row >
+                {/* <Col span={12} offset={0}>
                   <Checkbox checked={loginModel.rememberMe} onChange={loginModel.toggleRememberMe} style={{ paddingRight: 8 }} />
                   {L('RememberMe')}
                   <br />
                   <a href="#">{L('ForgotPassword')}</a>
-                </Col>
+                </Col> */}
 
-                <Col span={12}  >
+                <Col span={24}  >
                   <Button style={{ backgroundColor: '#f5222d', color: 'white' }} block htmlType={'submit'} danger>
                     {L('LogIn')}
                   </Button>

@@ -79,6 +79,17 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     }
 
+
+    async getNormRequests() {
+        await this.props.kNormStore.getMaxAll({
+            maxResultCount: 100000,
+            skipCount: 0,
+            keyword: '',
+            id: 0,
+        });
+    }
+
+
     async getNormCount() {
         await this.props.kSubeNormStore.getNormCount();
     }
@@ -200,6 +211,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         await this.getAll();
         await this.getEmployeeCount();
         await this.getNormCount();
+        await this.getNormRequests();
     }
 
     handleTableChange = (pagination: any) => {
@@ -216,19 +228,17 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         const { kBolge } = this.props.kBolgeStore;
         const { normCount } = this.props.kSubeNormStore;
         const { kPersonelCount } = this.props.kPersonelStore;
-        const { positions } = this.props.kInkaLookUpTableStore;
-
+        const { positions } = this.props.kInkaLookUpTableStore; 
         const {
-            getTotalNormFillingRequest,
             getTotalNormUpdateRequest,
             getPendingNormFillRequest,
-            getPendingNormUpdateRequest,
+            getTotalNormFillingRequest,
             getAcceptedNormFillRequest,
-            getAcceptedNormUpdateRequest,
             getCanceledNormFillRequest,
+            getPendingNormUpdateRequest,
+            getAcceptedNormUpdateRequest,
             getCanceledNormUpdateRequest
         } = this.props.kNormStore;
-
 
         const columns = [
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
@@ -239,7 +249,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             {
                 title: L('Actions'),
                 width: 150,
-                render: (text: string, item: any) => (
+                render: (text, bolge: any) => (
                     <div>
                         <Dropdown
                             trigger={['click']}
@@ -247,29 +257,27 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                                 <Menu>
                                     <Menu.Item >
                                         <Link to={
-
                                             {
-                                                pathname: `/ksubedetay/${item.objId}`,
+                                                pathname: `/ksubedetay/${bolge.objId}`,
                                                 state: {
-                                                    subeAdi: item.adi
+                                                    subeAdi: bolge.adi
                                                 }
                                             }
-
                                         }> {L('Detail')} </Link>
                                     </Menu.Item>
 
                                     <Menu.Item key={"/ksube"} >
                                         <Link
                                             to={{
-                                                pathname: `/ksube/${item.objId}`,
+                                                pathname: `/ksube/${bolge.objId}`,
                                                 state: {
-                                                    name: item.adi,
-                                                    tipTur: item.tipTur,
-                                                    tip: item.tip
+                                                    name: bolge.adi,
+                                                    tipTur: bolge.tipTur,
+                                                    tip: bolge.tip
                                                 }
                                             }}> {L('Branches')} </Link>
                                     </Menu.Item>
-                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(bolge.tip, bolge.objId, bolge.adi)} > {L('NormCreate')} </Link> </Menu.Item>
                                 </Menu>
                             }
                             placement="bottomLeft">
@@ -295,7 +303,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         }  >
                     </PageHeader>
                 </Card>
- 
+
                 <KCartList
                     subeObjId={0}
                     normCount={normCount}
@@ -312,10 +320,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
                     getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
                 />
- 
+
                 <Card hoverable>
                     <Row>
-                        <Col xs={{ span: 6, offset: 0 }} sm={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} lg={{ span: 4, offset: 0 }} xl={{ span: 4, offset: 0 }} xxl={{ span: 4, offset: 0 }}  >
+                        <Col
+                            xs={{ span: 6, offset: 0 }}
+                            sm={{ span: 6, offset: 0 }}
+                            md={{ span: 6, offset: 0 }}
+                            lg={{ span: 4, offset: 0 }}
+                            xl={{ span: 4, offset: 0 }}
+                            xxl={{ span: 4, offset: 0 }} >
                             {' '}
                             <h2>{L('Areas')}</h2>
                         </Col>
@@ -326,38 +340,39 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         </Col>
                     </Row>
                     <Row style={{ marginTop: 20 }}>
-                        <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
+                        <Col
+                            xs={{ span: 24, offset: 0 }}
+                            sm={{ span: 24, offset: 0 }}
+                            md={{ span: 24, offset: 0 }}
+                            lg={{ span: 24, offset: 0 }}
+                            xl={{ span: 24, offset: 0 }}
+                            xxl={{ span: 24, offset: 0 }} >
                             <Table
-                                rowKey={(record) => record.objId.toString()}
                                 bordered={false}
                                 columns={columns}
-                                pagination={{ pageSize: this.state.maxResultCount, total: kBolge === undefined ? 0 : kBolge.totalCount, defaultCurrent: 1 }}
+                                onChange={this.handleTableChange}
+                                rowKey={(record) => record.objId.toString()}
                                 loading={kBolge === undefined ? true : false}
                                 dataSource={kBolge === undefined ? [] : kBolge.items}
-                                onChange={this.handleTableChange}
+                                pagination={{ pageSize: this.state.maxResultCount, total: kBolge === undefined ? 0 : kBolge.totalCount, defaultCurrent: 1 }}
                             />
                         </Col>
                     </Row>
                 </Card>
 
                 <CreateKBolgeNorm
-                    // subeAdi={this.state.subeAdi}
-                    kSubeNorms={this.props.kSubeNormStore.norms}
                     modalType={'create'}
                     formRef={this.formRef}
                     positionSelect={positions}
                     subeObjId={this.state.subeObjId}
                     visible={this.state.modalVisible}
+                    kSubeNormEdit={this.kSubeNormEdit}
                     kSubeNormCreate={this.kSubeNormCreate}
                     kSubeNormDelete={this.kSubeNormDelete}
-                    kSubeNormEdit={this.kSubeNormEdit}
                     kPosizyonKontrol={this.kPosizyonKontrol}
                     kSubeNormStore={this.props.kSubeNormStore}
-                    onCancel={() => {
-                        this.setState({
-                            modalVisible: false,
-                        });
-                    }}
+                    kSubeNorms={this.props.kSubeNormStore.norms}
+                    onCancel={() => { this.setState({ modalVisible: false, }) }}
                 />
             </React.Fragment >
         )

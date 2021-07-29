@@ -39,7 +39,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   async getNormCount() {
     await this.props.kSubeNormStore.getNormCount();
-  } 
+  }
 
   async getNormRequests() {
     await this.props.kNormStore.getMaxAll({
@@ -50,14 +50,15 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     setTimeout(() => this.setState({ cardLoading: false }), 1000);
     setTimeout(() => this.setState({ lineChartLoading: false }), 1500);
     setTimeout(() => this.setState({ barChartLoading: false }), 2000);
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
-    this.getEmployeeCount();
-    this.getNormCount();
-    this.getNormRequests();
+
+    await this.getEmployeeCount();
+    await this.getNormCount();
+    await this.getNormRequests();
   }
 
   state = {

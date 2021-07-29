@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Timeline } from 'antd';
 import { CheckOutlined, CloseOutlined, ExclamationOutlined, QuestionOutlined } from '@ant-design/icons';
 
-const NormDetailDetail = ({ visible, onCancel, title }) => {
+const NormDetailTimeLine = ({ visible, onCancel, title }) => {
     return (
         <>
             <Modal
@@ -55,9 +55,9 @@ const NormDetailDetail = ({ visible, onCancel, title }) => {
     );
 };
 
-NormDetailDetail.propTypes = {
+NormDetailTimeLine.propTypes = {
     visible: PropTypes.bool.isRequired,
     title: PropTypes.string
 };
 
-export default NormDetailDetail;
+export default NormDetailTimeLine;
