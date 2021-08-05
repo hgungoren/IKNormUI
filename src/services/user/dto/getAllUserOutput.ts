@@ -9,4 +9,6 @@ export interface GetAllUserOutput {
   creationTime: Date;
   roleNames: string[];
   id: number;
+  title: string;
+  companyCode: string;
 }

@@ -17,7 +17,7 @@ import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import AppComponentBase from '../../components/AppComponentBase';
 import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
-import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Descriptions } from 'antd';
+import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader } from 'antd';
 
 export interface IKsubeDatayProps {
     kPersonelStore: KPersonelStore;
@@ -53,6 +53,7 @@ export interface IKSubeDatayState {
     groupNorm: {},
     tip: string,
     id: number,
+    groupData: any[]
 }
 
 const Search = Input.Search;
@@ -82,6 +83,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         userId: 0,
         tip: '',
         id: 0,
+        groupData: [{
+            id: 0,
+            gorev: '',
+            employeeCount: 0,
+            normCount: 0,
+            norm: 0
+        }]
     };
 
     async getPosition(key: string) {
@@ -113,6 +121,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
 
         let groupNorm = this.props.kSubeNormStore.norms.items.reduce((result, currentValue) => {
+
             (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || [])
                 .push(
                     currentValue
@@ -157,7 +166,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     setPageState = async () => this.setState({ id: this.props["match"].params["id"] });
- 
+
     async componentDidMount() {
         await this.setPageState();
         await this.getAll();
@@ -165,6 +174,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.getAllEmployees();
         await this.get({ id: this.state.id });
         await this.getNormRequests();
+        await this.mergeArray();
     }
 
     handleTableChange = (pagination: any) => {
@@ -213,13 +223,59 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
     }
 
+    mergeArray = async () => {
+        let employees = (Object.keys(this.state.groupEmployee).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: [...this.state.groupEmployee[y]].length,
+            normCount: 0
+        })));
+
+        let norms = (Object.keys(this.state.groupNorm).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: 0,
+            normCount: [...this.state.groupNorm[y]].length
+        })));
+
+        let result = [...employees, ...norms];
+        let names = result.map(x => x.gorev);
+        let set = new Set(names);
+
+        let groupData = [...set].map((x, i) => {
+            let gorev = x;
+            let employee = employees.find(x => x.gorev === gorev)?.employeeCount
+            let norm = norms.find(x => x.gorev === gorev)?.normCount
+
+            return Object.assign({
+                id: i,
+                gorev: x,
+                employeeCount: employee !== undefined ? employee : 0,
+                nomrCount: norm !== undefined ? norm : 0,
+                norm: ((norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0))
+            })
+        })
+
+        this.setState({ groupData: groupData })
+
+        console.log(this.state.groupData)
+    }
+
+
     public render() {
 
         const { location } = this.props;
         const { kNorms } = this.props.kNormStore;
         const { editKSube } = this.props.kSubeStore;
         const { norms } = this.props.kSubeNormStore;
-        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!; 
+        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
+
+        const normEmployeeCoumns = [
+            { title: 'Gorev',      dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Personel',   dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Norm',       dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Norm Açığı', dataIndex: 'norm', key: 'norm', width: 150, render: (text: string) => <div>{text}</div> }
+        ]
 
         const columns = [
             { title: 'Adi', dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
@@ -262,18 +318,18 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </PageHeader>
                 </Card>
                 <Card style={{ marginBottom: 20 }} hoverable>
-                    <Descriptions size="small" column={4}>
-                        {
-                            Object.keys(this.state.groupEmployee).map((key) => <Descriptions.Item key={key} label={key}> {this.state.groupEmployee[key].length} </Descriptions.Item>)
-                        }
-                    </Descriptions>
-                </Card>
-                <Card style={{ marginBottom: 20 }} hoverable>
-                    <Descriptions size="small" column={4}>
-                        {
-                            Object.keys(this.state.groupNorm).map((key) => <Descriptions.Item key={key + 'Norm'} label={key}> {this.state.groupNorm[key].length} </Descriptions.Item>)
-                        }
-                    </Descriptions>
+                    <Row style={{ marginTop: 20 }}>
+                        <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
+                            <Table
+                                rowKey={(record) => record.id}
+                                bordered={false}
+                                columns={normEmployeeCoumns}
+                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
+                                loading={this.state.groupData.length == 1 ? true : false}
+                                dataSource={this.state.groupData === undefined ? [] : this.state.groupData}
+                            />
+                        </Col>
+                    </Row>
                 </Card>
                 <Card hoverable>
                     <Row>
@@ -305,13 +361,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 columns={columns}
                                 pagination={{ pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 }}
                                 loading={kPersonels === undefined ? true : false}
-                                dataSource={kPersonels === undefined ? [] : kPersonels.items}
-
-                                // columns={normColumn}
-                                // pagination={{ pageSize: 5, total: (Object.keys(this.state.groupEmployee).map((y, i) => ({ id: i, position: y, employeeCount: [...this.state.groupEmployee[y]].length }))).length, defaultCurrent: 1 }}
-                                // loading={kPersonels === undefined ? true : false}
-                                // dataSource={Object.keys(this.state.groupEmployee).map((y, i) => ({ id: i, position: y, employeeCount: [...this.state.groupEmployee[y]].length }))}
-
+                                dataSource={kPersonels === undefined ? [] : kPersonels.items} 
                                 onChange={this.handleTableChange}
                             />
                         </Col>
@@ -340,7 +390,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                rowKey={(record) => record.objId}
+                                rowKey={(record) => record.subeObjId}
                                 bordered={false}
                                 columns={columnsNorm}
                                 pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}

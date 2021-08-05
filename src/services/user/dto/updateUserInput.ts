@@ -9,4 +9,6 @@ export interface UpdateUserInput {
   creationTime: Date;
   roleNames: string[];
   id: number;
+  title: string;
+  companyCode: string;
 }

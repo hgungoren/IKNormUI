@@ -71,28 +71,6 @@ class Login extends React.Component<ILoginProps> {
     const { loginModel } = this.props.authenticationStore!;
     return (
       <Form className="" onFinish={this.handleSubmit} ref={this.formRef}>
-        {/* <Row style={{ marginTop: 100 }}>
-          <Col span={8} offset={8}>
-            <Card>
-              <Row>
-                {!!this.props.sessionStore!.currentLogin.tenant ? (
-                  <Col span={24} offset={0} style={{ textAlign: 'center' }}>
-                    <Button type="link" onClick={loginModel.toggleShowModal}>
-                      {L('CurrentTenant')} : {this.props.sessionStore!.currentLogin.tenant.tenancyName}
-                    </Button>
-                  </Col>
-                ) : (
-                  <Col span={24} offset={0} style={{ textAlign: 'center' }}>
-                    <Button type="link" onClick={loginModel.toggleShowModal}>
-                      {L('NotSelected')}
-                    </Button>
-                  </Col>
-                )}
-              </Row>
-            </Card>
-          </Col>
-        </Row> */}
-
         <Row style={{ marginTop: 150 }}>
           <Modal
             visible={loginModel.showModal}
@@ -128,15 +106,7 @@ class Login extends React.Component<ILoginProps> {
               <FormItem name={'password'} rules={rules.password}>
                 <Input placeholder={L('Password')} prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" size="large" />
               </FormItem>
-              {/* <Row style={{ margin: '0px 0px 10px 15px ' }}> */}
               <Row >
-                {/* <Col span={12} offset={0}>
-                  <Checkbox checked={loginModel.rememberMe} onChange={loginModel.toggleRememberMe} style={{ paddingRight: 8 }} />
-                  {L('RememberMe')}
-                  <br />
-                  <a href="#">{L('ForgotPassword')}</a>
-                </Col> */}
-
                 <Col span={24}  >
                   <Button style={{ backgroundColor: '#f5222d', color: 'white' }} block htmlType={'submit'} danger>
                     {L('LogIn')}

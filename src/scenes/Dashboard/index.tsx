@@ -5,15 +5,16 @@ import { L } from '../../lib/abpUtility';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
-import ListExample from './components/ListExample';
+// import ListExample from './components/ListExample';
 import KCartList from '../../components/KCartList';
 import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
-import BarChartExample from './components/BarChartExample';
-import PieChartExample from './components/PieChartExample';
+// import BarChartExample from './components/BarChartExample';
+// import PieChartExample from './components/PieChartExample';
 import LineChartExample from './components/LineChartExample';
 import KNormDetailStore from '../../stores/kNormDetailStore';
-import TinyLineChartExample from './components/TinyLineChartExample';
+// import TinyLineChartExample from './components/TinyLineChartExample';
+import KLineChartModel from '../../models/KLineChart/kLineChart';
 
 
 export interface IDashboardProps {
@@ -59,6 +60,8 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     await this.getEmployeeCount();
     await this.getNormCount();
     await this.getNormRequests();
+    let d = this.addDays(new Date().getDay() + 7)
+    console.log(d)
   }
 
   state = {
@@ -68,8 +71,18 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     pieChartLoading: true,
   };
 
+
+  addDays(days: number): Date {
+    var futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + days);
+    return futureDate;
+  }
+
+
   render() {
-    const { cardLoading, lineChartLoading, barChartLoading, pieChartLoading } = this.state;
+ 
+    // const { cardLoading, lineChartLoading, barChartLoading, pieChartLoading } = this.state;
+    const { cardLoading, lineChartLoading } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
@@ -84,11 +97,23 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     } = this.props.kNormStore;
 
 
-    const visitorStatisticList = [
-      { title: 'TODAY', body: '1.200 user' },
-      { title: 'YESTERDAY', body: '3.872 user' },
-      { title: 'LAST WEEK', body: '26.582 user' },
+    // const visitorStatisticList = [
+    //   { title: 'TODAY', body: '1.200 user' },
+    //   { title: 'YESTERDAY', body: '3.872 user' },
+    //   { title: 'LAST WEEK', body: '26.582 user' },
+    // ];
+
+
+    const data: KLineChartModel[] = [
+      { name: 'Pazartesi', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Salı', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Çarşamba', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Perşembe', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Cuma', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Cumartesi', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: 'Pazar', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
     ];
+
 
     return (
       <React.Fragment>
@@ -109,15 +134,23 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
           getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
         />
 
-        <Row>
-          <Col span={24}>
-            <Card hoverable className={'dashboardBox'} title={L('WeeklyStatistics')} loading={lineChartLoading} bordered={false}>
-              <LineChartExample />
+        <Row gutter={16}>
+
+          <Col span={12}>
+            <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineChartLoading} bordered={false}>
+              <LineChartExample data={data} />
             </Card>
           </Col>
+
+          <Col span={12}>
+            <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineChartLoading} bordered={false}>
+              <LineChartExample data={data} />
+            </Card>
+          </Col>
+
         </Row>
 
-        <Row gutter={16}>
+        {/* <Row gutter={16}>
           <Col
             xs={{ offset: 1, span: 22 }}
             sm={{ offset: 1, span: 22 }}
@@ -157,9 +190,9 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
               <ListExample value={visitorStatisticList} />
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row gutter={16}>
+        {/* <Row gutter={16}>
           <Col span={16}>
             <Card title="Payment Statistics" className={'dashboardBox'} loading={barChartLoading} bordered={false}>
               <BarChartExample />
@@ -170,7 +203,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
               <PieChartExample />
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </React.Fragment>
     );
   }

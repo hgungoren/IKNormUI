@@ -6,4 +6,6 @@ export interface CreateUserInput {
   isActive: boolean;
   roleNames: string[];
   password: string;
+  title: string;
+  companyCode: string;
 }

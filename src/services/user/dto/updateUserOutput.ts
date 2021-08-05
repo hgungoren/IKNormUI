@@ -9,4 +9,6 @@ export interface UpdateUserOutput {
   creationTime: Date;
   roleNames: string[];
   id: number;
+  title: string;
+  companyCode: string;
 }

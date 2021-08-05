@@ -5,9 +5,11 @@ import rules from './createNormForm.validation';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import { PagedResultDto } from '../../services/dto/pagedResultDto';
-import { Input, Modal, Tabs, Form, Select, Button, Timeline, Row, Col } from 'antd';
+import { Input, Modal, Tabs, Form, Select, Button, Timeline, Col, Row } from 'antd';
 import { GetKPersonelOutput } from '../../services/kPersonel/dto/getKPersonelOutput';
 import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
+import './index.less';
+import { MailOutlined } from '@ant-design/icons';
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -66,6 +68,26 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
   }
 
+
+
+  onCancel = () => {
+    this.setState({
+      confirmDirty: false,
+      defaultActiveKey: {
+        "name": "Next",
+        "pane": "PositionSelect"
+      },
+      employeeVisible: true,
+      positionVisible: true,
+      newPositionVisible: true,
+      normRequestReasonVisible: true,
+      descriptionVisible: true,
+      talepTuru: '',
+      buttonVisible: false
+    })
+  }
+
+
   visibleChangeFormItems = (param) => {
 
     const form = this.props.formRef.current;
@@ -78,10 +100,6 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       newPositionVisible: true,
       buttonVisible: false
     });
-
-
-    // let normCount = this.props.normCount;
-    // let employeesCount = this.props.employees.items.length;
 
     if (param === 'Norm_Doldurma') {
 
@@ -202,22 +220,13 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
           ]
         }
-        onCancel={onCancel}
-        width={1000}
+        onCancel={() => { onCancel(); this.onCancel(); }}
+        width={'80%'}
         visible={visible}
         cancelText={L('Cancel')}
         okText={L('OK')}
         title={L('Position')}
         destroyOnClose={true} >
-
-        {/* <Form ref={this.props.formRef}
-          initialValues={{
-            TelepTuru: L('PleaseSelect'),
-            Pozisyon: L('PleaseSelect'),
-            YeniPozisyon: L('PleaseSelect'),
-            TelepNedeni: L('PleaseSelect'),
-            PersonelId: L('PleaseSelect')
-          }}> */}
 
         <Form ref={this.props.formRef}   >
           <Tabs
@@ -302,49 +311,60 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               }
 
             </TabPane>
-            <TabPane tab={L('AuthoritiesToApprove')} key={'AuthoritiesToApprove'} forceRender={true}>
-              <Row>
-                <Col className={'mt-50'}
-                  xs={{ span: 21, offset: 3 }}
-                  sm={{ span: 21, offset: 3 }}
-                  md={{ span: 21, offset: 3 }}
-                  lg={{ span: 21, offset: 3 }}
-                  xl={{ span: 21, offset: 3 }}
-                  xxl={{ span: 21, offset: 3 }}>
-                  <Timeline>
-                    {
-                      mails.map((s) =>
-                        <Timeline.Item key={s.id}>
-                          <Row>
-                            <Col
-                              xs={{ span: 8, offset: 0 }}
-                              sm={{ span: 8, offset: 0 }}
-                              md={{ span: 8, offset: 0 }}
-                              lg={{ span: 8, offset: 0 }}
-                              xl={{ span: 8, offset: 0 }}
-                              xxl={{ span: 8, offset: 0 }}> {s.name} </Col>
+            <TabPane className={'form-tabPane'} tab={L('AuthoritiesToApprove')} key={'AuthoritiesToApprove'} forceRender={true}>
+              <Timeline className={'form-timeline'}>
+                {
 
-                            <Col
-                              xs={{ span: 6, offset: 0 }}
-                              sm={{ span: 6, offset: 0 }}
-                              md={{ span: 6, offset: 0 }}
-                              lg={{ span: 6, offset: 0 }}
-                              xl={{ span: 6, offset: 0 }}
-                              xxl={{ span: 6, offset: 0 }}> {s.firstname} {s.lastname} </Col>
 
-                            <Col
-                              xs={{ span: 8, offset: 0 }}
-                              sm={{ span: 8, offset: 0 }}
-                              md={{ span: 8, offset: 0 }}
-                              lg={{ span: 8, offset: 0 }}
-                              xl={{ span: 8, offset: 0 }}
-                              xxl={{ span: 8, offset: 0 }}> {s.mail} </Col>
-                          </Row>
-                        </Timeline.Item>)
-                    }
-                  </Timeline>
-                </Col>
-              </Row>
+
+                  mails.map((x) => <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
+                    <div className="form-item-div">
+
+                      <p className={'form-tile-line-p'}>
+                        <Row>
+                          <Col xs={{ span: 6, offset: 0 }}
+                            sm={{ span: 6, offset: 0 }}
+                            md={{ span: 6, offset: 0 }}
+                            lg={{ span: 6, offset: 0 }}
+                            xl={{ span: 6, offset: 0 }}
+                            xxl={{ span: 6, offset: 0 }} >
+
+                            {x.name}
+                          </Col>
+                          <Col xs={{ span: 3, offset: 0 }}
+                            sm={{ span: 3, offset: 0 }}
+                            md={{ span: 3, offset: 0 }}
+                            lg={{ span: 3, offset: 0 }}
+                            xl={{ span: 3, offset: 0 }}
+                            xxl={{ span: 3, offset: 0 }} >
+
+                            {x.firstname}
+                          </Col>
+                          <Col xs={{ span: 3, offset: 0 }}
+                            sm={{ span: 3, offset: 0 }}
+                            md={{ span: 3, offset: 0 }}
+                            lg={{ span: 3, offset: 0 }}
+                            xl={{ span: 3, offset: 0 }}
+                            xxl={{ span: 3, offset: 0 }} >
+
+                            {x.lastname}
+                          </Col>
+                          <Col xs={{ span: 6, offset: 0 }}
+                            sm={{ span: 6, offset: 0 }}
+                            md={{ span: 6, offset: 0 }}
+                            lg={{ span: 6, offset: 0 }}
+                            xl={{ span: 6, offset: 0 }}
+                            xxl={{ span: 6, offset: 0 }} >
+
+                            <strong> {x.mail} </strong>
+                          </Col>
+                        </Row>
+                      </p>
+
+                    </div>
+                  </Timeline.Item>)
+                }
+              </Timeline>
               {
                 !this.state.buttonVisible && (<Button onClick={onCreateNorm} className={'right'} type="primary">{L('Send')}</Button>)
               }
@@ -355,5 +375,4 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
     );
   }
 }
-
 export default CreateNormForm;

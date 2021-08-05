@@ -9,6 +9,8 @@ export interface CreateUserOutputItem {
   creationTime: Date;
   roleNames: string[];
   id: number;
+  title: string;
+  companyCode: string;
 }
 
 export interface CreateUserOutput {
