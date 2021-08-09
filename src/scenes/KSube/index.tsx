@@ -66,7 +66,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         kPersonelCount: 0,
         subeAdi: ''
     };
- 
+
     async getNormRequests(id: number) {
         await this.props.kNormStore.getMaxAll({
             maxResultCount: 100000,
@@ -221,6 +221,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     public render() {
 
+
         const Search = Input.Search;
         const { cardLoading } = this.state;
         const { kSubes, editKSube, normCount } = this.props.kSubeStore;
@@ -236,8 +237,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             getCanceledNormFillRequest,
             getCanceledNormUpdateRequest
         } = this.props.kNormStore;
-
-
+ 
         const columns = [
             { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> },
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },

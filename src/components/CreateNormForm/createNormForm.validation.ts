@@ -8,6 +8,7 @@ const rules = {
     description: [{ required: true, message: L('ThisFieldIsRequired') }],
     requestReason: [{ required: true, message: L('ThisFieldIsRequired') }],
     subeObjId: [{ required: true, message: L('ThisFieldIsRequired') }],
+    tip: [{ required: true, message: L('ThisFieldIsRequired') }],
 };
 
 export default rules;

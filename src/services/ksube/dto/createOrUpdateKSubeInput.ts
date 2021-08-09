@@ -8,5 +8,6 @@ export interface CreateOrUpdateKSubeInput {
     tur: string,
     personelSayisi: number,
     normSayisi: number,
-    normEksigi:number
+    normEksigi: number,
+    bagliOlduguSube_ObjId: string
 }

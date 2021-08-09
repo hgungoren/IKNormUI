@@ -1,3 +1,4 @@
+import { CreateMail } from "./createMail";
 import NormStatus from "./normStatus";
 import TalepDurumu from "./talepDurumu";
 import TalepNedeni from "./talepNedeni";
@@ -15,4 +16,7 @@ export interface CreateKNormInput {
     creationTime?: Date;
     talepDurumu?: TalepDurumu;
     normStatus?: NormStatus;
+    tip?: string;
+    mails?: CreateMail[]
 }
+

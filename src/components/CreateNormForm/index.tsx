@@ -1,3 +1,4 @@
+/*eslint-disable */
 import * as React from 'react';
 import { L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
@@ -10,21 +11,25 @@ import { GetKPersonelOutput } from '../../services/kPersonel/dto/getKPersonelOut
 import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
 import './index.less';
 import { MailOutlined } from '@ant-design/icons';
+import { GetAllHierarchyOutput } from '../../services/kHierarchy/dto/getAllHierarchyOutput';
+import QueueAnim from 'rc-queue-anim';
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 const { Option } = Select;
 
 export interface ICreateNormFormProps {
+  tip: string;
+  subeId: number;
   visible: boolean;
+  normCount: number;
   modalType: string;
-  formRef: React.RefObject<FormInstance>;
   onCancel: () => void;
   onCreateNorm: () => void;
+  formRef: React.RefObject<FormInstance>;
   employees: PagedResultDto<GetKPersonelOutput>;
+  hierarchy: GetAllHierarchyOutput[];
   position: PagedResultDto<GetKInkaLookUpTableOutput>;
-  normCount: number;
-  subeId: number;
 }
 
 class CreateNormForm extends React.Component<ICreateNormFormProps> {
@@ -33,7 +38,8 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
     confirmDirty: false,
     defaultActiveKey: {
       "name": "Next",
-      "pane": "PositionSelect"
+      "pane": "PositionSelect",
+      "visible": false
     },
     employeeVisible: true,
     positionVisible: true,
@@ -52,7 +58,8 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       this.setState({
         defaultActiveKey: {
           "name": this.state.defaultActiveKey.name === "Back" ? "Next" : "Back",
-          "pane": this.state.defaultActiveKey.pane === "AuthoritiesToApprove" ? "PositionSelect" : "AuthoritiesToApprove"
+          "pane": this.state.defaultActiveKey.pane === "AuthoritiesToApprove" ? "PositionSelect" : "AuthoritiesToApprove",
+          "visible": this.state.defaultActiveKey.name === "Next" ? true : false
         }
       })
     })
@@ -71,11 +78,14 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
 
   onCancel = () => {
+
+    const form = this.props.formRef.current;
     this.setState({
       confirmDirty: false,
       defaultActiveKey: {
         "name": "Next",
-        "pane": "PositionSelect"
+        "pane": "PositionSelect",
+        "visible": false
       },
       employeeVisible: true,
       positionVisible: true,
@@ -85,6 +95,9 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       talepTuru: '',
       buttonVisible: false
     })
+
+
+    form?.resetFields();
   }
 
 
@@ -102,17 +115,6 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
     });
 
     if (param === 'Norm_Doldurma') {
-
-      //   message,  if (normCount < employeesCount) {
-      //   message.error({
-      //     content: L('InsufficientNormCount'),
-      //     style: {
-      //       marginTop: '12vh',
-      //     },
-      //   })
-      //   this.setState({ buttonVisible: true })
-      //   return;
-      // }
 
       this.setState({
         positionVisible: false,          // Açık
@@ -169,45 +171,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       },
     };
 
-    const { visible, onCancel, employees, position, onCreateNorm, subeId, normCount } = this.props;
-
-    const mails = [
-      {
-        "id": 1,
-        "firstname": "İsim",
-        "lastname": "Soyisim",
-        "name": "Bölge IK Müdürü",
-        "mail": "info@suratkargo.com.tr"
-      },
-      {
-        "id": 2,
-        "firstname": "İsim",
-        "lastname": "Soyisim",
-        "name": "Bölge IK Müdür Yardımcısı",
-        "mail": "info@suratkargo.com.tr"
-      },
-      {
-        "id": 3,
-        "firstname": "İsim",
-        "lastname": "Soyisim",
-        "name": "Bölge OP Müdürü",
-        "mail": "info@suratkargo.com.tr"
-      },
-      {
-        "id": 4,
-        "firstname": "İsim",
-        "lastname": "Soyisim",
-        "name": "Bölge OP Müdür Yardımcısı",
-        "mail": "info@suratkargo.com.tr"
-      },
-      {
-        "id": 5,
-        "firstname": "İsim",
-        "lastname": "Soyisim",
-        "name": "Genel Müdürlük",
-        "mail": "info@suratkargo.com.tr"
-      }
-    ]
+    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId, normCount, hierarchy } = this.props;
 
     return (
       <Modal
@@ -221,7 +185,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
           ]
         }
         onCancel={() => { onCancel(); this.onCancel(); }}
-        width={'80%'}
+        width={'90%'}
         visible={visible}
         cancelText={L('Cancel')}
         okText={L('OK')}
@@ -240,6 +204,9 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
+              <Form.Item initialValue={tip} name='tip' rules={rules.tip}>
+                <Input style={{ display: 'none' }} />
+              </Form.Item>
 
               <Form.Item label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
                 <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
@@ -312,59 +279,37 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
             </TabPane>
             <TabPane className={'form-tabPane'} tab={L('AuthoritiesToApprove')} key={'AuthoritiesToApprove'} forceRender={true}>
-              <Timeline className={'form-timeline'}>
-                {
+
+
+              {
+                (hierarchy !== undefined && this.state.defaultActiveKey.visible) && <Timeline className={'form-timeline'}>
 
 
 
-                  mails.map((x) => <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
-                    <div className="form-item-div">
+                  <QueueAnim delay={100} className="queue-simple">
+                    {
+                      hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}> 
+                                   {
+                                     console.log(x)
+                                   }
+                        <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
+                          <div className="form-item-div">
+                            <p className={'form-tile-line-p'}>
+                              <Row>
+                                <Col xs={{ span: 6, offset: 0 }} sm={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} lg={{ span: 6, offset: 0 }} xl={{ span: 6, offset: 0 }} xxl={{ span: 6, offset: 0 }} >            {x.title}            </Col>
+                                <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.firstName}        </Col>
+                                <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.lastName}         </Col>
+                                <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {x.mail} </strong>   </Col>
+                              </Row>
+                            </p>
+                          </div>
+                        </Timeline.Item></div>
+                      )
+                    }
+                  </QueueAnim>
+                </Timeline>
+              }
 
-                      <p className={'form-tile-line-p'}>
-                        <Row>
-                          <Col xs={{ span: 6, offset: 0 }}
-                            sm={{ span: 6, offset: 0 }}
-                            md={{ span: 6, offset: 0 }}
-                            lg={{ span: 6, offset: 0 }}
-                            xl={{ span: 6, offset: 0 }}
-                            xxl={{ span: 6, offset: 0 }} >
-
-                            {x.name}
-                          </Col>
-                          <Col xs={{ span: 3, offset: 0 }}
-                            sm={{ span: 3, offset: 0 }}
-                            md={{ span: 3, offset: 0 }}
-                            lg={{ span: 3, offset: 0 }}
-                            xl={{ span: 3, offset: 0 }}
-                            xxl={{ span: 3, offset: 0 }} >
-
-                            {x.firstname}
-                          </Col>
-                          <Col xs={{ span: 3, offset: 0 }}
-                            sm={{ span: 3, offset: 0 }}
-                            md={{ span: 3, offset: 0 }}
-                            lg={{ span: 3, offset: 0 }}
-                            xl={{ span: 3, offset: 0 }}
-                            xxl={{ span: 3, offset: 0 }} >
-
-                            {x.lastname}
-                          </Col>
-                          <Col xs={{ span: 6, offset: 0 }}
-                            sm={{ span: 6, offset: 0 }}
-                            md={{ span: 6, offset: 0 }}
-                            lg={{ span: 6, offset: 0 }}
-                            xl={{ span: 6, offset: 0 }}
-                            xxl={{ span: 6, offset: 0 }} >
-
-                            <strong> {x.mail} </strong>
-                          </Col>
-                        </Row>
-                      </p>
-
-                    </div>
-                  </Timeline.Item>)
-                }
-              </Timeline>
               {
                 !this.state.buttonVisible && (<Button onClick={onCreateNorm} className={'right'} type="primary">{L('Send')}</Button>)
               }

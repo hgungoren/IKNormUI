@@ -90,7 +90,7 @@ export const appRouters: any = [
     title: 'Tenants',
     name: 'tenant',
     icon: AppstoreOutlined,
-    showInMenu: true,
+    showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/Tenants')),
   },
   {
@@ -99,7 +99,7 @@ export const appRouters: any = [
     title: 'About',
     name: 'about',
     icon: InfoCircleOutlined,
-    showInMenu: true,
+    showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/About')),
   },
   {
@@ -117,6 +117,15 @@ export const appRouters: any = [
     name: 'exception',
     showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/Exception')),
+  },
+  {
+    path: '/knormrequestdetail/:id',
+    permission: '',
+    title: 'Norm Talep Detay Sayfası',
+    name: 'knormrequestdetail',
+    icon: UserOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')),
   },
 ];
 

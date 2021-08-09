@@ -59,9 +59,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    await this.getNormRequests();
-    let d = this.addDays(new Date().getDay() + 7)
-    console.log(d)
+    await this.getNormRequests();  
   }
 
   state = {

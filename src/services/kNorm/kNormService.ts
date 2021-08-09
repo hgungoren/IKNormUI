@@ -1,7 +1,7 @@
 import http from '../httpService';
 import { EntityDto } from '../dto/entityDto';
 import { PagedResultDto } from '../dto/pagedResultDto';
-import { GetAllKNormOutput } from './dto/getAllKNormOutput';
+import { GetAllKNormOutput } from './dto/getAllKNormOutput'; 
 import { CreateKNormInput } from './dto/createKNormInput';
 import { PagedKNormResultRequestDto } from './dto/pagedKNormResultRequestDto';
 import { GetKNormOutput } from './dto/getKNormOutput';

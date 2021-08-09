@@ -11,7 +11,7 @@ import { Provider } from 'mobx-react';
 import Utils from './utils/utils';
 import abpUserConfigurationService from './services/abpUserConfigurationService';
 import initializeStores from './stores/storeInitializer';
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker'; 
 
 declare var abp: any;
 
@@ -30,11 +30,15 @@ abpUserConfigurationService.getAll().then(data => {
   const stores = initializeStores();
 
   ReactDOM.render(
+
+
     <Provider {...stores}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </Provider>,
+    </Provider>
+
+    ,
     document.getElementById('root') as HTMLElement
   );
 

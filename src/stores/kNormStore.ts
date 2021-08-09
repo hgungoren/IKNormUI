@@ -4,7 +4,7 @@ import { PagedResultDto } from '../services/dto/pagedResultDto';
 import { EntityDto } from '../services/dto/entityDto';
 import { GetKNormOutput } from '../services/kNorm/dto/getKNormOutput';
 import { PagedKNormResultRequestDto } from '../services/kNorm/dto/pagedKNormResultRequestDto';
-import { CreateKNormInput } from '../services/kNorm/dto/createKNormInput';
+import { CreateKNormInput } from '../services/kNorm/dto/createKNormInput'; 
 import { GetAllKNormOutput } from '../services/kNorm/dto/getAllKNormOutput';
 import TalepTuru from '../services/kNorm/dto/talepTuru';
 import NormStatus from '../services/kNorm/dto/normStatus';
@@ -55,8 +55,8 @@ class KNormStore {
     }
 
     @action
-    async create(createKNormInput: CreateKNormInput) {
-        let result = await kNormService.create(createKNormInput);
+    async create(createKNormInput: CreateKNormInput  ) {
+        let result = await kNormService.create(createKNormInput );
         this.kNorms.items.push(result);
     }
 

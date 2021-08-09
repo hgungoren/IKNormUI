@@ -11,6 +11,7 @@ import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
 import KSubeNormStore           from './kSubeNormStore';
 import KNormStore               from './kNormStore';
 import KNormDetailStore         from './kNormDetailStore';
+import KHierarchyStore          from './kHierarchyStore';
 
 export default function initializeStores() {
   return {
@@ -27,5 +28,6 @@ export default function initializeStores() {
     kSubeNormStore:             new KSubeNormStore(),
     kNormStore:                 new KNormStore(),
     kNormDetailStore:           new KNormDetailStore(),
+    kHierarchyStore:            new KHierarchyStore(),
   };
 }

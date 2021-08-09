@@ -12,4 +12,5 @@ export default class Stores {
   static KSubeNormStore         : string = 'kSubeNormStore';
   static KNormStore             : string = 'kNormStore';
   static KNormDetailStore       : string = 'kNormDetailStore';
+  static KHierarchyStore       : string =  'kHierarchyStore';
 }

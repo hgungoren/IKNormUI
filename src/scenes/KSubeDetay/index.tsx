@@ -1,3 +1,4 @@
+/*eslint-disable */
 import './index.less';
 import * as React from 'react';
 import { L } from '../../lib/abpUtility';
@@ -9,22 +10,24 @@ import Stores from '../../stores/storeIdentifier';
 import { EntityDto } from '../../services/dto/entityDto';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import KPersonelStore from '../../stores/kPersonelStore';
+import KHierarchyStore from '../../stores/kHierarchyStore';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import CreateNormForm from '../../components/CreateNormForm';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
-import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import AppComponentBase from '../../components/AppComponentBase';
+import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
-import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader } from 'antd';
+import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader } from 'antd'; 
 
 export interface IKsubeDatayProps {
+    kSubeStore: KSubeStore;
+    kNormStore: KNormStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
-    kSubeStore: KSubeStore;
+    kHierarchyStore: KHierarchyStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
-    kNormStore: KNormStore;
 
     location: {
         hash: "",
@@ -40,6 +43,7 @@ export interface IKsubeDatayProps {
 export interface IKSubeDatayState {
     detaillModalVisible: boolean,
     maxNormResultCount: number,
+    bagliOlduguSubeId: string,
     maxResultCount: number,
     skipNormCount: number,
     modalVisible: boolean,
@@ -48,12 +52,12 @@ export interface IKSubeDatayState {
     filterNorm: string,
     skipCount: number,
     groupEmployee: {},
+    groupData: any[],
     filter: string,
     userId: number,
     groupNorm: {},
     tip: string,
     id: number,
-    groupData: any[]
 }
 
 const Search = Input.Search;
@@ -61,6 +65,7 @@ const Search = Input.Search;
 @inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
+@inject(Stores.KHierarchyStore)
 @inject(Stores.KInkaLookUpTableStore)
 
 @observer
@@ -89,7 +94,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             employeeCount: 0,
             normCount: 0,
             norm: 0
-        }]
+        }],
+        bagliOlduguSubeId: ''
     };
 
     async getPosition(key: string) {
@@ -160,9 +166,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
     }
 
+    getKHierarchy = async () => {
+        await this.props.kHierarchyStore.getAll(this.state.tip, this.state.bagliOlduguSubeId);
+    }
+
     async get(entityDto: EntityDto) {
         await this.props.kSubeStore.get(entityDto);
-        this.setState({ tip: this.props.kSubeStore.editKSube.tip })
+        this.setState({ tip: this.props.kSubeStore.editKSube.tip, bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId })
     }
 
     setPageState = async () => this.setState({ id: this.props["match"].params["id"] });
@@ -175,6 +185,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.get({ id: this.state.id });
         await this.getNormRequests();
         await this.mergeArray();
+        await this.getKHierarchy();
     }
 
     handleTableChange = (pagination: any) => {
@@ -213,6 +224,21 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     createNorm = () => {
         const form = this.formRef.current;
         form!.validateFields().then(async (values: any) => {
+
+            let mails = this.props.kHierarchyStore.kHierarchies.map(x => (
+                {
+                    mail: x.mail,
+                    title: x.title,
+                    orderNo: x.orderNo,
+                    gMYType: x.gMYType,
+                    lastName: x.lastName,
+                    firstName: x.firstName,
+                    normalizedTitle: x.normalizedTitle,
+                }
+            ));
+
+            values.mails = mails;
+
             await this.props.kNormStore.create(values);
             this.openNotificationWithIcon('success')
             form!.resetFields();
@@ -257,8 +283,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
 
         this.setState({ groupData: groupData })
-
-        console.log(this.state.groupData)
     }
 
 
@@ -268,12 +292,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { kNorms } = this.props.kNormStore;
         const { editKSube } = this.props.kSubeStore;
         const { norms } = this.props.kSubeNormStore;
+        const { kHierarchies } = this.props.kHierarchyStore;
         const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
 
         const normEmployeeCoumns = [
-            { title: 'Gorev',      dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Personel',   dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Norm',       dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Gorev', dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Personel', dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: 'Norm', dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
             { title: 'Norm Açığı', dataIndex: 'norm', key: 'norm', width: 150, render: (text: string) => <div>{text}</div> }
         ]
 
@@ -321,11 +346,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                rowKey={(record) => record.id}
                                 bordered={false}
                                 columns={normEmployeeCoumns}
-                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
+                                rowKey={(record) => record.id}
                                 loading={this.state.groupData.length == 1 ? true : false}
+                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
                                 dataSource={this.state.groupData === undefined ? [] : this.state.groupData}
                             />
                         </Col>
@@ -355,14 +380,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                rowKey={(record) => record.objId.toString()}
                                 bordered={false}
-
                                 columns={columns}
-                                pagination={{ pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 }}
-                                loading={kPersonels === undefined ? true : false}
-                                dataSource={kPersonels === undefined ? [] : kPersonels.items} 
                                 onChange={this.handleTableChange}
+                                rowKey={(record) => record.objId.toString()}
+                                loading={kPersonels === undefined ? true : false}
+                                dataSource={kPersonels === undefined ? [] : kPersonels.items}
+                                pagination={{ pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 }}
                             />
                         </Col>
                     </Row>
@@ -379,7 +403,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             md={{ span: 15, offset: 0 }}
                             lg={{ span: 1, offset: 21 }}
                             xl={{ span: 1, offset: 21 }}
-                            xxl={{ span: 1, offset: 21 }}  >
+                            xxl={{ span: 1, offset: 21 }} >
                         </Col>
                     </Row>
                     <Row>
@@ -390,24 +414,28 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                rowKey={(record) => record.subeObjId}
                                 bordered={false}
                                 columns={columnsNorm}
-                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}
+                                onChange={this.handleNormTableChange}
+                                rowKey={(record) => record.subeObjId}
                                 loading={kNorms === undefined ? true : false}
                                 dataSource={kNorms === undefined ? [] : kNorms.items}
-                                onChange={this.handleNormTableChange}
+                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}
                             />
                         </Col>
                     </Row>
                 </Card>
                 <CreateNormForm
-                    subeId={this.state.id}
-                    normCount={norms !== undefined ? norms.items.length : 0}
-                    formRef={this.formRef}
-                    position={this.props.kInkaLookUpTableStore.positions}
-                    visible={this.state.modalVisible}
                     modalType={'create'}
+                    tip={this.state.tip}
+                    formRef={this.formRef}
+                    subeId={this.state.id}
+                    hierarchy={kHierarchies}
+                    employees={kAllPersonels}
+                    onCreateNorm={this.createNorm}
+                    visible={this.state.modalVisible}
+                    position={this.props.kInkaLookUpTableStore.positions}
+                    normCount={norms !== undefined ? norms.items.length : 0}
                     onCancel={() => {
                         const form = this.formRef.current;
                         this.setState({
@@ -415,8 +443,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         });
                         form!.resetFields();
                     }}
-                    employees={kAllPersonels}
-                    onCreateNorm={this.createNorm}
                 />
 
                 <NormDetailTimeLine
@@ -432,6 +458,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         );
     }
 }
+ 
 export default KSubeDetay;
 
 
