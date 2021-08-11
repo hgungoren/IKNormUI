@@ -3,9 +3,12 @@ import React from 'react';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { Timeline } from 'antd';
-import { CheckOutlined, CloseOutlined, ExclamationOutlined, QuestionOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
+import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
+import Status from '../../services/kNormDetail/dto/status';
 
-const NormDetailTimeLine = ({ visible, onCancel, title }) => {
+const NormDetailTimeLine = ({ visible, onCancel, title, data }) => {
+
     return (
         <>
             <Modal
@@ -14,41 +17,33 @@ const NormDetailTimeLine = ({ visible, onCancel, title }) => {
                 visible={visible}
                 onCancel={onCancel}
                 width={'70%'}
-                footer={
-                    []
-                }
+                footer={[]}
             >
                 <Timeline mode="alternate">
-                    <Timeline.Item dot={<CheckOutlined className={'icon success'} />}>
-                        <div className="item-div">
-                            <p>Bölge Operasyon Tarafından Onaylandı 06.06.2021</p>
-                            <p>Açıklama Alanı Gelecek</p>
-                        </div>
-                    </Timeline.Item>
-                    <Timeline.Item dot={<CheckOutlined className={'icon'} />}>
-                        <div className="item-div">
-                            <p>Bölge Operasyon Tarafından Onaylandı 06.06.2021</p>
-                            <p>Açıklama Alanı Gelecek</p>
-                        </div>
-                    </Timeline.Item>
-                    <Timeline.Item dot={<ExclamationOutlined className={'icon'} />}>
-                        <div className="item-div">
-                            <p>Bölge Operasyon Tarafından Onaylandı 06.06.2021</p>
-                            <p>Açıklama Alanı Gelecek</p>
-                        </div>
-                    </Timeline.Item>
-                    <Timeline.Item dot={<QuestionOutlined className={'icon'} />}>
-                        <div className="item-div">
-                            <p>Bölge Operasyon Tarafından Onaylandı 06.06.2021</p>
-                            <p>Açıklama Alanı Gelecek</p>
-                        </div>
-                    </Timeline.Item>
-                    <Timeline.Item dot={<CloseOutlined className={'icon danger'} />}>
-                        <div className="item-div">
-                            <p>Bölge Operasyon Tarafından Onaylandı 06.06.2021</p>
-                            <p>Açıklama Alanı Gelecek</p>
-                        </div>
-                    </Timeline.Item>
+                    {
+                        data !== undefined && data.map((x) => <Timeline.Item
+                            key={x.id}
+                            dot={
+                                x.status == Status.Apporved ?
+                                    <CheckOutlined className={'icon success'} /> : x.status == Status.Waiting ?
+                                        <ExclamationOutlined className={'icon waiting'} /> : <CloseOutlined className={'icon danger'} />
+                            }>
+                            <div className="item-div">
+                                <p className={'title'}> {TalepDurumu[x.talepDurumuStr]} </p>
+                                <p>
+                                    {
+                                        x.lastModificationTime !== null && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "2-digit",
+                                            hour: "2-digit",
+                                            minute: "2-digit"
+                                        })
+                                    } </p>
+                                <p>{x.description} </p>
+                            </div>
+                        </Timeline.Item>)
+                    }
                 </Timeline>
             </Modal>
         </>

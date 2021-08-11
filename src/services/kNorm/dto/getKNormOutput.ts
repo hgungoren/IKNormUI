@@ -13,8 +13,9 @@ export interface GetKNormOutput {
     subeObjId: number;
     creationTime: Date;
     talepDurumu: TalepDurumu;
-
     nedeni: string;
     turu: string;
     durumu: string;
+    kNormId: number;
+    id: number;
 }

@@ -5,5 +5,5 @@ import UserLoginInfoDto from './userLoginInfoDto';
 export class GetCurrentLoginInformations {
   application!: ApplicationInfoDto;
   user!: UserLoginInfoDto;
-  tenant!: TenantLoginInfoDto;
+  tenant!: TenantLoginInfoDto; 
 }

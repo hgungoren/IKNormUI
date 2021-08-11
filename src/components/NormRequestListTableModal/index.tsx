@@ -4,7 +4,7 @@ import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import NormRequestListTable from '../NormRequestListTable';
 
-function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObjId, visible, kNormDetailStore }) {
+function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObjId, visible, kNormDetailStore, userId }) {
     return (
         <>
             <Modal
@@ -16,6 +16,7 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
                 onCancel={onCancel} >
 
                 <NormRequestListTable
+                    userId={userId}
                     kNormDetailStore={kNormDetailStore}
                     isConfirmOrCancel={true}
                     kNormStore={kNormStore}
@@ -34,8 +35,7 @@ NormRequestListTableModal.propTypes = {
     table: PropTypes.string,
     visible: PropTypes.bool,
     onCancel: PropTypes.func,
-    kNormStore: PropTypes.any,
-    subeObjId: PropTypes.number,
+    kNormStore: PropTypes.any, 
 };
 
 export default NormRequestListTableModal;

@@ -1,5 +1,4 @@
 import { action, observable } from 'mobx';
-
 import { GetCurrentLoginInformations } from '../services/session/dto/getCurrentLoginInformations';
 import sessionService from '../services/session/sessionService';
 
@@ -8,7 +7,7 @@ class SessionStore {
 
   @action
   async getCurrentLoginInformations() {
-    let result = await sessionService.getCurrentLoginInformations();
+    let result = await sessionService.getCurrentLoginInformations(); 
     this.currentLogin = result;
   }
 }

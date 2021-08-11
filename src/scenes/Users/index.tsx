@@ -59,7 +59,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
   async createOrUpdateModalOpen(entityDto: EntityDto) {
 
-    
+   
     if (entityDto.id === 0) {
       await this.props.userStore.createUser();
       await this.props.userStore.getRoles();
@@ -74,6 +74,8 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     setTimeout(() => {
       this.formRef.current?.setFieldsValue({ ...this.props.userStore.editUser });
     }, 100);
+
+    console.log(this.props.userStore.editUser)
   }
 
   delete(input: EntityDto) {
@@ -188,7 +190,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
           >
             <Table
               rowKey={(record) => record.id.toString()}
-              bordered={true}
+           
               columns={columns}
               pagination={{ pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }}
               loading={users === undefined ? true : false}

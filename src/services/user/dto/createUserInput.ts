@@ -5,7 +5,11 @@ export interface CreateUserInput {
   emailAddress: string;
   isActive: boolean;
   roleNames: string[];
-  password: string;
+  password: string; 
+  userObjId: number;
+  companyObjId: string;
+  ompanyRelationalObjId: string;
+  sicilNo: number;
   title: string;
-  companyCode: string;
+  companyCode: number;
 }

@@ -17,7 +17,9 @@ import KNormDetailStore from '../../stores/kNormDetailStore';
 import AppComponentBase from '../../components/AppComponentBase';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-
+import SessionStore from '../../stores/sessionStore';
+import AuthenticationStore from '../../stores/authenticationStore';
+import AccountStore from '../../stores/accountStore';
 
 export interface IBolgeProps {
     kNormStore: KNormStore;
@@ -26,6 +28,9 @@ export interface IBolgeProps {
     kSubeNormStore: KSubeNormStore;
     kNormDetailStore: KNormDetailStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
+    authenticationStore?: AuthenticationStore;
+    sessionStore?: SessionStore;
+    accountStore?: AccountStore;
 }
 
 export interface IBolgeState {
@@ -44,13 +49,13 @@ export interface IBolgeState {
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
+@inject(Stores.KNormStore)
 @inject(Stores.KBolgeStore)
+@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
-@inject(Stores.KInkaLookUpTableStore)
-@inject(Stores.KNormStore)
 @inject(Stores.KNormDetailStore)
-
+@inject(Stores.KInkaLookUpTableStore)
 @observer
 class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
@@ -228,7 +233,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         const { kBolge } = this.props.kBolgeStore;
         const { normCount } = this.props.kSubeNormStore;
         const { kPersonelCount } = this.props.kPersonelStore;
-        const { positions } = this.props.kInkaLookUpTableStore; 
+        const { positions } = this.props.kInkaLookUpTableStore;
         const {
             getTotalNormUpdateRequest,
             getPendingNormFillRequest,
@@ -239,7 +244,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             getAcceptedNormUpdateRequest,
             getCanceledNormUpdateRequest
         } = this.props.kNormStore;
-
+ 
         const columns = [
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('Type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
@@ -263,7 +268,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                                                     subeAdi: bolge.adi
                                                 }
                                             }
-                                        }> {L('Detail')} </Link>
+                                        }> {L('UnitDetail')} </Link>
                                     </Menu.Item>
 
                                     <Menu.Item key={"/ksube"} >
@@ -308,6 +313,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     subeObjId={0}
                     normCount={normCount}
                     cardLoading={cardLoading}
+                    userId={this.props.sessionStore?.currentLogin.user.id}
                     kPersonelCount={kPersonelCount}
                     kNormStore={this.props.kNormStore}
                     kNormDetailStore={this.props.kNormDetailStore}

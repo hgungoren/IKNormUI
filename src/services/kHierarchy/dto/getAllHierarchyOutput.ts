@@ -7,5 +7,5 @@ export interface GetAllHierarchyOutput {
     mail: string;
     orderNo: number;
     gMYType: GMYType;
-    normalizedTitle: string;
+    normalizedTitle: string; 
 }

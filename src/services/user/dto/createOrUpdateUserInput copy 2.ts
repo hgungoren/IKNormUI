@@ -9,7 +9,7 @@ export interface CreateOrUpdateUserInput {
   id: number;
   userObjId: number;
   companyObjId: string;
-  companyRelationalObjId: string;
+  ompanyRelationalObjId: string;
   sicilNo: number;
   title: string;
   companyCode: number;

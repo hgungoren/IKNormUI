@@ -30,6 +30,7 @@ export interface ICreateNormFormProps {
   employees: PagedResultDto<GetKPersonelOutput>;
   hierarchy: GetAllHierarchyOutput[];
   position: PagedResultDto<GetKInkaLookUpTableOutput>;
+  createFormState: {};
 }
 
 class CreateNormForm extends React.Component<ICreateNormFormProps> {
@@ -58,7 +59,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       this.setState({
         defaultActiveKey: {
           "name": this.state.defaultActiveKey.name === "Back" ? "Next" : "Back",
-          "pane": this.state.defaultActiveKey.pane === "AuthoritiesToApprove" ? "PositionSelect" : "AuthoritiesToApprove",
+          "pane": this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" ? "PositionSelect" : "AuthoritiesHierarchy",
           "visible": this.state.defaultActiveKey.name === "Next" ? true : false
         }
       })
@@ -75,9 +76,22 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
   }
 
+  CreateNorm = () => {
+    this.setState({
+      defaultActiveKey: this.props.createFormState,
+      employeeVisible: true,
+      positionVisible: true,
+      newPositionVisible: true,
+      normRequestReasonVisible: true,
+      descriptionVisible: true,
+      talepTuru: '',
+      buttonVisible: false,
+      confirmDirty: false
+    })
 
+  }
 
-  onCancel = () => {
+  resetForm = () => {
 
     const form = this.props.formRef.current;
     this.setState({
@@ -95,7 +109,6 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       talepTuru: '',
       buttonVisible: false
     })
-
 
     form?.resetFields();
   }
@@ -184,7 +197,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
           ]
         }
-        onCancel={() => { onCancel(); this.onCancel(); }}
+        onCancel={() => { onCancel(); this.resetForm(); }}
         width={'90%'}
         visible={visible}
         cancelText={L('Cancel')}
@@ -278,7 +291,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               }
 
             </TabPane>
-            <TabPane className={'form-tabPane'} tab={L('AuthoritiesToApprove')} key={'AuthoritiesToApprove'} forceRender={true}>
+            <TabPane className={'form-tabPane'} tab={L('AuthoritiesHierarchy')} key={'AuthoritiesHierarchy'} forceRender={true}>
 
 
               {
@@ -288,10 +301,8 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
                   <QueueAnim delay={100} className="queue-simple">
                     {
-                      hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}> 
-                                   {
-                                     console.log(x)
-                                   }
+                      hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
+
                         <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
                           <div className="form-item-div">
                             <p className={'form-tile-line-p'}>
@@ -311,7 +322,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               }
 
               {
-                !this.state.buttonVisible && (<Button onClick={onCreateNorm} className={'right'} type="primary">{L('Send')}</Button>)
+                !this.state.buttonVisible && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>)
               }
             </TabPane>
           </Tabs>

@@ -110,6 +110,23 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                 <Input />
               </Form.Item>
 
+              <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  >
+                <Input />
+              </Form.Item>
+
+              <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  >
+                <Input />
+              </Form.Item>
+
+
+              <Form.Item label={L('CompanyRelationalObjId')} {...formItemLayout} name={'ompanyRelationalObjId'}  >
+                <Input />
+              </Form.Item>
+
+              <Form.Item label={L('SicilNo')} {...formItemLayout} name={'sicilNo'}  >
+                <Input />
+              </Form.Item> 
+
               <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'}  >
                 <Input />
               </Form.Item>

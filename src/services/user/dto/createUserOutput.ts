@@ -8,9 +8,13 @@ export interface CreateUserOutputItem {
   lastLoginTime?: any;
   creationTime: Date;
   roleNames: string[];
-  id: number;
+  id: number; 
+  userObjId: number;
+  companyObjId: string;
+  ompanyRelationalObjId: string;
+  sicilNo: number;
   title: string;
-  companyCode: string;
+  companyCode: number;
 }
 
 export interface CreateUserOutput {

@@ -1,9 +1,6 @@
 import './AppLayout.less';
-
 import * as React from 'react';
-
 import { Redirect, Switch, Route } from 'react-router-dom';
-
 import DocumentTitle from 'react-document-title';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -13,10 +10,10 @@ import SiderMenu from '../../components/SiderMenu';
 import { appRouters } from '../Router/router.config';
 import utils from '../../utils/utils';
 import NotFoundRoute from '../Router/NotFoundRoute';
-
 const { Content } = Layout;
 
 class AppLayout extends React.Component<any> {
+
   state = {
     collapsed: false,
   };
@@ -49,7 +46,7 @@ class AppLayout extends React.Component<any> {
           </Layout.Header>
           <Content style={{ margin: 16 }}>
             <Switch>
-              {pathname === '/' && <Redirect from="/" to="/dashboard" />}
+              {pathname === '/' && <Redirect from="/" to="/home" />}
               {appRouters
                 .filter((item: any) => !item.isLayout)
                 .map((route: any, index: any) => (

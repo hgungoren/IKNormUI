@@ -7,6 +7,6 @@ export function L(key: string, sourceName?: string): string {
   return abp.localization.localize(key, sourceName ? sourceName : localizationSourceName);
 }
 
-export function isGranted(permissionName: string): boolean {
+export function isGranted(permissionName: string): boolean { 
   return abp.auth.isGranted(permissionName);
 }

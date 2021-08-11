@@ -1,35 +1,33 @@
 import './index.less';
 
-import * as React from 'react';
-
+import * as React from 'react'; 
 import { Avatar, Col, Layout, Menu } from 'antd';
-import { L, isGranted } from '../../lib/abpUtility';
-
-import AbpLogo from '../../images/abp-logo-long.png';
+import { L, isGranted } from '../../lib/abpUtility'; 
+import AbpLogo from '../../images/surat-logo.svg';
 import { appRouters } from '../../components/Router/router.config';
-import utils from '../../utils/utils';
+import utils from '../../utils/utils'; 
 
 const { Sider } = Layout;
-
+ 
 export interface ISiderMenuProps {
   path: any;
   collapsed: boolean;
   onCollapse: any;
   history: any;
-}
+} 
 
 const SiderMenu = (props: ISiderMenuProps) => {
   const { collapsed, history, onCollapse } = props;
   const currentRoute = utils.getRoute(history.location.pathname);
   return (
-    <Sider trigger={null} className={'sidebar'} width={256} collapsible collapsed={collapsed} onCollapse={onCollapse}>
+    <Sider  trigger={null} className={'sidebar'} width={256} collapsible collapsed={collapsed} onCollapse={onCollapse}>
       {collapsed ? (
         <Col style={{ textAlign: 'center', marginTop: 15, marginBottom: 10 }}>
-          <Avatar shape="square" style={{ height: 27, width: 64 }} src={AbpLogo} />
+          <Avatar shape="square" style={{ height: 30, width: 70 }} src={AbpLogo} />
         </Col>
       ) : (
         <Col style={{ textAlign: 'center', marginTop: 15, marginBottom: 10 }}>
-          {/* <Avatar shape="square" style={{ height: 54, width: 128 }} src={AbpLogo} /> */}
+           <Avatar shape="square" style={{ height: 60, width: 215 }} src={AbpLogo} /> 
         </Col>
       )}
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import './index.less'
 import { Input, Modal, Tabs, Form, Checkbox } from 'antd';
 import { GetAllPermissionsOutput } from '../../../services/role/dto/getAllPermissionsOutput';
 import { L } from '../../../lib/abpUtility';
@@ -60,17 +60,18 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
         xxl: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 18 },
-        sm: { span: 18 },
-        md: { span: 18 },
-        lg: { span: 18 },
-        xl: { span: 18 },
-        xxl: { span: 18 },
+        xs: { span: 24 },
+        sm: { span: 24 },
+        md: { span: 24 },
+        lg: { span: 24 },
+        xl: { span: 24 },
+        xxl: { span: 24 },
       },
     };
 
     return (
       <Modal
+        width={'80%'}
         visible={this.props.visible}
         cancelText={L('Cancel')}
         okText={L('OK')}
@@ -93,8 +94,8 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
               </Form.Item>
             </TabPane>
             <TabPane tab={L('RolePermission')} key={'permission'} forceRender={true}>
-              <Form.Item {...tailFormItemLayout} name={'grantedPermissions'} valuePropName={'value'}>
-                <Checkbox.Group options={options} />
+              <Form.Item   {...tailFormItemLayout} name={'grantedPermissions'} valuePropName={'value'}>
+                <Checkbox.Group  options={options} />
               </Form.Item>
             </TabPane>
           </Tabs>

@@ -6,8 +6,7 @@ import CountUp from 'react-countup';
 import { L } from '../../lib/abpUtility';
 import { PlusOutlined, QuestionCircleOutlined, CheckOutlined, ClockCircleOutlined, CloseOutlined, MessageOutlined, QuestionOutlined, UserAddOutlined, UsergroupAddOutlined, FileDoneOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
-
-
+ 
 function KCart({ cardLoading, color, title, icon, number, onClick }) {
 
     let _icon: any;
@@ -39,7 +38,13 @@ function KCart({ cardLoading, color, title, icon, number, onClick }) {
         _icon = <CheckCircleOutlined className={'dashboardCardIcon'} />
 
     return (
-        <Col className={'dashboardCard'} xs={{ offset: 1, span: 22 }} sm={{ offset: 1, span: 22 }} md={{ offset: 1, span: 11 }} lg={{ offset: 1, span: 11 }} xl={{ offset: 0, span: 6 }} xxl={{ offset: 0, span: 6 }} >
+        <Col className={'dashboardCard'}
+            xs={{ offset: 1, span: 22 }}
+            sm={{ offset: 1, span: 22 }}
+            md={{ offset: 1, span: 11 }}
+            lg={{ offset: 1, span: 11 }}
+            xl={{ offset: 0, span: 6 }}
+            xxl={{ offset: 0, span: 6 }} >
 
             <Card onClick={onClick}
                 hoverable

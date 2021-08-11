@@ -39,7 +39,7 @@ class KNormStore {
         this.getPendingNormUpdateRequest =  this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
         this.getAcceptedNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
         this.getCanceledNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
- 
+
     }
 
     @action
@@ -55,7 +55,7 @@ class KNormStore {
     }
 
     @action
-    async create(createKNormInput: CreateKNormInput  ) {
+    async create(createKNormInput: CreateKNormInput  ) { 
         let result = await kNormService.create(createKNormInput );
         this.kNorms.items.push(result);
     }

@@ -1,30 +1,36 @@
-import './index.less'
+import './index.less';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
+import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
+import KCartList from '../../components/KCartList';
 import { SettingOutlined } from '@ant-design/icons';
+import SessionStore from '../../stores/sessionStore';
+import AccountStore from '../../stores/accountStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import KPersonelStore from '../../stores/kPersonelStore';
 import { EntityDto } from '../../services/dto/entityDto';
 import CreateKSubeNorm from './components/createKSubeNorm';
+import KNormDetailStore from '../../stores/kNormDetailStore';
 import AppComponentBase from '../../components/AppComponentBase';
+import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-import KNormStore from '../../stores/kNormStore';
-import KCartList from '../../components/KCartList';
-import KNormDetailStore from '../../stores/kNormDetailStore';
 
 
 export interface INormProps {
     kSubeStore: KSubeStore;
     kNormStore: KNormStore;
+    sessionStore?: SessionStore;
+    accountStore?: AccountStore;
     kSubeNormStore: KSubeNormStore;
     kPersonelStore: KPersonelStore;
     kNormDetailStore: KNormDetailStore;
+    authenticationStore?: AuthenticationStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
 }
 
@@ -49,7 +55,7 @@ const confirm = Modal.confirm;
 @inject(Stores.KPersonelStore)
 @inject(Stores.KNormDetailStore)
 @inject(Stores.KInkaLookUpTableStore)
-
+@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 class KSube extends AppComponentBase<INormProps, INormState>{
     formRef = React.createRef<FormInstance>();
@@ -58,21 +64,21 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         id: 0,
         normId: 0,
         filter: '',
+        subeAdi: '',
         skipCount: 0,
         subeObjId: 0,
         cardLoading: true,
         maxResultCount: 5,
-        modalVisible: false,
         kPersonelCount: 0,
-        subeAdi: ''
+        modalVisible: false,
     };
 
     async getNormRequests(id: number) {
         await this.props.kNormStore.getMaxAll({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
             id: id,
+            keyword: '',
+            skipCount: 0,
+            maxResultCount: 100000,
         });
     }
 
@@ -82,8 +88,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         await this.props.kSubeNormStore.getAllNorms({
             keyword: '',
             skipCount: 0,
-            id: this.state.subeObjId,
             maxResultCount: 5,
+            id: this.state.subeObjId,
         });
     }
 
@@ -158,12 +164,12 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     async getAll() {
         await this.props.kSubeStore.getAll({
-            maxResultCount: this.state.maxResultCount,
-            skipCount: this.state.skipCount,
-            keyword: this.state.filter,
-            isActivity: true,
             isActive: true,
-            id: this.state.id
+            isActivity: true,
+            id: this.state.id,
+            keyword: this.state.filter,
+            skipCount: this.state.skipCount,
+            maxResultCount: this.state.maxResultCount,
         });
 
         await this.props.kSubeStore.getNormCount(this.state.id);
@@ -199,7 +205,19 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     }
 
     async setPageState() {
-        this.setState({ id: this.props["match"].params["id"] });
+
+
+        if (this.props["match"].params["id"] !== undefined && this.props["match"].params["id"] !== ":id") {
+            this.setState({ id: this.props["match"].params["id"] });
+            return
+        }
+
+
+        if (this.props.sessionStore?.currentLogin !== undefined) {
+            let companyObjId = this.props.sessionStore?.currentLogin.user.companyObjId;
+            this.setState({ id: companyObjId });
+        }
+
     }
 
     async componentDidMount() {
@@ -221,23 +239,23 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     public render() {
 
-
         const Search = Input.Search;
         const { cardLoading } = this.state;
-        const { kSubes, editKSube, normCount } = this.props.kSubeStore;
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
+        const { kSubes, editKSube, normCount } = this.props.kSubeStore;
+
         const {
-            getTotalNormFillingRequest,
             getTotalNormUpdateRequest,
             getPendingNormFillRequest,
-            getPendingNormUpdateRequest,
+            getTotalNormFillingRequest,
             getAcceptedNormFillRequest,
-            getAcceptedNormUpdateRequest,
             getCanceledNormFillRequest,
-            getCanceledNormUpdateRequest
+            getPendingNormUpdateRequest,
+            getAcceptedNormUpdateRequest,
+            getCanceledNormUpdateRequest,
         } = this.props.kNormStore;
- 
+
         const columns = [
             { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> },
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
@@ -258,10 +276,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                                         <Link to={
 
                                             {
-                                                pathname: `/ksubedetay/${item.objId}`,
-                                                state: {
-                                                    subeAdi: editKSube === undefined ? '' : editKSube.adi
-                                                }
+                                                pathname: `/ksubedetay/${item.objId}`
                                             }
 
                                         }> {L('Detail')} </Link>
@@ -295,7 +310,6 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </PageHeader>
                     </Card>
 
-
                     <KCartList
                         normCount={normCount}
                         subeObjId={this.state.id}
@@ -305,15 +319,14 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         kNormDetailStore={this.props.kNormDetailStore}
                         getTotalNormUpdateRequest={getTotalNormUpdateRequest}
                         getPendingNormFillRequest={getPendingNormFillRequest}
+                        userId={this.props.sessionStore?.currentLogin.user.id}
                         getTotalNormFillingRequest={getTotalNormFillingRequest}
                         getAcceptedNormFillRequest={getAcceptedNormFillRequest}
                         getCanceledNormFillRequest={getCanceledNormFillRequest}
                         getPendingNormUpdateRequest={getPendingNormUpdateRequest}
-                        getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
                         getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+                        getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
                     />
-
-
 
                     <Card hoverable>
                         <Row>
@@ -355,18 +368,17 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </Row>
                     </Card>
                     <CreateKSubeNorm
-                        // subeAdi={this.state.subeAdi}
-                        kSubeNorms={this.props.kSubeNormStore.norms}
                         modalType={'create'}
                         formRef={this.formRef}
                         positionSelect={positions}
                         subeObjId={this.state.subeObjId}
                         visible={this.state.modalVisible}
-                        kPosizyonKontrol={this.kPosizyonKontrol}
+                        kSubeNormEdit={this.kSubeNormEdit}
                         kSubeNormCreate={this.kSubeNormCreate}
                         kSubeNormDelete={this.kSubeNormDelete}
-                        kSubeNormEdit={this.kSubeNormEdit}
+                        kPosizyonKontrol={this.kPosizyonKontrol}
                         kSubeNormStore={this.props.kSubeNormStore}
+                        kSubeNorms={this.props.kSubeNormStore.norms}
                         onCancel={() => {
                             this.setState({
                                 modalVisible: false,

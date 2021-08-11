@@ -18,6 +18,7 @@ export interface GetAllKNormOutput {
     talepNedeni: TalepNedeni;
     talepTuru: number;
     turu: string;
-    yeniPozisyon: null
+    yeniPozisyon: null;
+    kNormId: number;
 
 }

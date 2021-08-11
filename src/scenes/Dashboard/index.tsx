@@ -5,23 +5,25 @@ import { L } from '../../lib/abpUtility';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
-// import ListExample from './components/ListExample';
 import KCartList from '../../components/KCartList';
+import AccountStore from '../../stores/accountStore';
+import SessionStore from '../../stores/sessionStore';
 import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
-// import BarChartExample from './components/BarChartExample';
-// import PieChartExample from './components/PieChartExample';
 import LineChartExample from './components/LineChartExample';
 import KNormDetailStore from '../../stores/kNormDetailStore';
-// import TinyLineChartExample from './components/TinyLineChartExample';
 import KLineChartModel from '../../models/KLineChart/kLineChart';
+import AuthenticationStore from '../../stores/authenticationStore';
 
 
 export interface IDashboardProps {
   kNormStore: KNormStore;
+  sessionStore?: SessionStore;
+  accountStore?: AccountStore;
   kPersonelStore: KPersonelStore;
   kSubeNormStore: KSubeNormStore;
   kNormDetailStore: KNormDetailStore;
+  authenticationStore?: AuthenticationStore;
 }
 
 
@@ -30,7 +32,7 @@ export interface IBolgeState { }
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 @inject(Stores.KNormDetailStore)
-
+@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
@@ -59,7 +61,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    await this.getNormRequests();  
+    await this.getNormRequests();
   }
 
   state = {
@@ -78,38 +80,30 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
 
   render() {
- 
+
     // const { cardLoading, lineChartLoading, barChartLoading, pieChartLoading } = this.state;
     const { cardLoading, lineChartLoading } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
-      getTotalNormFillingRequest,
       getTotalNormUpdateRequest,
       getPendingNormFillRequest,
-      getPendingNormUpdateRequest,
+      getTotalNormFillingRequest,
       getAcceptedNormFillRequest,
-      getAcceptedNormUpdateRequest,
       getCanceledNormFillRequest,
+      getPendingNormUpdateRequest,
+      getAcceptedNormUpdateRequest,
       getCanceledNormUpdateRequest
     } = this.props.kNormStore;
 
-
-    // const visitorStatisticList = [
-    //   { title: 'TODAY', body: '1.200 user' },
-    //   { title: 'YESTERDAY', body: '3.872 user' },
-    //   { title: 'LAST WEEK', body: '26.582 user' },
-    // ];
-
-
     const data: KLineChartModel[] = [
-      { name: 'Pazartesi', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Salı', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Çarşamba', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Perşembe', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Cuma', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Cumartesi', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Pazar', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
+      { name: L('Monday'), talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Tuesday'), talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Wednesday'), talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Thursday'), talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Friday'), talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Saturday'), talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+      { name: L('Sunday'), talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
     ];
 
 
@@ -124,6 +118,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
           kNormDetailStore={this.props.kNormDetailStore}
           getTotalNormUpdateRequest={getTotalNormUpdateRequest}
           getPendingNormFillRequest={getPendingNormFillRequest}
+          userId={this.props.sessionStore?.currentLogin.user.id}
           getTotalNormFillingRequest={getTotalNormFillingRequest}
           getAcceptedNormFillRequest={getAcceptedNormFillRequest}
           getCanceledNormFillRequest={getCanceledNormFillRequest}

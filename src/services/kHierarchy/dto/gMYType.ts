@@ -1,7 +1,7 @@
 export enum GMYType {
-    None,
-    IK,
-    Operasyon,
-    BilgiSistemleri,
-    MaliIsler
+    None = 0,
+    IK = 1,
+    Operasyon = 2,
+    BilgiSistemleri = 3,
+    MaliIsler = 4
 }
