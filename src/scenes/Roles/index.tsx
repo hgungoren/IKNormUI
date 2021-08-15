@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import AppComponentBase from '../../components/AppComponentBase';
 import CreateOrUpdateRole from './components/createOrUpdateRole';
 import { EntityDto } from '../../services/dto/entityDto';
-import { L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../lib/abpUtility';
 import RoleStore from '../../stores/roleStore';
 import Stores from '../../stores/storeIdentifier';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
@@ -142,16 +142,20 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               trigger={['click']}
               overlay={
                 <Menu>
-                  <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
-                  <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
-                  <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
+                  {
+                    isGranted('role.create') && <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
+                  }
+                  {
+                    isGranted('role.update') && <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
+                  }
+                  {
+                    isGranted('role.delete') && <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
+                  }
                 </Menu>
               }
               placement="bottomLeft"
             >
-              <Button type="primary" icon={<SettingOutlined />}>
-                {L('Actions')}
-              </Button>
+              <Button type="primary" icon={<SettingOutlined />}> {L('Actions')} </Button>
             </Dropdown>
           </div>
         ),
@@ -180,7 +184,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               xl={{ span: 1, offset: 21 }}
               xxl={{ span: 1, offset: 21 }}
             >
-              <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
+              {isGranted('role.create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
             </Col>
           </Row>
           <Row>
@@ -199,7 +203,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
             >
               <Table
                 locale={{ emptyText: L('NoData') }}
-                rowKey="id" 
+                rowKey="id"
                 pagination={{ pageSize: this.state.maxResultCount, total: roles === undefined ? 0 : roles.totalCount, defaultCurrent: 1 }}
                 columns={columns}
                 loading={roles === undefined ? true : false}
@@ -225,11 +229,10 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
         </Card>
 
         <RoleDetailDrawer
-          formRef={this.formRef}
           visible={drawerVisible}
           showOrHideDrawer={this.hideDrawer}
-          permissionsList={this.props.roleStore.allPermissions}
-          id={this.state.roleId} />
+          permissions={allPermissions}
+          roleStore={this.props.roleStore} />
 
       </>
     );

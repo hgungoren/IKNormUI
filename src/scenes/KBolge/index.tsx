@@ -297,7 +297,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         const { normCount } = this.props.kSubeNormStore;
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
-        const { 
+        const {
             getTotalNormUpdateRequestCount,
             getPendingNormFillRequestCount,
             getTotalNormFillingRequestCount,
@@ -376,10 +376,10 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     subeObjId={0}
                     normCount={normCount}
                     cardLoading={cardLoading}
-                    userId={this.props.sessionStore?.currentLogin.user.id}
+                    userId={this.props.sessionStore?.currentLogin.user.id !== undefined ? this.props.sessionStore?.currentLogin.user.id : 0}
                     kPersonelCount={kPersonelCount}
                     kNormStore={this.props.kNormStore}
-                    kNormDetailStore={this.props.kNormDetailStore} 
+                    kNormDetailStore={this.props.kNormDetailStore}
                     getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
                     getPendingNormFillRequestCount={getPendingNormFillRequestCount}
                     getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}

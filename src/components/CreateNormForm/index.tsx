@@ -53,7 +53,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
   };
 
 
-  changeActiveTab = () => { 
+  changeActiveTab = () => {
     const form = this.props.formRef.current;
     form!.validateFields().then(async (values: any) => {
       this.setState({
@@ -195,20 +195,17 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               {L(this.state.defaultActiveKey.name)}
             </Button>),
 
-            (this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" && !this.state.buttonVisible) && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>) 
+            (this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" && !this.state.buttonVisible) && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>)
 
           ]
         }
         onCancel={() => { onCancel(); this.resetForm(); }}
-        width={'90%'}
+        width={'50%'}
         visible={visible}
         cancelText={L('Cancel')}
         okText={L('OK')}
         title={L('Position')}
         destroyOnClose={true} >
-
-
-
         <Form ref={this.props.formRef}   >
           <Tabs
             defaultActiveKey={this.state.defaultActiveKey.pane}
@@ -217,19 +214,19 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
             <TabPane tab={L('PositionSelect')} key={'PositionSelect'}>
 
-              <Form.Item initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
+              <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
-              <Form.Item initialValue={subeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
+              <Form.Item className={'hidden-form-item'} initialValue={subeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
-              <Form.Item initialValue={tip} name='tip' rules={rules.tip}>
+              <Form.Item className={'hidden-form-item'} initialValue={tip} name='tip' rules={rules.tip}>
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
-              <Form.Item label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
+              <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
                 <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                   {
                     Object.keys(TalepTuru).map((value) => <Option key={value} value={value}> {TalepTuru[value]}  </Option>)
@@ -313,7 +310,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                           <div className="form-item-div">
                             <p className={'form-tile-line-p'}>
                               <Row>
-                                <Col xs={{ span: 6, offset: 0 }} sm={{ span: 6, offset: 0 }} md={{ span: 6, offset: 0 }} lg={{ span: 6, offset: 0 }} xl={{ span: 6, offset: 0 }} xxl={{ span: 6, offset: 0 }} >            {x.title}            </Col>
+                                <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >            {x.title}            </Col>
                                 <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.firstName}        </Col>
                                 <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.lastName}         </Col>
                                 <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {x.mail} </strong>   </Col>

@@ -6,7 +6,6 @@ import { L } from '../../../lib/abpUtility';
 import RoleStore from '../../../stores/roleStore';
 import rules from './createOrUpdateRole.validation';
 import { FormInstance } from 'antd/lib/form';
-// import RoleDetailDrawer from './rodeDetailDrawer';
 
 const TabPane = Tabs.TabPane;
 
@@ -51,28 +50,9 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
       },
     };
 
-    const tailFormItemLayout = {
-      labelCol: {
-        xs: { span: 6 },
-        sm: { span: 6 },
-        md: { span: 6 },
-        lg: { span: 6 },
-        xl: { span: 6 },
-        xxl: { span: 6 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
     return (
       <Modal
-        width={'80%'}
+        width={'40%'}
         okText={L('Save')}
         destroyOnClose={true}
         onOk={this.props.onOk}
@@ -94,16 +74,19 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
               <Form.Item label={L('Description')} name={'description'} {...formItemLayout}>
                 <Input />
               </Form.Item>
-            </TabPane>
-            <TabPane tab={L('UserRolePermission')} key={'permission'} forceRender={true}>
- 
-              <Form.Item   {...tailFormItemLayout} name={'grantedPermissions'} valuePropName={'value'}>
+
+              <Form.Item style={{ display: 'none' }} name={'grantedPermissions'} valuePropName={'value'}>
                 <Checkbox.Group options={options} />
               </Form.Item>
-
-              {/* <RoleDetailDrawer onClose={true} onComplete={true} roleId={1} showDrawer={true}  /> */}
-
             </TabPane>
+
+
+            {/* <TabPane style={{ display: 'none' }} tab={L('UserRolePermission')} key={'permission'} forceRender={true}>
+
+              
+            </TabPane> */}
+
+
           </Tabs>
         </Form>
       </Modal>

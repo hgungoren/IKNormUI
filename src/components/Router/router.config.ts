@@ -41,7 +41,7 @@ export const appRouters: any = [
   },
   {
     path: '/ksube/:id',
-    permission: 'kSube',
+    permission: 'ksube.view',
     title: 'KSube',
     name: 'KSube',
     icon: UserOutlined,
@@ -50,16 +50,16 @@ export const appRouters: any = [
   },
   {
     path: '/ksubedetay/:id',
-    permission: 'kSubeDetay',
+    permission: 'ksube.detail',
     title: 'KSubeDetay',
     name: 'KSubeDetay',
     icon: UserOutlined,
-    showInMenu: true,
+    showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/KSubeDetay')),
   },
   {
     path: '/bolgemudurluk',
-    permission: 'kBolge',
+    permission: 'kbolge.view',
     title: 'KBolge',
     name: 'KBolge',
     icon: UserOutlined,
@@ -68,7 +68,7 @@ export const appRouters: any = [
   },
   {
     path: '/users',
-    permission: '',
+    permission: 'user.view',
     title: 'Users',
     name: 'Users',
     icon: UserOutlined,
@@ -77,7 +77,7 @@ export const appRouters: any = [
   },
   {
     path: '/roles',
-    permission: '',
+    permission: 'role.view',
     title: 'Roles',
     name: 'Roles',
     icon: TagsOutlined,

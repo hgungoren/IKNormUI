@@ -1,7 +1,7 @@
 import './index.less';
 import * as React from 'react';
 import { Row, Col, Card } from 'antd';
-import { L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../lib/abpUtility';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
@@ -70,7 +70,19 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    await this.getNormRequests();
+ 
+    if (
+      isGranted('knorm.gettotalnormfillingrequest') ||
+      isGranted('knorm.getpendingnormfillrequest') ||
+      isGranted('knorm.getacceptednormfillrequest') ||
+      isGranted('knorm.getcancelednormfillrequest') ||
+      isGranted('knorm.gettotalnormupdaterequest') ||
+      isGranted('knorm.getpendingnormupdaterequest') ||
+      isGranted('knorm.getacceptednormupdaterequest') ||
+      isGranted('knorm.getcancelednormupdaterequest')
+    ) {
+      await this.getNormRequests();
+    }
   }
 
   state = {

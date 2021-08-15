@@ -11,6 +11,8 @@ const ProtectedRoute = ({ path, component: Component, permission, render, ...res
       {...rest}
       render={props => {
 
+
+        console.log(permission)
         if (!abp.session.userId)
           return (
             <Redirect

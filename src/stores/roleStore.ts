@@ -59,7 +59,7 @@ class RoleStore {
   @action
   async getAllPermissions() {
     var result = await roleService.getAllPermissions();
-    this.allPermissions = result;
+    this.allPermissions = result; 
   }
 
   @action

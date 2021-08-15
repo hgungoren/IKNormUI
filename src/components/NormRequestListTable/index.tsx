@@ -2,7 +2,7 @@
 
 import './index.less';
 import * as React from 'react';
-import { L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
@@ -27,7 +27,6 @@ export interface INormRequestListTableState {
     maxNormResultCount: number;
     detaillModalVisible: boolean;
     normRejectDescriptionModalVisible: boolean;
-
 }
 
 
@@ -102,8 +101,6 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
     async componentDidMount() {
-
-        console.log("componentDidMount NormRequestListTable")
         if (this.props.isModal) {
             this.getNormRequestsAll();
         }
@@ -222,9 +219,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 render: (text, norm) => (
                     <>
                         <Space size={'small'}>
-                            <Tooltip placement="topLeft" title={L('Detail')}>
-                                <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
-                            </Tooltip>
+                            {
+                                isGranted('knorm.detail') && <Tooltip placement="topLeft" title={L('Detail')}>
+                                    <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                                </Tooltip>
+                            }
                             {
                                 kNormDetails !== undefined &&
                                 (this.props.isConfirmOrCancel &&
@@ -232,13 +231,18 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     NormStatus[norm.normStatusValue] === NormStatus.Beklemede &&
                                     kNormDetails.items.filter(x => x.userId == this.props.userId && x.status == Status.Waiting && x.kNormId == norm.id).length > 0) && (
                                     <>
-                                        <Tooltip placement="topLeft" title={L('Accept')}>
-                                            <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
-                                        </Tooltip>
+                                        {
+                                            isGranted('knorm.approve') && <Tooltip placement="topLeft" title={L('Accept')}>
+                                                <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
+                                            </Tooltip>
+                                        }
 
-                                        <Tooltip placement="topLeft" title={L('Reject')}>
-                                            <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary"></Button>
-                                        </Tooltip>
+
+                                        {
+                                            isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Reject')}>
+                                                <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary"></Button>
+                                            </Tooltip>
+                                        }
                                     </>
                                 )
                             }
@@ -264,7 +268,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             xl={{ span: 1, offset: 21 }}
                             xxl={{ span: 1, offset: 21 }}>
                         </Col>
-                    </Row>
+                    </Row> 
                     <Row>
                         <Col sm={{ span: 10, offset: 0 }}>
                             <Search placeholder={L('Filter')} onSearch={this.handleNormSearch} />
