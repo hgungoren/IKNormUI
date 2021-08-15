@@ -3,7 +3,7 @@ import TalepNedeni from "./talepNedeni";
 import NormStatus from "./normStatus";
 
 export interface GetAllKNormOutput {
-    objId: number;
+  
     aciklama: string;
     creationTime: Date;
     durumu: string;
@@ -19,6 +19,6 @@ export interface GetAllKNormOutput {
     talepTuru: number;
     turu: string;
     yeniPozisyon: null;
-    kNormId: number;
-
+    kNormId: number; 
+    bagliOlduguSubeObjId?: string;
 }

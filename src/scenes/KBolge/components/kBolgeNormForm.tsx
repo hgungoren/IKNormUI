@@ -10,12 +10,12 @@ import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dt
 
 
 export interface IKBolgeNorFormProps {
-    subeObjId: number;
+    subeObjId: string;
     kSubeNormCreate: () => void;
     kSubeNormStore: KSubeNormStore;
     formRef: React.RefObject<FormInstance>;
-    positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
     kPosizyonKontrol: (key: string) => void;
+    positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
 }
 
 

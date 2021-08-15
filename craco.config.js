@@ -10,6 +10,7 @@ module.exports = {
         customizeTheme: {
           '@primary-color': '#1DA57A',
           '@link-color': '#1DA57A',
+          '@back-color':'#1DA57A'
         },
       },
     },

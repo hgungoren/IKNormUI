@@ -20,7 +20,7 @@ const { Option } = Select;
 
 export interface ICreateNormFormProps {
   tip: string;
-  subeId: number;
+  subeId: string;
   visible: boolean;
   normCount: number;
   modalType: string;
@@ -31,6 +31,7 @@ export interface ICreateNormFormProps {
   hierarchy: GetAllHierarchyOutput[];
   position: PagedResultDto<GetKInkaLookUpTableOutput>;
   createFormState: {};
+  bagliOlduguSubeId: string;
 }
 
 class CreateNormForm extends React.Component<ICreateNormFormProps> {
@@ -52,8 +53,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
   };
 
 
-  changeActiveTab = () => {
-
+  changeActiveTab = () => { 
     const form = this.props.formRef.current;
     form!.validateFields().then(async (values: any) => {
       this.setState({
@@ -193,7 +193,9 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
             !this.state.buttonVisible && (<Button key="next" onClick={this.changeActiveTab} >
               {L(this.state.defaultActiveKey.name)}
-            </Button>)
+            </Button>),
+
+            (this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" && !this.state.buttonVisible) && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>) 
 
           ]
         }
@@ -205,6 +207,8 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
         title={L('Position')}
         destroyOnClose={true} >
 
+
+
         <Form ref={this.props.formRef}   >
           <Tabs
             defaultActiveKey={this.state.defaultActiveKey.pane}
@@ -214,6 +218,10 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             <TabPane tab={L('PositionSelect')} key={'PositionSelect'}>
 
               <Form.Item initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
+                <Input style={{ display: 'none' }} />
+              </Form.Item>
+
+              <Form.Item initialValue={subeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
@@ -297,9 +305,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               {
                 (hierarchy !== undefined && this.state.defaultActiveKey.visible) && <Timeline className={'form-timeline'}>
 
-
-
-                  <QueueAnim delay={100} className="queue-simple">
+                  <QueueAnim delay={1} className="queue-simple">
                     {
                       hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
 
@@ -320,10 +326,10 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                   </QueueAnim>
                 </Timeline>
               }
-
+              {/* 
               {
                 !this.state.buttonVisible && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>)
-              }
+              } */}
             </TabPane>
           </Tabs>
         </Form>

@@ -20,12 +20,14 @@ import { CheckCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-desi
 
 export interface INormRequestListTableState {
     filter: string;
-    subeObjId: number;
+    subeObjId: string;
     requestId: number;
+    inputValue: string;
     skipNormCount: number;
     maxNormResultCount: number;
     detaillModalVisible: boolean;
     normRejectDescriptionModalVisible: boolean;
+
 }
 
 
@@ -33,7 +35,7 @@ interface INormRequestListTableProps {
     table: string,
     userId: number;
     isModal: boolean,
-    subeObjId: number;
+    subeObjId: string;
     tableTitle: string;
     isHoverable: boolean;
     kNormStore: KNormStore;
@@ -48,36 +50,39 @@ const Search = Input.Search;
 @observer
 class NormRequestListTable extends React.Component<INormRequestListTableProps, INormRequestListTableState> {
 
-    formRef = React.createRef<FormInstance>();
-
     state = {
         filter: '',
         requestId: 0,
-        subeObjId: 0,
+        subeObjId: '0',
+        inputValue: '',
         skipNormCount: 0,
         maxNormResultCount: 5,
         detaillModalVisible: false,
         normRejectDescriptionModalVisible: false,
     }
 
+    formRef = React.createRef<FormInstance>();
+
     getNormRequests = async () => {
         this.props.kNormStore.getAll({
             maxResultCount: 5,
             id: this.props.subeObjId,
             keyword: this.state.filter,
-            skipCount: this.state.skipNormCount
+            skipCount: this.state.skipNormCount,
+            bolgeId: '0'
         })
     }
 
     async getNormRequestsAll() {
+
         this.props.kNormStore.getMaxAll({
             skipCount: 0,
             id: this.props.subeObjId,
             keyword: this.state.filter,
             maxResultCount: 1000000000,
+            bolgeId: '0'
         })
     }
-
 
     getAllNormDetails = async () => {
         this.props.kNormDetailStore.getAll({
@@ -87,6 +92,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             keyword: ''
         });
     }
+
     handleNormSearch = (value: string) => {
         if (this.props.isModal)
             this.setState({ filter: value }, async () => await this.getNormRequestsAll());
@@ -94,16 +100,19 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             this.setState({ filter: value }, async () => await this.getNormRequests());
     };
 
+
     async componentDidMount() {
 
-        if (this.props.isModal)
+        console.log("componentDidMount NormRequestListTable")
+        if (this.props.isModal) {
             this.getNormRequestsAll();
+        }
         else
             this.getNormRequests()
 
         await this.getAllNormDetails();
-
     }
+
 
     handleNormTableChange = (pagination: any) => {
         if (this.props.isModal)
@@ -185,7 +194,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     {
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
-                            month: "long",
+                            month: "numeric",
                             day: "2-digit",
                             hour: "2-digit",
                             minute: "2-digit"
@@ -197,8 +206,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 250, render: (text, norm) => (<>
 
                     {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
-                        <div className={'title'}>      {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
-                        <div className={'title'}>     {TalepDurumu[norm.durumu] + ' ' + L('Reject')}  </div>}
+                        <div className={'title'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
+                        <div className={'title'}> {TalepDurumu[norm.durumu] + ' ' + L('Reject')}   </div>}
                 </>)
 
             },
@@ -266,6 +275,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             {
                                 isModal ? (
                                     <Table
+                                        locale={{ emptyText: L('NoData') }}
                                         rowKey={(record) => record.id}
                                         bordered={false}
                                         columns={columnsNorm}
@@ -279,6 +289,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     />
                                 ) : (
                                     <Table
+                                        locale={{ emptyText: L('NoData') }}
                                         rowKey={(record) => record.id}
                                         bordered={false}
                                         columns={columnsNorm}

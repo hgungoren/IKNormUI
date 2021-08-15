@@ -2,5 +2,5 @@ import { PagedFilterAndSortedRequest } from '../../dto/pagedFilterAndSortedReque
 
 export interface PagedKSubeNormResultRequestDto extends PagedFilterAndSortedRequest {
     keyword: string,
-    id: number
+    id: string
 }

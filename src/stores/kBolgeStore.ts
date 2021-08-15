@@ -17,7 +17,7 @@ class KBolgeStore {
   }
 
   @action
-  async get(entityDto: EntityDto) {
+  async get(entityDto: EntityDto<string>) {
     let result = await kBolgeService.get(entityDto);
     this.editKBolge = result;
   }

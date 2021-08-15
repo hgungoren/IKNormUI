@@ -11,7 +11,8 @@ import { Provider } from 'mobx-react';
 import Utils from './utils/utils';
 import abpUserConfigurationService from './services/abpUserConfigurationService';
 import initializeStores from './stores/storeInitializer';
-import registerServiceWorker from './registerServiceWorker'; 
+import registerServiceWorker from './registerServiceWorker';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 declare var abp: any;
 
@@ -28,16 +29,27 @@ abpUserConfigurationService.getAll().then(data => {
   }
 
   const stores = initializeStores();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        cacheTime: 0,
+        retry: 3,
+        retryDelay: 3000
+      },
+    },
+  });
 
-  ReactDOM.render(
 
-
+  ReactDOM.render( 
     <Provider {...stores}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </Provider> 
     ,
     document.getElementById('root') as HTMLElement
   );

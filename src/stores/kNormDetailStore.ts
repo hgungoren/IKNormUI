@@ -17,9 +17,7 @@ class KNormDetailStore {
     }
 
     @action
-    async update(createKNormDetailInput: CreateKNormDetailInput) {
-
-        console.log(createKNormDetailInput)
+    async update(createKNormDetailInput: CreateKNormDetailInput) { 
         await kNormDetailService.update(createKNormDetailInput);
     }
 

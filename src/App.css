@@ -32,3 +32,11 @@
     transform: rotate(360deg);
   }
 }
+
+table {
+  cursor: context-menu;
+}
+
+.ant-card {
+  cursor: context-menu;
+}

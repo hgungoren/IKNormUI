@@ -5,7 +5,7 @@ export interface GetAllKSubeNormOutput {
   isActive: boolean; 
   lastLoginTime: Date;
   creationTime: Date;   
-  id: number; 
+  id: string; 
   creatorUserId: number;
   lastModificationTime: Date;
   lastModifierUserId: number; 

@@ -13,7 +13,7 @@ class UserService {
     return result.data.result;
   }
 
-  public async update(updateUserInput: UpdateUserInput) {
+  public async update(updateUserInput: UpdateUserInput) { 
     let result = await http.put('api/services/app/User/Update', updateUserInput);
     return result.data.result;
   }
@@ -38,7 +38,7 @@ class UserService {
     return result.data.result;
   }
 
-    public async getAll(pagedFilterAndSortedRequest: PagedUserResultRequestDto): Promise<PagedResultDto<GetAllUserOutput>> {
+  public async getAll(pagedFilterAndSortedRequest: PagedUserResultRequestDto): Promise<PagedResultDto<GetAllUserOutput>> {
     let result = await http.get('api/services/app/User/GetAll', { params: pagedFilterAndSortedRequest });
     return result.data.result;
   }

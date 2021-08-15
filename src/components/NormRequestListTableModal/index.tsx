@@ -15,7 +15,7 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
                 visible={visible}
                 onCancel={onCancel} >
 
-                <NormRequestListTable
+                <NormRequestListTable 
                     userId={userId}
                     kNormDetailStore={kNormDetailStore}
                     isConfirmOrCancel={true}
@@ -35,7 +35,7 @@ NormRequestListTableModal.propTypes = {
     table: PropTypes.string,
     visible: PropTypes.bool,
     onCancel: PropTypes.func,
-    kNormStore: PropTypes.any, 
+    kNormStore: PropTypes.any,
 };
 
 export default NormRequestListTableModal;

@@ -1,15 +1,17 @@
 /*eslint-disable */
-import * as React from 'react'; 
-import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table, Tag } from 'antd';
-import { inject, observer } from 'mobx-react'; 
+import './index.less';
+import * as React from 'react';
+import { L } from '../../lib/abpUtility';
+import { FormInstance } from 'antd/lib/form';
+import { inject, observer } from 'mobx-react';
+import UserStore from '../../stores/userStore';
+import Stores from '../../stores/storeIdentifier';
+import { EntityDto } from '../../services/dto/entityDto';
 import AppComponentBase from '../../components/AppComponentBase';
 import CreateOrUpdateUser from './components/createOrUpdateUser';
-import { EntityDto } from '../../services/dto/entityDto';
-import { L } from '../../lib/abpUtility';
-import Stores from '../../stores/storeIdentifier';
-import UserStore from '../../stores/userStore';
-import { FormInstance } from 'antd/lib/form';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table, Tag } from 'antd';
+
 
 export interface IUserProps {
   userStore: UserStore;
@@ -21,6 +23,7 @@ export interface IUserState {
   skipCount: number;
   userId: number;
   filter: string;
+  drawerVisible: boolean;
 }
 
 const confirm = Modal.confirm;
@@ -37,6 +40,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     skipCount: 0,
     userId: 0,
     filter: '',
+    drawerVisible: false,
   };
 
   async componentDidMount() {
@@ -57,9 +61,9 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     });
   };
 
+
   async createOrUpdateModalOpen(entityDto: EntityDto) {
 
-   
     if (entityDto.id === 0) {
       await this.props.userStore.createUser();
       await this.props.userStore.getRoles();
@@ -74,14 +78,14 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     setTimeout(() => {
       this.formRef.current?.setFieldsValue({ ...this.props.userStore.editUser });
     }, 100);
-
-    console.log(this.props.userStore.editUser)
   }
 
   delete(input: EntityDto) {
     const self = this;
     confirm({
-      title: 'Do you Want to delete these items?',
+      okText: L('Yes'),
+      cancelText: L('No'),
+      title: L('ConfirmDelete'),
       onOk() {
         self.props.userStore.delete(input);
       },
@@ -111,19 +115,24 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     this.setState({ filter: value }, async () => await this.getAll());
   };
 
+
+
   public render() {
     const { users } = this.props.userStore;
+
+
     const columns = [
       { title: L('UserName'), dataIndex: 'userName', key: 'userName', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('FullName'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('FirstName'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('LastName'), dataIndex: 'surname', key: 'surname', width: 150, render: (text: string) => <div>{text}</div> },
       { title: L('Title'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div> },
       { title: L('EmailAddress'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div> },
       {
-        title: L('IsActive'),
+        title: L('IsActiveStatus'),
         dataIndex: 'isActive',
         key: 'isActive',
         width: 150,
-        render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Yes')}</Tag> : <Tag color="red">{L('No')}</Tag>),
+        render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>),
       },
       {
         title: L('Actions'),
@@ -133,7 +142,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
             <Dropdown
               trigger={['click']}
               overlay={
-                <Menu>
+                <Menu> 
                   <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                   <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
                 </Menu>
@@ -150,69 +159,72 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     ];
 
     return (
-      <Card>
-        <Row>
-          <Col
-            xs={{ span: 4, offset: 0 }}
-            sm={{ span: 4, offset: 0 }}
-            md={{ span: 4, offset: 0 }}
-            lg={{ span: 2, offset: 0 }}
-            xl={{ span: 2, offset: 0 }}
-            xxl={{ span: 2, offset: 0 }}
-          >
-            {' '}
-            <h2>{L('Users')}</h2>
-          </Col>
-          <Col
-            xs={{ span: 14, offset: 0 }}
-            sm={{ span: 15, offset: 0 }}
-            md={{ span: 15, offset: 0 }}
-            lg={{ span: 1, offset: 21 }}
-            xl={{ span: 1, offset: 21 }}
-            xxl={{ span: 1, offset: 21 }}
-          >
-            <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{ span: 10, offset: 0 }}>
-            <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 20 }}>
-          <Col
-            xs={{ span: 24, offset: 0 }}
-            sm={{ span: 24, offset: 0 }}
-            md={{ span: 24, offset: 0 }}
-            lg={{ span: 24, offset: 0 }}
-            xl={{ span: 24, offset: 0 }}
-            xxl={{ span: 24, offset: 0 }}
-          >
-            <Table
-              rowKey={(record) => record.id.toString()}
-           
-              columns={columns}
-              pagination={{ pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }}
-              loading={users === undefined ? true : false}
-              dataSource={users === undefined ? [] : users.items}
-              onChange={this.handleTableChange}
-            />
-          </Col>
-        </Row>
-        <CreateOrUpdateUser
-          formRef={this.formRef}
-          visible={this.state.modalVisible}
-          onCancel={() => {
-            this.setState({
-              modalVisible: false,
-            });
-            this.formRef.current?.resetFields();
-          }}
-          modalType={this.state.userId === 0 ? 'edit' : 'create'}
-          onCreate={this.handleCreate}
-          roles={this.props.userStore.roles}
-        />
-      </Card>
+      <>
+        <Card>
+          <Row>
+            <Col
+              xs={{ span: 4, offset: 0 }}
+              sm={{ span: 4, offset: 0 }}
+              md={{ span: 4, offset: 0 }}
+              lg={{ span: 2, offset: 0 }}
+              xl={{ span: 2, offset: 0 }}
+              xxl={{ span: 2, offset: 0 }}
+            >
+              {' '}
+              <h2>{L('Users')}</h2>
+            </Col>
+            <Col
+              xs={{ span: 14, offset: 0 }}
+              sm={{ span: 15, offset: 0 }}
+              md={{ span: 15, offset: 0 }}
+              lg={{ span: 1, offset: 21 }}
+              xl={{ span: 1, offset: 21 }}
+              xxl={{ span: 1, offset: 21 }}
+            >
+              <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={{ span: 10, offset: 0 }}>
+              <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 20 }}>
+            <Col
+              xs={{ span: 24, offset: 0 }}
+              sm={{ span: 24, offset: 0 }}
+              md={{ span: 24, offset: 0 }}
+              lg={{ span: 24, offset: 0 }}
+              xl={{ span: 24, offset: 0 }}
+              xxl={{ span: 24, offset: 0 }}
+            >
+              <Table
+                locale={{ emptyText: L('NoData') }}
+                rowKey={(record) => record.id.toString()}
+                columns={columns}
+                pagination={{ pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }}
+                loading={users === undefined ? true : false}
+                dataSource={users === undefined ? [] : users.items}
+                onChange={this.handleTableChange}
+              />
+            </Col>
+          </Row>
+          <CreateOrUpdateUser
+            formRef={this.formRef}
+            visible={this.state.modalVisible}
+            onCancel={() => {
+              this.setState({
+                modalVisible: false,
+              });
+              this.formRef.current?.resetFields();
+            }}
+            modalType={this.state.userId === 0 ? 'edit' : 'create'}
+            onCreate={this.handleCreate}
+            roles={this.props.userStore.roles}
+          />
+        </Card>
+
+      </>
     );
   }
 }

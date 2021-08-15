@@ -12,6 +12,7 @@ import RoleStore from '../../stores/roleStore';
 import Stores from '../../stores/storeIdentifier';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
+import RoleDetailDrawer from '../../components/RoleDetailDrawer';
 
 export interface IRoleProps {
   roleStore: RoleStore;
@@ -23,6 +24,7 @@ export interface IRoleState {
   skipCount: number;
   roleId: number;
   filter: string;
+  drawerVisible: boolean;
 }
 
 const confirm = Modal.confirm;
@@ -38,7 +40,8 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     maxResultCount: 10,
     skipCount: 0,
     roleId: 0,
-    filter: ''
+    filter: '',
+    drawerVisible: false
   };
 
   async componentDidMount() {
@@ -82,11 +85,13 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
   delete(input: EntityDto) {
     const self = this;
     confirm({
-      title: 'Do you Want to delete these items?',
+      okText: L('Yes'),
+      cancelText: L('No'),
+      title: L('ConfirmDelete'),
       onOk() {
         self.props.roleStore.delete(input);
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
@@ -109,8 +114,22 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     this.setState({ filter: value }, async () => await this.getAll());
   };
 
+
+  showDrawer = async (entityDto: EntityDto) => {
+    await this.props.roleStore.getRoleForEdit(entityDto);
+    await this.props.roleStore.getAllPermissions();
+    this.setState({ drawerVisible: true, roleId: entityDto.id });
+  }
+
+  hideDrawer = async (entityDto: EntityDto) => {
+    this.setState({ drawerVisible: false });
+  }
+
+
   public render() {
+    const { drawerVisible } = this.state;
     const { allPermissions, roles } = this.props.roleStore;
+
     const columns = [
       { title: L('RoleName'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
       { title: L('DisplayName'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div> },
@@ -123,6 +142,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               trigger={['click']}
               overlay={
                 <Menu>
+                  <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
                   <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                   <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
                 </Menu>
@@ -139,69 +159,79 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     ];
 
     return (
-      <Card>
-        <Row>
-          <Col
-            xs={{ span: 4, offset: 0 }}
-            sm={{ span: 4, offset: 0 }}
-            md={{ span: 4, offset: 0 }}
-            lg={{ span: 2, offset: 0 }}
-            xl={{ span: 2, offset: 0 }}
-            xxl={{ span: 2, offset: 0 }}
-          >
-            <h2>{L('Roles')}</h2>
-          </Col>
-          <Col
-            xs={{ span: 14, offset: 0 }}
-            sm={{ span: 15, offset: 0 }}
-            md={{ span: 15, offset: 0 }}
-            lg={{ span: 1, offset: 21 }}
-            xl={{ span: 1, offset: 21 }}
-            xxl={{ span: 1, offset: 21 }}
-          >
-            <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{ span: 10, offset: 0 }}>
-            <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 20 }}>
-          <Col
-            xs={{ span: 24, offset: 0 }}
-            sm={{ span: 24, offset: 0 }}
-            md={{ span: 24, offset: 0 }}
-            lg={{ span: 24, offset: 0 }}
-            xl={{ span: 24, offset: 0 }}
-            xxl={{ span: 24, offset: 0 }}
-          >
-            <Table
-              rowKey="id"
-              bordered={true}
-              pagination={{ pageSize: this.state.maxResultCount, total: roles === undefined ? 0 : roles.totalCount, defaultCurrent: 1 }}
-              columns={columns}
-              loading={roles === undefined ? true : false}
-              dataSource={roles === undefined ? [] : roles.items}
-              onChange={this.handleTableChange}
-            />
-          </Col>
-        </Row>
+      <>
+        <Card>
+          <Row>
+            <Col
+              xs={{ span: 4, offset: 0 }}
+              sm={{ span: 4, offset: 0 }}
+              md={{ span: 4, offset: 0 }}
+              lg={{ span: 2, offset: 0 }}
+              xl={{ span: 2, offset: 0 }}
+              xxl={{ span: 2, offset: 0 }}
+            >
+              <h2>{L('Roles')}</h2>
+            </Col>
+            <Col
+              xs={{ span: 14, offset: 0 }}
+              sm={{ span: 15, offset: 0 }}
+              md={{ span: 15, offset: 0 }}
+              lg={{ span: 1, offset: 21 }}
+              xl={{ span: 1, offset: 21 }}
+              xxl={{ span: 1, offset: 21 }}
+            >
+              <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={{ span: 10, offset: 0 }}>
+              <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 20 }}>
+            <Col
+              xs={{ span: 24, offset: 0 }}
+              sm={{ span: 24, offset: 0 }}
+              md={{ span: 24, offset: 0 }}
+              lg={{ span: 24, offset: 0 }}
+              xl={{ span: 24, offset: 0 }}
+              xxl={{ span: 24, offset: 0 }}
+            >
+              <Table
+                locale={{ emptyText: L('NoData') }}
+                rowKey="id" 
+                pagination={{ pageSize: this.state.maxResultCount, total: roles === undefined ? 0 : roles.totalCount, defaultCurrent: 1 }}
+                columns={columns}
+                loading={roles === undefined ? true : false}
+                dataSource={roles === undefined ? [] : roles.items}
+                onChange={this.handleTableChange}
+              />
+            </Col>
+          </Row>
 
-        <CreateOrUpdateRole
-          visible={this.state.modalVisible}
-          onCancel={() =>
-            this.setState({
-              modalVisible: false,
-            })
-          }
-          modalType={this.state.roleId === 0 ? 'edit' : 'create'}
-          onOk={this.handleCreate}
-          permissions={allPermissions}
-          roleStore={this.props.roleStore}
+          <CreateOrUpdateRole
+            visible={this.state.modalVisible}
+            onCancel={() =>
+              this.setState({
+                modalVisible: false,
+              })
+            }
+            modalType={this.state.roleId === 0 ? 'edit' : 'create'}
+            onOk={this.handleCreate}
+            permissions={allPermissions}
+            roleStore={this.props.roleStore}
+            formRef={this.formRef}
+          />
+        </Card>
+
+        <RoleDetailDrawer
           formRef={this.formRef}
-        />
-      </Card>
+          visible={drawerVisible}
+          showOrHideDrawer={this.hideDrawer}
+          permissionsList={this.props.roleStore.allPermissions}
+          id={this.state.roleId} />
+
+      </>
     );
   }
 }

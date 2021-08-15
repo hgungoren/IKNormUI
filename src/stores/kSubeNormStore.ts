@@ -31,13 +31,13 @@ class KSubeNormStore {
   }
 
   @action
-  async delete(entityDto: EntityDto) {
+  async delete(entityDto: EntityDto<string>) {
     await kSubeNormService.delete(entityDto);
     this.norms.items = this.norms.items.filter((x: GetKSubeNormOutput) => x.id !== entityDto.id);
   }
 
   @action
-  async get(entityDto: EntityDto) {
+  async get(entityDto: EntityDto<string>) {
     let result = await kSubeNormService.get(entityDto);
     this.editNorm = result;
   }
@@ -55,7 +55,7 @@ class KSubeNormStore {
   }
 
   @action
-  async getNormCountById(id: number) {
+  async getNormCountById(id: string) {
     let result = await kSubeNormService.getNormCountById(id);
     this.count = result;
   }

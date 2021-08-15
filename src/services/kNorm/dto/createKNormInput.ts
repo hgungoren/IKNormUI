@@ -17,6 +17,7 @@ export interface CreateKNormInput {
     talepDurumu?: TalepDurumu;
     normStatus?: NormStatus;
     tip?: string;
-    mails?: CreateMail[]
+    mails?: CreateMail[];
+    bagliOlduguSubeObjId?: string;
 }
 

@@ -6,9 +6,9 @@ export interface CreateUserInput {
   isActive: boolean;
   roleNames: string[];
   password: string; 
-  userObjId: number;
+  userObjId: string;
   companyObjId: string;
-  ompanyRelationalObjId: string;
+  companyRelationObjId: string;
   sicilNo: number;
   title: string;
   companyCode: number;

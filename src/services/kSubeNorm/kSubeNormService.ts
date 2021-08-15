@@ -18,12 +18,12 @@ class KSubeNormService {
     return result.data.result;
   }
 
-  public async delete(entityDto: EntityDto) {
+  public async delete(entityDto: EntityDto<string>) {
     let result = await http.delete('api/services/app/KSubeNorm/Delete', { params: entityDto });
     return result.data;
   }
 
-  public async get(entityDto: EntityDto): Promise<CreateOrUpdateKSubeNormInput> {
+  public async get(entityDto: EntityDto<string>): Promise<CreateOrUpdateKSubeNormInput> {
     let result = await http.get('api/services/app/KSubeNorm/Get', { params: entityDto });
     return result.data.result;
   }
@@ -38,7 +38,7 @@ class KSubeNormService {
     return result.data.result;
   }
 
-  public async getNormCountById(id: number): Promise<number> {
+  public async getNormCountById(id: string): Promise<number> {
     let result = await http.get('api/services/app/KSubeNorm/GetNormCountById?id=' + id);
     return result.data.result;
   }

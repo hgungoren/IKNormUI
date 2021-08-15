@@ -23,7 +23,7 @@ class KPersonelStore {
     }
 
     @action
-    async getEmployeeCountById(id: number) {
+    async getEmployeeCountById(id: string) {
         let result = await kPersonelService.getEmployeeCountById(id);
         this.kPersonelCount = result;
     }

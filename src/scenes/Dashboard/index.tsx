@@ -49,7 +49,16 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       maxResultCount: 100000,
       skipCount: 0,
       keyword: '',
-      id: 0,
+      id: '0',
+      bolgeId: '0'
+    });
+
+    await this.props.kNormStore.getMaxAllCount({
+      maxResultCount: 100000,
+      skipCount: 0,
+      keyword: '',
+      id: '0',
+      bolgeId: '0'
     });
   }
 
@@ -86,14 +95,14 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
-      getTotalNormUpdateRequest,
-      getPendingNormFillRequest,
-      getTotalNormFillingRequest,
-      getAcceptedNormFillRequest,
-      getCanceledNormFillRequest,
-      getPendingNormUpdateRequest,
-      getAcceptedNormUpdateRequest,
-      getCanceledNormUpdateRequest
+      getTotalNormUpdateRequestCount,
+      getPendingNormFillRequestCount,
+      getTotalNormFillingRequestCount,
+      getAcceptedNormFillRequestCount,
+      getCanceledNormFillRequestCount,
+      getPendingNormUpdateRequestCount,
+      getAcceptedNormUpdateRequestCount,
+      getCanceledNormUpdateRequestCount
     } = this.props.kNormStore;
 
     const data: KLineChartModel[] = [
@@ -116,15 +125,16 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
           kPersonelCount={kPersonelCount}
           kNormStore={this.props.kNormStore}
           kNormDetailStore={this.props.kNormDetailStore}
-          getTotalNormUpdateRequest={getTotalNormUpdateRequest}
-          getPendingNormFillRequest={getPendingNormFillRequest}
           userId={this.props.sessionStore?.currentLogin.user.id}
-          getTotalNormFillingRequest={getTotalNormFillingRequest}
-          getAcceptedNormFillRequest={getAcceptedNormFillRequest}
-          getCanceledNormFillRequest={getCanceledNormFillRequest}
-          getPendingNormUpdateRequest={getPendingNormUpdateRequest}
-          getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
-          getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+          getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
+          getPendingNormFillRequestCount={getPendingNormFillRequestCount}
+          getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}
+          getAcceptedNormFillRequestCount={getAcceptedNormFillRequestCount}
+          getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
+          getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
+          getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
+          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+
         />
 
         <Row gutter={16}>

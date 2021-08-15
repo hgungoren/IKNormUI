@@ -1,3 +1,4 @@
+/* eslint-disable */
 import './index.less';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -35,11 +36,11 @@ export interface INormProps {
 }
 
 export interface INormState {
-    id: number;
-    normId: number;
+    id: string;
+    normId: string;
     filter: string;
     subeAdi: string;
-    subeObjId: number;
+    subeObjId: string;
     skipCount: number;
     cardLoading: boolean;
     modalVisible: boolean;
@@ -61,24 +62,33 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     formRef = React.createRef<FormInstance>();
 
     state = {
-        id: 0,
-        normId: 0,
+        id: '0',
+        normId: '0',
         filter: '',
         subeAdi: '',
         skipCount: 0,
-        subeObjId: 0,
+        subeObjId: '0',
         cardLoading: true,
         maxResultCount: 5,
         kPersonelCount: 0,
         modalVisible: false,
     };
 
-    async getNormRequests(id: number) {
+    async getNormRequests(id: string) {
         await this.props.kNormStore.getMaxAll({
             id: id,
-            keyword: '',
+            keyword: 'sube',
             skipCount: 0,
             maxResultCount: 100000,
+            bolgeId: id
+        });
+
+        await this.props.kNormStore.getMaxAllCount({
+            maxResultCount: 100000,
+            skipCount: 0,
+            keyword: 'sube',
+            id: id,
+            bolgeId: id
         });
     }
 
@@ -93,7 +103,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         });
     }
 
-    async getNormCount(id: number) {
+    async getNormCount(id: string) {
         await this.props.kSubeNormStore.getNormCountById(id);
     }
 
@@ -124,7 +134,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     kSubeNormCreate = () => {
         const form = this.formRef.current;
         form!.validateFields().then(async (values: any) => {
-            if (this.state.normId === 0) {
+            if (this.state.normId === '0') {
                 await this.props.kSubeNormStore.create(values);
                 this.openNotificationWithIcon('success')
             } else {
@@ -135,7 +145,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         });
     };
 
-    kSubeNormEdit = (input: EntityDto) => {
+    kSubeNormEdit = (input: EntityDto<string>) => {
         this.props.kSubeNormStore.get(input);
         const form = this.formRef.current;
         this.setState({ normId: input.id })
@@ -146,9 +156,11 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     }
 
-    kSubeNormDelete = (input: EntityDto) => {
+    kSubeNormDelete = (input: EntityDto<string>) => {
         const self = this;
         confirm({
+            okText: L('Yes'),
+            cancelText: L('No'),
             title: L('ConfirmDelete'),
             onOk() {
                 self.getKSubeNorms();
@@ -177,7 +189,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         this.setState({ cardLoading: false })
     }
 
-    async get(entityDto: EntityDto) {
+    async get(entityDto: EntityDto<string>) {
         await this.props.kSubeStore.get(entityDto);
     }
 
@@ -192,7 +204,10 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             );
     }
 
-    async createOrUpdateModalOpen(tip: string, id: number, subeAdi: string) {
+    async createOrUpdateModalOpen(tip: string, id: string, subeAdi: string) {
+
+        this.formRef.current?.resetFields();
+
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.setState({ subeObjId: id })
         await this.getPosition(tip);
@@ -200,23 +215,25 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         this.setState({ modalVisible: !this.state.modalVisible });
     }
 
-    async getEmployeeCount(id: number) {
+    async getEmployeeCount(id: string) {
+
         await this.props.kPersonelStore.getEmployeeCountById(id);
     }
 
     async setPageState() {
 
+        this.setState({ id: this.props["match"].params["id"] });
 
-        if (this.props["match"].params["id"] !== undefined && this.props["match"].params["id"] !== ":id") {
-            this.setState({ id: this.props["match"].params["id"] });
-            return
-        }
+        // if (this.props["match"].params["id"] !== undefined && this.props["match"].params["id"] !== ":id") {
+        //     this.setState({ id: this.props["match"].params["id"] });
+        //     return
+        // }
 
 
-        if (this.props.sessionStore?.currentLogin !== undefined) {
-            let companyObjId = this.props.sessionStore?.currentLogin.user.companyObjId;
-            this.setState({ id: companyObjId });
-        }
+        // if (this.props.sessionStore?.currentLogin !== undefined) {
+        //     let companyObjId = this.props.sessionStore?.currentLogin.user.companyObjId;
+        //     this.setState({ id: companyObjId });
+        // }
 
     }
 
@@ -246,14 +263,14 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         const { kSubes, editKSube, normCount } = this.props.kSubeStore;
 
         const {
-            getTotalNormUpdateRequest,
-            getPendingNormFillRequest,
-            getTotalNormFillingRequest,
-            getAcceptedNormFillRequest,
-            getCanceledNormFillRequest,
-            getPendingNormUpdateRequest,
-            getAcceptedNormUpdateRequest,
-            getCanceledNormUpdateRequest,
+            getTotalNormUpdateRequestCount,
+            getPendingNormFillRequestCount,
+            getTotalNormFillingRequestCount,
+            getAcceptedNormFillRequestCount,
+            getCanceledNormFillRequestCount,
+            getPendingNormUpdateRequestCount,
+            getAcceptedNormUpdateRequestCount,
+            getCanceledNormUpdateRequestCount
         } = this.props.kNormStore;
 
         const columns = [
@@ -302,8 +319,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                             onBack={() => window.history.back()}
                             title={
                                 <Breadcrumb>
-                                    <Breadcrumb.Item> {L('Dashboard')} </Breadcrumb.Item>
-                                    <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
+                                    <Breadcrumb.Item><Link to="/home">{L('Dashboard')}</Link>   </Breadcrumb.Item>
+                                    <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link>  </Breadcrumb.Item>
                                     <Breadcrumb.Item> {editKSube === undefined ? '' : editKSube.adi} </Breadcrumb.Item>
                                 </Breadcrumb>
                             }  >
@@ -311,21 +328,21 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                     </Card>
 
                     <KCartList
+                        userId={this.props.sessionStore?.currentLogin.user.id}
                         normCount={normCount}
                         subeObjId={this.state.id}
                         cardLoading={cardLoading}
                         kPersonelCount={kPersonelCount}
                         kNormStore={this.props.kNormStore}
                         kNormDetailStore={this.props.kNormDetailStore}
-                        getTotalNormUpdateRequest={getTotalNormUpdateRequest}
-                        getPendingNormFillRequest={getPendingNormFillRequest}
-                        userId={this.props.sessionStore?.currentLogin.user.id}
-                        getTotalNormFillingRequest={getTotalNormFillingRequest}
-                        getAcceptedNormFillRequest={getAcceptedNormFillRequest}
-                        getCanceledNormFillRequest={getCanceledNormFillRequest}
-                        getPendingNormUpdateRequest={getPendingNormUpdateRequest}
-                        getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
-                        getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
+                        getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
+                        getPendingNormFillRequestCount={getPendingNormFillRequestCount}
+                        getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}
+                        getAcceptedNormFillRequestCount={getAcceptedNormFillRequestCount}
+                        getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
+                        getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
+                        getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
+                        getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
                     />
 
                     <Card hoverable>
@@ -356,6 +373,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                                 xxl={{ span: 24, offset: 0 }}
                             >
                                 <Table
+                                    locale={{ emptyText: L('NoData') }}
                                     rowKey={(record) => record.objId.toString()}
                                     bordered={false}
                                     columns={columns}

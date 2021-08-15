@@ -6,6 +6,7 @@ import { L } from '../../../lib/abpUtility';
 import RoleStore from '../../../stores/roleStore';
 import rules from './createOrUpdateRole.validation';
 import { FormInstance } from 'antd/lib/form';
+// import RoleDetailDrawer from './rodeDetailDrawer';
 
 const TabPane = Tabs.TabPane;
 
@@ -72,17 +73,18 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
     return (
       <Modal
         width={'80%'}
-        visible={this.props.visible}
-        cancelText={L('Cancel')}
-        okText={L('OK')}
-        onCancel={this.props.onCancel}
-        title={L('Role')}
-        onOk={this.props.onOk}
+        okText={L('Save')}
         destroyOnClose={true}
+        onOk={this.props.onOk}
+        cancelText={L('GiveUp')}
+        title={L('AddUserRole')}
+        visible={this.props.visible}
+        onCancel={this.props.onCancel}
       >
+
         <Form ref={this.props.formRef}>
           <Tabs defaultActiveKey={'role'} size={'small'} tabBarGutter={64}>
-            <TabPane tab={L('RoleDetails')} key={'role'}>
+            <TabPane tab={L('UserRoleDetail')} key={'role'}>
               <Form.Item label={L('RoleName')} name={'name'} rules={rules.name} {...formItemLayout}>
                 <Input />
               </Form.Item>
@@ -93,10 +95,14 @@ class CreateOrUpdateRole extends React.Component<ICreateOrUpdateRoleProps> {
                 <Input />
               </Form.Item>
             </TabPane>
-            <TabPane tab={L('RolePermission')} key={'permission'} forceRender={true}>
+            <TabPane tab={L('UserRolePermission')} key={'permission'} forceRender={true}>
+ 
               <Form.Item   {...tailFormItemLayout} name={'grantedPermissions'} valuePropName={'value'}>
-                <Checkbox.Group  options={options} />
+                <Checkbox.Group options={options} />
               </Form.Item>
+
+              {/* <RoleDetailDrawer onClose={true} onComplete={true} roleId={1} showDrawer={true}  /> */}
+
             </TabPane>
           </Tabs>
         </Form>

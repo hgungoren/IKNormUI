@@ -1,15 +1,13 @@
 import './index.less';
-
 import * as React from 'react';
-
+import { Link } from 'react-router-dom';
+import { L } from '../../lib/abpUtility';
+import LanguageSelect from '../LanguageSelect';
+import profilePicture from '../../images/user.png';
 import { Avatar, Badge, Col, Dropdown, Menu, Row } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined } from '@ant-design/icons';
 
-import { L } from '../../lib/abpUtility';
-import LanguageSelect from '../LanguageSelect';
-import { Link } from 'react-router-dom';
 
-import profilePicture from '../../images/user.png';
 
 export interface IHeaderProps {
   collapsed?: any;

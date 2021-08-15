@@ -10,7 +10,7 @@ import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dt
 
 
 export interface IKSubeNorFormProps {
-    subeObjId: number;
+    subeObjId: string;
     kSubeNormCreate: () => void;
     kSubeNormStore: KSubeNormStore;
     kPosizyonKontrol: (key: string) => void;

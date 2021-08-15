@@ -84,11 +84,13 @@ class Tenant extends AppComponentBase<ITenantProps, ITenantState> {
   delete(input: EntityDto) {
     const self = this;
     confirm({
-      title: 'Do you Want to delete these items?',
+      okText: L('Yes'),
+      cancelText: L('No'),
+      title: L('ConfirmDelete'),
       onOk() {
         self.props.tenantStore.delete(input);
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
@@ -185,6 +187,7 @@ class Tenant extends AppComponentBase<ITenantProps, ITenantState> {
             xxl={{ span: 24, offset: 0 }}
           >
             <Table
+              locale={{ emptyText: L('NoData') }}
               rowKey="id"
               bordered={true}
               pagination={{ pageSize: this.state.maxResultCount, total: tenants === undefined ? 0 : tenants.totalCount, defaultCurrent: 1 }}

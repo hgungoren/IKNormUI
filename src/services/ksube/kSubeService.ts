@@ -12,12 +12,12 @@ class KSubeService {
         return result.data.result;
     }
 
-    public async get(entityDto: EntityDto): Promise<CreateOrUpdateKSubeInput> {
+    public async get(entityDto: EntityDto<string>): Promise<CreateOrUpdateKSubeInput> { 
         let result = await http.get('api/services/app/KSube/Get', { params: entityDto });
         return result.data.result;
     }
 
-    public async getNormCount(id: number): Promise<number> {
+    public async getNormCount(id: string): Promise<number> {
         let result = await http.get('api/services/app/KSube/GetNormCountById?id=' + id);
         return result.data.result;
     }

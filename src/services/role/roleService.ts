@@ -22,7 +22,7 @@ class RoleService {
     return result.data.result;
   }
 
-  public async update(updateRoleInput: UpdateRoleInput): Promise<UpdateRoleOutput> {
+  public async update(updateRoleInput: UpdateRoleInput): Promise<UpdateRoleOutput> { 
     let result = await http.put('api/services/app/Role/Update', updateRoleInput);
     return result.data.result as UpdateRoleOutput;
   }

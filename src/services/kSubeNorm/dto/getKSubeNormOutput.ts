@@ -3,7 +3,7 @@ export interface GetKSubeNormOutput {
   adet: number;
   subeObjId: string;
   isActive: boolean;
-  id: number;
+  id: string;
   creationTime: Date;
   creatorUserId: number;
   lastModificationTime: Date;

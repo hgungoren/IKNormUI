@@ -11,7 +11,7 @@ class KBolgeService {
         return result.data.result;
     }
 
-    public async get(entityDto: EntityDto): Promise<CreateOrUpdateKBolgeInput> {
+    public async get(entityDto: EntityDto<string>): Promise<CreateOrUpdateKBolgeInput> {
         let result = await http.get('api/services/app/KBolge/Get', { params: entityDto });
         return result.data.result;
     }

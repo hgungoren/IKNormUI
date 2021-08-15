@@ -7,6 +7,8 @@ import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
+import AccountStore from '../../stores/accountStore';
+import SessionStore from '../../stores/sessionStore';
 import { EntityDto } from '../../services/dto/entityDto';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import KPersonelStore from '../../stores/kPersonelStore';
@@ -19,23 +21,24 @@ import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import AppComponentBase from '../../components/AppComponentBase';
 import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
+import AuthenticationStore from '../../stores/authenticationStore';
 import { FileSearchOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tag } from 'antd';
-import AuthenticationStore from '../../stores/authenticationStore';
-import AccountStore from '../../stores/accountStore';
-import SessionStore from '../../stores/sessionStore';
+import KBolgeStore from '../../stores/kBolgeStore';
+import { Link } from 'react-router-dom';
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
     kNormStore: KNormStore;
+    kBolgeStore: KBolgeStore;
+    sessionStore?: SessionStore;
+    accountStore?: AccountStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
     kHierarchyStore: KHierarchyStore;
     kNormDetailStore: KNormDetailStore;
-    kInkaLookUpTableStore: KInkaLookUpTableStore;
     authenticationStore?: AuthenticationStore;
-    sessionStore?: SessionStore;
-    accountStore?: AccountStore;
+    kInkaLookUpTableStore: KInkaLookUpTableStore;
 
     location: {
         hash: "",
@@ -49,29 +52,33 @@ export interface IKsubeDatayProps {
 }
 
 export interface IKSubeDatayState {
-    detaillModalVisible: boolean,
-    maxNormResultCount: number,
-    bagliOlduguSubeId: string,
-    maxResultCount: number,
-    skipNormCount: number,
-    modalVisible: boolean,
-    cardLoading: boolean,
-    filterKNorm: string,
-    filterNorm: string,
-    skipCount: number,
-    groupEmployee: {},
-    groupData: any[],
-    filter: string,
-    userId: number,
-    groupNorm: {},
+    id: string,
     tip: string,
-    id: number,
-    createFormState: {}
+    groupNorm: {},
+    userId: number,
+    filter: string,
+    groupData: any[],
+    groupEmployee: {},
+    skipCount: number,
+    filterNorm: string,
+    filterKNorm: string,
+    createFormState: {},
+    cardLoading: boolean,
+    modalVisible: boolean,
+    skipNormCount: number,
+    maxResultCount: number,
+    breadcrumbSubeAdi: string,
+    bagliOlduguSubeId: string,
+    breadcrumbBolgeAdi: string,
+    maxNormResultCount: number,
+    detaillModalVisible: boolean,
 }
+
 
 const Search = Input.Search;
 
 @inject(Stores.KSubeStore)
+@inject(Stores.KBolgeStore)
 @inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
@@ -98,20 +105,22 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         filter: '',
         userId: 0,
         tip: '',
-        id: 0,
+        id: '0',
         groupData: [{
             id: 0,
+            norm: 0,
             gorev: '',
-            employeeCount: 0,
             normCount: 0,
-            norm: 0
+            employeeCount: 0,
         }],
         bagliOlduguSubeId: '',
         createFormState: {
             "name": "Next",
+            "visible": false,
             "pane": "PositionSelect",
-            "visible": false
-        }
+        },
+        breadcrumbSubeAdi: '',
+        breadcrumbBolgeAdi: ''
     };
 
     async getPosition(key: string) {
@@ -130,7 +139,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             id: this.state.id,
             keyword: this.state.filterKNorm,
             maxResultCount: this.state.maxNormResultCount,
-            skipCount: this.state.skipNormCount
+            skipCount: this.state.skipNormCount,
+            bolgeId: '0'
         })
     }
 
@@ -154,7 +164,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async getAllEmployees() {
-
         await this.props.kPersonelStore.getAllEmployees({
             maxResultCount: 10000,
             skipCount: 0,
@@ -188,21 +197,24 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             this.state.bagliOlduguSubeId);
     }
 
-    async get(entityDto: EntityDto) {
+    async get(entityDto: EntityDto<string>) {
+
         await this.props.kSubeStore.get(entityDto);
-        
+
         this.setState({
             tip: this.props.kSubeStore.editKSube.tip,
-            bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId
+            bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
+        })
+
+        await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
+
+        this.setState({
+            breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+            breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
         })
     }
 
     setPageState = async () => {
-        if (this.props.sessionStore?.currentLogin !== undefined) {
-            let companyObjId = this.props.sessionStore?.currentLogin.user.companyObjId;
-            this.setState({ id: companyObjId });
-            return
-        }
         this.setState({ id: this.props["match"].params["id"] });
     }
 
@@ -304,13 +316,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     public render() {
 
-        // const { location } = this.props;
         const { kNorms } = this.props.kNormStore;
-        // const { editKSube } = this.props.kSubeStore;
         const { norms } = this.props.kSubeNormStore;
         const { kHierarchies } = this.props.kHierarchyStore;
-        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
         const { kNormAllDetails } = this.props.kNormDetailStore;
+        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
+        const { breadcrumbBolgeAdi, breadcrumbSubeAdi } = this.state;
 
         const normEmployeeCoumns = [
             { title: 'Gorev', dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
@@ -327,7 +338,19 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         ];
 
         const columnsNorm = [
-            { title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: string) => <div>{text}</div> },
+            {
+                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: string) => <div>
+                    {
+                        new Date(text).toLocaleDateString("tr-TR", {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        })
+                    }
+                </div>
+            },
             { title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 250, render: (text: TalepDurumu) => <div> <Tag icon={<SyncOutlined spin />} color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
             { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
@@ -351,12 +374,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item> {L('Dashboard')} </Breadcrumb.Item>
-                                <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
-                                <Breadcrumb.Item> {"TODO : Şube Adı Gelecek"} </Breadcrumb.Item>
-                                <Breadcrumb.Item> {"TODO : Şube Adı Gelecek"} </Breadcrumb.Item>
-                                {/* <Breadcrumb.Item> {location !== undefined && location.state.subeAdi} </Breadcrumb.Item>
-                                <Breadcrumb.Item> {editKSube === undefined ? '' : editKSube.adi} </Breadcrumb.Item>   */}
+                                <Breadcrumb.Item> <Link to="/home">{L('Dashboard')}</Link> </Breadcrumb.Item>
+                                <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item> 
+                                {
+                                    breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
+                                }
+                                {
+                                    breadcrumbSubeAdi !== '' && <Breadcrumb.Item> {breadcrumbSubeAdi} </Breadcrumb.Item>
+                                }
                             </Breadcrumb>
                         }  >
                     </PageHeader>
@@ -365,6 +390,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
+                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={normEmployeeCoumns}
                                 rowKey={(record) => record.id}
@@ -387,9 +413,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             md={{ span: 15, offset: 0 }}
                             lg={{ span: 1, offset: 21 }}
                             xl={{ span: 1, offset: 21 }}
-                            xxl={{ span: 1, offset: 21 }}  >
-                            <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>
+                            xxl={{ span: 1, offset: 21 }} >
                         </Col>
+
                     </Row>
                     <Row>
                         <Col sm={{ span: 10, offset: 0 }}>
@@ -399,6 +425,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
+                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={columns}
                                 onChange={this.handleTableChange}
@@ -422,7 +449,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             md={{ span: 15, offset: 0 }}
                             lg={{ span: 1, offset: 21 }}
                             xl={{ span: 1, offset: 21 }}
-                            xxl={{ span: 1, offset: 21 }} >
+                            xxl={{ span: 1, offset: 21 }}  >
+                            <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>
                         </Col>
                     </Row>
                     <Row>
@@ -433,6 +461,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}>
                             <Table
+                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={columnsNorm}
                                 onChange={this.handleNormTableChange}
@@ -445,6 +474,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Row>
                 </Card>
                 <CreateNormForm
+                    bagliOlduguSubeId ={this.state.bagliOlduguSubeId}
                     createFormState={this.state.createFormState}
                     modalType={'create'}
                     tip={this.state.tip}

@@ -19,14 +19,14 @@ class KSubeStore {
   }
 
   @action
-  async get(entityDto: EntityDto) {
+  async get(entityDto: EntityDto<string>) {
     let result = await kSubeService.get(entityDto);
     this.editKSube = result;
   }
 
 
   @action
-  async getNormCount(id: number) {
+  async getNormCount(id: string) {
     let result = await kSubeService.getNormCount(id);
     this.normCount = result;
   }

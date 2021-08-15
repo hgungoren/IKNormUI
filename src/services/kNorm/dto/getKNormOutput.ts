@@ -3,7 +3,7 @@ import TalepNedeni from "./talepNedeni";
 import TalepTuru from "./talepTuru";
 
 export interface GetKNormOutput {
-    objId: number;
+ 
     telepTuru: TalepTuru;
     pozisyon: string;
     yeniPozisyon: string;
@@ -18,4 +18,5 @@ export interface GetKNormOutput {
     durumu: string;
     kNormId: number;
     id: number;
+    bagliOlduguSubeObjId?: string;
 }

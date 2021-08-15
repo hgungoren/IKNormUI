@@ -13,24 +13,24 @@ import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dt
 export interface ICreateNormProps {
   visible: boolean;
   modalType: string;
-  subeObjId: number;
+  subeObjId: string;
   onCancel: () => void;
   kSubeNormCreate: () => void;
   kSubeNormStore: KSubeNormStore;
   formRef: React.RefObject<FormInstance>;
-  kSubeNormEdit: (input: EntityDto) => void;
-  kSubeNormDelete: (input: EntityDto) => void;
-  positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
-  kSubeNorms: PagedResultDto<GetKSubeNormOutput>;
   kPosizyonKontrol: (key: string) => void;
+  kSubeNorms: PagedResultDto<GetKSubeNormOutput>;
+  kSubeNormEdit: (input: EntityDto<string>) => void;
+  kSubeNormDelete: (input: EntityDto<string>) => void;
+  positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
 }
 
 
 class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
   state = {
-    id: 0,
+    id: '0',
     adet: 0,
-    userId: 0,
+    userId: '0',
     pozisyon: '',
     confirmDirty: false,
   };
@@ -57,7 +57,7 @@ class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
           }
           width={'90%'}
           visible={visible}
-          title={L('Position')}
+          title={L('NormInsertOperation')}
           onCancel={onCancel}
           destroyOnClose={true}
         >

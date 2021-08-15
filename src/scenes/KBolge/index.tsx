@@ -1,4 +1,5 @@
-import './index.less'
+/* eslint-disable */
+import './index.less';
 import *  as React from 'react';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
@@ -20,17 +21,18 @@ import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, I
 import SessionStore from '../../stores/sessionStore';
 import AuthenticationStore from '../../stores/authenticationStore';
 import AccountStore from '../../stores/accountStore';
+import BolgeTip from '../../services/kBolge/dto/bolgeTip';
 
 export interface IBolgeProps {
     kNormStore: KNormStore;
     kBolgeStore: KBolgeStore;
+    sessionStore?: SessionStore;
+    accountStore?: AccountStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
     kNormDetailStore: KNormDetailStore;
-    kInkaLookUpTableStore: KInkaLookUpTableStore;
     authenticationStore?: AuthenticationStore;
-    sessionStore?: SessionStore;
-    accountStore?: AccountStore;
+    kInkaLookUpTableStore: KInkaLookUpTableStore;
 }
 
 export interface IBolgeState {
@@ -38,12 +40,18 @@ export interface IBolgeState {
     modalVisible: boolean;
     cardLoading: boolean
     skipCount: number;
-    subeObjId: number;
+    subeObjId: string;
     subeAdi: string;
-    userId: number;
-    filter: string;
-    normId: number;
-    id: number;
+    userId: string;
+    searchFilter: string;
+    normId: string;
+    id: string;
+    totalSize: number;
+    filter: {
+        offset: number,
+        limit: number,
+        current: number
+    }
 }
 
 const Search = Input.Search;
@@ -51,27 +59,33 @@ const confirm = Modal.confirm;
 
 @inject(Stores.KNormStore)
 @inject(Stores.KBolgeStore)
-@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 @inject(Stores.KNormDetailStore)
 @inject(Stores.KInkaLookUpTableStore)
+@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
     formRef = React.createRef<FormInstance>();
 
     state = {
-        id: 0,
-        normId: 0,
-        userId: 0,
-        filter: '',
+        id: '0',
+        searchFilter: '',
+        normId: '0',
+        userId: '0',
+        subeAdi: '',
         skipCount: 0,
-        subeObjId: 0,
+        subeObjId: '0',
         cardLoading: true,
         maxResultCount: 5,
         modalVisible: false,
-        subeAdi: ''
+        totalSize: 0,
+        filter: {
+            offset: 0,
+            limit: 10,
+            current: 0,
+        }
     };
 
     // Şubeye ait norm listesini getirir
@@ -90,7 +104,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             maxResultCount: 100000,
             skipCount: 0,
             keyword: '',
-            id: 0,
+            id: '0',
+            bolgeId: '0'
+        });
+
+        await this.props.kNormStore.getMaxAllCount({
+            maxResultCount: 100000,
+            skipCount: 0,
+            keyword: '',
+            id: '0',
+            bolgeId: '0'
         });
     }
 
@@ -130,7 +153,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         const form = this.formRef.current;
         form!.validateFields()
             .then(async (values: any) => {
-                if (this.state.normId === 0) {
+                if (this.state.normId === '0') {
                     await this.props.kSubeNormStore.create(values);
                     this.openNotificationWithIcon('success')
                 } else {
@@ -141,7 +164,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             });
     };
 
-    kSubeNormEdit = (input: EntityDto) => {
+    kSubeNormEdit = (input: EntityDto<string>) => {
+
         this.props.kSubeNormStore.get(input);
         const form = this.formRef.current;
         this.setState({ normId: input.id })
@@ -151,9 +175,13 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         }, 200);
     }
 
-    kSubeNormDelete = (input: EntityDto) => {
+
+
+    kSubeNormDelete = (input: EntityDto<string>) => {
         const self = this;
         confirm({
+            okText: L('Yes'),
+            cancelText: L('No'),
             title: L('ConfirmDelete'),
             onOk() {
                 self.getKSubeNorms();
@@ -171,11 +199,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         await this.props.kBolgeStore.getAll({
             maxResultCount: this.state.maxResultCount,
             skipCount: this.state.skipCount,
-            keyword: this.state.filter,
-            isActivity: true,
-            isActive: true,
-            tip: 2,
-            tur: 1,
+            keyword: this.state.searchFilter
         });
 
         setTimeout(() => this.setState({ cardLoading: false }), 500);
@@ -192,8 +216,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             );
     }
 
-    async createOrUpdateModalOpen(tip: string, id: number, subeAdi: string) {
-
+    async createOrUpdateModalOpen(tip: string, id: string, subeAdi: string) {
+        this.formRef.current?.resetFields();
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.getPosition(tip);
         await this.getKSubeNorms();
@@ -212,42 +236,81 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
 
     async componentDidMount() {
-        this.state.id = this.props["match"].params["id"];
+        await this.setPageState();
         await this.getAll();
         await this.getEmployeeCount();
         await this.getNormCount();
         await this.getNormRequests();
     }
 
-    handleTableChange = (pagination: any) => {
-        this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+    handleSearch = (value: string) => {
+        this.setState({ searchFilter: value }, async () => await this.getAll());
     };
 
-    handleSearch = (value: string) => {
-        this.setState({ filter: value }, async () => await this.getAll());
+    goToNextPage = () => {
+        const { filter, totalSize } = this.state;
+        const { offset: currentOffset } = filter || {};
+        const limit = 20;
+        const offset =
+            currentOffset + limit >= totalSize
+                ? currentOffset
+                : currentOffset + limit;
+
+        this.setState({
+            filter: {
+                ...filter,
+                limit,
+                offset,
+                current: offset / limit + 1
+            }
+        });
+    };
+
+    handlePagination = pagination => {
+        const { filter } = this.state;
+        const { pageSize, current } = pagination;
+
+        this.setState({
+            filter: {
+                ...filter,
+                current,
+                limit: pageSize
+            }
+        });
     };
 
     public render() {
+        const { filter, totalSize } = this.state;
+        const tablePagination = {
+            pageSize: filter.limit,
+            current: filter.current || 1,
+            total: totalSize,
+            pageSizeOptions: ["10", "20", "30", "50", "100"],
+            showSizeChanger: true
+            // showTotal: total => L('Total') + ` : ${total}   `
+        };
+
+
 
         const { cardLoading } = this.state;
         const { kBolge } = this.props.kBolgeStore;
         const { normCount } = this.props.kSubeNormStore;
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
-        const {
-            getTotalNormUpdateRequest,
-            getPendingNormFillRequest,
-            getTotalNormFillingRequest,
-            getAcceptedNormFillRequest,
-            getCanceledNormFillRequest,
-            getPendingNormUpdateRequest,
-            getAcceptedNormUpdateRequest,
-            getCanceledNormUpdateRequest
+        const { 
+            getTotalNormUpdateRequestCount,
+            getPendingNormFillRequestCount,
+            getTotalNormFillingRequestCount,
+            getAcceptedNormFillRequestCount,
+            getCanceledNormFillRequestCount,
+            getPendingNormUpdateRequestCount,
+            getAcceptedNormUpdateRequestCount,
+            getCanceledNormUpdateRequestCount
         } = this.props.kNormStore;
- 
+
         const columns = [
             { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('Type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div> },
             { title: L('EmployeeCount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
             { title: L('NormCount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div> },
             { title: L('NormOpening'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
@@ -302,7 +365,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item> {L('Dashboard')} </Breadcrumb.Item>
+                                <Breadcrumb.Item> <Link to="/home">{L('Dashboard')}</Link>  </Breadcrumb.Item>
                                 <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
                             </Breadcrumb>
                         }  >
@@ -316,15 +379,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     userId={this.props.sessionStore?.currentLogin.user.id}
                     kPersonelCount={kPersonelCount}
                     kNormStore={this.props.kNormStore}
-                    kNormDetailStore={this.props.kNormDetailStore}
-                    getTotalNormUpdateRequest={getTotalNormUpdateRequest}
-                    getPendingNormFillRequest={getPendingNormFillRequest}
-                    getTotalNormFillingRequest={getTotalNormFillingRequest}
-                    getAcceptedNormFillRequest={getAcceptedNormFillRequest}
-                    getCanceledNormFillRequest={getCanceledNormFillRequest}
-                    getPendingNormUpdateRequest={getPendingNormUpdateRequest}
-                    getAcceptedNormUpdateRequest={getAcceptedNormUpdateRequest}
-                    getCanceledNormUpdateRequest={getCanceledNormUpdateRequest}
+                    kNormDetailStore={this.props.kNormDetailStore} 
+                    getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
+                    getPendingNormFillRequestCount={getPendingNormFillRequestCount}
+                    getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}
+                    getAcceptedNormFillRequestCount={getAcceptedNormFillRequestCount}
+                    getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
+                    getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
+                    getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
+                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+
                 />
 
                 <Card hoverable>
@@ -354,13 +418,15 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                             xl={{ span: 24, offset: 0 }}
                             xxl={{ span: 24, offset: 0 }} >
                             <Table
+                                locale={{ emptyText: L('NoData'), expand: 'test' }}
                                 bordered={false}
                                 columns={columns}
-                                onChange={this.handleTableChange}
+                                onChange={this.handlePagination}
                                 rowKey={(record) => record.objId.toString()}
                                 loading={kBolge === undefined ? true : false}
                                 dataSource={kBolge === undefined ? [] : kBolge.items}
-                                pagination={{ pageSize: this.state.maxResultCount, total: kBolge === undefined ? 0 : kBolge.totalCount, defaultCurrent: 1 }}
+                                // pagination={{ pageSize: 10, total: kBolge === undefined ? 0 : kBolge.totalCount, defaultCurrent: 1 }}
+                                pagination={tablePagination}
                             />
                         </Col>
                     </Row>

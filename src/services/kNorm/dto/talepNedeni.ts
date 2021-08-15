@@ -1,7 +1,7 @@
 enum TalepNedeni {
-    Ayrilma = 'Ayrilma',
-    Diger = 'Diger', 
-    Kadro_Genisleme ='Kadro Genisleme'
+    Ayrilma = 'Ayrılma',
+    Diger = 'Diğer', 
+    Kadro_Genisleme ='Kadro Genişleme'
 }
 
 export default TalepNedeni;

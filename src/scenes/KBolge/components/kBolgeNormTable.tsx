@@ -11,8 +11,8 @@ import { GetKSubeNormOutput } from '../../../services/kSubeNorm/dto/getKSubeNorm
 
 export interface ICreateNormTableProps {
     kSubeNormStore: KSubeNormStore;
-    kSubeNormEdit: (input: EntityDto) => void;
-    kSubeNormDelete: (input: EntityDto) => void;
+    kSubeNormEdit: (input: EntityDto<string>) => void;
+    kSubeNormDelete: (input: EntityDto<string>) => void;
     kSubeNorms: PagedResultDto<GetKSubeNormOutput>;
 }
 
@@ -51,9 +51,7 @@ class KBolgeNormTable extends React.Component<ICreateNormTableProps> {
 
                         <Tooltip placement="topLeft" title={L('Delete')}>
                             <Button style={{ marginLeft: 3 }} type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
-                        </Tooltip>
-
-
+                        </Tooltip>  
                     </div>
                 ),
             },
@@ -62,6 +60,7 @@ class KBolgeNormTable extends React.Component<ICreateNormTableProps> {
         return (
             <>
                 <Table
+                    locale={{ emptyText: L('NoData') }}
                     rowKey={(record) => record.id.toString()}
                     bordered={false}
                     columns={columns}

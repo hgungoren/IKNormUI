@@ -7,9 +7,9 @@ export interface CreateOrUpdateUserInput {
   roleNames: string[];
   password: string;
   id: number;
-  userObjId: number;
+  userObjId: string;
   companyObjId: string;
-  companyRelationalObjId: string;
+  companyRelationObjId: string;
   sicilNo: number;
   title: string;
   companyCode: number;

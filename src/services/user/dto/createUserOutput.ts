@@ -9,9 +9,9 @@ export interface CreateUserOutputItem {
   creationTime: Date;
   roleNames: string[];
   id: number; 
-  userObjId: number;
+  userObjId: string;
   companyObjId: string;
-  ompanyRelationalObjId: string;
+  companyRelationObjId: string;
   sicilNo: number;
   title: string;
   companyCode: number;

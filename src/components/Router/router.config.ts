@@ -33,15 +33,15 @@ export const appRouters: any = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    permission: 'Pages.Dashboard',
+    permission: 'dashboard',
     title: 'Dashboard',
     icon: HomeOutlined,
     showInMenu: true,
     component: LoadableComponent(() => import('../../scenes/Dashboard')),
   },
   {
-    path: '/ksube/:id?',
-    permission: 'Pages.KSube',
+    path: '/ksube/:id',
+    permission: 'kSube',
     title: 'KSube',
     name: 'KSube',
     icon: UserOutlined,
@@ -49,8 +49,8 @@ export const appRouters: any = [
     component: LoadableComponent(() => import('../../scenes/KSube')),
   },
   {
-    path: '/ksubedetay/:id?',
-    permission: 'Pages.KSubeDetay',
+    path: '/ksubedetay/:id',
+    permission: 'kSubeDetay',
     title: 'KSubeDetay',
     name: 'KSubeDetay',
     icon: UserOutlined,
@@ -59,7 +59,7 @@ export const appRouters: any = [
   },
   {
     path: '/bolgemudurluk',
-    permission: 'Pages.KBolge',
+    permission: 'kBolge',
     title: 'KBolge',
     name: 'KBolge',
     icon: UserOutlined,
@@ -68,7 +68,7 @@ export const appRouters: any = [
   },
   {
     path: '/users',
-    permission: 'Pages.Users',
+    permission: '',
     title: 'Users',
     name: 'Users',
     icon: UserOutlined,
@@ -77,7 +77,7 @@ export const appRouters: any = [
   },
   {
     path: '/roles',
-    permission: 'Pages.Roles',
+    permission: '',
     title: 'Roles',
     name: 'Roles',
     icon: TagsOutlined,
@@ -86,7 +86,7 @@ export const appRouters: any = [
   },
   {
     path: '/tenants',
-    permission: 'Pages.Tenants',
+    permission: 'tenants',
     title: 'Tenants',
     name: 'Tenants',
     icon: AppstoreOutlined,
@@ -120,7 +120,7 @@ export const appRouters: any = [
   },
   {
     path: '/knormrequestdetail/:id',
-    permission: 'Pages.KNormRequestDetail',
+    permission: 'kNormRequestDetail',
     title: 'KNormRequestDetail',
     name: 'KNormRequestDetail',
     icon: UserOutlined,

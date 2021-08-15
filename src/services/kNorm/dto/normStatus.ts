@@ -1,7 +1,7 @@
 enum NormStatus {
-    Beklemede = 'Beklemede',
-    Onaylandi = 'Onaylandi',
-    Iptal = 'Iptal'
+    Beklemede = 'Bekliyor',
+    Onaylandi = 'Onayladı',
+    Iptal = 'İptal Etti'
 }
 
 export default NormStatus;

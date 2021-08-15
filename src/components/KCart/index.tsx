@@ -6,8 +6,8 @@ import CountUp from 'react-countup';
 import { L } from '../../lib/abpUtility';
 import { PlusOutlined, QuestionCircleOutlined, CheckOutlined, ClockCircleOutlined, CloseOutlined, MessageOutlined, QuestionOutlined, UserAddOutlined, UsergroupAddOutlined, FileDoneOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
- 
-function KCart({ cardLoading, color, title, icon, number, onClick }) {
+
+function KCart({ cardLoading, color, title, icon, number, onClick, cursor = '' }) {
 
     let _icon: any;
     if (icon === "UserAddOutlined")
@@ -49,7 +49,7 @@ function KCart({ cardLoading, color, title, icon, number, onClick }) {
             <Card onClick={onClick}
                 hoverable
                 className={'KCard'}
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: color, cursor: cursor }}
                 bodyStyle={{ padding: 10 }}
                 loading={cardLoading}
                 bordered={false}>

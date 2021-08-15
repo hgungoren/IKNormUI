@@ -1,10 +1,11 @@
 import * as React from 'react';
 
-import { Checkbox, Input, Modal, Tabs, Form } from 'antd';
+import { Checkbox, Input, Modal, Tabs, Form, Row, Col } from 'antd';
 import { GetRoles } from '../../../services/user/dto/getRolesOuput';
 import { L } from '../../../lib/abpUtility';
 import rules from './createOrUpdateUser.validation';
 import { FormInstance } from 'antd/lib/form';
+
 
 const TabPane = Tabs.TabPane;
 
@@ -19,7 +20,7 @@ export interface ICreateOrUpdateUserProps {
 
 class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
   state = {
-    confirmDirty: false,
+    confirmDirty: false, 
   };
 
   compareToFirstPassword = (rule: any, value: any, callback: any) => {
@@ -40,11 +41,10 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
 
     if (value && this.state.confirmDirty && getFieldValue('confirm')) {
       validateFields(['confirm']);
-    }
-
+    } 
     return Promise.resolve();
   };
-
+ 
   render() {
     const { roles } = this.props;
 
@@ -85,97 +85,127 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
       },
     };
 
-    const { visible, onCancel, onCreate } = this.props;
+    const { visible, onCancel, onCreate } = this.props; 
 
     const options = roles.map((x: GetRoles) => {
       var test = { label: x.displayName, value: x.normalizedName };
       return test;
-    });
+    }); 
 
     return (
       <Modal
         width={'80%'}
-        visible={visible} cancelText={L('Cancel')} okText={L('OK')} onCancel={onCancel} onOk={onCreate} title={'User'} destroyOnClose={true}>
+        visible={visible}
+        cancelText={L('GiveUp')}
+        okText={L('Save')}
+        onCancel={onCancel}
+        onOk={onCreate}
+        title={L('UserDetail')}
+        destroyOnClose={true}>
         <Form ref={this.props.formRef}>
           <Tabs defaultActiveKey={'userInfo'} size={'small'} tabBarGutter={64}>
-            <TabPane tab={'User'} key={'userInfo'}>
-              <Form.Item label={L('Name')} {...formItemLayout} name={'name'} rules={rules.name}>
-                <Input />
-              </Form.Item>
-              <Form.Item label={L('Surname')} {...formItemLayout} name={'surname'} rules={rules.surname}>
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={L('Title')} {...formItemLayout} name={'title'}  >
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  >
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  >
-                <Input />
-              </Form.Item>
-
-
-              <Form.Item label={L('CompanyRelationalObjId')} {...formItemLayout} name={'ompanyRelationalObjId'}  >
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={L('SicilNo')} {...formItemLayout} name={'sicilNo'}  >
-                <Input />
-              </Form.Item> 
-
-              <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'}  >
-                <Input />
-              </Form.Item>
-              <Form.Item label={L('UserName')} {...formItemLayout} name={'userName'} rules={rules.userName}>
-                <Input />
-              </Form.Item>
-              <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
-                <Input />
-              </Form.Item>
-              {this.props.modalType === 'edit' ? (
-                <Form.Item label={L('Password')} {...formItemLayout} name={'password'}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input your password!',
-                    },
-                    {
-                      validator: this.validateToNextPassword,
-                    },
-                  ]}
+            <TabPane tab={L('User')} key={'userInfo'}>
+              <Row >
+                <Col
+                  xs={{ span: 10, offset: 2 }}
+                  sm={{ span: 10, offset: 2 }}
+                  md={{ span: 10, offset: 2 }}
+                  lg={{ span: 10, offset: 2 }}
+                  xl={{ span: 10, offset: 2 }}
+                  xxl={{ span: 10, offset: 2 }}
                 >
-                  <Input type="password" />
-                </Form.Item>
-              ) : null}
-              {this.props.modalType === 'edit' ? (
-                <Form.Item label={L('ConfirmPassword')} {...formItemLayout} name={'confirm'}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input your confirm password!',
-                    },
-                    {
-                      validator: this.compareToFirstPassword,
-                    },
-                  ]}
+                  <Form.Item label={L('Name')} {...formItemLayout} name={'name'} rules={rules.name}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('Surname')} {...formItemLayout} name={'surname'} rules={rules.surname}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'}  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('CompanyRelationObjId')} {...formItemLayout} name={'companyRelationObjId'}  >
+                    <Input />
+                  </Form.Item>
+
+                </Col>
+
+                <Col
+                  xs={{ span: 10, offset: 0 }}
+                  sm={{ span: 10, offset: 0 }}
+                  md={{ span: 10, offset: 0 }}
+                  lg={{ span: 10, offset: 0 }}
+                  xl={{ span: 10, offset: 0 }}
+                  xxl={{ span: 10, offset: 0 }}
                 >
-                  <Input type="password" />
-                </Form.Item>
-              ) : null}
-              <Form.Item label={L('IsActive')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
-                <Checkbox>Aktif</Checkbox>
-              </Form.Item>
+
+                  <Form.Item label={L('UserName')} {...formItemLayout} name={'userName'} rules={rules.userName}>
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('RegistrationNumber')} {...formItemLayout} name={'sicilNo'}  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'}  >
+                    <Input />
+                  </Form.Item>
+
+                  {this.props.modalType === 'edit' ? (
+                    <Form.Item label={L('Password')} {...formItemLayout} name={'password'}
+                      rules={[
+                        {
+                          required: true,
+                          message: L('PleaseInputYourPassword'),
+                        },
+                        {
+                          validator: this.validateToNextPassword,
+                        },
+                      ]}
+                    >
+                      <Input type="password" />
+                    </Form.Item>
+                  ) : null}
+                  {this.props.modalType === 'edit' ? (
+                    <Form.Item label={L('ConfirmPassword')} {...formItemLayout} name={'confirm'}
+                      rules={[
+                        {
+                          required: true,
+                          message: L('PleaseInputYourConfirmPassword'),
+                        },
+                        {
+                          validator: this.compareToFirstPassword,
+                        },
+                      ]}
+                    >
+                      <Input type="password" />
+                    </Form.Item>
+                  ) : null}
+                  <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
+                    <Checkbox>{L('Active')}</Checkbox>
+                  </Form.Item>
+                </Col>
+              </Row>
             </TabPane>
             <TabPane tab={L('Roles')} key={'rol'} forceRender={true}>
               <Form.Item {...tailFormItemLayout} name={'roleNames'}>
                 <Checkbox.Group options={options} />
               </Form.Item>
             </TabPane>
-          </Tabs>
+          </Tabs> 
         </Form>
       </Modal>
     );

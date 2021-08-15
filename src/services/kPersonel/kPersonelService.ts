@@ -19,7 +19,7 @@ class KPersonelService {
         return result.data.result;
     } 
 
-    public async getEmployeeCountById(id: number): Promise<number> {
+    public async getEmployeeCountById(id: string): Promise<number> {
         let result = await http.get('api/services/app/KPersonel/GetTotalEmployeeCountById?id=' + id, {
             params: id
         });

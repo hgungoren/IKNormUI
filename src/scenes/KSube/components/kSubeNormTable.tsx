@@ -11,9 +11,9 @@ import { GetKSubeNormOutput } from '../../../services/kSubeNorm/dto/getKSubeNorm
 
 export interface ICreateNormTableProps {
     kSubeNormStore: KSubeNormStore;
-    kSubeNormEdit: (input: EntityDto) => void;
-    kSubeNormDelete: (input: EntityDto) => void;
     kSubeNorms: PagedResultDto<GetKSubeNormOutput>;
+    kSubeNormEdit: (input: EntityDto<string>) => void;
+    kSubeNormDelete: (input: EntityDto<string>) => void;
 }
 
 class KSubeNormTable extends React.Component<ICreateNormTableProps> {
@@ -63,6 +63,7 @@ class KSubeNormTable extends React.Component<ICreateNormTableProps> {
         return (
             <>
                 <Table
+                    locale={{ emptyText: L('NoData') }}
                     rowKey={(record) => record.id.toString()}
                     bordered={false}
                     columns={columns}
