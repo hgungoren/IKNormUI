@@ -9,13 +9,13 @@ import { useEffect } from 'react';
 
 
 function KCartList({
+    type,
     kNormDetailStore,
     cardLoading,
     normCount,
     kPersonelCount,
     kNormStore,
     subeObjId,
-    userId,
     getTotalNormUpdateRequestCount,
     getPendingNormFillRequestCount,
     getTotalNormFillingRequestCount,
@@ -73,10 +73,7 @@ function KCartList({
     return (
         <>
             <Row gutter={16}>
-
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-
-
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
             </Row>
 
@@ -138,8 +135,9 @@ function KCartList({
 
             </Row>
 
-            <NormRequestListTableModal key={key}
-                userId={userId}
+            <NormRequestListTableModal
+                key={key}
+                type={type}
                 kNormDetailStore={kNormDetailStore}
                 title={table.replace('get', '')}
                 table={table}

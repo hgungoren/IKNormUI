@@ -32,7 +32,6 @@ export interface INormRequestListTableState {
 
 interface INormRequestListTableProps {
     table: string,
-    userId: number;
     isModal: boolean,
     subeObjId: string;
     tableTitle: string;
@@ -40,6 +39,7 @@ interface INormRequestListTableProps {
     kNormStore: KNormStore;
     isConfirmOrCancel: boolean;
     kNormDetailStore: KNormDetailStore;
+    type: string;
 }
 
 const Search = Input.Search;
@@ -68,7 +68,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             id: this.props.subeObjId,
             keyword: this.state.filter,
             skipCount: this.state.skipNormCount,
-            bolgeId: '0'
+            bolgeId: '0',
+            type: this.props.type
         })
     }
 
@@ -79,7 +80,17 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             id: this.props.subeObjId,
             keyword: this.state.filter,
             maxResultCount: 1000000000,
-            bolgeId: '0'
+            bolgeId: '0',
+            type: this.props.type
+        })
+
+        this.props.kNormStore.getMaxAllCount({
+            skipCount: 0,
+            id: this.props.subeObjId,
+            keyword: this.state.filter,
+            maxResultCount: 1000000000,
+            bolgeId: '0',
+            type: this.props.type
         })
     }
 
@@ -101,6 +112,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
     async componentDidMount() {
+
         if (this.props.isModal) {
             this.getNormRequestsAll();
         }
@@ -140,15 +152,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         form!.validateFields()
             .then(async (values: any) => {
 
-                values.status = Status.Reject;
-                values.userId = this.props.userId;
-
+                values.status = Status.Reject; 
                 await this.props.kNormDetailStore.update(values)
                     .then(() => {
                         this.props.kNormStore.setStatusAsync({
                             id: this.state.requestId,
-                            normStatus: NormStatus.Iptal,
-
+                            normStatus: NormStatus.Iptal  
                         }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
                     }).catch((err) => {
                         this.openNotificationWithIcon('error')
@@ -163,13 +172,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     approveRequestClick = async (id: number) => {
         await this.props.kNormDetailStore.update({
-            kNormId: id,
-            userId: this.props.userId,
+            kNormId: id, 
             id: id,
             status: Status.Apporved
         }).then(() => {
             this.props.kNormStore.setStatusAsync({
-                id: id
+                id: id 
             }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
         })
             .catch((err) => {
@@ -229,7 +237,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                 (this.props.isConfirmOrCancel &&
                                     (!tableTitle.search('Pending') || !tableTitle.search('Total')) &&
                                     NormStatus[norm.normStatusValue] === NormStatus.Beklemede &&
-                                    kNormDetails.items.filter(x => x.userId == this.props.userId && x.status == Status.Waiting && x.kNormId == norm.id).length > 0) && (
+                                    kNormDetails.items.filter(x => x.status == Status.Waiting && x.kNormId == norm.id).length > 0) && (
                                     <>
                                         {
                                             isGranted('knorm.approve') && <Tooltip placement="topLeft" title={L('Accept')}>
@@ -268,7 +276,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             xl={{ span: 1, offset: 21 }}
                             xxl={{ span: 1, offset: 21 }}>
                         </Col>
-                    </Row> 
+                    </Row>
                     <Row>
                         <Col sm={{ span: 10, offset: 0 }}>
                             <Search placeholder={L('Filter')} onSearch={this.handleNormSearch} />

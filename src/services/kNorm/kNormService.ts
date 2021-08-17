@@ -1,10 +1,10 @@
 import http from '../httpService';
 import { EntityDto } from '../dto/entityDto';
 import { PagedResultDto } from '../dto/pagedResultDto';
-import { GetAllKNormOutput } from './dto/getAllKNormOutput'; 
+import { GetAllKNormOutput } from './dto/getAllKNormOutput';
 import { CreateKNormInput } from './dto/createKNormInput';
 import { PagedKNormResultRequestDto } from './dto/pagedKNormResultRequestDto';
-import { GetKNormOutput } from './dto/getKNormOutput';
+import { GetKNormOutput } from './dto/getKNormOutput'; 
 
 class KNormService {
 
@@ -18,15 +18,28 @@ class KNormService {
         return result.data.result;
     }
 
-    public async getAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('api/services/app/KNorm/GetAll', { params: pagedFilterAndSortedRequest });
+    public async getAllBolge(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
+        let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
+
+    public async getAllSube(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
+        let result = await http.get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });
+        return result.data.result;
+    }
+
+    public async getAllSubeDetail(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
+        let result = await http.get('api/services/app/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest });
+        return result.data.result;
+    }
+
+    
 
     public async setStatusAsync(createKNormInput: CreateKNormInput) {
         let result = await http.post('api/services/app/KNorm/SetStatus', createKNormInput);
         return result.data.result;
     }
+ 
 }
 
 export default new KNormService();

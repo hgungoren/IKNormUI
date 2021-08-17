@@ -60,8 +60,6 @@ export interface IKSubeDatayState {
     groupData: any[],
     groupEmployee: {},
     skipCount: number,
-    filterNorm: string,
-    filterKNorm: string,
     createFormState: {},
     cardLoading: boolean,
     modalVisible: boolean,
@@ -72,6 +70,7 @@ export interface IKSubeDatayState {
     breadcrumbBolgeAdi: string,
     maxNormResultCount: number,
     detaillModalVisible: boolean,
+    normFilter: string,
 }
 
 
@@ -98,8 +97,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         groupEmployee: {},
         maxResultCount: 5,
         skipNormCount: 0,
-        filterKNorm: '',
-        filterNorm: '',
+        normFilter: '',
         groupNorm: {},
         skipCount: 0,
         filter: '',
@@ -135,12 +133,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async getNormRequests() {
+
         this.props.kNormStore.getAll({
             id: this.state.id,
-            keyword: this.state.filterKNorm,
+            keyword: this.state.normFilter,
             maxResultCount: this.state.maxNormResultCount,
             skipCount: this.state.skipNormCount,
-            bolgeId: '0'
+            bolgeId: '0',
+            type: 'subedetail'
         })
     }
 
@@ -172,7 +172,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
 
         let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((result, currentValue) => {
-            (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
+            (result[currentValue['normStatusValue']] = result[currentValue['normStatusValue']] || [])
                 .push(
                     currentValue
                 );
@@ -242,7 +242,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     };
 
     handleNormSearch = (value: string) => {
-        this.setState({ filter: value }, async () => await this.getNormRequests());
+        this.setState({ normFilter: value }, async () => await this.getNormRequests());
     };
 
     async createOrUpdateModalOpen(entityDto: EntityDto) {
@@ -375,7 +375,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         title={
                             <Breadcrumb>
                                 <Breadcrumb.Item> <Link to="/home">{L('Dashboard')}</Link> </Breadcrumb.Item>
-                                <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item> 
+                                <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
                                 {
                                     breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
                                 }
@@ -474,7 +474,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Row>
                 </Card>
                 <CreateNormForm
-                    bagliOlduguSubeId ={this.state.bagliOlduguSubeId}
+                    bagliOlduguSubeId={this.state.bagliOlduguSubeId}
                     createFormState={this.state.createFormState}
                     modalType={'create'}
                     tip={this.state.tip}

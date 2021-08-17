@@ -15,10 +15,10 @@ const KLineChart: React.FunctionComponent<KLineChartProps> = ({ data }: KLineCha
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey={L('Request')}  stroke="rgb(83, 29, 171)"  strokeWidth={2} activeDot={{ r: 12 }} />
-      <Line type="monotone" dataKey={L('Waiting')}  stroke="rgb(250, 173, 20)" strokeWidth={2} />
-      <Line type="monotone" dataKey={L('Approved')} stroke="rgb(29, 165, 122)" strokeWidth={2} />
-      <Line type="monotone" dataKey={L('Cancel')}   stroke="rgb(250, 84, 28)"  strokeWidth={2} />
+      <Line type="monotone" dataKey={L('ChartRequest')}  stroke="rgb(83, 29, 171)"  strokeWidth={2} activeDot={{ r: 12 }} />
+      <Line type="monotone" dataKey={L('ChartWaiting')}  stroke="rgb(250, 173, 20)" strokeWidth={2} />
+      <Line type="monotone" dataKey={L('ChartApproved')} stroke="rgb(29, 165, 122)" strokeWidth={2} />
+      <Line type="monotone" dataKey={L('ChartCancel')}   stroke="rgb(250, 84, 28)"  strokeWidth={2} />
     </LineChart>
   );
 };

@@ -184,7 +184,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
       },
     };
 
-    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId, normCount, hierarchy } = this.props;
+    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId, normCount, hierarchy, bagliOlduguSubeId } = this.props;
 
     return (
       <Modal
@@ -218,7 +218,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
-              <Form.Item className={'hidden-form-item'} initialValue={subeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
+              <Form.Item className={'hidden-form-item'} initialValue={bagliOlduguSubeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 

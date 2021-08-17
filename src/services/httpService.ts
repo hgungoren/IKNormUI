@@ -25,6 +25,7 @@ http.interceptors.request.use(
 
     config.headers.common['.AspNetCore.Culture'] = abp.utils.getCookieValue('Abp.Localization.CultureName');
     config.headers.common['Abp.TenantId'] = abp.multiTenancy.getTenantIdCookie();
+  
 
     return config;
   },

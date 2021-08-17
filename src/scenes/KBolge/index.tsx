@@ -105,7 +105,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             skipCount: 0,
             keyword: '',
             id: '0',
-            bolgeId: '0'
+            bolgeId: '0',
+            type: 'bolge'
         });
 
         await this.props.kNormStore.getMaxAllCount({
@@ -113,7 +114,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             skipCount: 0,
             keyword: '',
             id: '0',
-            bolgeId: '0'
+            bolgeId: '0',
+            type: 'bolge'
         });
     }
 
@@ -290,8 +292,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             // showTotal: total => L('Total') + ` : ${total}   `
         };
 
-
-
         const { cardLoading } = this.state;
         const { kBolge } = this.props.kBolgeStore;
         const { normCount } = this.props.kSubeNormStore;
@@ -373,10 +373,11 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                 </Card>
 
                 <KCartList
+                    type={"bolge"}
                     subeObjId={0}
                     normCount={normCount}
                     cardLoading={cardLoading}
-                    userId={this.props.sessionStore?.currentLogin.user.id !== undefined ? this.props.sessionStore?.currentLogin.user.id : 0}
+                    // userId={this.props.sessionStore?.currentLogin.user.id !== undefined ? this.props.sessionStore?.currentLogin.user.id : 0}
                     kPersonelCount={kPersonelCount}
                     kNormStore={this.props.kNormStore}
                     kNormDetailStore={this.props.kNormDetailStore}
@@ -390,7 +391,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
 
                 />
-
                 <Card hoverable>
                     <Row>
                         <Col

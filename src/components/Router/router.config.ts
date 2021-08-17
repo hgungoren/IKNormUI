@@ -33,7 +33,7 @@ export const appRouters: any = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    permission: 'dashboard',
+    permission: 'dashboard.view',
     title: 'Dashboard',
     icon: HomeOutlined,
     showInMenu: true,
@@ -45,7 +45,7 @@ export const appRouters: any = [
     title: 'KSube',
     name: 'KSube',
     icon: UserOutlined,
-    showInMenu: true,
+    showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/KSube')),
   },
   {
@@ -95,11 +95,11 @@ export const appRouters: any = [
   },
   {
     path: '/home',
-    permission: '',
+    permission: 'home.view',
     title: 'Home',
     name: 'Home',
     icon: InfoCircleOutlined,
-    showInMenu: false,
+    showInMenu: true,
     component: LoadableComponent(() => import('../../scenes/Home')),
   },
   {

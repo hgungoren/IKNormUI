@@ -75,20 +75,24 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     };
 
     async getNormRequests(id: string) {
+
+      
         await this.props.kNormStore.getMaxAll({
-            id: id,
-            keyword: 'sube',
+            id: '0',
+            keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
-            bolgeId: id
+            bolgeId: id,
+            type: 'sube'
         });
 
         await this.props.kNormStore.getMaxAllCount({
             maxResultCount: 100000,
             skipCount: 0,
-            keyword: 'sube',
-            id: id,
-            bolgeId: id
+            keyword: '',
+            id: '0',
+            bolgeId: id,
+            type: 'sube'
         });
     }
 
@@ -221,20 +225,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     }
 
     async setPageState() {
-
-        this.setState({ id: this.props["match"].params["id"] });
-
-        // if (this.props["match"].params["id"] !== undefined && this.props["match"].params["id"] !== ":id") {
-        //     this.setState({ id: this.props["match"].params["id"] });
-        //     return
-        // }
-
-
-        // if (this.props.sessionStore?.currentLogin !== undefined) {
-        //     let companyObjId = this.props.sessionStore?.currentLogin.user.companyObjId;
-        //     this.setState({ id: companyObjId });
-        // }
-
+ 
+        this.setState({ id: this.props["match"].params["id"] });   
     }
 
     async componentDidMount() {
@@ -311,99 +303,98 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             },
         ];
         return (
-            <>
-                <React.Fragment>
-                    <Card style={{ marginBottom: 20 }}>
-                        <PageHeader
-                            ghost={false}
-                            onBack={() => window.history.back()}
-                            title={
-                                <Breadcrumb>
-                                    <Breadcrumb.Item><Link to="/home">{L('Dashboard')}</Link>   </Breadcrumb.Item>
-                                    <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link>  </Breadcrumb.Item>
-                                    <Breadcrumb.Item> {editKSube === undefined ? '' : editKSube.adi} </Breadcrumb.Item>
-                                </Breadcrumb>
-                            }  >
-                        </PageHeader>
-                    </Card>
+            <>  <React.Fragment>
+                <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item><Link to="/home">{L('Dashboard')}</Link>   </Breadcrumb.Item>
+                                <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link>  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {editKSube === undefined ? '' : editKSube.adi} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
 
-                    <KCartList
-                        userId={this.props.sessionStore?.currentLogin.user.id}
-                        normCount={normCount}
-                        subeObjId={this.state.id}
-                        cardLoading={cardLoading}
-                        kPersonelCount={kPersonelCount}
-                        kNormStore={this.props.kNormStore}
-                        kNormDetailStore={this.props.kNormDetailStore}
-                        getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
-                        getPendingNormFillRequestCount={getPendingNormFillRequestCount}
-                        getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}
-                        getAcceptedNormFillRequestCount={getAcceptedNormFillRequestCount}
-                        getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
-                        getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
-                        getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
-                        getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-                    />
+                <KCartList
+                    type="sube"
+                    normCount={normCount}
+                    subeObjId={this.state.id}
+                    cardLoading={cardLoading}
+                    kPersonelCount={kPersonelCount}
+                    kNormStore={this.props.kNormStore}
+                    kNormDetailStore={this.props.kNormDetailStore}
+                    getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
+                    getPendingNormFillRequestCount={getPendingNormFillRequestCount}
+                    getTotalNormFillingRequestCount={getTotalNormFillingRequestCount}
+                    getAcceptedNormFillRequestCount={getAcceptedNormFillRequestCount}
+                    getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
+                    getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
+                    getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
+                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+                />
 
-                    <Card hoverable>
-                        <Row>
-                            <Col
-                                xs={{ span: 4, offset: 0 }}
-                                sm={{ span: 4, offset: 0 }}
-                                md={{ span: 4, offset: 0 }}
-                                lg={{ span: 2, offset: 0 }}
-                                xl={{ span: 2, offset: 0 }}
-                                xxl={{ span: 2, offset: 0 }}
-                            >
-                                <h2>{L('KSube')}</h2>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col sm={{ span: 10, offset: 0 }}>
-                                <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
-                            </Col>
-                        </Row>
-                        <Row style={{ marginTop: 20 }}>
-                            <Col
-                                xs={{ span: 24, offset: 0 }}
-                                sm={{ span: 24, offset: 0 }}
-                                md={{ span: 24, offset: 0 }}
-                                lg={{ span: 24, offset: 0 }}
-                                xl={{ span: 24, offset: 0 }}
-                                xxl={{ span: 24, offset: 0 }}
-                            >
-                                <Table
-                                    locale={{ emptyText: L('NoData') }}
-                                    rowKey={(record) => record.objId.toString()}
-                                    bordered={false}
-                                    columns={columns}
-                                    pagination={{ pageSize: this.state.maxResultCount, total: kSubes === undefined ? 0 : kSubes.totalCount, defaultCurrent: 1 }}
-                                    loading={kSubes === undefined ? true : false}
-                                    dataSource={kSubes === undefined ? [] : kSubes.items}
-                                    onChange={this.handleTableChange}
-                                />
-                            </Col>
-                        </Row>
-                    </Card>
-                    <CreateKSubeNorm
-                        modalType={'create'}
-                        formRef={this.formRef}
-                        positionSelect={positions}
-                        subeObjId={this.state.subeObjId}
-                        visible={this.state.modalVisible}
-                        kSubeNormEdit={this.kSubeNormEdit}
-                        kSubeNormCreate={this.kSubeNormCreate}
-                        kSubeNormDelete={this.kSubeNormDelete}
-                        kPosizyonKontrol={this.kPosizyonKontrol}
-                        kSubeNormStore={this.props.kSubeNormStore}
-                        kSubeNorms={this.props.kSubeNormStore.norms}
-                        onCancel={() => {
-                            this.setState({
-                                modalVisible: false,
-                            });
-                        }}
-                    />
-                </React.Fragment >
+                <Card hoverable>
+                    <Row>
+                        <Col
+                            xs={{ span: 4, offset: 0 }}
+                            sm={{ span: 4, offset: 0 }}
+                            md={{ span: 4, offset: 0 }}
+                            lg={{ span: 2, offset: 0 }}
+                            xl={{ span: 2, offset: 0 }}
+                            xxl={{ span: 2, offset: 0 }}
+                        >
+                            <h2>{L('KSube')}</h2>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={{ span: 10, offset: 0 }}>
+                            <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+                        </Col>
+                    </Row>
+                    <Row style={{ marginTop: 20 }}>
+                        <Col
+                            xs={{ span: 24, offset: 0 }}
+                            sm={{ span: 24, offset: 0 }}
+                            md={{ span: 24, offset: 0 }}
+                            lg={{ span: 24, offset: 0 }}
+                            xl={{ span: 24, offset: 0 }}
+                            xxl={{ span: 24, offset: 0 }}
+                        >
+                            <Table
+                                locale={{ emptyText: L('NoData') }}
+                                rowKey={(record) => record.objId.toString()}
+                                bordered={false}
+                                columns={columns}
+                                pagination={{ pageSize: this.state.maxResultCount, total: kSubes === undefined ? 0 : kSubes.totalCount, defaultCurrent: 1 }}
+                                loading={kSubes === undefined ? true : false}
+                                dataSource={kSubes === undefined ? [] : kSubes.items}
+                                onChange={this.handleTableChange}
+                            />
+                        </Col>
+                    </Row>
+                </Card>
+                <CreateKSubeNorm
+                    modalType={'create'}
+                    formRef={this.formRef}
+                    positionSelect={positions}
+                    subeObjId={this.state.subeObjId}
+                    visible={this.state.modalVisible}
+                    kSubeNormEdit={this.kSubeNormEdit}
+                    kSubeNormCreate={this.kSubeNormCreate}
+                    kSubeNormDelete={this.kSubeNormDelete}
+                    kPosizyonKontrol={this.kPosizyonKontrol}
+                    kSubeNormStore={this.props.kSubeNormStore}
+                    kSubeNorms={this.props.kSubeNormStore.norms}
+                    onCancel={() => {
+                        this.setState({
+                            modalVisible: false,
+                        });
+                    }}
+                />
+            </React.Fragment >
             </>
         )
     }

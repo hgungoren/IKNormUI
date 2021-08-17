@@ -3,22 +3,22 @@ import TalepNedeni from "./talepNedeni";
 import NormStatus from "./normStatus";
 
 export interface GetAllKNormOutput {
-  
-    aciklama: string;
-    creationTime: Date;
-    durumu: string;
+
     id: number;
+    turu: string;
+    durumu: string;
     nedeni: string;
-    normStatus: NormStatus;
-    normStatusValue: string;
-    personelId: number;
+    kNormId: number;
+    aciklama: string;
     pozisyon: string;
     subeObjId: number;
+    talepTuru: number;
+    creationTime: Date;
+    yeniPozisyon: null;
+    personelId: number;
+    normStatus: NormStatus;
+    normStatusValue: string;
     talepDurumu: TalepDurumu;
     talepNedeni: TalepNedeni;
-    talepTuru: number;
-    turu: string;
-    yeniPozisyon: null;
-    kNormId: number; 
-    bagliOlduguSubeObjId?: string;
+    bagliOlduguSubeObjId?: string; 
 }
