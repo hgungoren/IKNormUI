@@ -1,3 +1,4 @@
+/*eslint-disable */
 import './index.less';
 import * as React from 'react';
 import { Row, Col, Card } from 'antd';
@@ -29,7 +30,6 @@ export interface IDashboardProps {
 
 
 export interface IBolgeState {
-
   totalFill: KLineChartModel[];
   cardLoading: boolean;
   lineChartLoading: boolean;
@@ -37,6 +37,7 @@ export interface IBolgeState {
   pieChartLoading: boolean;
 
 }
+
 @inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
@@ -106,7 +107,11 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let result = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+
+
+
+    this.setState({ totalFill: result, lineChartLoading: false })
   }
 
   parseDate(input) {
@@ -114,9 +119,12 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
 
-  lineChartModel = async (data: GetAllKNormOutput[]) => {
 
-    if (data === undefined) return;
+
+
+  lineChartModel = async (data: GetAllKNormOutput[]): Promise<KLineChartModel[]> => {
+
+    if (data === undefined) [];
 
     let date = new Date();
     let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate())
@@ -236,7 +244,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       { name: L('Sunday'), talep: toplamWeek7, bekleyen: beklemedeWeek7, amt: 0, onaylanan: onaylandiWeek7, iptal: iptalWeek7 }
     ]
 
-    this.setState({ totalFill: model, lineChartLoading: false })
+    return model;
   }
 
   addDays(days: number): Date {
