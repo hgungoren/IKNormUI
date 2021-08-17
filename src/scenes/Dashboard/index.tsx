@@ -31,8 +31,10 @@ export interface IDashboardProps {
 
 export interface IBolgeState {
   totalFill: KLineChartModel[];
+  totalUpdate: KLineChartModel[];
   cardLoading: boolean;
-  lineChartLoading: boolean;
+  lineFillLoading: boolean;
+  lineUpdateLoading: boolean;
   barChartLoading: boolean;
   pieChartLoading: boolean;
 
@@ -48,8 +50,10 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   state = {
     totalFill: [] as KLineChartModel[],
+    totalUpdate: [] as KLineChartModel[],
     cardLoading: true,
-    lineChartLoading: true,
+    lineFillLoading: true,
+    lineUpdateLoading: true,
     barChartLoading: true,
     pieChartLoading: true
   }
@@ -84,7 +88,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       bolgeId: '0',
       type: ''
     });
-    await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    // await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
   }
 
   async componentDidMount() {
@@ -107,11 +111,13 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    let result = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getAcceptedNormUpdateRequest);
 
 
 
-    this.setState({ totalFill: result, lineChartLoading: false })
+    this.setState({ totalFill: resultFill, lineFillLoading: false })
+    this.setState({ totalUpdate: resultUpdate, lineUpdateLoading: false })
   }
 
   parseDate(input) {
@@ -255,7 +261,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   render() {
 
-    const { cardLoading, lineChartLoading } = this.state;
+    const { cardLoading, lineFillLoading, lineUpdateLoading } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
@@ -269,15 +275,15 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       getCanceledNormUpdateRequestCount
     } = this.props.kNormStore;
 
-    const data: KLineChartModel[] = [
-      { name: 'Pazartesi', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Salı', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Çarşamba', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Perşembe', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Cuma', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Cumartesi', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-      { name: 'Pazar', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
-    ];
+    // const data: KLineChartModel[] = [
+    //   { name: 'Pazartesi', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Salı', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Çarşamba', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Perşembe', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Cuma', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Cumartesi', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
+    //   { name: 'Pazar', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
+    // ];
 
 
     return (
@@ -304,14 +310,14 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
         <Row gutter={16}>
           <Col span={12}>
-            <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineChartLoading} bordered={false}>
+            <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
               <LineChartExample data={this.state.totalFill} />
             </Card>
           </Col>
 
           <Col span={12}>
-            <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineChartLoading} bordered={false}>
-              <LineChartExample data={data} />
+            <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
+              <LineChartExample data={this.state.totalUpdate} />
             </Card>
           </Col>
 
