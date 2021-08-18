@@ -12,7 +12,7 @@ import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/g
 import './index.less';
 import { MailOutlined } from '@ant-design/icons';
 import { GetAllHierarchyOutput } from '../../services/kHierarchy/dto/getAllHierarchyOutput';
- 
+
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -212,7 +212,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             size={'small'} tabBarGutter={64}
             activeKey={this.state.defaultActiveKey.pane}>
 
-            <TabPane tab={L('PositionSelect')} key={'PositionSelect'}>
+            <TabPane tab={L('PositionSelect')} key={'PositionSelect'} className={'ant-tab-form'}>
 
               <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
                 <Input style={{ display: 'none' }} />
@@ -236,7 +236,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
               {
                 !this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
-                  <Select placeholder={L('PleaseSelect')} >
+                  <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')} >
                     {
                       position === undefined
                         ? []
@@ -298,7 +298,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             </TabPane>
             <TabPane className={'form-tabPane'} tab={L('AuthoritiesHierarchy')} key={'AuthoritiesHierarchy'} forceRender={true}>
               {
-                <Timeline className={'form-timeline'}> 
+                <Timeline className={'form-timeline'}>
                   {
                     hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
 
@@ -317,7 +317,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                     )
                   }
                 </Timeline>
-              }  
+              }
             </TabPane>
           </Tabs>
         </Form>
