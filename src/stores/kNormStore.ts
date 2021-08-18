@@ -40,6 +40,8 @@ class KNormStore {
     async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
 
         let result: PagedResultDto<GetAllKNormOutput>;
+
+
         if (pagedFilterAndSortedRequest.type === "sube") {
             result = await kNormService.getAllSube(pagedFilterAndSortedRequest);
         }
@@ -49,13 +51,16 @@ class KNormStore {
         else {
             result = await kNormService.getAllBolge(pagedFilterAndSortedRequest);
         }
-        this.getTotalNormFillingRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
-        this.getPendingNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
-        this.getAcceptedNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
-        this.getCanceledNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
 
-        this.getTotalNormUpdateRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir);
-        this.getPendingNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
+
+
+        this.getTotalNormFillingRequest   = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
+        this.getPendingNormFillRequest    = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
+        this.getAcceptedNormFillRequest   = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
+        this.getCanceledNormFillRequest   = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
+
+        this.getTotalNormUpdateRequest    = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir);
+        this.getPendingNormUpdateRequest  = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
         this.getAcceptedNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
         this.getCanceledNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
     }

@@ -122,15 +122,15 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'}  rules={rules.title}>
+                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'} rules={rules.title}>
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  rules={rules.userObjId}>
+                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'} rules={rules.userObjId}>
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  rules={rules.companyObjId}>
+                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'} rules={rules.companyObjId}>
                     <Input />
                   </Form.Item>
 
@@ -194,7 +194,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                       <Input type="password" />
                     </Form.Item>
                   ) : null}
-                  <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
+                  <Form.Item initialValue={false} label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
                     <Checkbox>{L('Active')}</Checkbox>
                   </Form.Item>
                 </Col>

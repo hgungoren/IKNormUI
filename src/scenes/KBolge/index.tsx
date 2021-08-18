@@ -416,13 +416,13 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                             xl={{ span: 24, offset: 0 }}
                             xxl={{ span: 24, offset: 0 }} >
                             <Table
-                                locale={{ emptyText: L('NoData'), expand: 'test' }}
+                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={columns}
                                 onChange={this.handlePagination}
                                 rowKey={(record) => record.objId.toString()}
                                 loading={kBolge === undefined ? true : false}
-                                dataSource={kBolge === undefined ? [] : kBolge.items} 
+                                dataSource={kBolge === undefined ? [] : kBolge.items}
                                 pagination={tablePagination}
                             />
                         </Col>
