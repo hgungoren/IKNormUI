@@ -76,7 +76,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     async getNormRequests(id: string) {
 
-      
+
         await this.props.kNormStore.getMaxAll({
             id: '0',
             keyword: '',
@@ -185,7 +185,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             id: this.state.id,
             keyword: this.state.filter,
             skipCount: this.state.skipCount,
-            maxResultCount: this.state.maxResultCount,
+            maxResultCount: this.state.maxResultCount 
         });
 
         await this.props.kSubeStore.getNormCount(this.state.id);
@@ -214,8 +214,10 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.setState({ subeObjId: id })
+
         await this.getPosition(tip);
         await this.getKSubeNorms();
+
         this.setState({ modalVisible: !this.state.modalVisible });
     }
 
@@ -225,8 +227,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     }
 
     async setPageState() {
- 
-        this.setState({ id: this.props["match"].params["id"] });   
+
+        this.setState({ id: this.props["match"].params["id"] });
     }
 
     async componentDidMount() {
@@ -320,6 +322,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
                 <KCartList
                     type="sube"
+                    bolgeId={this.state.id}
                     normCount={normCount}
                     subeObjId={this.state.id}
                     cardLoading={cardLoading}

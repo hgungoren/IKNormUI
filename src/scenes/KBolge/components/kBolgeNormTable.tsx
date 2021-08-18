@@ -23,11 +23,11 @@ class KBolgeNormTable extends React.Component<ICreateNormTableProps> {
         const { kSubeNormDelete, kSubeNormEdit } = this.props;
 
         const columns = [
-            { title: L('Position'), dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('NormCount'), dataIndex: 'adet', key: 'adet', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('EmployeeCount'), dataIndex: 'adet', key: 'adet', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('Position'),          dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('NormCount'),         dataIndex: 'adet',     key: 'adet',     width: 50, render: (text: string) => <div>{text}</div> },
+            { title: L('EmployeeCount'),     dataIndex: 'adet',     key: 'adet',     width: 50, render: (text: string) => <div>{text}</div> },
             {
-                title: L('CreationTime'), dataIndex: 'creationTime', key: 'creationTime', width: 150, render: (text: Date) => <div>{
+                title: L('CreationTime'), dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: Date) => <div>{
                     <div>{
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
@@ -42,7 +42,7 @@ class KBolgeNormTable extends React.Component<ICreateNormTableProps> {
             },
             {
                 title: L('Actions'),
-                width: 150,
+                width: 30,
                 render: (text: string, item: any) => (
                     <div>
                         <Tooltip placement="topRight" title={L('Edit')}>

@@ -365,7 +365,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item> <Link to="/home">{L('Dashboard')}</Link>  </Breadcrumb.Item>
+                                <Breadcrumb.Item> <Link to="/dashboard">{L('Dashboard')}</Link>  </Breadcrumb.Item>
                                 <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
                             </Breadcrumb>
                         }  >
@@ -376,8 +376,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     type={"bolge"}
                     subeObjId={0}
                     normCount={normCount}
+                    bolgeId={this.state.id}
                     cardLoading={cardLoading}
-                    // userId={this.props.sessionStore?.currentLogin.user.id !== undefined ? this.props.sessionStore?.currentLogin.user.id : 0}
                     kPersonelCount={kPersonelCount}
                     kNormStore={this.props.kNormStore}
                     kNormDetailStore={this.props.kNormDetailStore}
@@ -388,9 +388,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
-                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-
-                />
+                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} />
                 <Card hoverable>
                     <Row>
                         <Col
@@ -424,8 +422,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                                 onChange={this.handlePagination}
                                 rowKey={(record) => record.objId.toString()}
                                 loading={kBolge === undefined ? true : false}
-                                dataSource={kBolge === undefined ? [] : kBolge.items}
-                                // pagination={{ pageSize: 10, total: kBolge === undefined ? 0 : kBolge.totalCount, defaultCurrent: 1 }}
+                                dataSource={kBolge === undefined ? [] : kBolge.items} 
                                 pagination={tablePagination}
                             />
                         </Col>

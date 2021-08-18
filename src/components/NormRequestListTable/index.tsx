@@ -2,11 +2,11 @@
 
 import './index.less';
 import * as React from 'react';
-import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
+import { isGranted, L } from '../../lib/abpUtility';
 import NormDetailTimeLine from '../NormDetailTimeLine';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import Status from '../../services/kNormDetail/dto/status';
@@ -17,8 +17,10 @@ import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import { notification, Card, Col, Row, Table, Input, Button, Tooltip, Space } from 'antd';
 import { CheckCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-design/icons';
+import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
 
 export interface INormRequestListTableState {
+    subeOrBolgeAdi: string;
     filter: string;
     subeObjId: string;
     requestId: number;
@@ -31,7 +33,10 @@ export interface INormRequestListTableState {
 
 
 interface INormRequestListTableProps {
+
+    type: string;
     table: string,
+    bolgeId: string;
     isModal: boolean,
     subeObjId: string;
     tableTitle: string;
@@ -39,7 +44,6 @@ interface INormRequestListTableProps {
     kNormStore: KNormStore;
     isConfirmOrCancel: boolean;
     kNormDetailStore: KNormDetailStore;
-    type: string;
 }
 
 const Search = Input.Search;
@@ -50,6 +54,7 @@ const Search = Input.Search;
 class NormRequestListTable extends React.Component<INormRequestListTableProps, INormRequestListTableState> {
 
     state = {
+        subeOrBolgeAdi: '',
         filter: '',
         requestId: 0,
         subeObjId: '0',
@@ -64,42 +69,45 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     getNormRequests = async () => {
         this.props.kNormStore.getAll({
+            bolgeId: '0',
             maxResultCount: 5,
+            type: this.props.type,
             id: this.props.subeObjId,
             keyword: this.state.filter,
             skipCount: this.state.skipNormCount,
-            bolgeId: '0',
-            type: this.props.type
         })
     }
 
     async getNormRequestsAll() {
-
         this.props.kNormStore.getMaxAll({
             skipCount: 0,
+            type: this.props.type,
             id: this.props.subeObjId,
             keyword: this.state.filter,
             maxResultCount: 1000000000,
-            bolgeId: '0',
-            type: this.props.type
-        })
-
-        this.props.kNormStore.getMaxAllCount({
-            skipCount: 0,
-            id: this.props.subeObjId,
-            keyword: this.state.filter,
-            maxResultCount: 1000000000,
-            bolgeId: '0',
-            type: this.props.type
+            bolgeId: this.props.bolgeId,
         })
     }
 
+
+    async getNormRequestsAllCount() {
+        this.props.kNormStore.getMaxAllCount({
+            skipCount: 0,
+            type: this.props.type,
+            id: this.props.subeObjId,
+            keyword: this.state.filter,
+            maxResultCount: 1000000000,
+            bolgeId: this.props.bolgeId,
+        })
+    }
+
+
     getAllNormDetails = async () => {
         this.props.kNormDetailStore.getAll({
+            id: 0,
+            keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
-            id: 0,
-            keyword: ''
         });
     }
 
@@ -114,7 +122,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     async componentDidMount() {
 
         if (this.props.isModal) {
-            this.getNormRequestsAll();
+            await this.getNormRequestsAll();
+            await this.getNormRequestsAllCount();
         }
         else
             this.getNormRequests()
@@ -126,13 +135,14 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     handleNormTableChange = (pagination: any) => {
         if (this.props.isModal)
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequestsAll());
-        else
+        else {
             this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
+        }
     };
 
-    async detailModalOpen(id: number) {
+    async detailModalOpen(id: number, name: string) {
         this.props.kNormDetailStore.getDetails(id);
-        this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
+        this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
     }
 
     async normRejectDescriptionModalOpen(id: number) {
@@ -152,12 +162,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         form!.validateFields()
             .then(async (values: any) => {
 
-                values.status = Status.Reject; 
+                values.status = Status.Reject;
                 await this.props.kNormDetailStore.update(values)
                     .then(() => {
                         this.props.kNormStore.setStatusAsync({
                             id: this.state.requestId,
-                            normStatus: NormStatus.Iptal  
+                            normStatus: NormStatus.Iptal
                         }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
                     }).catch((err) => {
                         this.openNotificationWithIcon('error')
@@ -172,12 +182,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     approveRequestClick = async (id: number) => {
         await this.props.kNormDetailStore.update({
-            kNormId: id, 
+            kNormId: id,
             id: id,
             status: Status.Apporved
         }).then(() => {
             this.props.kNormStore.setStatusAsync({
-                id: id 
+                id: id
             }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
         })
             .catch((err) => {
@@ -192,6 +202,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         const { kNorms } = this.props.kNormStore;
         const { isHoverable, tableTitle, table, isModal } = this.props;
         const { kNormAllDetails, kNormDetails } = this.props.kNormDetailStore;
+        const { subeOrBolgeAdi, detaillModalVisible } = this.state;
 
         const columnsNorm = [
             {
@@ -216,6 +227,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 </>)
 
             },
+            { title: "Bölge Adı", dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: "Şube Adı", dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
             { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
@@ -224,12 +237,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 dataIndex: 'id',
                 key: 'id',
                 width: 50,
-                render: (text, norm) => (
+                render: (text, norm: GetAllKNormOutput) => (
                     <>
                         <Space size={'small'}>
                             {
                                 isGranted('knorm.detail') && <Tooltip placement="topLeft" title={L('Detail')}>
-                                    <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                                    <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
                                 </Tooltip>
                             }
                             {
@@ -244,7 +257,6 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                                 <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
                                             </Tooltip>
                                         }
-
 
                                         {
                                             isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Reject')}>
@@ -322,8 +334,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 </Card>
                 <NormDetailTimeLine
                     data={kNormAllDetails}
-                    title="Ankara Bölge Md."
-                    visible={this.state.detaillModalVisible}
+                    title={subeOrBolgeAdi}
+                    visible={detaillModalVisible}
                     onCancel={() => {
                         this.setState({
                             detaillModalVisible: false,

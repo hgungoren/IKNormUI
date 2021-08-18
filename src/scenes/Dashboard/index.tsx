@@ -14,9 +14,11 @@ import KSubeNormStore from '../../stores/kSubeNormStore';
 import LineChartExample from './components/LineChartExample';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import KLineChartModel from '../../models/KLineChart/kLineChart';
+import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
 import AuthenticationStore from '../../stores/authenticationStore';
 import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
 
+declare var abp: any;
 
 export interface IDashboardProps {
   kNormStore: KNormStore;
@@ -30,8 +32,8 @@ export interface IDashboardProps {
 
 
 export interface IBolgeState {
-  totalFill: KLineChartModel[];
-  totalUpdate: KLineChartModel[];
+  totalFill: any[];
+  totalUpdate: any[];
   cardLoading: boolean;
   lineFillLoading: boolean;
   lineUpdateLoading: boolean;
@@ -49,8 +51,8 @@ export interface IBolgeState {
 export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   state = {
-    totalFill: [] as KLineChartModel[],
-    totalUpdate: [] as KLineChartModel[],
+    totalFill: [] as any[],
+    totalUpdate: [] as any[],
     cardLoading: true,
     lineFillLoading: true,
     lineUpdateLoading: true,
@@ -111,9 +113,9 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
-    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getAcceptedNormUpdateRequest);
 
+    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
 
     this.setState({ totalFill: resultFill, lineFillLoading: false })
@@ -125,10 +127,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
 
-
-
-
-  lineChartModel = async (data: GetAllKNormOutput[]): Promise<KLineChartModel[]> => {
+  lineChartModel = async (data: GetAllKNormOutput[]): Promise<any[]> => {
 
     if (data === undefined) [];
 
@@ -240,17 +239,36 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       toplamWeek7 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[6].getDate()).length
     }
 
-    const model: KLineChartModel[] = [
-      { name: L('Monday'), talep: toplamWeek1, bekleyen: beklemedeWeek1, amt: 0, onaylanan: onaylandiWeek1, iptal: iptalWeek1 },
-      { name: L('Tuesday'), talep: toplamWeek2, bekleyen: beklemedeWeek2, amt: 0, onaylanan: onaylandiWeek2, iptal: iptalWeek2 },
-      { name: L('Wednesday'), talep: toplamWeek3, bekleyen: beklemedeWeek3, amt: 0, onaylanan: onaylandiWeek3, iptal: iptalWeek3 },
-      { name: L('Thursday'), talep: toplamWeek4, bekleyen: beklemedeWeek4, amt: 0, onaylanan: onaylandiWeek4, iptal: iptalWeek4 },
-      { name: L('Friday'), talep: toplamWeek5, bekleyen: beklemedeWeek5, amt: 0, onaylanan: onaylandiWeek5, iptal: iptalWeek5 },
-      { name: L('Saturday'), talep: toplamWeek6, bekleyen: beklemedeWeek6, amt: 0, onaylanan: onaylandiWeek6, iptal: iptalWeek6 },
-      { name: L('Sunday'), talep: toplamWeek7, bekleyen: beklemedeWeek7, amt: 0, onaylanan: onaylandiWeek7, iptal: iptalWeek7 }
-    ]
 
-    return model;
+
+
+    if (abp.localization.currentLanguage.name === "tr") {
+      let model: KLineChartModel[] = [
+
+        { name: L('Monday'), talep: toplamWeek1, bekleyen: beklemedeWeek1, amt: 0, onaylanan: onaylandiWeek1, iptal: iptalWeek1 },
+        { name: L('Tuesday'), talep: toplamWeek2, bekleyen: beklemedeWeek2, amt: 0, onaylanan: onaylandiWeek2, iptal: iptalWeek2 },
+        { name: L('Wednesday'), talep: toplamWeek3, bekleyen: beklemedeWeek3, amt: 0, onaylanan: onaylandiWeek3, iptal: iptalWeek3 },
+        { name: L('Thursday'), talep: toplamWeek4, bekleyen: beklemedeWeek4, amt: 0, onaylanan: onaylandiWeek4, iptal: iptalWeek4 },
+        { name: L('Friday'), talep: toplamWeek5, bekleyen: beklemedeWeek5, amt: 0, onaylanan: onaylandiWeek5, iptal: iptalWeek5 },
+        { name: L('Saturday'), talep: toplamWeek6, bekleyen: beklemedeWeek6, amt: 0, onaylanan: onaylandiWeek6, iptal: iptalWeek6 },
+        { name: L('Sunday'), talep: toplamWeek7, bekleyen: beklemedeWeek7, amt: 0, onaylanan: onaylandiWeek7, iptal: iptalWeek7 }
+      ]
+      return model;
+    }
+    else {
+
+      let model: KLineChartModelEN[] = [
+        { name: L('Monday'), request: toplamWeek1, waiting: beklemedeWeek1, amt: 0, approved: onaylandiWeek1, cancel: iptalWeek1 },
+        { name: L('Tuesday'), request: toplamWeek2, waiting: beklemedeWeek2, amt: 0, approved: onaylandiWeek2, cancel: iptalWeek2 },
+        { name: L('Wednesday'), request: toplamWeek3, waiting: beklemedeWeek3, amt: 0, approved: onaylandiWeek3, cancel: iptalWeek3 },
+        { name: L('Thursday'), request: toplamWeek4, waiting: beklemedeWeek4, amt: 0, approved: onaylandiWeek4, cancel: iptalWeek4 },
+        { name: L('Friday'), request: toplamWeek5, waiting: beklemedeWeek5, amt: 0, approved: onaylandiWeek5, cancel: iptalWeek5 },
+        { name: L('Saturday'), request: toplamWeek6, waiting: beklemedeWeek6, amt: 0, approved: onaylandiWeek6, cancel: iptalWeek6 },
+        { name: L('Sunday'), request: toplamWeek7, waiting: beklemedeWeek7, amt: 0, approved: onaylandiWeek7, cancel: iptalWeek7 }
+      ]
+
+      return model;
+    }
   }
 
   addDays(days: number): Date {
@@ -275,22 +293,12 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       getCanceledNormUpdateRequestCount
     } = this.props.kNormStore;
 
-    // const data: KLineChartModel[] = [
-    //   { name: 'Pazartesi', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Salı', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Çarşamba', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Perşembe', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Cuma', talep: 2000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Cumartesi', talep: 3000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 },
-    //   { name: 'Pazar', talep: 1000, bekleyen: 2000, amt: 0, onaylanan: 4000, iptal: 5000 }
-    // ];
-
 
     return (
       <React.Fragment>
-
         <KCartList
           type={""}
+          bolgeId={0}
           subeObjId={0}
           normCount={normCount}
           cardLoading={cardLoading}
@@ -305,78 +313,19 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
           getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
           getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-
         />
-
         <Row gutter={16}>
           <Col span={12}>
             <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
               <LineChartExample data={this.state.totalFill} />
             </Card>
           </Col>
-
           <Col span={12}>
             <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
               <LineChartExample data={this.state.totalUpdate} />
             </Card>
           </Col>
-
         </Row>
-
-        {/* <Row gutter={16}>
-          <Col
-            xs={{ offset: 1, span: 22 }}
-            sm={{ offset: 1, span: 22 }}
-            md={{ offset: 1, span: 22 }}
-            lg={{ offset: 0, span: 8 }}
-            xl={{ offset: 0, span: 8 }}
-            xxl={{ offset: 0, span: 8 }}
-          >
-            <Card className={'dashboardCardTinyLine'} loading={barChartLoading} bordered={false}>
-              <TinyLineChartExample />
-              <ListExample value={visitorStatisticList} />
-            </Card>
-          </Col>
-          <Col
-            xs={{ offset: 1, span: 22 }}
-            sm={{ offset: 1, span: 22 }}
-            md={{ offset: 1, span: 22 }}
-            lg={{ offset: 0, span: 8 }}
-            xl={{ offset: 0, span: 8 }}
-            xxl={{ offset: 0, span: 8 }}
-          >
-            <Card className={'latestSocialTrendsList'} loading={barChartLoading} bordered={false}>
-              <TinyLineChartExample />
-              <ListExample value={visitorStatisticList} />
-            </Card>
-          </Col>
-          <Col
-            xs={{ offset: 1, span: 22 }}
-            sm={{ offset: 1, span: 22 }}
-            md={{ offset: 1, span: 22 }}
-            lg={{ offset: 0, span: 8 }}
-            xl={{ offset: 0, span: 8 }}
-            xxl={{ offset: 0, span: 8 }}
-          >
-            <Card className={'answeredTickeds'} loading={barChartLoading} bordered={false}>
-              <TinyLineChartExample />
-              <ListExample value={visitorStatisticList} />
-            </Card>
-          </Col>
-        </Row> */}
-
-        {/* <Row gutter={16}>
-          <Col span={16}>
-            <Card title="Payment Statistics" className={'dashboardBox'} loading={barChartLoading} bordered={false}>
-              <BarChartExample />
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card title="Browser Usage" className={'dashboardBox'} loading={pieChartLoading} bordered={false}>
-              <PieChartExample />
-            </Card>
-          </Col>
-        </Row> */}
       </React.Fragment>
     );
   }

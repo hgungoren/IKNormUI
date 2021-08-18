@@ -119,10 +119,10 @@ export const appRouters: any = [
     component: LoadableComponent(() => import('../../scenes/Exception')),
   },
   {
-    path: '/knormrequestdetail/:id',
+    path:        '/knormrequestdetail/:id',
     permission: 'kNormRequestDetail',
-    title: 'KNormRequestDetail',
-    name: 'KNormRequestDetail',
+    title:      'KNormRequestDetail',
+    name:       'KNormRequestDetail',
     icon: UserOutlined,
     showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')),

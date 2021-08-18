@@ -3,11 +3,12 @@
 import * as React from 'react';
 
 import { Card, Col, Row } from 'antd';
- import InformationCart from '../../components/InformationCard'
+//  import InformationCart from '../../components/InformationCard'
 export class Home extends React.Component<any> {
   render() {
     return (
       <Row gutter={16}>
+        
         <Col
           xs={{ span: 10, offset: 0 }}
           sm={{ span: 10, offset: 0 }}
@@ -16,7 +17,7 @@ export class Home extends React.Component<any> {
           xl={{ span: 10, offset: 0 }}
           xxl={{ span: 10, offset: 0 }}>
           <Card hoverable>
-            <InformationCart />
+            {/* <InformationCart /> */}
           </Card>
         </Col>
 

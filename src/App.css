@@ -40,3 +40,6 @@ table {
 .ant-card {
   cursor: context-menu;
 }
+table{
+  text-transform: capitalize;
+}
