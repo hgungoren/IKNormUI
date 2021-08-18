@@ -1,3 +1,4 @@
+import { GetKNormCount } from './../services/kNorm/dto/getKNormCount';
 import { action, observable } from 'mobx';
 import kNormService from '../services/kNorm/kNormService';
 import { PagedResultDto } from '../services/dto/pagedResultDto';
@@ -75,10 +76,10 @@ class KNormStore {
             result = await kNormService.getAllBolge(pagedFilterAndSortedRequest);
         }
 
-        this.getTotalNormFillingRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma).length;
-        this.getPendingNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
-        this.getAcceptedNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
-        this.getCanceledNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
+        // this.getTotalNormFillingRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma).length;
+        // this.getPendingNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
+        // this.getAcceptedNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
+        // this.getCanceledNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
 
         this.getTotalNormUpdateRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir).length;
         this.getPendingNormUpdateRequestCount = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
@@ -87,6 +88,18 @@ class KNormStore {
 
     }
 
+    @action
+     async getMaxAreaCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto){
+
+        let result: PagedResultDto<GetKNormCount>
+        result =  await kNormService.getAllBolgeCount(pagedFilterAndSortedRequest);
+        console.log(result.items);
+        this.getTotalNormFillingRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma).length;
+        this.getPendingNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
+        this.getAcceptedNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
+        this.getCanceledNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
+
+    }
 
     @action
     async getAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {

@@ -112,7 +112,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     await this.getEmployeeCount();
     await this.getNormCount();
     let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
-    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getAcceptedNormUpdateRequest);
+    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
 
 
