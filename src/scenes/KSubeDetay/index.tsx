@@ -324,22 +324,22 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi } = this.state;
 
         const normEmployeeCoumns = [
-            { title: 'Gorev', dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Personel', dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Norm', dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Norm Açığı', dataIndex: 'norm', key: 'norm', width: 150, render: (text: string) => <div>{text}</div> }
+            { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (text: string) => <div>{text}</div> }
         ]
 
         const columns = [
-            { title: 'Adi', dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Soyadi', dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Görevi', dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: 'Sicil No', dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div> }
+            { title: L('table.employee.name'), dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.employee.surname'), dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.employee.duty'), dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.employee.registrationnumber'), dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div> }
         ];
 
         const columnsNorm = [
             {
-                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: string) => <div>
+                title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: string) => <div>
                     {
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
@@ -351,14 +351,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     }
                 </div>
             },
-            { title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 250, render: (text: TalepDurumu) => <div> <Tag icon={<SyncOutlined spin />} color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
-            { title: "Bölge Adı",    dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Şube Adı",     dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Pozisyon",     dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: "Talep Türü",   dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+            { title: L("table.norm.requeststatus"), dataIndex: 'durumu', key: 'durumu', width: 250, render: (text: TalepDurumu) => <div> <Tag icon={<SyncOutlined spin />} color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
+            { title: L("Bölge Adı"),    dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("Şube Adı"),     dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.position"),     dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
+            { title: L("table.norm.requesttype"),   dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
             {
-                title: "İşlem",
+                title: L("table.norm.transactions"),
                 dataIndex: 'id',
                 key: 'id',
                 width: 50,

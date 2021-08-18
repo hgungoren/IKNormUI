@@ -41,10 +41,10 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "lint":  "eslint . --ext .ts,.tsx",
-    "test":  "craco test",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "craco test",
     "eject": "react-scripts eject",
-    "dev":   "craco start NODE_ENV=development"
+    "dev": "craco start NODE_ENV=development"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",

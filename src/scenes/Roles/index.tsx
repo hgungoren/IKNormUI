@@ -131,10 +131,10 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     const { allPermissions, roles } = this.props.roleStore;
 
     const columns = [
-      { title: L('RoleName'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('DisplayName'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div> },
       {
-        title: L('Actions'),
+        title: L('table.role.transactions'),
         width: 150,
         render: (text: string, item: any) => (
           <div>

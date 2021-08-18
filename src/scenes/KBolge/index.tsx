@@ -311,11 +311,11 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         } = this.props.kNormStore;
 
         const columns = [
-            { title: L('Name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('Type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div> },
-            { title: L('EmployeeCount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('NormCount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div> },
-            { title: L('NormOpening'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
+            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div> },
+            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div> },
+            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
             {
                 title: L('Actions'),
                 width: 150,
