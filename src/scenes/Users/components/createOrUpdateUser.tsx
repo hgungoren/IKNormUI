@@ -27,7 +27,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
     const form = this.props.formRef.current;
 
     if (value && value !== form!.getFieldValue('password')) {
-      return Promise.reject('Two passwords that you enter is inconsistent!');
+      return Promise.reject(L('TwoPasswordsThatYouEnterIsInconsistent'));
     }
     return Promise.resolve();
   };
