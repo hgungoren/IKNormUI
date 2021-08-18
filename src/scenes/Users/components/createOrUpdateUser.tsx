@@ -20,7 +20,7 @@ export interface ICreateOrUpdateUserProps {
 
 class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
   state = {
-    confirmDirty: false, 
+    confirmDirty: false,
   };
 
   compareToFirstPassword = (rule: any, value: any, callback: any) => {
@@ -41,10 +41,10 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
 
     if (value && this.state.confirmDirty && getFieldValue('confirm')) {
       validateFields(['confirm']);
-    } 
+    }
     return Promise.resolve();
   };
- 
+
   render() {
     const { roles } = this.props;
 
@@ -85,12 +85,12 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
       },
     };
 
-    const { visible, onCancel, onCreate } = this.props; 
+    const { visible, onCancel, onCreate } = this.props;
 
     const options = roles.map((x: GetRoles) => {
       var test = { label: x.displayName, value: x.normalizedName };
       return test;
-    }); 
+    });
 
     return (
       <Modal
@@ -122,19 +122,19 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'}  >
+                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'}  rules={rules.title}>
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  >
+                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'}  rules={rules.userObjId}>
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  >
+                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'}  rules={rules.companyObjId}>
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('CompanyRelationObjId')} {...formItemLayout} name={'companyRelationObjId'}  >
+                  <Form.Item label={L('CompanyRelationObjId')} {...formItemLayout} name={'companyRelationObjId'} rules={rules.companyRelationObjId} >
                     <Input />
                   </Form.Item>
 
@@ -156,11 +156,11 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('RegistrationNumber')} {...formItemLayout} name={'sicilNo'}  >
+                  <Form.Item label={L('RegistrationNumber')} {...formItemLayout} name={'sicilNo'} rules={rules.sicilNo} >
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'}  >
+                  <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'} rules={rules.companyCode} >
                     <Input />
                   </Form.Item>
 
@@ -205,7 +205,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                 <Checkbox.Group options={options} />
               </Form.Item>
             </TabPane>
-          </Tabs> 
+          </Tabs>
         </Form>
       </Modal>
     );
