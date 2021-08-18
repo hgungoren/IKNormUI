@@ -206,7 +206,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         const columnsNorm = [
             {
-                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: Date) => <div>
+                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 60, render: (text: Date) => <div>
                     {
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
@@ -219,7 +219,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 </div>
             },
             {
-                title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 250, render: (text, norm) => (<>
+                title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 200, render: (text, norm) => (<>
 
                     {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
                         <div className={'title'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
@@ -229,9 +229,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             },
             { title: "Bölge Adı", dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Şube Adı", dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+            { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 50, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
+            { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 50, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
             {
                 title: "İşlem",
                 dataIndex: 'id',

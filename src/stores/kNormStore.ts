@@ -55,15 +55,21 @@ class KNormStore {
             result = await kNormService.getAllBolgeCount();
         }
  
+ 
         this.getPendingNormFillRequestCountArray = result.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
-        this.getPendingNormFillRequestCount = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
-        this.getAcceptedNormFillRequestCount = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
-        this.getCanceledNormFillRequestCount = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
+
+        this.getTotalNormFillingRequestCount     = this.getPendingNormFillRequestCountArray.length;
+        this.getPendingNormFillRequestCount      = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
+        this.getAcceptedNormFillRequestCount     = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
+        this.getCanceledNormFillRequestCount     = this.getPendingNormFillRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
 
         this.getTotalNormUpdateRequestCountArray = result.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir);
-        this.getPendingNormUpdateRequestCount = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
-        this.getAcceptedNormUpdateRequestCount = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
-        this.getCanceledNormUpdateRequestCount = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
+
+        this.getTotalNormUpdateRequestCount      = this.getTotalNormUpdateRequestCountArray.length;
+        this.getPendingNormUpdateRequestCount    = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
+        this.getAcceptedNormUpdateRequestCount   = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
+        this.getCanceledNormUpdateRequestCount   = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
+              
     }
 
 
@@ -85,10 +91,10 @@ class KNormStore {
         }
 
  
-        this.getTotalNormFillingRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
-        this.getPendingNormFillRequest  = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
-        this.getAcceptedNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
-        this.getCanceledNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
+        this.getTotalNormFillingRequest   = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
+        this.getPendingNormFillRequest    = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
+        this.getAcceptedNormFillRequest   = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
+        this.getCanceledNormFillRequest   = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
 
         this.getTotalNormUpdateRequest    = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir);
         this.getPendingNormUpdateRequest  = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);

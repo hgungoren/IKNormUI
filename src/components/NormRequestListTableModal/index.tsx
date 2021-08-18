@@ -11,7 +11,7 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
                 centered
                 title={''}
                 footer={[]}
-                width={'95%'}
+                width={'80%'}
                 visible={visible}
                 onCancel={onCancel} >
 
