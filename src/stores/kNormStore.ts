@@ -46,7 +46,7 @@ class KNormStore {
 
         let result: GetAllKNormOutput[];
         if (pagedFilterAndSortedRequest.type === "sube") {
-            result = await kNormService.getAllSubeCount(pagedFilterAndSortedRequest);
+            result = await kNormService.getAllSubeCount();
         }
         else if (pagedFilterAndSortedRequest.type === "subedetail") {
             result = await kNormService.getAllSubeDetailCount(pagedFilterAndSortedRequest);
@@ -71,9 +71,6 @@ class KNormStore {
         this.getCanceledNormUpdateRequestCount   = this.getTotalNormUpdateRequestCountArray.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
               
     }
-
-
-
 
     @action
     async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
