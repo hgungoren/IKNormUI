@@ -71,8 +71,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
   }
 
   async getNormRequests() {
-
-
+ 
     await this.props.kNormStore.getMaxAll({
       maxResultCount: 100000,
       skipCount: 0,
@@ -112,14 +111,9 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     }
 
     await this.getEmployeeCount();
-    await this.getNormCount();
-<<<<<<< HEAD
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
-    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
-=======
->>>>>>> 7b446c8aed3f51594b9648127097aea08e4b49ab
-
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    await this.getNormCount(); 
+    
+    let resultFill =   await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
     let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
 
@@ -300,7 +294,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
 
     return (
-      <React.Fragment>
+      <React.Fragment> 
         <KCartList
           type={""}
           bolgeId={0}

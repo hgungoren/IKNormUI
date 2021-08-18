@@ -121,17 +121,17 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
     }
 
-    async getNormRequestsCount() {
-        await this.props.kNormStore.getMaxAreaCount({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
-            id: '0',
-            bolgeId: '0',
-            type: 'bolge'
-        })
+    // async getNormRequestsCount() {
+    //     await this.props.kNormStore.getMaxAreaCount({
+    //         maxResultCount: 100000,
+    //         skipCount: 0,
+    //         keyword: '',
+    //         id: '0',
+    //         bolgeId: '0',
+    //         type: 'bolge'
+    //     })
 
-    }
+    // }
 
 
     async getNormCount() {
@@ -257,7 +257,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         await this.getEmployeeCount();
         await this.getNormCount();
         await this.getNormRequests();
-        await this.getNormRequestsCount();
+        // await this.getNormRequestsCount();
     }
 
     handleSearch = (value: string) => {
@@ -373,7 +373,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             },
         ];
         return (
-            <React.Fragment>
+            <React.Fragment> 
                 <Card style={{ marginBottom: 20 }}>
                     <PageHeader
                         ghost={false}
