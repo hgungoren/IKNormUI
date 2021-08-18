@@ -85,7 +85,7 @@ class KNormStore {
         // this.getPendingNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
         // this.getAcceptedNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
         // this.getCanceledNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal).length;
-
+        console.log(result.items);
         this.getTotalNormUpdateRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Arttir || TalepTuru[x.turu] === TalepTuru.Norm_Kaydir).length;
         this.getPendingNormUpdateRequestCount = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;
         this.getAcceptedNormUpdateRequestCount = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi).length;
@@ -94,10 +94,11 @@ class KNormStore {
     }
 
     @action
-     async getMaxAreaCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto){
+     async getMaxAreaCount(){
 
+    
         let result: PagedResultDto<GetKNormCount>
-        result =  await kNormService.getAllBolgeCount(pagedFilterAndSortedRequest);
+        result =  await kNormService.getAllBolgeCount();
         console.log(result.items);
         this.getTotalNormFillingRequestCount = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma).length;
         this.getPendingNormFillRequestCount = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede).length;

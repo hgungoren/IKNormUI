@@ -122,14 +122,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     }
 
     async getNormRequestsCount() {
-        await this.props.kNormStore.getMaxAreaCount({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
-            id: '0',
-            bolgeId: '0',
-            type: 'bolge'
-        })
+        await this.props.kNormStore.getMaxAreaCount()
 
     }
 

@@ -48,7 +48,7 @@ export interface IBolgeState {
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
+export class Dashboard2 extends React.Component<IDashboardProps, IBolgeState> {
 
   state = {
     totalFill: [] as any[],
@@ -113,11 +113,6 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     await this.getEmployeeCount();
     await this.getNormCount();
-<<<<<<< HEAD
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
-    let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
-=======
->>>>>>> 7b446c8aed3f51594b9648127097aea08e4b49ab
 
     let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
     let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
@@ -336,4 +331,4 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
   }
 }
 
-export default Dashboard;
+export default Dashboard2;

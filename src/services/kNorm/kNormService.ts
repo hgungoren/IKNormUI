@@ -1,3 +1,4 @@
+import { GetKNormCount } from './dto/getKNormCount';
 import http from '../httpService';
 import { EntityDto } from '../dto/entityDto';
 import { PagedResultDto } from '../dto/pagedResultDto';
@@ -22,8 +23,9 @@ class KNormService {
         let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
-    public async getAllBolgeCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('api/services/app/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest });
+    public async getAllBolgeCount(): Promise<PagedResultDto<GetKNormCount>> {
+        let result = await http.get('api/services/app/KNorm/GetBolgeNormsCount');
+        console.log(result.data.result)
         return result.data.result;
     }
 
