@@ -1,8 +1,8 @@
 import TalepTuru from './talepTuru';
 import NormStatus from './normStatus';
 export interface GetKNormCount {
-  normStatus?: NormStatus;
+  normStatus: NormStatus;
   normStatusValue: string;
-  telepTuru?: TalepTuru;
+  telepTuru: TalepTuru;
   turu: string;
 }

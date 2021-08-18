@@ -48,7 +48,7 @@ export interface IBolgeState {
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
+export class Dashboard2 extends React.Component<IDashboardProps, IBolgeState> {
 
   state = {
     totalFill: [] as any[],
@@ -71,7 +71,8 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
   }
 
   async getNormRequests() {
- 
+
+
     await this.props.kNormStore.getMaxAll({
       maxResultCount: 100000,
       skipCount: 0,
@@ -110,10 +111,10 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       await this.getNormRequests();
     }
 
-    await this.getEmployeeCount(); 
-    await this.getNormCount();  
+    await this.getEmployeeCount();
+    await this.getNormCount();
 
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest); 
+    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
     let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
 
@@ -294,7 +295,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
 
     return (
-      <React.Fragment> 
+      <React.Fragment>
         <KCartList
           type={""}
           bolgeId={0}
@@ -330,4 +331,4 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
   }
 }
 
-export default Dashboard;
+export default Dashboard2;

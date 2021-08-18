@@ -22,15 +22,13 @@ class KNormService {
         let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest }); 
         return result.data.result;
     }
+ 
 
     public async getAllBolgeCount(): Promise<GetAllKNormOutput[]> {
         let result = await http.get('api/services/app/KNorm/GetBolgeNormsCount');
         return result.data.result;
     }
-
-
-
-
+ 
 
     public async getAllSube(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
         let result = await http.get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });

@@ -84,6 +84,7 @@ class KNormStore {
             result = await kNormService.getAllBolge(pagedFilterAndSortedRequest);
         }
 
+ 
         this.getTotalNormFillingRequest = result.items.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
         this.getPendingNormFillRequest  = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Beklemede);
         this.getAcceptedNormFillRequest = this.getTotalNormFillingRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
@@ -94,10 +95,8 @@ class KNormStore {
         this.getAcceptedNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Onaylandi);
         this.getCanceledNormUpdateRequest = this.getTotalNormUpdateRequest.filter(x => NormStatus[x.normStatusValue] === NormStatus.Iptal);
 
-    }
-
-
-
+    } 
+  
     @action
     async getAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
 
@@ -114,10 +113,7 @@ class KNormStore {
 
         this.kNorms = result;
     }
-
-
-
-
+ 
     @action
     async get(entityDto: EntityDto) {
         let result = await kNormService.get(entityDto);
