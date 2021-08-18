@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 
 
 function KCartList({
+    bolgeId,
     type,
     kNormDetailStore,
     cardLoading,
@@ -136,6 +137,7 @@ function KCartList({
             </Row>
 
             <NormRequestListTableModal
+                bolgeId={bolgeId}
                 key={key}
                 type={type}
                 kNormDetailStore={kNormDetailStore}

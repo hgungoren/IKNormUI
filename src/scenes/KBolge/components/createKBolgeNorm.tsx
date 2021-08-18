@@ -55,7 +55,7 @@ class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
               <Button onClick={onCancel} type="primary" danger key="1" >{L('Close')}</Button>
             ]
           }
-          width={'90%'}
+          width={'60%'}
           visible={visible}
           title={L('NormInsertOperation')}
           onCancel={onCancel}

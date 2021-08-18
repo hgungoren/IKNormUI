@@ -9,6 +9,8 @@ export interface GetAllKNormOutput {
     durumu: string;
     nedeni: string;
     kNormId: number;
+    subeAdi: string;
+    bolgeAdi: string;
     aciklama: string;
     pozisyon: string;
     subeObjId: number;
@@ -20,5 +22,5 @@ export interface GetAllKNormOutput {
     normStatusValue: string;
     talepDurumu: TalepDurumu;
     talepNedeni: TalepNedeni;
-    bagliOlduguSubeObjId?: string; 
+    bagliOlduguSubeObjId?: string;
 }

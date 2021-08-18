@@ -39,7 +39,8 @@ export class Header extends React.Component<IHeaderProps> {
         <Col style={{ padding: '0px 15px 0px 15px', textAlign: 'right' }} span={12}>
           <LanguageSelect /> {'   '}
           <Dropdown overlay={userDropdownMenu} trigger={['click']}>
-            <Badge style={{}} count={3}>
+            {/* TODO : Bu alanda kullanıcıya ait okunmamış bildirim adedi eklenecektir */}
+            <Badge style={{}} count={""}>
               <Avatar style={{ height: 24, width: 24 }} shape="circle" alt={'profile'} src={profilePicture} />
             </Badge>
           </Dropdown>

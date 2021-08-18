@@ -1,10 +1,12 @@
 import './index.less';
 import * as React from 'react';
-import KLineChartModel from '../../../../models/KLineChart/kLineChart';
+// import KLineChartModel from '../../../../models/KLineChart/kLineChart';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { L } from '../../../../lib/abpUtility';
+
+
 interface KLineChartProps {
-  data: KLineChartModel[]
+  data: any[]
 }
 
 const KLineChart: React.FunctionComponent<KLineChartProps> = ({ data }: KLineChartProps) => {

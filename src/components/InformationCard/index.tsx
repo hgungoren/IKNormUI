@@ -35,6 +35,9 @@ class InformationCart extends AppComponentBase<IInformationProps, IInformationSt
         return (
 
             <>
+            {
+                console.log(   this.props.sessionStore)
+            }
                 <Meta
                     avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
                     title={<p className={'metaUserName'}>{this.props.sessionStore?.currentLogin.user.name} {this.props.sessionStore?.currentLogin.user.surname}</p>}

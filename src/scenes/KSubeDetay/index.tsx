@@ -172,7 +172,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
 
         let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((result, currentValue) => {
-            (result[currentValue['normStatusValue']] = result[currentValue['normStatusValue']] || [])
+            (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
                 .push(
                     currentValue
                 );
@@ -352,9 +352,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 </div>
             },
             { title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 250, render: (text: TalepDurumu) => <div> <Tag icon={<SyncOutlined spin />} color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
-            { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: "Bölge Adı",    dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: "Şube Adı",     dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: "Pozisyon",     dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+            { title: "Talep Türü",   dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
             {
                 title: "İşlem",
                 dataIndex: 'id',
@@ -390,13 +392,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             <Table
-                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={normEmployeeCoumns}
                                 rowKey={(record) => record.id}
+                                locale={{ emptyText: L('NoData') }}
                                 loading={this.state.groupData.length == 1 ? true : false}
-                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
                                 dataSource={this.state.groupData === undefined ? [] : this.state.groupData}
+                                pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
                             />
                         </Col>
                     </Row>
@@ -461,9 +463,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}>
                             <Table
-                                locale={{ emptyText: L('NoData') }}
                                 bordered={false}
                                 columns={columnsNorm}
+                                locale={{ emptyText: L('NoData') }}
                                 onChange={this.handleNormTableChange}
                                 rowKey={(record) => record.subeObjId}
                                 loading={kNorms === undefined ? true : false}
@@ -473,9 +475,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         </Col>
                     </Row>
                 </Card>
+
                 <CreateNormForm
-                    bagliOlduguSubeId={this.state.bagliOlduguSubeId}
-                    createFormState={this.state.createFormState}
                     modalType={'create'}
                     tip={this.state.tip}
                     formRef={this.formRef}
@@ -484,6 +485,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     employees={kAllPersonels}
                     onCreateNorm={this.createNorm}
                     visible={this.state.modalVisible}
+                    createFormState={this.state.createFormState}
+                    bagliOlduguSubeId={this.state.bagliOlduguSubeId}
                     position={this.props.kInkaLookUpTableStore.positions}
                     normCount={norms !== undefined ? norms.items.length : 0}
                     onCancel={() => {
@@ -492,8 +495,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             modalVisible: false,
                         });
                         form!.resetFields();
-                    }}
-                />
+                    }} />
 
                 <NormDetailTimeLine
                     data={kNormAllDetails}

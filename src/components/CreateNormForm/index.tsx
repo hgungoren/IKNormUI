@@ -12,7 +12,7 @@ import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/g
 import './index.less';
 import { MailOutlined } from '@ant-design/icons';
 import { GetAllHierarchyOutput } from '../../services/kHierarchy/dto/getAllHierarchyOutput';
-import QueueAnim from 'rc-queue-anim';
+
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -212,7 +212,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             size={'small'} tabBarGutter={64}
             activeKey={this.state.defaultActiveKey.pane}>
 
-            <TabPane tab={L('PositionSelect')} key={'PositionSelect'}>
+            <TabPane tab={L('PositionSelect')} key={'PositionSelect'} className={'ant-tab-form'}>
 
               <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
                 <Input style={{ display: 'none' }} />
@@ -236,7 +236,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
               {
                 !this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
-                  <Select placeholder={L('PleaseSelect')} >
+                  <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')} >
                     {
                       position === undefined
                         ? []
@@ -297,36 +297,27 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
             </TabPane>
             <TabPane className={'form-tabPane'} tab={L('AuthoritiesHierarchy')} key={'AuthoritiesHierarchy'} forceRender={true}>
-
-
               {
-                (hierarchy !== undefined && this.state.defaultActiveKey.visible) && <Timeline className={'form-timeline'}>
+                <Timeline className={'form-timeline'}>
+                  {
+                    hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
 
-                  <QueueAnim delay={1} className="queue-simple">
-                    {
-                      hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
-
-                        <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
-                          <div className="form-item-div">
-                            <p className={'form-tile-line-p'}>
-                              <Row>
-                                <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >            {x.title}            </Col>
-                                <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.firstName}        </Col>
-                                <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.lastName}         </Col>
-                                <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {x.mail} </strong>   </Col>
-                              </Row>
-                            </p>
-                          </div>
-                        </Timeline.Item></div>
-                      )
-                    }
-                  </QueueAnim>
+                      <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
+                        <div className="form-item-div">
+                          <p className={'form-tile-line-p'}>
+                            <Row>
+                              <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >            {x.title}            </Col>
+                              <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.firstName}        </Col>
+                              <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.lastName}         </Col>
+                              <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {x.mail} </strong>   </Col>
+                            </Row>
+                          </p>
+                        </div>
+                      </Timeline.Item></div>
+                    )
+                  }
                 </Timeline>
               }
-              {/* 
-              {
-                !this.state.buttonVisible && (<Button onClick={() => { onCreateNorm(), this.CreateNorm() }} className={'right'} type="primary">{L('Send')}</Button>)
-              } */}
             </TabPane>
           </Tabs>
         </Form>
