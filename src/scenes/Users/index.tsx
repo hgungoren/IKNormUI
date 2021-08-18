@@ -122,20 +122,20 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
 
     const columns = [
-      { title: L('UserName'), dataIndex: 'userName', key: 'userName', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('FirstName'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('LastName'), dataIndex: 'surname', key: 'surname', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('Title'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('EmailAddress'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div> },
       {
-        title: L('IsActiveStatus'),
+        title: L('table.user.status'),
         dataIndex: 'isActive',
         key: 'isActive',
         width: 150,
         render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>),
       },
       {
-        title: L('Actions'),
+        title: L('table.user.transactions'),
         width: 150,
         render: (text: string, item: any) => (
           <div>
