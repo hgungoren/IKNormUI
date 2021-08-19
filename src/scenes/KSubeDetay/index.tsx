@@ -257,8 +257,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     openNotificationWithIcon = type => {
         notification[type]({
-            message: L('NormCreateNotificationMessageTitle'),
-            description: L('NormCreateNotificationMessageDescription'),
+            message: type === "success" ? L('NormCreateNotificationMessageTitle') : L('NormRejectNotificationMessageTitle'),
+            description: type === "success" ? L('NormCreateNotificationMessageDescription') : L('NormCreateNotificationMessageDescription'),
             duration: 3
         });
     };

@@ -72,7 +72,7 @@ function KCartList({
 
 
     return (
-        <>
+        <> 
             <Row gutter={16}>
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />

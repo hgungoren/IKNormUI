@@ -19,16 +19,16 @@ class KNormService {
     }
 
     public async getAllBolge(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest }); 
+        let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
- 
+
 
     public async getAllBolgeCount(): Promise<GetAllKNormOutput[]> {
         let result = await http.get('api/services/app/KNorm/GetBolgeNormsCount');
         return result.data.result;
     }
- 
+
 
     public async getAllSube(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
         let result = await http.get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });
@@ -36,8 +36,8 @@ class KNormService {
         return result.data.result;
     }
 
-    public async getAllSubeCount(): Promise<GetAllKNormOutput[]> {
-        let result = await http.get('api/services/app/KNorm/GetSubeNormsCount');
+    public async getAllSubeCount(id: string): Promise<GetAllKNormOutput[]> { 
+        let result = await http.get('api/services/app/KNorm/GetSubeNormsCount?id=' + id);
         return result.data.result;
     }
 

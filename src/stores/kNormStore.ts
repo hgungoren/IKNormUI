@@ -46,7 +46,7 @@ class KNormStore {
 
         let result: GetAllKNormOutput[];
         if (pagedFilterAndSortedRequest.type === "sube") {
-            result = await kNormService.getAllSubeCount();
+            result = await kNormService.getAllSubeCount(pagedFilterAndSortedRequest.bolgeId);
         }
         else if (pagedFilterAndSortedRequest.type === "subedetail") {
             result = await kNormService.getAllSubeDetailCount(pagedFilterAndSortedRequest);
@@ -54,8 +54,7 @@ class KNormStore {
         else {
             result = await kNormService.getAllBolgeCount();
         }
- 
- 
+  
         this.getPendingNormFillRequestCountArray = result.filter(x => TalepTuru[x.turu] === TalepTuru.Norm_Doldurma);
 
         this.getTotalNormFillingRequestCount     = this.getPendingNormFillRequestCountArray.length;
@@ -75,6 +74,9 @@ class KNormStore {
     @action
     async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
 
+
+        console.log(pagedFilterAndSortedRequest.bolgeId)
+        
         let result: PagedResultDto<GetAllKNormOutput>;
         if (pagedFilterAndSortedRequest.type === "sube") {
 

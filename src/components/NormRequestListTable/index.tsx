@@ -54,12 +54,12 @@ const Search = Input.Search;
 class NormRequestListTable extends React.Component<INormRequestListTableProps, INormRequestListTableState> {
 
     state = {
-        subeOrBolgeAdi: '',
         filter: '',
         requestId: 0,
         subeObjId: '0',
         inputValue: '',
         skipNormCount: 0,
+        subeOrBolgeAdi: '',
         maxNormResultCount: 5,
         detaillModalVisible: false,
         normRejectDescriptionModalVisible: false,
@@ -151,8 +151,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     openNotificationWithIcon = type => {
         notification[type]({
-            message: L('NormRejectNotificationMessageTitle'),
-            description: L('NormCreateNotificationMessageDescription'),
+            message: type === "success" ? L('NormCreateNotificationMessageTitle') : L('NormRejectNotificationMessageTitle'),
+            description: type === "success" ? L('NormCreateNotificationMessageDescription') : L('NormCreateNotificationMessageDescription'),
             duration: 3
         });
     };

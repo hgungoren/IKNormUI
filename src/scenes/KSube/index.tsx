@@ -75,8 +75,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     };
 
     async getNormRequests(id: string) {
-
-
+ 
         await this.props.kNormStore.getMaxAll({
             id: '0',
             keyword: '',
@@ -85,7 +84,10 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             bolgeId: id,
             type: 'sube'
         });
-
+ 
+    }
+    async getNormRequestsCount(id: string) {
+ 
         await this.props.kNormStore.getMaxAllCount({
             maxResultCount: 100000,
             skipCount: 0,
@@ -95,7 +97,6 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             type: 'sube'
         });
     }
-
 
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
@@ -128,8 +129,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     openNotificationWithIcon = type => {
         notification[type]({
-            message: L('NormCreateNotificationMessageTitle'),
-            description: L('NormCreateNotificationMessageDescription'),
+            message: type === "success" ? L('NormCreateNotificationMessageTitle') : L('NormRejectNotificationMessageTitle'),
+            description: type === "success" ? L('NormCreateNotificationMessageDescription') : L('NormCreateNotificationMessageDescription'),
             duration: 3
         });
     };
@@ -238,6 +239,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         await this.getEmployeeCount(this.state.id);
         await this.getNormCount(this.state.id);
         await this.getNormRequests(this.state.id)
+        await this.getNormRequestsCount(this.state.id)
     }
 
     handleTableChange = (pagination: any) => {
