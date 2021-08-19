@@ -1,15 +1,16 @@
 import './AppLayout.less';
+import { Layout } from 'antd';
 import * as React from 'react';
-import { Redirect, Switch, Route } from 'react-router-dom';
-import DocumentTitle from 'react-document-title';
+import utils from '../../utils/utils';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
-import { Layout } from 'antd';
-import ProtectedRoute from '../../components/Router/ProtectedRoute';
+import DocumentTitle from 'react-document-title';
 import SiderMenu from '../../components/SiderMenu';
-import { appRouters } from '../Router/router.config';
-import utils from '../../utils/utils';
 import NotFoundRoute from '../Router/NotFoundRoute';
+import { appRouters } from '../Router/router.config';
+import { Redirect, Switch, Route } from 'react-router-dom';
+import ProtectedRoute from '../../components/Router/ProtectedRoute';
+
 const { Content } = Layout;
 
 class AppLayout extends React.Component<any> {

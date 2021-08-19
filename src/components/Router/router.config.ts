@@ -49,6 +49,15 @@ export const appRouters: any = [
     component: LoadableComponent(() => import('../../scenes/KSube')),
   },
   {
+    path: '/ksubedetay',
+    permission: 'ksube.detail',
+    title: 'KSube',
+    name: 'KSube',
+    icon: UserOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/KSubeDetay')),
+  },
+  {
     path: '/ksubedetay/:id',
     permission: 'ksube.detail',
     title: 'KSubeDetay',

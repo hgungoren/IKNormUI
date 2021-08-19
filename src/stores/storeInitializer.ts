@@ -1,33 +1,35 @@
 import RoleStore                from './roleStore';
-import TenantStore              from './tenantStore';
 import UserStore                from './userStore';
-import SessionStore             from './sessionStore';
-import AuthenticationStore      from './authenticationStore';
-import AccountStore             from './accountStore';
+import KNormStore               from './kNormStore';
 import KSubeStore               from './kSubeStore';
 import KBolgeStore              from './kBolgeStore';
+import TenantStore              from './tenantStore';
+import SessionStore             from './sessionStore';
+import AccountStore             from './accountStore';
 import KPersonelStore           from './kPersonelStore';
-import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
 import KSubeNormStore           from './kSubeNormStore';
-import KNormStore               from './kNormStore';
-import KNormDetailStore         from './kNormDetailStore';
 import KHierarchyStore          from './kHierarchyStore';
+import KNormDetailStore         from './kNormDetailStore';
+import NotificationStore        from './notificationStore';
+import AuthenticationStore      from './authenticationStore';
+import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
 
 export default function initializeStores() {
   return {
-    authenticationStore:        new AuthenticationStore(),
     roleStore:                  new RoleStore(),
-    tenantStore:                new TenantStore(),
     userStore:                  new UserStore(),
+    kNormStore:                 new KNormStore(),
+    kSubeStore:                 new KSubeStore(),
+    tenantStore:                new TenantStore(),
+    kBolgeStore:                new KBolgeStore(),
     sessionStore:               new SessionStore(),
     accountStore:               new AccountStore(),
-    kSubeStore:                 new KSubeStore(),
-    kBolgeStore:                new KBolgeStore(),
     kPersonelStore:             new KPersonelStore(),
-    kInkaLookUpTableStore:      new KInkaLookUpTableStore(),
     kSubeNormStore:             new KSubeNormStore(),
-    kNormStore:                 new KNormStore(),
-    kNormDetailStore:           new KNormDetailStore(),
     kHierarchyStore:            new KHierarchyStore(),
+    kNormDetailStore:           new KNormDetailStore(),
+    notificationStore:          new NotificationStore(),
+    authenticationStore:        new AuthenticationStore(),
+    kInkaLookUpTableStore:      new KInkaLookUpTableStore(),
   };
 }

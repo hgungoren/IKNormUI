@@ -133,6 +133,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     const columns = [
       { title: L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
       { title: L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.role.description'), dataIndex: 'description', key: 'description', width: 150, render: (text: string) => <div>{text}</div> },
       {
         title: L('table.role.transactions'),
         width: 150,

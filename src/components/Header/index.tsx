@@ -28,7 +28,7 @@ const userDropdownMenu = (
 export class Header extends React.Component<IHeaderProps> {
   render() {
     return (
-      <Row className={'header-container'}>
+      <Row className={'header-container'}> 
         <Col style={{ textAlign: 'left' }} span={12}>
           {this.props.collapsed ? (
             <MenuUnfoldOutlined className="trigger" onClick={this.props.toggle} />
