@@ -499,7 +499,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
                 <NormDetailTimeLine
                     data={kNormAllDetails}
-                    title={"TODO : Şube Adı Gelecek"}
+                    title={breadcrumbSubeAdi}
                     visible={this.state.detaillModalVisible}
                     onCancel={() => {
                         this.setState({

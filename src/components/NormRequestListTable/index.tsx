@@ -240,10 +240,18 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 render: (text, norm: GetAllKNormOutput) => (
                     <>
                         <Space size={'small'}>
+
                             {
-                                isGranted('knorm.detail') && <Tooltip placement="topLeft" title={L('Detail')}>
-                                    <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
-                                </Tooltip>
+                                console.log(this.props.isConfirmOrCancel)
+                            }
+                            {
+                                console.log(tableTitle)
+                            }
+                            {
+                                kNormDetails !== undefined && (  isGranted('knorm.detail') && <Tooltip placement="topLeft" title={L('Detail')}>
+                                <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                            </Tooltip>)
+                              
                             }
                             {
                                 kNormDetails !== undefined &&

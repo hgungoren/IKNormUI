@@ -194,8 +194,8 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                       <Input type="password" />
                     </Form.Item>
                   ) : null}
-                  <Form.Item initialValue={false} label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
-                    <Checkbox>{L('Active')}</Checkbox>
+                  <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
+                    <Checkbox  >{L('Active')}</Checkbox>
                   </Form.Item>
                 </Col>
               </Row>
