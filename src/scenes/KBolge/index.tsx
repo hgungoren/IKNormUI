@@ -2,7 +2,7 @@
 import './index.less';
 import *  as React from 'react';
 import { Link } from 'react-router-dom';
-import { L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
@@ -81,11 +81,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         maxResultCount: 5,
         modalVisible: false,
         totalSize: 0,
-        filter: {
-            offset: 0,
-            limit: 10,
-            current: 0,
-        }
+        filter: { offset: 0, limit: 10, current: 0, }
     };
 
     // Şubeye ait norm listesini getirir
@@ -117,13 +113,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             bolgeId: '0',
             type: 'bolge'
         });
-
-
     }
 
-      
+    // Mavi Kutu olan alanlar
+
     async getNormCount() {
         await this.props.kSubeNormStore.getNormCount();
+    }
+
+    async getEmployeeCount() {
+        await this.props.kPersonelStore.getEmployeeCount();
     }
 
     async getNormCountById(id: number) {
@@ -152,7 +151,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     };
 
- 
+
     kSubeNormCreate = () => {
         const form = this.formRef.current;
         form!.validateFields()
@@ -229,9 +228,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
     }
 
-    async getEmployeeCount() {
-        await this.props.kPersonelStore.getEmployeeCount();
-    }
 
 
     async setPageState() {
@@ -244,7 +240,18 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         await this.getAll();
         await this.getEmployeeCount();
         await this.getNormCount();
-        await this.getNormRequests(); 
+
+        if (isGranted('knorm.getcancelednormupdaterequest') ||
+            isGranted('knorm.getacceptednormupdaterequest') ||
+            isGranted('knorm.getpendingnormupdaterequest') ||
+            isGranted('knorm.gettotalnormupdaterequest') ||
+            isGranted('knorm.getcancelednormfillrequest') ||
+            isGranted('knorm.getacceptednormfillrequest') ||
+            isGranted('knorm.getpendingnormfillrequest') ||
+            isGranted('knorm.gettotalnormfillingrequest')
+        ) {
+            await this.getNormRequests();
+        }
     }
 
     handleSearch = (value: string) => {
@@ -391,45 +398,48 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} />
-                <Card hoverable>
-                    <Row>
-                        <Col
-                            xs={{ span: 6, offset: 0 }}
-                            sm={{ span: 6, offset: 0 }}
-                            md={{ span: 6, offset: 0 }}
-                            lg={{ span: 4, offset: 0 }}
-                            xl={{ span: 4, offset: 0 }}
-                            xxl={{ span: 4, offset: 0 }} >
-                            {' '}
-                            <h2>{L('Areas')}</h2>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={{ span: 10, offset: 0 }}>
-                            <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
-                        </Col>
-                    </Row>
-                    <Row style={{ marginTop: 20 }}>
-                        <Col
-                            xs={{ span: 24, offset: 0 }}
-                            sm={{ span: 24, offset: 0 }}
-                            md={{ span: 24, offset: 0 }}
-                            lg={{ span: 24, offset: 0 }}
-                            xl={{ span: 24, offset: 0 }}
-                            xxl={{ span: 24, offset: 0 }} >
-                            <Table
-                                locale={{ emptyText: L('NoData') }}
-                                bordered={false}
-                                columns={columns}
-                                onChange={this.handlePagination}
-                                rowKey={(record) => record.objId.toString()}
-                                loading={kBolge === undefined ? true : false}
-                                dataSource={kBolge === undefined ? [] : kBolge.items}
-                                pagination={tablePagination}
-                            />
-                        </Col>
-                    </Row>
-                </Card>
+                {
+                    this.isGranted('kbolge.areas.list') && <Card hoverable>
+
+                        <Row>
+                            <Col
+                                xs={{ span: 6, offset: 0 }}
+                                sm={{ span: 6, offset: 0 }}
+                                md={{ span: 6, offset: 0 }}
+                                lg={{ span: 4, offset: 0 }}
+                                xl={{ span: 4, offset: 0 }}
+                                xxl={{ span: 4, offset: 0 }} >
+                                {' '}
+                                <h2>{L('Areas')}</h2>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={{ span: 10, offset: 0 }}>
+                                <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+                            </Col>
+                        </Row>
+                        <Row style={{ marginTop: 20 }}>
+                            <Col
+                                xs={{ span: 24, offset: 0 }}
+                                sm={{ span: 24, offset: 0 }}
+                                md={{ span: 24, offset: 0 }}
+                                lg={{ span: 24, offset: 0 }}
+                                xl={{ span: 24, offset: 0 }}
+                                xxl={{ span: 24, offset: 0 }} >
+                                <Table
+                                    locale={{ emptyText: L('NoData') }}
+                                    bordered={false}
+                                    columns={columns}
+                                    onChange={this.handlePagination}
+                                    rowKey={(record) => record.objId.toString()}
+                                    loading={kBolge === undefined ? true : false}
+                                    dataSource={kBolge === undefined ? [] : kBolge.items}
+                                    pagination={tablePagination}
+                                />
+                            </Col>
+                        </Row>
+
+                    </Card>}
 
                 <CreateKBolgeNorm
                     modalType={'create'}

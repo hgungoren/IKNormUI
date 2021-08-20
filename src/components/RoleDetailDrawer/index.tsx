@@ -63,7 +63,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }
 
     const onCheck = (selected) => {
-        
+
         let permissions = [] as string[];
         permissions = getItems().filter(x => selected.includes(x.key)).map((x: any) => x.value);
 

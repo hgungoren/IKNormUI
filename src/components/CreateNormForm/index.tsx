@@ -211,14 +211,14 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             defaultActiveKey={this.state.defaultActiveKey.pane}
             size={'small'} tabBarGutter={64}
             activeKey={this.state.defaultActiveKey.pane}>
-
+ 
             <TabPane tab={L('PositionSelect')} key={'PositionSelect'} className={'ant-tab-form'}>
 
-              <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId' rules={rules.subeObjId}>
+              <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId'  >
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
-              <Form.Item className={'hidden-form-item'} initialValue={bagliOlduguSubeId} name='bagliOlduguSubeObjId' rules={rules.bagliOlduguSubeObjId}>
+              <Form.Item className={'hidden-form-item'} initialValue={bagliOlduguSubeId} name='bagliOlduguSubeObjId' >
                 <Input style={{ display: 'none' }} />
               </Form.Item>
 
@@ -272,7 +272,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                         //   ? ''
                         //   : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
 
-                        normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
+                        employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
                       }</>)
                     }
                   </Select>
@@ -283,7 +283,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                 !this.state.employeeVisible && (<Form.Item label={L('Employee')} {...formItemLayout} name={'PersonelId'} rules={rules.employeeId}>
                   <Select placeholder={L('PleaseSelect')} >
                     {
-                      employees.items.map((x) => <Option key={x.objId} value={x.objId}> {x.ad} {x.soyad} </Option>)
+                      employees != undefined && employees.items.map((x) => <Option key={x.objId} value={x.objId}> {x.ad} {x.soyad} </Option>)
                     }
                   </Select>
                 </Form.Item>)

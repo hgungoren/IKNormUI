@@ -1,5 +1,5 @@
 import './index.less'
-import *  as React from 'react'; 
+import *  as React from 'react';
 import { inject, observer } from 'mobx-react';
 import Stores from '../../stores/storeIdentifier';
 import AccountStore from '../../stores/accountStore';
@@ -8,7 +8,7 @@ import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
 import { Avatar } from 'antd';
 import { AntDesignOutlined } from '@ant-design/icons';
-import Meta from 'antd/lib/card/Meta'; 
+import Meta from 'antd/lib/card/Meta';
 
 
 export interface IInformationProps {
@@ -33,15 +33,11 @@ class InformationCart extends AppComponentBase<IInformationProps, IInformationSt
     render() {
 
         return (
-
             <>
-            {
-                console.log(   this.props.sessionStore)
-            }
                 <Meta
                     avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
                     title={<p className={'metaUserName'}>{this.props.sessionStore?.currentLogin.user.name} {this.props.sessionStore?.currentLogin.user.surname}</p>}
-                    description={<> 
+                    description={<>
                         {
                             this.props.sessionStore !== undefined && <>
                                 <p>{this.props.sessionStore?.currentLogin.user.title}</p>
@@ -49,9 +45,8 @@ class InformationCart extends AppComponentBase<IInformationProps, IInformationSt
                             </>
                         }
                     </>}
-                /></>
-
-
+                />
+            </>
         );
     }
 }

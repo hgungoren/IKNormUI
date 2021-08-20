@@ -72,10 +72,7 @@ class KNormStore {
     }
 
     @action
-    async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) {
-
-
-        console.log(pagedFilterAndSortedRequest.bolgeId)
+    async getMaxAll(pagedFilterAndSortedRequest: PagedKNormResultRequestDto) { 
         
         let result: PagedResultDto<GetAllKNormOutput>;
         if (pagedFilterAndSortedRequest.type === "sube") {
@@ -124,20 +121,15 @@ class KNormStore {
         let result = await kNormService.get(entityDto);
         this.editKNorm = result;
     }
-
-
+ 
     @action
-    async create(createKNormInput: CreateKNormInput) {
-
-        console.log(createKNormInput)
+    async create(createKNormInput: CreateKNormInput) { 
         let result = await kNormService.create(createKNormInput);
         this.kNorms.items.push(result);
     }
 
     @action
-    async setStatusAsync(createKNormInput: CreateKNormInput) {
-
-        console.log(createKNormInput)
+    async setStatusAsync(createKNormInput: CreateKNormInput) { 
         await kNormService.setStatusAsync(createKNormInput);
     }
 }

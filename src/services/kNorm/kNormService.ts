@@ -32,7 +32,6 @@ class KNormService {
 
     public async getAllSube(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
         let result = await http.get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });
-        console.log(result.data.result);
         return result.data.result;
     }
 

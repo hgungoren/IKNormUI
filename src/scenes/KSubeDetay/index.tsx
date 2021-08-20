@@ -133,7 +133,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async getNormRequests() {
-
         this.props.kNormStore.getAll({
             id: this.state.id,
             keyword: this.state.normFilter,
@@ -144,14 +143,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
     }
 
-    async getAllSubeNorm() {
+
+    async getAllSubeNormForGroupBy() {
         await this.props.kSubeNormStore.getAllNorms({
             maxResultCount: 10000,
             skipCount: 0,
             keyword: '',
             id: this.state.id
         });
+    }
 
+    async setAllSubeNormGroupBy() {
         let groupNorm = this.props.kSubeNormStore.norms.items.reduce((result, currentValue) => {
 
             (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || [])
@@ -162,15 +164,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         }, {});
         this.setState({ groupNorm, cardLoading: false })
     }
-
-    async getAllEmployees() {
+ 
+    async getAllEmployeesForGroupBy() {
         await this.props.kPersonelStore.getAllEmployees({
             maxResultCount: 10000,
             skipCount: 0,
             keyword: '',
             id: this.state.id
         });
-
+    }
+ 
+    async setAllEmployeesGroupBy() {
         let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((result, currentValue) => {
             (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
                 .push(
@@ -180,8 +184,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         }, {});
         this.setState({ groupEmployee, cardLoading: false })
     }
-
-    async getAll() {
+ 
+    async getAllEmployees() {
 
         await this.props.kPersonelStore.getAll({
             maxResultCount: this.state.maxResultCount,
@@ -196,45 +200,60 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             this.state.tip,
             this.state.bagliOlduguSubeId);
     }
-
-    async get(entityDto: EntityDto<string>) {
-
-        await this.props.kSubeStore.get(entityDto);
-
+ 
+    async pageSettings(entityDto: EntityDto<string>) {
+ 
+        await this.props.kSubeStore.get(entityDto); 
         this.setState({
             tip: this.props.kSubeStore.editKSube.tip,
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
         })
-
-        await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
-
-        this.setState({
-            breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-            breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
-        })
+ 
+        if (isGranted('kbolge.view')) { 
+            await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId }); 
+            this.setState({
+                breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+                breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+            })
+        } 
     }
-
+ 
     setPageState = async () => {
         this.setState({ id: this.props["match"].params["id"] });
     }
 
     async componentDidMount() {
-        await this.setPageState();
-        await this.getAll();
-        await this.getAllSubeNorm();
-        await this.getAllEmployees();
-        await this.get({ id: this.state.id });
-        await this.getNormRequests();
-        await this.mergeArray();
-        await this.getKHierarchy();
+
+        await this.setPageState(); 
+        if (isGranted('ksubedetail.employee.list')) {
+            await this.getAllEmployees();
+        } 
+ 
+        await this.pageSettings({ id: this.state.id }); 
+
+        if (isGranted('ksubedetail.norm.request.list')) {
+            await this.getNormRequests();
+            await this.getKHierarchy();
+            await this.getAllEmployees();
+        }
+
+        if (isGranted('ksubedetail.norm.employee.list')) {
+            await this.getAllEmployeesForGroupBy();
+            await this.getAllSubeNormForGroupBy();
+
+            await this.setAllEmployeesGroupBy();
+            await this.setAllSubeNormGroupBy();
+
+            await this.mergeArray();
+        } 
     }
 
     handleTableChange = (pagination: any) => {
-        this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+        this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAllEmployees());
     };
 
     handleSearch = (value: string) => {
-        this.setState({ filter: value }, async () => await this.getAll());
+        this.setState({ filter: value }, async () => await this.getAllEmployees());
     };
 
     handleNormTableChange = (pagination: any) => {
@@ -320,7 +339,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { norms } = this.props.kSubeNormStore;
         const { kHierarchies } = this.props.kHierarchyStore;
         const { kNormAllDetails } = this.props.kNormDetailStore;
-        const { kPersonels, kAllPersonels } = this.props.kPersonelStore!;
+        const { kPersonels } = this.props.kPersonelStore!;
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi } = this.state;
 
         const normEmployeeCoumns = [
@@ -376,8 +395,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item> <Link to="/home">{L('Dashboard')}</Link> </Breadcrumb.Item>
-                                <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
+                                <Breadcrumb.Item>
+
+                                    {
+                                        isGranted('dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Home')}</Link>
+                                    }
+
+                                </Breadcrumb.Item>
+                                {
+                                    isGranted('kbolge.view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
+                                }
+
                                 {
                                     breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
                                 }
@@ -390,7 +418,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 </Card>
 
                 {
-                    isGranted('ksube.detail.norm.employee.list') && <Card style={{ marginBottom: 20 }} hoverable>
+                    isGranted('ksubedetail.norm.employee.list') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                                 <Table
@@ -409,7 +437,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
 
                 {
-                    isGranted('ksube.detail.employee.list') && <Card hoverable>
+                    isGranted('ksubedetail.employee.list') && <Card hoverable>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -447,7 +475,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Card>
                 }
                 {
-                    isGranted('ksube.detail.norm.request.list') && <Card hoverable style={{ marginTop: 15 }}>
+                    isGranted('ksubedetail.norm.request.list') && <Card hoverable style={{ marginTop: 15 }}>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -461,7 +489,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 xl={{ span: 1, offset: 21 }}
                                 xxl={{ span: 1, offset: 21 }}  >
 
-                              { isGranted('knorm.create') &&  <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
+                                {isGranted('knorm.create') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
 
                             </Col>
                         </Row>
@@ -493,7 +521,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     formRef={this.formRef}
                     subeId={this.state.id}
                     hierarchy={kHierarchies}
-                    employees={kAllPersonels}
+                    employees={kPersonels}
                     onCreateNorm={this.createNorm}
                     visible={this.state.modalVisible}
                     createFormState={this.state.createFormState}

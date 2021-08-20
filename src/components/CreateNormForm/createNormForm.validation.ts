@@ -6,9 +6,7 @@ const rules = {
     requestType: [{ required: true, message: L('ThisFieldIsRequired') }],
     employeeId: [{ required: true, message: L('ThisFieldIsRequired') }],
     description: [{ required: true, message: L('ThisFieldIsRequired') }],
-    requestReason: [{ required: true, message: L('ThisFieldIsRequired') }],
-    subeObjId: [{ required: true, message: L('ThisFieldIsRequired') }],
-    bagliOlduguSubeObjId: [{ required: true, message: L('ThisFieldIsRequired') }],
+    requestReason: [{ required: true, message: L('ThisFieldIsRequired') }],  
     tip: [{ required: true, message: L('ThisFieldIsRequired') }],
 };
 
