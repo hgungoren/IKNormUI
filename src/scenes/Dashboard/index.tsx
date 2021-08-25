@@ -5,13 +5,13 @@ import { Row, Col, Card } from 'antd';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
+import KLineChart from './components/KLineChart';
 import KCartList from '../../components/KCartList';
 import { isGranted, L } from '../../lib/abpUtility';
 import AccountStore from '../../stores/accountStore';
 import SessionStore from '../../stores/sessionStore';
 import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
-import LineChartExample from './components/LineChartExample';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import KLineChartModel from '../../models/KLineChart/kLineChart';
 import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
@@ -113,7 +113,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     await this.getEmployeeCount();
     await this.getNormCount();
 
-    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let resultFill   = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
     let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
 
@@ -316,12 +316,12 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
         <Row gutter={16}>
           <Col span={12}>
             <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
-              <LineChartExample data={this.state.totalFill} />
+              <KLineChart data={this.state.totalFill} />
             </Card>
           </Col>
           <Col span={12}>
             <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
-              <LineChartExample data={this.state.totalUpdate} />
+              <KLineChart data={this.state.totalUpdate} />
             </Card>
           </Col>
         </Row>

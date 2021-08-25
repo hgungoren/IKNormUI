@@ -30,6 +30,8 @@
     "react-query": "^3.19.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.2.0",
+    "react-sortable-tree": "^2.8.0",
+    "react-uuid": "^1.0.2",
     "recharts": "^1.8.5",
     "save": "^2.4.0",
     "tslib": "^1.13.0",

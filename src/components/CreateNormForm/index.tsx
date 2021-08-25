@@ -1,17 +1,17 @@
 /*eslint-disable */
+import './index.less';
 import * as React from 'react';
 import { L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import rules from './createNormForm.validation';
-import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
+import { MailOutlined } from '@ant-design/icons';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
+import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import { PagedResultDto } from '../../services/dto/pagedResultDto';
 import { Input, Modal, Tabs, Form, Select, Button, Timeline, Col, Row } from 'antd';
 import { GetKPersonelOutput } from '../../services/kPersonel/dto/getKPersonelOutput';
-import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
-import './index.less';
-import { MailOutlined } from '@ant-design/icons';
 import { GetAllHierarchyOutput } from '../../services/kHierarchy/dto/getAllHierarchyOutput';
+import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
 
 
 const TabPane = Tabs.TabPane;
@@ -211,7 +211,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
             defaultActiveKey={this.state.defaultActiveKey.pane}
             size={'small'} tabBarGutter={64}
             activeKey={this.state.defaultActiveKey.pane}>
- 
+
             <TabPane tab={L('PositionSelect')} key={'PositionSelect'} className={'ant-tab-form'}>
 
               <Form.Item className={'hidden-form-item'} initialValue={subeId} name='subeObjId'  >
@@ -229,7 +229,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
                 <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                   {
-                    Object.keys(TalepTuru).map((value) => <Option key={value} value={value}> {TalepTuru[value]}  </Option>)
+                    Object.keys(TalepTuru).map((value, index) => <Option key={index} value={value}> {TalepTuru[value]}  </Option>)
                   }
                 </Select>
               </Form.Item>
@@ -240,8 +240,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                     {
                       position === undefined
                         ? []
-                        : position.items.map(
-                          (key) => <Option key={key.adi} value={key.adi}> {key.adi} </Option>
+                        : position.items.map((value, index) => <Option key={index} value={value.adi}> {value.adi} </Option>
                         )
                     }
                   </Select>
@@ -254,8 +253,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                     {
                       position === undefined
                         ? []
-                        : position.items.map(
-                          (key) => <Option key={key.adi + 'x'} value={key.adi}> {key.adi} </Option>
+                        : position.items.map((value, index) => <Option key={index} value={value.adi}> {value.adi} </Option>
                         )
                     }
                   </Select>
@@ -266,14 +264,11 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                 !this.state.normRequestReasonVisible && (<Form.Item label={L('NormRequestReason')} {...formItemLayout} name={'TalepNedeni'} rules={rules.requestReason}>
                   <Select placeholder={L('PleaseSelect')} onChange={this.visibleEmployee}>
                     {
-                      Object.keys(TalepNedeni).map((value) => <>{
-
-                        // this.state.talepTuru === 'Norm_Arttir' && value === 'Ayrilma'
-                        //   ? ''
-                        //   : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
-
-                        employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option key={value} value={value}> {TalepNedeni[value]} </Option>
-                      }</>)
+                      Object.keys(TalepNedeni).map((value, index) => <>
+                        { 
+                          employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option key={index} value={value}> {TalepNedeni[value]} </Option>
+                        }
+                      </>)
                     }
                   </Select>
                 </Form.Item>)
@@ -283,7 +278,7 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
                 !this.state.employeeVisible && (<Form.Item label={L('Employee')} {...formItemLayout} name={'PersonelId'} rules={rules.employeeId}>
                   <Select placeholder={L('PleaseSelect')} >
                     {
-                      employees != undefined && employees.items.map((x) => <Option key={x.objId} value={x.objId}> {x.ad} {x.soyad} </Option>)
+                      employees != undefined && employees.items.map((value, index) => <Option key={index} value={value.objId}> {value.ad} {value.soyad} </Option>)
                     }
                   </Select>
                 </Form.Item>)
@@ -300,19 +295,15 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
               {
                 <Timeline className={'form-timeline'}>
                   {
-                    hierarchy !== undefined && hierarchy.map((x, row) => <div key={row}>
+                    hierarchy !== undefined && hierarchy.map((value, index) => <div key={index}>
 
                       <Timeline.Item className={'form-timeline-item'} dot={<MailOutlined className={'form-icon form-success'} />}>
-                        <div className="form-item-div">
-                          <p className={'form-tile-line-p'}>
-                            <Row>
-                              <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >            {x.title}            </Col>
-                              <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.firstName}        </Col>
-                              <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {x.lastName}         </Col>
-                              <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {x.mail} </strong>   </Col>
-                            </Row>
-                          </p>
-                        </div>
+                        <Row>
+                          <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >            {value.title}            </Col>
+                          <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {value.firstName}        </Col>
+                          <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} >            {value.lastName}         </Col>
+                          <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} >   <strong> {value.mail} </strong>   </Col>
+                        </Row>
                       </Timeline.Item></div>
                     )
                   }

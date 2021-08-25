@@ -2,7 +2,7 @@
 import './index.less';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
@@ -38,14 +38,16 @@ export interface INormProps {
 export interface INormState {
     id: string;
     normId: string;
-    filter: string;
     subeAdi: string;
     subeObjId: string;
     skipCount: number;
+    searchFilter: string;
     cardLoading: boolean;
     modalVisible: boolean;
     maxResultCount: number;
     kPersonelCount: number;
+    totalSize: number;
+    filter: { offset: number, limit: number, current: number }
 }
 
 const confirm = Modal.confirm;
@@ -64,18 +66,20 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     state = {
         id: '0',
         normId: '0',
-        filter: '',
         subeAdi: '',
         skipCount: 0,
         subeObjId: '0',
+        searchFilter: '',
         cardLoading: true,
         maxResultCount: 5,
         kPersonelCount: 0,
         modalVisible: false,
+        totalSize: 0,
+        filter: { offset: 0, limit: 5, current: 0, }
     };
 
     async getNormRequests(id: string) {
- 
+
         await this.props.kNormStore.getMaxAll({
             id: '0',
             keyword: '',
@@ -84,10 +88,10 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             bolgeId: id,
             type: 'sube'
         });
- 
+
     }
     async getNormRequestsCount(id: string) {
- 
+
         await this.props.kNormStore.getMaxAllCount({
             maxResultCount: 100000,
             skipCount: 0,
@@ -135,15 +139,35 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         });
     };
 
+    permissionNotification = type => {
+        notification[type]({
+            message: L('YouAreNotAuthorizedToAddRecordsTitle'),
+            description: L('YouAreNotAuthorizedToAddRecordsDescription'),
+            duration: 3
+        });
+    };
+
     // Şube için Norm Oluşturma Metodu
     kSubeNormCreate = () => {
         const form = this.formRef.current;
         form!.validateFields().then(async (values: any) => {
+
             if (this.state.normId === '0') {
-                await this.props.kSubeNormStore.create(values);
-                this.openNotificationWithIcon('success')
-            } else {
-                await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
+
+                if (isGranted('ksubenorm.create')) {
+                    await this.props.kSubeNormStore.create(values);
+                    this.openNotificationWithIcon('success')
+                } else {
+                    this.permissionNotification('warning');
+                }
+            }
+
+            else {
+                if (isGranted('ksubenorm.edit')) {
+                    await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
+                } else {
+                    this.permissionNotification('warning');
+                }
             }
             form!.resetFields();
             await this.getKSubeNorms();
@@ -184,9 +208,9 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             isActive: true,
             isActivity: true,
             id: this.state.id,
-            keyword: this.state.filter,
+            keyword: this.state.searchFilter,
             skipCount: this.state.skipCount,
-            maxResultCount: this.state.maxResultCount 
+            maxResultCount: this.state.maxResultCount
         });
 
         await this.props.kSubeStore.getNormCount(this.state.id);
@@ -214,10 +238,11 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         this.formRef.current?.resetFields();
 
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
-        await this.setState({ subeObjId: id })
-
         await this.getPosition(tip);
-        await this.getKSubeNorms();
+
+        if (isGranted('ksubenorm.view')) {
+            await this.getKSubeNorms();
+        }
 
         this.setState({ modalVisible: !this.state.modalVisible });
     }
@@ -247,10 +272,34 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     };
 
     handleSearch = (value: string) => {
-        this.setState({ filter: value }, async () => await this.getAll());
+        this.setState({ searchFilter: value }, async () => await this.getAll());
+    };
+
+    handlePagination = pagination => {
+        const { filter } = this.state;
+        const { pageSize, current } = pagination;
+
+        this.setState({
+            filter: {
+                ...filter,
+                current,
+                limit: pageSize
+            }
+        });
     };
 
     public render() {
+
+        const { filter, totalSize } = this.state;
+        const tablePagination = {
+            pageSize: filter.limit,
+            current: filter.current || 1,
+            total: totalSize,
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
+            locale: { items_per_page: L('page') },
+            // showTotal: total => L('Total') + ` : ${total}   `
+        };
 
         const Search = Input.Search;
         const { cardLoading } = this.state;
@@ -294,7 +343,9 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
                                         }> {L('Detail')} </Link>
                                     </Menu.Item>
-                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    {
+                                        this.isGranted('ksubenorm.operation') && <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    }
                                 </Menu>
                             }
                             placement="bottomLeft">
@@ -372,16 +423,19 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                                 locale={{ emptyText: L('NoData') }}
                                 rowKey={(record) => record.objId.toString()}
                                 bordered={false}
-                                columns={columns}
-                                pagination={{ pageSize: this.state.maxResultCount, total: kSubes === undefined ? 0 : kSubes.totalCount, defaultCurrent: 1 }}
+                                columns={columns} 
+                                pagination={tablePagination}
                                 loading={kSubes === undefined ? true : false}
                                 dataSource={kSubes === undefined ? [] : kSubes.items}
-                                onChange={this.handleTableChange}
+                                onChange={this.handlePagination}
+
                             />
                         </Col>
                     </Row>
                 </Card>
                 <CreateKSubeNorm
+                    bolgeAdi={this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : ''}
+                    subeAdi={this.state.subeAdi}
                     modalType={'create'}
                     formRef={this.formRef}
                     positionSelect={positions}

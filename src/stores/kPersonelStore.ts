@@ -33,6 +33,13 @@ class KPersonelStore {
         let result = await kPersonelService.getEmployeeCount();
         this.kPersonelCount = result;
     }
+
+    
+    @action
+    async getEmployeesCount() {
+        let result = await kPersonelService.getEmployeesCount();
+        this.kPersonelCount = result;
+    }
 }
 
 export default KPersonelStore;

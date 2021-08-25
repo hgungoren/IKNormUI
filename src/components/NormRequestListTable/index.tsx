@@ -15,25 +15,32 @@ import NormStatus from '../../services/kNorm/dto/normStatus';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
-import { notification, Card, Col, Row, Table, Input, Button, Tooltip, Space } from 'antd';
-import { CheckCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-design/icons';
 import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
+import { Modal, notification, Card, Col, Row, Table, Input, Button, Tooltip, Space } from 'antd';
+import { CheckCircleOutlined, ExclamationCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-design/icons';
+import AuthenticationStore from '../../stores/authenticationStore';
+import AccountStore from '../../stores/accountStore';
+import SessionStore from '../../stores/sessionStore';
+import uuid from 'react-uuid';
+
 
 export interface INormRequestListTableState {
-    subeOrBolgeAdi: string;
-    filter: string;
+    searchFilter: string;
     subeObjId: string;
     requestId: number;
     inputValue: string;
     skipNormCount: number;
+    currentUserId: number;
+    subeOrBolgeAdi: string;
     maxNormResultCount: number;
     detaillModalVisible: boolean;
+    totalSize: number;
     normRejectDescriptionModalVisible: boolean;
+    filter: { offset: number, limit: number, current: number }
 }
 
 
 interface INormRequestListTableProps {
-
     type: string;
     table: string,
     bolgeId: string;
@@ -43,26 +50,38 @@ interface INormRequestListTableProps {
     isHoverable: boolean;
     kNormStore: KNormStore;
     isConfirmOrCancel: boolean;
+    sessionStore?: SessionStore;
+    accountStore?: AccountStore;
     kNormDetailStore: KNormDetailStore;
+    authenticationStore?: AuthenticationStore;
 }
 
+
+const { confirm } = Modal;
 const Search = Input.Search;
+
 @inject(Stores.KNormStore)
+@inject(Stores.AccountStore)
+@inject(Stores.SessionStore)
 @inject(Stores.KNormDetailStore)
+@inject(Stores.AuthenticationStore)
 
 @observer
 class NormRequestListTable extends React.Component<INormRequestListTableProps, INormRequestListTableState> {
 
     state = {
-        filter: '',
         requestId: 0,
+        totalSize: 0,
         subeObjId: '0',
         inputValue: '',
         skipNormCount: 0,
+        searchFilter: '',
         subeOrBolgeAdi: '',
         maxNormResultCount: 5,
         detaillModalVisible: false,
         normRejectDescriptionModalVisible: false,
+        currentUserId: 0,
+        filter: { offset: 0, limit: 5, current: 0, }
     }
 
     formRef = React.createRef<FormInstance>();
@@ -73,7 +92,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             maxResultCount: 5,
             type: this.props.type,
             id: this.props.subeObjId,
-            keyword: this.state.filter,
+            keyword: this.state.searchFilter,
             skipCount: this.state.skipNormCount,
         })
     }
@@ -83,7 +102,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             skipCount: 0,
             type: this.props.type,
             id: this.props.subeObjId,
-            keyword: this.state.filter,
+            keyword: this.state.searchFilter,
             maxResultCount: 1000000000,
             bolgeId: this.props.bolgeId,
         })
@@ -95,7 +114,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             skipCount: 0,
             type: this.props.type,
             id: this.props.subeObjId,
-            keyword: this.state.filter,
+            keyword: this.state.searchFilter,
             maxResultCount: 1000000000,
             bolgeId: this.props.bolgeId,
         })
@@ -113,9 +132,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     handleNormSearch = (value: string) => {
         if (this.props.isModal)
-            this.setState({ filter: value }, async () => await this.getNormRequestsAll());
+            this.setState({ searchFilter: value }, async () => await this.getNormRequestsAll());
         else
-            this.setState({ filter: value }, async () => await this.getNormRequests());
+            this.setState({ searchFilter: value }, async () => await this.getNormRequests());
     };
 
 
@@ -129,6 +148,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             this.getNormRequests()
 
         await this.getAllNormDetails();
+
     }
 
 
@@ -152,52 +172,98 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     openNotificationWithIcon = type => {
         notification[type]({
             message: type === "success" ? L('NormCreateNotificationMessageTitle') : L('NormRejectNotificationMessageTitle'),
-            description: type === "success" ? L('NormCreateNotificationMessageDescription') : L('NormCreateNotificationMessageDescription'),
+            description: type === "success" ? L('NormCreateNotificationMessageDescription') : L('NormRejectNotificationMessageDescription'),
             duration: 3
         });
     };
 
     rejectRequestClick = async () => {
-        const form = this.formRef.current;
-        form!.validateFields()
-            .then(async (values: any) => {
 
-                values.status = Status.Reject;
-                await this.props.kNormDetailStore.update(values)
-                    .then(() => {
-                        this.props.kNormStore.setStatusAsync({
-                            id: this.state.requestId,
-                            normStatus: NormStatus.Iptal
-                        }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
-                    }).catch((err) => {
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            content: L('DoYouWantToConfirm'),
+            okText: L('Approve'),
+            cancelText: L('Cancel'),
+            onOk: () => {
+                const form = this.formRef.current;
+                form!.validateFields()
+                    .then(async (values: any) => {
+
+                        values.status = Status.Reject;
+                        await this.props.kNormDetailStore.update(values)
+                            .then(() => {
+                                this.props.kNormStore.setStatusAsync({
+                                    id: this.state.requestId,
+                                    normStatus: NormStatus.Iptal
+                                }).then(() => {
+                                    this.openNotificationWithIcon('success');
+                                    this.getNormRequestsAll();
+                                    this.getAllNormDetails();
+                                });
+                            }).catch((err) => {
+                                this.openNotificationWithIcon('error')
+                                return;
+                            });
+                        form!.resetFields();
+                        this.setState({ normRejectDescriptionModalVisible: false })
+                    });
+            },
+            onCancel() { console.log(L('Cancel')); },
+        });
+    }
+
+
+    approveRequestClick = async (id: number) => {
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            content: L('DoYouWantToConfirm'),
+            okText: L('Approve'),
+            cancelText: L('Cancel'),
+            onOk: () => {
+                this.props.kNormDetailStore.update({
+                    kNormId: id,
+                    id: id,
+                    status: Status.Apporved
+                }).then(() => {
+                    this.props.kNormStore.setStatusAsync({
+                        id: id
+                    }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
+                })
+                    .catch((err) => {
                         this.openNotificationWithIcon('error')
                         return;
                     });
-
                 this.openNotificationWithIcon('success')
-                form!.resetFields();
-                this.setState({ normRejectDescriptionModalVisible: false })
-            });
+            },
+            onCancel() { console.log(L('Cancel')); },
+        });
     }
 
-    approveRequestClick = async (id: number) => {
-        await this.props.kNormDetailStore.update({
-            kNormId: id,
-            id: id,
-            status: Status.Apporved
-        }).then(() => {
-            this.props.kNormStore.setStatusAsync({
-                id: id
-            }).then(() => { this.getNormRequestsAll(); this.getAllNormDetails(); });
-        })
-            .catch((err) => {
-                this.openNotificationWithIcon('error')
-                return;
-            });
-        this.openNotificationWithIcon('success')
-    }
+
+    handlePagination = pagination => {
+        const { filter } = this.state;
+        const { pageSize, current } = pagination;
+
+        this.setState({
+            filter: {
+                ...filter,
+                current,
+                limit: pageSize
+            }
+        });
+    };
+
 
     render() {
+        const { filter, totalSize } = this.state;
+        const tablePagination = {
+            pageSize: filter.limit,
+            current: filter.current || 1,
+            total: totalSize,
+            locale: { items_per_page: L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
+        };
 
         const { kNorms } = this.props.kNormStore;
         const { isHoverable, tableTitle, table, isModal } = this.props;
@@ -206,7 +272,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         const columnsNorm = [
             {
-                title: "Talep Tarihi", dataIndex: 'creationTime', key: 'creationTime', width: 60, render: (text: Date) => <div>
+                title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 60, render: (text: Date) => <div>
                     {
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
@@ -219,19 +285,21 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 </div>
             },
             {
-                title: "Talep Durumu", dataIndex: 'durumu', key: 'durumu', width: 200, render: (text, norm) => (<>
+                title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: 'durumu', width: 200, render: (text, norm) => (<>
 
                     {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
-                        <div className={'title'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
-                        <div className={'title'}> {TalepDurumu[norm.durumu] + ' ' + L('Reject')}   </div>}
+                        <div className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
+                        <div className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Reject')}   </div>}
                 </>)
 
             },
-            { title: "Bölge Adı", dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Şube Adı", dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: "Pozisyon", dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: "Talep Nedeni", dataIndex: 'nedeni', key: 'nedeni', width: 50, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: "Talep Türü", dataIndex: 'turu', key: 'turu', width: 50, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+
+
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 50, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 50, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
             {
                 title: "İşlem",
                 dataIndex: 'id',
@@ -248,17 +316,20 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             }
                             {
                                 kNormDetails !== undefined &&
-                                (this.props.isConfirmOrCancel &&
+                                (
+                                    this.props.isConfirmOrCancel &&
                                     (!tableTitle.search('Pending') || !tableTitle.search('Total')) &&
                                     NormStatus[norm.normStatusValue] === NormStatus.Beklemede &&
-                                    kNormDetails.items.filter(x => x.status == Status.Waiting && x.kNormId == norm.id).length > 0) && (
+                                    kNormDetails.items.filter(x => x.status == Status.Waiting && x.kNormId === norm.id && this.props.sessionStore?.currentLogin.user.id === x.userId && x.visible).length > 0) && (
                                     <>
                                         {
-                                            isGranted('knorm.approve') && <Tooltip placement="topLeft" title={L('Accept')}>
-                                                <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
-                                            </Tooltip>
-                                        }
+                                            isGranted('knorm.approve') && <>
+                                                <Tooltip placement="topLeft" title={L('Accept')}>
+                                                    <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
+                                                </Tooltip>
 
+                                            </>
+                                        }
                                         {
                                             isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Reject')}>
                                                 <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary"></Button>
@@ -300,33 +371,29 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             {
                                 isModal ? (
                                     <Table
+                                        key={uuid()}
                                         locale={{ emptyText: L('NoData') }}
-                                        rowKey={(record) => record.id}
+                                        rowKey={uuid()}
                                         bordered={false}
                                         columns={columnsNorm}
-                                        pagination={{
-                                            pageSize: 5,
-                                            total: this.props.kNormStore[table] === undefined ? 0 : this.props.kNormStore[table].length, defaultCurrent: 1
-                                        }}
+                                        pagination={tablePagination}
                                         loading={this.props.kNormStore[table] === undefined ? true : false}
                                         dataSource={this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table]}
-                                        onChange={this.handleNormTableChange}
+                                        onChange={this.handlePagination}
                                     />
                                 ) : (
                                     <Table
+                                        key={uuid()}
                                         locale={{ emptyText: L('NoData') }}
-                                        rowKey={(record) => record.id}
-                                        bordered={false}
+                                        rowKey={uuid()}
+                                        bordered={false} 
+                                        pagination={tablePagination}
                                         columns={columnsNorm}
-                                        pagination={{
-                                            pageSize: 5,
-                                            total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1
-                                        }}
                                         loading={kNorms === undefined ? true : false}
                                         dataSource={
                                             kNorms === undefined ? [] : kNorms.items
                                         }
-                                        onChange={this.handleNormTableChange}
+                                        onChange={this.handlePagination}
                                     />
                                 )
                             }

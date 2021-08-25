@@ -31,6 +31,11 @@ class KPersonelService {
         let result = await http.get('api/services/app/KPersonel/GetTotalEmployeeCount'); 
         return result.data.result;
     }
+
+    public async getEmployeesCount(): Promise<number> {
+        let result = await http.get('api/services/app/KPersonel/GetEmployeesCount'); 
+        return result.data.result;
+    }
 }
 
 export default new KPersonelService();

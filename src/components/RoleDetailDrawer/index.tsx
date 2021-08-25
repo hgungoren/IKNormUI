@@ -68,6 +68,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
         permissions = getItems().filter(x => selected.includes(x.key)).map((x: any) => x.value);
 
 
+
         let norms = [
             'knorm.gettotalnormfillingrequest',
             'knorm.getpendingnormfillrequest',
@@ -77,12 +78,29 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
             'knorm.getpendingnormupdaterequest',
             'knorm.getacceptednormupdaterequest',
             'knorm.getcancelednormupdaterequest'
-        ]
+        ];
+
+
 
         if (permissions.filter((x) => norms.includes(x)).length > 0) {
+
             permissions = [...permissions, 'knorm.view']
         }
+ 
 
+        let bolgeDetail = ['kbolge.detail'];
+
+        if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) { 
+            permissions = [...permissions, 'ksube.detail']
+        }
+
+
+        let bolgeList = ['kbolge.branches'];
+
+        if (permissions.filter((x) => bolgeList.includes(x)).length > 0) { 
+            permissions = [...permissions, 'ksube.view']
+        }
+ 
         setGrantedPermissions(permissions)
     }
 
@@ -93,7 +111,11 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
         setTimeout(() => { showOrHideDrawer() }, 500)
     }
 
-    const onSelect = (x) => { }
+    const onSelect = (x) => {
+
+
+
+    }
 
     const content = () => {
         return <Tree

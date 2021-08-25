@@ -23,4 +23,5 @@ export interface GetAllKNormOutput {
     talepDurumu: TalepDurumu;
     talepNedeni: TalepNedeni;
     bagliOlduguSubeObjId?: string;
+    visible:boolean;
 }

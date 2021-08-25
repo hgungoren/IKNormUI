@@ -12,5 +12,5 @@ export interface CreateOrUpdateUserInput {
   companyRelationObjId: string;
   sicilNo: number;
   title: string;
-  companyCode: number;
+  companyCode: string;
 }

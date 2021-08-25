@@ -1,0 +1,14 @@
+.tag {
+  width: 100px;
+  text-align: center;
+  height: 32px;
+  line-height: 31px;
+}
+.info {
+  color: #fff;
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+.requeststatus {
+  text-transform: capitalize;
+}

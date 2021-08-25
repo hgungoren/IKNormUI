@@ -36,22 +36,18 @@ export interface IBolgeProps {
 }
 
 export interface IBolgeState {
-    maxResultCount: number;
-    modalVisible: boolean;
-    cardLoading: boolean
+    id: string;
+    normId: string;
+    userId: string;
+    subeAdi: string;
     skipCount: number;
     subeObjId: string;
-    subeAdi: string;
-    userId: string;
-    searchFilter: string;
-    normId: string;
-    id: string;
     totalSize: number;
-    filter: {
-        offset: number,
-        limit: number,
-        current: number
-    }
+    cardLoading: boolean;
+    searchFilter: string;
+    modalVisible: boolean;
+    maxResultCount: number;
+    filter: { offset: number, limit: number, current: number }
 }
 
 const Search = Input.Search;
@@ -71,20 +67,20 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
     state = {
         id: '0',
-        searchFilter: '',
         normId: '0',
         userId: '0',
         subeAdi: '',
         skipCount: 0,
+        totalSize: 0,
         subeObjId: '0',
         cardLoading: true,
         maxResultCount: 5,
+        searchFilter: '',
         modalVisible: false,
-        totalSize: 0,
-        filter: { offset: 0, limit: 10, current: 0, }
+        filter: { offset: 0, limit: 5, current: 0, }
     };
 
-    // Şubeye ait norm listesini getirir
+
     async getKSubeNorms() {
         await this.props.kSubeNormStore.getAllNorms({
             keyword: '',
@@ -104,7 +100,9 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             bolgeId: '0',
             type: 'bolge'
         });
+    }
 
+    async getNormRequestsAllCount() {
         await this.props.kNormStore.getMaxAllCount({
             maxResultCount: 100000,
             skipCount: 0,
@@ -115,14 +113,12 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     }
 
-    // Mavi Kutu olan alanlar
-
     async getNormCount() {
-        await this.props.kSubeNormStore.getNormCount();
+        await this.props.kSubeNormStore.getNormsCount();
     }
 
     async getEmployeeCount() {
-        await this.props.kPersonelStore.getEmployeeCount();
+        await this.props.kPersonelStore.getEmployeesCount();
     }
 
     async getNormCountById(id: number) {
@@ -151,16 +147,34 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     };
 
+    permissionNotification = type => {
+        notification[type]({
+            message:   L('YouAreNotAuthorizedToAddRecordsTitle')  ,
+            description:  L('YouAreNotAuthorizedToAddRecordsDescription') ,
+            duration: 3
+        });
+    };
+
 
     kSubeNormCreate = () => {
         const form = this.formRef.current;
         form!.validateFields()
             .then(async (values: any) => {
                 if (this.state.normId === '0') {
-                    await this.props.kSubeNormStore.create(values);
-                    this.openNotificationWithIcon('success')
+                    if (isGranted('kbolge.norm.create')) {
+                        await this.props.kSubeNormStore.create(values);
+                        this.openNotificationWithIcon('success')
+                    }
+                    else {
+                        this.permissionNotification('warning');
+                    }
                 } else {
-                    await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
+                    if (isGranted('kbolge.norm.edit')) {
+                        await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
+                    }
+                    else {
+                        this.permissionNotification('warning');
+                    }
                 }
                 form!.resetFields();
                 await this.getKSubeNorms();
@@ -219,13 +233,18 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             );
     }
 
+
+
     async createOrUpdateModalOpen(tip: string, id: string, subeAdi: string) {
         this.formRef.current?.resetFields();
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.getPosition(tip);
-        await this.getKSubeNorms();
-        this.setState({ modalVisible: !this.state.modalVisible });
 
+        if (isGranted('kbolge.norm.view')) {
+            await this.getKSubeNorms();
+        }
+
+        this.setState({ modalVisible: !this.state.modalVisible });
     }
 
 
@@ -233,7 +252,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     async setPageState() {
         this.setState({ id: this.props["match"].params["id"] });
     }
-
 
     async componentDidMount() {
         await this.setPageState();
@@ -251,30 +269,12 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             isGranted('knorm.gettotalnormfillingrequest')
         ) {
             await this.getNormRequests();
+            await this.getNormRequestsAllCount();
         }
     }
 
     handleSearch = (value: string) => {
         this.setState({ searchFilter: value }, async () => await this.getAll());
-    };
-
-    goToNextPage = () => {
-        const { filter, totalSize } = this.state;
-        const { offset: currentOffset } = filter || {};
-        const limit = 20;
-        const offset =
-            currentOffset + limit >= totalSize
-                ? currentOffset
-                : currentOffset + limit;
-
-        this.setState({
-            filter: {
-                ...filter,
-                limit,
-                offset,
-                current: offset / limit + 1
-            }
-        });
     };
 
     handlePagination = pagination => {
@@ -296,9 +296,9 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             pageSize: filter.limit,
             current: filter.current || 1,
             total: totalSize,
-            pageSizeOptions: ["10", "20", "30", "50", "100"],
-            showSizeChanger: true
-            // showTotal: total => L('Total') + ` : ${total}   `
+            locale: { items_per_page: L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
         };
 
         const { cardLoading } = this.state;
@@ -332,29 +332,15 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                             trigger={['click']}
                             overlay={
                                 <Menu>
-                                    <Menu.Item >
-                                        <Link to={
-                                            {
-                                                pathname: `/ksubedetay/${bolge.objId}`,
-                                                state: {
-                                                    subeAdi: bolge.adi
-                                                }
-                                            }
-                                        }> {L('UnitDetail')} </Link>
-                                    </Menu.Item>
-
-                                    <Menu.Item key={"/ksube"} >
-                                        <Link
-                                            to={{
-                                                pathname: `/ksube/${bolge.objId}`,
-                                                state: {
-                                                    name: bolge.adi,
-                                                    tipTur: bolge.tipTur,
-                                                    tip: bolge.tip
-                                                }
-                                            }}> {L('Branches')} </Link>
-                                    </Menu.Item>
-                                    <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(bolge.tip, bolge.objId, bolge.adi)} > {L('NormCreate')} </Link> </Menu.Item>
+                                    {
+                                        isGranted('kbolge.detail') && (<Menu.Item > <Link to={{ pathname: `/ksubedetay/${bolge.objId}`, state: { subeAdi: bolge.adi } }}> {L('UnitDetail')} </Link> </Menu.Item>)
+                                    }
+                                    {
+                                        isGranted('kbolge.branches') && (<Menu.Item key={"/ksube"} > <Link to={{ pathname: `/ksube/${bolge.objId}`, state: { name: bolge.adi, tipTur: bolge.tipTur, tip: bolge.tip } }}> {L('Branches')} </Link> </Menu.Item>)
+                                    }
+                                    {
+                                        isGranted('kbolge.norm.operation') && (<Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(bolge.tip, bolge.objId, bolge.adi)} > {L('NormCreate')} </Link> </Menu.Item>)
+                                    }
                                 </Menu>
                             }
                             placement="bottomLeft">
@@ -380,7 +366,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         }  >
                     </PageHeader>
                 </Card>
-
                 <KCartList
                     type={"bolge"}
                     subeObjId={0}

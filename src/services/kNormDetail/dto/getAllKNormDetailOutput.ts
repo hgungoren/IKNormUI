@@ -8,5 +8,6 @@ export interface GetAllKNormDetailOutput {
     orderNo: number;
     talepDurumu: TalepDurumu;
     description: string;
-    status: Status
+    status: Status;
+    visible: boolean;
 }

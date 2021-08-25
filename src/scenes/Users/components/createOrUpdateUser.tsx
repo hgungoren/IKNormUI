@@ -50,16 +50,16 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 6 },
-        sm: { span: 6 },
+        xs: { span: 10 },
+        sm: { span: 10 },
         md: { span: 6 },
         lg: { span: 6 },
         xl: { span: 6 },
         xxl: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 18 },
-        sm: { span: 18 },
+        xs: { span: 14 },
+        sm: { span: 14 },
         md: { span: 18 },
         lg: { span: 18 },
         xl: { span: 18 },
@@ -68,16 +68,16 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
     };
     const tailFormItemLayout = {
       labelCol: {
-        xs: { span: 6 },
-        sm: { span: 6 },
+        xs: { span: 10 },
+        sm: { span: 10 },
         md: { span: 6 },
         lg: { span: 6 },
         xl: { span: 6 },
         xxl: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 18 },
-        sm: { span: 18 },
+        xs: { span: 14 },
+        sm: { span: 14 },
         md: { span: 18 },
         lg: { span: 18 },
         xl: { span: 18 },
@@ -107,9 +107,9 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
             <TabPane tab={L('User')} key={'userInfo'}>
               <Row >
                 <Col
-                  xs={{ span: 10, offset: 2 }}
-                  sm={{ span: 10, offset: 2 }}
-                  md={{ span: 10, offset: 2 }}
+                  xs={{ span: 24, offset: 0 }}
+                  sm={{ span: 24, offset: 0 }}
+                  md={{ span: 12, offset: 0 }}
                   lg={{ span: 10, offset: 2 }}
                   xl={{ span: 10, offset: 2 }}
                   xxl={{ span: 10, offset: 2 }}
@@ -125,42 +125,19 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                   <Form.Item label={L('Title')} {...formItemLayout} name={'title'} rules={rules.title}>
                     <Input />
                   </Form.Item>
-
-                  <Form.Item label={L('UserObjId')} {...formItemLayout} name={'userObjId'} rules={rules.userObjId}>
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label={L('CompanyObjId')} {...formItemLayout} name={'companyObjId'} rules={rules.companyObjId}>
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label={L('CompanyRelationObjId')} {...formItemLayout} name={'companyRelationObjId'} rules={rules.companyRelationObjId} >
-                    <Input />
-                  </Form.Item>
-
-                </Col>
-
-                <Col
-                  xs={{ span: 10, offset: 0 }}
-                  sm={{ span: 10, offset: 0 }}
-                  md={{ span: 10, offset: 0 }}
-                  lg={{ span: 10, offset: 0 }}
-                  xl={{ span: 10, offset: 0 }}
-                  xxl={{ span: 10, offset: 0 }}
-                >
-
                   <Form.Item label={L('UserName')} {...formItemLayout} name={'userName'} rules={rules.userName}>
                     <Input />
                   </Form.Item>
+                </Col> 
+                <Col
+                  xs={{ span: 24, offset: 0 }}
+                  sm={{ span: 24, offset: 0 }}
+                  md={{ span: 12, offset: 0 }}
+                  lg={{ span: 10, offset: 0 }}
+                  xl={{ span: 10, offset: 0 }}
+                  xxl={{ span: 10, offset: 0 }}
+                > 
                   <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label={L('RegistrationNumber')} {...formItemLayout} name={'sicilNo'} rules={rules.sicilNo} >
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label={L('CompanyCode')} {...formItemLayout} name={'companyCode'} rules={rules.companyCode} >
                     <Input />
                   </Form.Item>
 
@@ -195,7 +172,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     </Form.Item>
                   ) : null}
                   <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
-                    <Checkbox  >{L('Active')}</Checkbox>
+                    <Checkbox  defaultChecked>{L('Active')}</Checkbox>
                   </Form.Item>
                 </Col>
               </Row>

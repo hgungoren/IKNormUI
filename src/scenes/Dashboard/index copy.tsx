@@ -11,7 +11,7 @@ import AccountStore from '../../stores/accountStore';
 import SessionStore from '../../stores/sessionStore';
 import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
-import LineChartExample from './components/LineChartExample';
+import LineChartExample from './components/KLineChart';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import KLineChartModel from '../../models/KLineChart/kLineChart';
 import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';

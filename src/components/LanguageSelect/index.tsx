@@ -1,16 +1,15 @@
+import * as React from 'react'; 
+
 import './index.less';
-import 'famfamfam-flags/dist/sprite/famfamfam-flags.css';
+import 'famfamfam-flags/dist/sprite/famfamfam-flags.css'; 
 
-import * as React from 'react';
-
-import { Dropdown, Menu } from 'antd';
-import { GlobalOutlined } from '@ant-design/icons';
-
-import { L } from '../../lib/abpUtility';
-import Stores from '../../stores/storeIdentifier';
-import UserStore from '../../stores/userStore';
 import classNames from 'classnames';
 import { inject } from 'mobx-react';
+import { Dropdown, Menu } from 'antd';
+import { L } from '../../lib/abpUtility';
+import UserStore from '../../stores/userStore';
+import Stores from '../../stores/storeIdentifier';
+import { GlobalOutlined } from '@ant-design/icons'; 
 
 declare var abp: any;
 

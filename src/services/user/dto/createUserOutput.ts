@@ -14,7 +14,7 @@ export interface CreateUserOutputItem {
   companyRelationObjId: string;
   sicilNo: number;
   title: string;
-  companyCode: number;
+  companyCode: string;
 }
 
 export interface CreateUserOutput {

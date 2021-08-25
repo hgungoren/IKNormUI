@@ -29,7 +29,7 @@ http.interceptors.request.use(
 
     return config;
   },
-  function(error) {
+  function(error) { 
     return Promise.reject(error);
   }
 );
@@ -41,13 +41,14 @@ http.interceptors.response.use(
   error => {
     if (!!error.response && !!error.response.data.error && !!error.response.data.error.message && error.response.data.error.details) {
       Modal.error({
-        title: error.response.data.error.message,
-        content: error.response.data.error.details,
+        title: L(error.response.data.error.message),
+        content: L(error.response.data.error.details),
       });
     } else if (!!error.response && !!error.response.data.error && !!error.response.data.error.message) {
+      console.log(error)
       Modal.error({
         title: L('LoginFailed'),
-        content: error.response.data.error.message,
+        content: L(error.response.data.error.message),
       });
     } else if (!error.response) {
       Modal.error({ content: L('UnknownError') });

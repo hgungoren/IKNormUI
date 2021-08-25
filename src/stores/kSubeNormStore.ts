@@ -53,7 +53,11 @@ class KSubeNormStore {
     let result = await kSubeNormService.getNormCount();
     this.normCount = result;
   }
-
+  @action
+  async getNormsCount() {
+    let result = await kSubeNormService.getNormsCount();
+    this.normCount = result;
+  }
   @action
   async getNormCountById(id: string) {
     let result = await kSubeNormService.getNormCountById(id);

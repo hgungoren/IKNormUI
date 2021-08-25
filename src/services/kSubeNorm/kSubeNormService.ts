@@ -37,7 +37,10 @@ class KSubeNormService {
     let result = await http.get('api/services/app/KSubeNorm/GetNormCount');
     return result.data.result;
   }
-
+  public async getNormsCount(): Promise<number> {
+    let result = await http.get('api/services/app/KSubeNorm/GetNormsCount');
+    return result.data.result;
+  }
   public async getNormCountById(id: string): Promise<number> {
     let result = await http.get('api/services/app/KSubeNorm/GetNormCountById?id=' + id);
     return result.data.result;

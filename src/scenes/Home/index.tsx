@@ -38,15 +38,15 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
 
   componentDidMount = async () => {
     await this.getNotifications()
-    setTimeout(() => {
-      if (this.props.notificationStore.notifications !== undefined) {
+    // setTimeout(() => {
+    //   if (this.props.notificationStore.notifications !== undefined) {
 
-        console.log(this.props.notificationStore.notifications)
-        this.props.notificationStore.notifications.items.map(x =>
-          console.log(x.notification.data.properties.detail)
-        )
-      }
-    }, 5000);
+    //     // console.log(this.props.notificationStore.notifications)
+    //   //   this.props.notificationStore.notifications.items.map(x =>
+    //   // console.log(x.notification.data.properties.detail)
+    //   //   )
+    //   }
+    // }, 5000);
   }
 
   render() {

@@ -1,12 +1,14 @@
 /*eslint-disable */
 import './index.less';
 import * as React from 'react';
-import { isGranted, L } from '../../lib/abpUtility';
+import { Link } from 'react-router-dom';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
+import KBolgeStore from '../../stores/kBolgeStore';
+import { isGranted, L } from '../../lib/abpUtility';
 import AccountStore from '../../stores/accountStore';
 import SessionStore from '../../stores/sessionStore';
 import { EntityDto } from '../../services/dto/entityDto';
@@ -19,13 +21,11 @@ import KNormDetailStore from '../../stores/kNormDetailStore';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import AppComponentBase from '../../components/AppComponentBase';
+import AuthenticationStore from '../../stores/authenticationStore';
+import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
 import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
-import AuthenticationStore from '../../stores/authenticationStore';
-import { FileSearchOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tag } from 'antd';
-import KBolgeStore from '../../stores/kBolgeStore';
-import { Link } from 'react-router-dom';
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -39,16 +39,6 @@ export interface IKsubeDatayProps {
     kNormDetailStore: KNormDetailStore;
     authenticationStore?: AuthenticationStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
-
-    location: {
-        hash: "",
-        key: "",
-        pathname: "",
-        search: "",
-        state: {
-            subeAdi: ""
-        }
-    }
 }
 
 export interface IKSubeDatayState {
@@ -164,7 +154,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         }, {});
         this.setState({ groupNorm, cardLoading: false })
     }
- 
+
     async getAllEmployeesForGroupBy() {
         await this.props.kPersonelStore.getAllEmployees({
             maxResultCount: 10000,
@@ -173,7 +163,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             id: this.state.id
         });
     }
- 
+
     async setAllEmployeesGroupBy() {
         let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce((result, currentValue) => {
             (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
@@ -184,7 +174,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         }, {});
         this.setState({ groupEmployee, cardLoading: false })
     }
- 
+
     async getAllEmployees() {
 
         await this.props.kPersonelStore.getAll({
@@ -200,36 +190,36 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             this.state.tip,
             this.state.bagliOlduguSubeId);
     }
- 
+
     async pageSettings(entityDto: EntityDto<string>) {
- 
-        await this.props.kSubeStore.get(entityDto); 
+
+        await this.props.kSubeStore.get(entityDto);
         this.setState({
             tip: this.props.kSubeStore.editKSube.tip,
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
         })
- 
-        if (isGranted('kbolge.view')) { 
-            await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId }); 
+
+        if (isGranted('kbolge.view')) {
+            await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
             this.setState({
                 breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
                 breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
             })
-        } 
+        }
     }
- 
+
     setPageState = async () => {
         this.setState({ id: this.props["match"].params["id"] });
     }
 
     async componentDidMount() {
 
-        await this.setPageState(); 
+        await this.setPageState();
         if (isGranted('ksubedetail.employee.list')) {
             await this.getAllEmployees();
-        } 
- 
-        await this.pageSettings({ id: this.state.id }); 
+        }
+
+        await this.pageSettings({ id: this.state.id });
 
         if (isGranted('ksubedetail.norm.request.list')) {
             await this.getNormRequests();
@@ -240,12 +230,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         if (isGranted('ksubedetail.norm.employee.list')) {
             await this.getAllEmployeesForGroupBy();
             await this.getAllSubeNormForGroupBy();
-
             await this.setAllEmployeesGroupBy();
             await this.setAllSubeNormGroupBy();
-
             await this.mergeArray();
-        } 
+        }
     }
 
     handleTableChange = (pagination: any) => {
@@ -370,9 +358,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     }
                 </div>
             },
-            { title: L("table.norm.requeststatus"), dataIndex: 'durumu', key: 'durumu', width: 250, render: (text: TalepDurumu) => <div> <Tag icon={<SyncOutlined spin />} color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
-            { title: L("Bölge Adı"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("Şube Adı"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.requeststatus"), dataIndex: 'durumu', key: 'durumu', width: 150, render: (text: TalepDurumu) => <div> <Tag color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
             { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
             { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
             { title: L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
@@ -505,7 +493,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     columns={columnsNorm}
                                     locale={{ emptyText: L('NoData') }}
                                     onChange={this.handleNormTableChange}
-                                    rowKey={(record) => record.subeObjId}
+                                    rowKey={(record) => record.id}
                                     loading={kNorms === undefined ? true : false}
                                     dataSource={kNorms === undefined ? [] : kNorms.items}
                                     pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}

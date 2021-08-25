@@ -1,6 +1,6 @@
+import * as React from 'react';
 import './AppLayout.less';
 import { Layout } from 'antd';
-import * as React from 'react';
 import utils from '../../utils/utils';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';

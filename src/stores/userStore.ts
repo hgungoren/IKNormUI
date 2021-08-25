@@ -50,7 +50,7 @@ class UserStore {
   @action
   async createUser() {
     this.editUser = {
-      companyCode: 0,
+      companyCode: '0',
       companyObjId: '0',
       companyRelationObjId: '0',
       sicilNo: 0,

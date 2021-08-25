@@ -1,0 +1,53 @@
+.item {
+  position: relative;
+  text-align: left;
+}
+.item-div {
+  padding-bottom: 18px;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+.ant-timeline-item {
+  position: relative;
+  margin: 0;
+  padding-bottom: 20px;
+  font-size: 14px;
+  list-style: none;
+}
+.success {
+  background: #1da57a !important;
+  color: #fff;
+}
+.danger {
+  background: #fa541c !important;
+  color: #fff;
+}
+.icon {
+  background: white;
+  position: absolute;
+  top: 0;
+  border: 2px solid #ddd;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  padding-top: 9px;
+  margin-left: -20px;
+}
+.ant-timeline {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  -webkit-font-feature-settings: 'tnum', "tnum";
+  font-feature-settings: 'tnum', "tnum";
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding: 15px 0 0 35px;
+}
+.timeline-title {
+  text-transform: capitalize;
+}

@@ -1,11 +1,11 @@
+import React, { useState ,useEffect} from 'react';
 import './index.less';
 import { Row } from 'antd';
 import KCart from '../KCart';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 import { isGranted, L } from '../../lib/abpUtility';
 import NormRequestListTableModal from '../NormRequestListTableModal';
-import { useEffect } from 'react';
+ 
 
 
 function KCartList({
@@ -52,7 +52,7 @@ function KCartList({
         setVisible(!visible);
     }
 
-    useEffect(() => { setKey(key + 1) }, [visible]);
+    useEffect(() => { setKey(  key + 1) }, [visible]);
 
     setTimeout(() => {
 

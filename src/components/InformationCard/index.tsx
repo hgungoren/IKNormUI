@@ -1,3 +1,4 @@
+/*eslint-disable */
 import './index.less'
 import *  as React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -18,7 +19,9 @@ export interface IInformationProps {
 
 }
 export interface IInformationState {
-    cardLoading: boolean
+    cardLoading: boolean;
+    title: string;
+    emailAddress: string;
 }
 
 
@@ -27,24 +30,40 @@ export interface IInformationState {
 class InformationCart extends AppComponentBase<IInformationProps, IInformationState> {
 
     state = {
-        cardLoading: false
+        cardLoading: false,
+        title: '',
+        emailAddress: '' 
+    } 
+    
+    componentDidMount() {
+        let store = this.props.sessionStore?.currentLogin.user;
+        this.setState({
+
+            title: store?.title !== undefined ? store?.title : '',
+            emailAddress: store?.emailAddress !== undefined ? store?.emailAddress : ''
+
+        }) 
     }
 
-    render() {
 
+    render() {
+        const { title, emailAddress } = this.state;
         return (
             <>
                 <Meta
                     avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
                     title={<p className={'metaUserName'}>{this.props.sessionStore?.currentLogin.user.name} {this.props.sessionStore?.currentLogin.user.surname}</p>}
-                    description={<>
-                        {
-                            this.props.sessionStore !== undefined && <>
-                                <p>{this.props.sessionStore?.currentLogin.user.title}</p>
-                                <p>{this.props.sessionStore?.currentLogin.user.emailAddress}</p>
-                            </>
-                        }
-                    </>}
+                    description={
+                        <>
+                            {
+                                setTimeout(() => {
+                                    this.props.sessionStore !== undefined && <>
+                                        <p>{title}</p>
+                                        <p>{emailAddress}</p>
+                                    </>
+                                }, 1000)
+                            }
+                        </>}
                 />
             </>
         );

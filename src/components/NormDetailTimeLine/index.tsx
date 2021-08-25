@@ -1,50 +1,49 @@
 import './index.less';
 import React from 'react';
-import { Modal } from 'antd';
+import { Col, Modal, Row, Steps } from 'antd';
 import PropTypes from 'prop-types';
-import { Timeline } from 'antd';
-import { CheckOutlined, CloseOutlined, ExclamationOutlined } from '@ant-design/icons';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import Status from '../../services/kNormDetail/dto/status';
+import uuid from 'react-uuid';
+
+const { Step } = Steps;
+
 
 const NormDetailTimeLine = ({ visible, onCancel, title, data }) => {
 
     return (
         <>
-            <Modal
-                title={title}
-                centered
-                visible={visible}
-                onCancel={onCancel}
-                width={'70%'}
-                footer={[]}
-            >
-                <Timeline mode="alternate">
-                    {
-                        data !== undefined && data.map((x) => <Timeline.Item
-                            key={x.id}
-                            dot={
-                                x.status == Status.Apporved ?
-                                    <CheckOutlined className={'icon success'} /> : x.status == Status.Waiting ?
-                                        <ExclamationOutlined className={'icon waiting'} /> : <CloseOutlined className={'icon danger'} />
-                            }>
-                            <div className="item-div">
-                                <p className={'title'}> {TalepDurumu[x.talepDurumuStr]} </p>
-                                <p>
-                                    {
-                                        x.lastModificationTime !== null && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
+
+            {
+                console.log(data)
+            }
+            <Modal title={title} centered visible={visible} onCancel={onCancel} width={'70%'} footer={[]}     >
+                <>
+                    <Row>
+                        <Col xs={{ span: 12, offset: 0 }}>
+
+                        </Col>
+                        <Col xs={{ span: 12, offset: 0 }}>
+                            <Steps direction="vertical" >
+                                {
+                                    data !== undefined && data.map((x) => <>
+
+                                        <Step key={uuid()} status={(x.status === Status.Apporved) ? "finish" : (x.status === Status.Waiting ? "wait" : "error")} title={TalepDurumu[x.talepDurumuStr]} description={`
+                                    ${x.lastModificationTime !== null && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
                                             year: "numeric",
                                             month: "long",
                                             day: "2-digit",
                                             hour: "2-digit",
                                             minute: "2-digit"
-                                        })
-                                    } </p>
-                                <p>{x.description} </p>
-                            </div>
-                        </Timeline.Item>)
-                    }
-                </Timeline>
+                                        })}      ${x.description !== null ? x.description : ''} `
+                                        } />
+
+                                    </>)
+                                }
+                            </Steps>
+                        </Col>
+                    </Row>
+                </>
             </Modal>
         </>
     );

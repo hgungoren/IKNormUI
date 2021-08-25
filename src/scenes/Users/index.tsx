@@ -72,6 +72,8 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       await this.props.userStore.getRoles();
     }
 
+
+    console.log(this.props.userStore.editUser)
     this.setState({ userId: entityDto.id });
     this.Modal();
 
@@ -122,27 +124,27 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
 
     const columns = [
-      { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 150, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: (text: string) => <div>{text}</div> },
+      { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: (text: string) => <div className={"firstname"}>{text}</div> },
+      { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: (text: string) => <div className={"surname"}>{text}</div> },
       { title: L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div> },
       { title: L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div> },
       {
         title: L('table.user.status'),
         dataIndex: 'isActive',
         key: 'isActive',
-        width: 150,
+        width: 50,
         render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>),
       },
       {
         title: L('table.user.transactions'),
-        width: 150,
+        width: 100,
         render: (text: string, item: any) => (
           <div>
             <Dropdown
               trigger={['click']}
               overlay={
-                <Menu> 
+                <Menu>
                   <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                   <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
                 </Menu>

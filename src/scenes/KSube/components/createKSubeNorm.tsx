@@ -9,6 +9,7 @@ import { EntityDto } from '../../../services/dto/entityDto';
 import { PagedResultDto } from '../../../services/dto/pagedResultDto';
 import { GetKSubeNormOutput } from '../../../services/kSubeNorm/dto/getKSubeNormOutput';
 import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
+ 
 
 export interface ICreateNormProps {
   visible: boolean;
@@ -23,6 +24,8 @@ export interface ICreateNormProps {
   kSubeNormEdit: (input: EntityDto<string>) => void;
   kSubeNormDelete: (input: EntityDto<string>) => void;
   positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
+  subeAdi: string;
+  bolgeAdi: string;
 }
 
 
@@ -46,7 +49,9 @@ class CreateKSubeNorm extends React.Component<ICreateNormProps> {
       kSubeNormStore,
       kSubeNormCreate,
       kSubeNormDelete,
-      kPosizyonKontrol
+      kPosizyonKontrol,
+      subeAdi,
+      bolgeAdi
     } = this.props;
     return (
       <>
@@ -56,9 +61,9 @@ class CreateKSubeNorm extends React.Component<ICreateNormProps> {
               <Button onClick={onCancel} type="primary" danger key="1" >{L('Close')}</Button>
             ]
           }
-          width={'90%'}
+          width={'50%'}
           visible={visible}
-          title={L('NormInsertOperation')}
+          title={bolgeAdi + ' / ' + subeAdi + ' / ' + L('NormInsertOperation')}
           onCancel={onCancel}
           destroyOnClose={true}
         >
