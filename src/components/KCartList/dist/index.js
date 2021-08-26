@@ -7,6 +7,7 @@ var KCart_1 = require("../KCart");
 var prop_types_1 = require("prop-types");
 var abpUtility_1 = require("../../lib/abpUtility");
 var NormRequestListTableModal_1 = require("../NormRequestListTableModal");
+var KNormDateFilter_1 = require("../KNormDateFilter");
 function KCartList(_a) {
     var bolgeId = _a.bolgeId, type = _a.type, kNormDetailStore = _a.kNormDetailStore, cardLoading = _a.cardLoading, normCount = _a.normCount, kPersonelCount = _a.kPersonelCount, kNormStore = _a.kNormStore, subeObjId = _a.subeObjId, getTotalNormUpdateRequestCount = _a.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _a.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _a.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _a.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _a.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _a.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _a.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _a.getCanceledNormUpdateRequestCount;
     var _b = react_1.useState(false), visible = _b[0], setVisible = _b[1];
@@ -57,6 +58,7 @@ function KCartList(_a) {
     }, 500);
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
+            react_1["default"].createElement(KNormDateFilter_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)' }),
             react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('NormCount'), icon: 'UsergroupAddOutlined', number: normCount }),
             react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('EmployeeCount'), icon: 'UserAddOutlined', number: kPersonelCount })),
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },

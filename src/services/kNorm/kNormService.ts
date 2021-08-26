@@ -18,6 +18,12 @@ class KNormService {
         return result.data.result;
     }
 
+    public async getById(entityDto: EntityDto): Promise<GetKNormOutput> {
+        let result = await http.get('api/services/app/KNorm/GetById', { params: entityDto });
+        return result.data.result;
+    }
+
+
     public async getAllBolge(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
         let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;

@@ -3,20 +3,22 @@ import TalepNedeni from "./talepNedeni";
 import TalepTuru from "./talepTuru";
 
 export interface GetKNormOutput {
- 
-    telepTuru: TalepTuru;
-    pozisyon: string;
-    yeniPozisyon: string;
-    telepNedeni: TalepNedeni;
-    personelId: number;
-    aciklama: string;
-    subeObjId: number;
-    creationTime: Date;
-    talepDurumu: TalepDurumu;
-    nedeni: string;
+    id: number;
     turu: string;
     durumu: string;
     kNormId: number;
-    id: number;
+    nedeni: string;
+    subeAdi: string;
+    aciklama: string;
+    bolgeAdi: string;
+    pozisyon: string;
+    subeObjId: number;
+    personelId: number;
+    creationTime: Date;
+    personelAdi: string;
+    telepTuru: TalepTuru;
+    yeniPozisyon: string;
+    telepNedeni: TalepNedeni;
+    talepDurumu: TalepDurumu;
     bagliOlduguSubeObjId?: string;
 }

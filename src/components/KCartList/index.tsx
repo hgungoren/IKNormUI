@@ -1,11 +1,11 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
 import { Row } from 'antd';
 import KCart from '../KCart';
 import PropTypes from 'prop-types';
 import { isGranted, L } from '../../lib/abpUtility';
 import NormRequestListTableModal from '../NormRequestListTableModal';
- 
+import KNormDateFilter from '../KNormDateFilter';
 
 
 function KCartList({
@@ -52,7 +52,7 @@ function KCartList({
         setVisible(!visible);
     }
 
-    useEffect(() => { setKey(  key + 1) }, [visible]);
+    useEffect(() => { setKey(key + 1) }, [visible]);
 
     setTimeout(() => {
 
@@ -63,15 +63,18 @@ function KCartList({
         if (isGranted('knorm.getcancelednormfillrequest')) { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
         if (isGranted('knorm.getacceptednormfillrequest')) { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
         if (isGranted('knorm.getpendingnormfillrequest')) { setPendingNormFillRequest(getPendingNormFillRequestCount) }
-        if (isGranted('knorm.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) } 
+        if (isGranted('knorm.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
     }, 500)
 
 
     return (
         <>
             <Row gutter={16}>
+                {/* <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} > */}
+                <KNormDateFilter cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)'  />
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
+
             </Row>
 
             <Row gutter={16}>

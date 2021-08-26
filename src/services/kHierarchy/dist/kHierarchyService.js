@@ -61,7 +61,6 @@ var KHierarchyService = /** @class */ (function () {
                     case 0: return [4 /*yield*/, httpService_1["default"].get('/api/services/app/Unit/GetAll')];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         return [2 /*return*/, result.data.result];
                 }
             });

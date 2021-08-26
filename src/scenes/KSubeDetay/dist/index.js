@@ -428,20 +428,29 @@ var KSubeDetay = /** @class */ (function (_super) {
     KSubeDetay.prototype.detailModalOpen = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.props.kNormDetailStore.getDetails(id);
-                this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        console.log(this.props.kNormStore);
+                        return [4 /*yield*/, this.props.kNormStore.getById({ id: id })];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.props.kNormDetailStore.getDetails(id)];
+                    case 2:
+                        _a.sent();
+                        this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
+                        return [2 /*return*/];
+                }
             });
         });
     };
     KSubeDetay.prototype.render = function () {
         var _this = this;
-        var kNorms = this.props.kNormStore.kNorms;
+        var _a = this.props.kNormStore, kNorms = _a.kNorms, editKNorm = _a.editKNorm;
         var norms = this.props.kSubeNormStore.norms;
+        var kPersonels = this.props.kPersonelStore.kPersonels;
         var kHierarchies = this.props.kHierarchyStore.kHierarchies;
         var kNormAllDetails = this.props.kNormDetailStore.kNormAllDetails;
-        var kPersonels = this.props.kPersonelStore.kPersonels;
-        var _a = this.state, breadcrumbBolgeAdi = _a.breadcrumbBolgeAdi, breadcrumbSubeAdi = _a.breadcrumbSubeAdi;
+        var _b = this.state, breadcrumbBolgeAdi = _b.breadcrumbBolgeAdi, breadcrumbSubeAdi = _b.breadcrumbSubeAdi, detaillModalVisible = _b.detaillModalVisible, groupData = _b.groupData, createFormState = _b.createFormState, modalVisible = _b.modalVisible, tip = _b.tip, id = _b.id, bagliOlduguSubeId = _b.bagliOlduguSubeId;
         var normEmployeeCoumns = [
             { title: abpUtility_1.L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: function (text) { return React.createElement("div", null, text); } },
             { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: function (text) { return React.createElement("div", null, text); } },
@@ -502,7 +511,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             abpUtility_1.isGranted('ksubedetail.norm.employee.list') && React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
-                        React.createElement(antd_1.Table, { bordered: false, columns: normEmployeeCoumns, rowKey: function (record) { return record.id; }, locale: { emptyText: abpUtility_1.L('NoData') }, loading: this.state.groupData.length == 1 ? true : false, dataSource: this.state.groupData === undefined ? [] : this.state.groupData, pagination: { pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 } })))),
+                        React.createElement(antd_1.Table, { bordered: false, columns: normEmployeeCoumns, rowKey: function (record) { return record.id; }, locale: { emptyText: abpUtility_1.L('NoData') }, loading: groupData.length == 1 ? true : false, dataSource: groupData === undefined ? [] : groupData, pagination: { pageSize: 5, total: kNorms === undefined ? 0 : groupData.length, defaultCurrent: 1 } })))),
             abpUtility_1.isGranted('ksubedetail.employee.list') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
@@ -530,14 +539,14 @@ var KSubeDetay = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, columns: columnsNorm, locale: { emptyText: abpUtility_1.L('NoData') }, onChange: this.handleNormTableChange, rowKey: function (record) { return record.id; }, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, pagination: { pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 } })))),
-            React.createElement(CreateNormForm_1["default"], { modalType: 'create', tip: this.state.tip, formRef: this.formRef, subeId: this.state.id, hierarchy: kHierarchies, employees: kPersonels, onCreateNorm: this.createNorm, visible: this.state.modalVisible, createFormState: this.state.createFormState, bagliOlduguSubeId: this.state.bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
+            React.createElement(CreateNormForm_1["default"], { modalType: 'create', tip: tip, formRef: this.formRef, subeId: id, hierarchy: kHierarchies, employees: kPersonels, onCreateNorm: this.createNorm, visible: modalVisible, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
                     var form = _this.formRef.current;
                     _this.setState({
                         modalVisible: false
                     });
                     form.resetFields();
                 } }),
-            React.createElement(NormDetailTimeLine_1["default"], { data: kNormAllDetails, title: breadcrumbSubeAdi, visible: this.state.detaillModalVisible, onCancel: function () {
+            React.createElement(NormDetailTimeLine_1["default"], { norm: editKNorm, data: kNormAllDetails, title: breadcrumbSubeAdi, visible: detaillModalVisible, onCancel: function () {
                     _this.setState({
                         detaillModalVisible: false
                     });

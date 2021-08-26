@@ -93,14 +93,15 @@ var NormRequestListTable = /** @class */ (function (_super) {
             totalSize: 0,
             subeObjId: '0',
             inputValue: '',
+            currentUserId: 0,
             skipNormCount: 0,
             searchFilter: '',
             subeOrBolgeAdi: '',
             maxNormResultCount: 5,
             detaillModalVisible: false,
             normRejectDescriptionModalVisible: false,
-            currentUserId: 0,
-            filter: { offset: 0, limit: 5, current: 0 }
+            filter: { offset: 0, limit: 5, current: 0 },
+            getAllKNormOutput: {}
         };
         _this.formRef = React.createRef();
         _this.getNormRequests = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -305,10 +306,17 @@ var NormRequestListTable = /** @class */ (function (_super) {
     };
     NormRequestListTable.prototype.detailModalOpen = function (id, name) {
         return __awaiter(this, void 0, void 0, function () {
+            var norm;
             return __generator(this, function (_a) {
-                this.props.kNormDetailStore.getDetails(id);
-                this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormDetailStore.getDetails(id)];
+                    case 1:
+                        _a.sent();
+                        norm = this.props.kNormStore[this.props.table].filter(function (x) { return x.id === id; })[0];
+                        this.setState({ getAllKNormOutput: norm });
+                        this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -334,11 +342,11 @@ var NormRequestListTable = /** @class */ (function (_super) {
         var kNorms = this.props.kNormStore.kNorms;
         var _b = this.props, isHoverable = _b.isHoverable, tableTitle = _b.tableTitle, table = _b.table, isModal = _b.isModal;
         var _c = this.props.kNormDetailStore, kNormAllDetails = _c.kNormAllDetails, kNormDetails = _c.kNormDetails;
-        var _d = this.state, subeOrBolgeAdi = _d.subeOrBolgeAdi, detaillModalVisible = _d.detaillModalVisible;
+        var _d = this.state, subeOrBolgeAdi = _d.subeOrBolgeAdi, detaillModalVisible = _d.detaillModalVisible, getAllKNormOutput = _d.getAllKNormOutput;
         var columnsNorm = [
             {
-                title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 60,
-                render: function (text) { return React.createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
+                title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: react_uuid_1["default"](), width: 60,
+                render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, new Date(text).toLocaleDateString("tr-TR", {
                     year: "numeric",
                     month: "numeric",
                     day: "2-digit",
@@ -347,61 +355,57 @@ var NormRequestListTable = /** @class */ (function (_super) {
                 })); }
             },
             {
-                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: 'durumu', width: 200,
+                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
                 render: function (text, norm) { return (React.createElement(React.Fragment, null, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
-                    React.createElement("div", { className: 'requeststatus' },
+                    React.createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
                         " ",
                         talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Waiting'),
                         "  ") :
-                    React.createElement("div", { className: 'requeststatus' },
+                    React.createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
                         " ",
                         talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Reject'),
                         "   "))); }
             },
-            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); } },
-            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); } },
+            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
+            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
+            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
+            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, talepNedeni_1["default"][text]); } },
+            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, talepTuru_1["default"][text]); } },
             {
                 title: "İşlem",
                 dataIndex: 'id',
-                key: 'id',
+                key: react_uuid_1["default"](),
                 width: 50,
                 render: function (text, norm) { return (React.createElement(React.Fragment, null,
-                    React.createElement(antd_1.Space, { size: 'small' },
-                        kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Detail') },
-                            React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(norm.id, norm.subeAdi); }, icon: React.createElement(icons_1.FileSearchOutlined, null), type: "primary" }))),
+                    React.createElement(antd_1.Space, { key: react_uuid_1["default"](), size: 'small' },
+                        kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail') && React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Detail') },
+                            React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(norm.id, norm.subeAdi); }, icon: React.createElement(icons_1.FileSearchOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))),
                         kNormDetails !== undefined &&
                             (_this.props.isConfirmOrCancel &&
                                 (!tableTitle.search('Pending') || !tableTitle.search('Total')) &&
                                 normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede &&
                                 kNormDetails.items.filter(function (x) { var _a; return x.status == status_1["default"].Waiting && x.kNormId === norm.id && ((_a = _this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.id) === x.userId && x.visible; }).length > 0) && (React.createElement(React.Fragment, null,
                             abpUtility_1.isGranted('knorm.approve') && React.createElement(React.Fragment, null,
-                                React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Accept') },
-                                    React.createElement(antd_1.Button, { onClick: function () { return _this.approveRequestClick(norm.id); }, icon: React.createElement(icons_1.CheckCircleOutlined, null), type: "primary" }))),
-                            abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
-                                React.createElement(antd_1.Button, { danger: true, onClick: function () { return _this.normRejectDescriptionModalOpen(norm.id); }, icon: React.createElement(icons_1.StopOutlined, null), type: "primary" }))))))); }
+                                React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Accept') },
+                                    React.createElement(antd_1.Button, { key: react_uuid_1["default"](), onClick: function () { return _this.approveRequestClick(norm.id); }, icon: React.createElement(icons_1.CheckCircleOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))),
+                            abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Reject') },
+                                React.createElement(antd_1.Button, { key: react_uuid_1["default"](), danger: true, onClick: function () { return _this.normRejectDescriptionModalOpen(norm.id); }, icon: React.createElement(icons_1.StopOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))))))); }
             }
         ];
         return (React.createElement(React.Fragment, null,
-            React.createElement(antd_1.Card, { hoverable: isHoverable, style: { marginTop: 15 } },
-                React.createElement(antd_1.Row, null,
-                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
+            React.createElement(antd_1.Card, { key: react_uuid_1["default"](), hoverable: isHoverable, style: { marginTop: 15 } },
+                React.createElement(antd_1.Row, { key: react_uuid_1["default"]() },
+                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
-                        React.createElement("h2", null, abpUtility_1.L(tableTitle))),
-                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
-                React.createElement(antd_1.Row, null,
-                    React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
-                React.createElement(antd_1.Row, { style: { marginTop: 20 } },
-                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
-            React.createElement(NormDetailTimeLine_1["default"], { data: kNormAllDetails, title: subeOrBolgeAdi, visible: detaillModalVisible, onCancel: function () {
-                    _this.setState({
-                        detaillModalVisible: false
-                    });
-                } }),
-            React.createElement(NormRejectDescription_1["default"], { formRef: this.formRef, title: abpUtility_1.L('RequestRejectForm'), reuestId: this.state.requestId, rejectRequestClick: this.rejectRequestClick, visible: this.state.normRejectDescriptionModalVisible, onCancel: function () {
+                        React.createElement("h2", { key: react_uuid_1["default"]() }, abpUtility_1.L(tableTitle))),
+                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
+                React.createElement(antd_1.Row, { key: react_uuid_1["default"]() },
+                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), sm: { span: 10, offset: 0 } },
+                        React.createElement(Search, { key: react_uuid_1["default"](), placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
+                React.createElement(antd_1.Row, { key: react_uuid_1["default"](), style: { marginTop: 20 } },
+                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
+            React.createElement(NormDetailTimeLine_1["default"], { key: react_uuid_1["default"](), data: kNormAllDetails, title: subeOrBolgeAdi, norm: getAllKNormOutput, visible: detaillModalVisible, onCancel: function () { _this.setState({ detaillModalVisible: false }); } }),
+            React.createElement(NormRejectDescription_1["default"], { key: react_uuid_1["default"](), formRef: this.formRef, title: abpUtility_1.L('RequestRejectForm'), reuestId: this.state.requestId, rejectRequestClick: this.rejectRequestClick, visible: this.state.normRejectDescriptionModalVisible, onCancel: function () {
                     _this.setState({
                         normRejectDescriptionModalVisible: false
                     });

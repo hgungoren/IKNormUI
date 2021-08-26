@@ -7,24 +7,51 @@ var prop_types_1 = require("prop-types");
 var talepDurumu_1 = require("../../services/kNorm/dto/talepDurumu");
 var status_1 = require("../../services/kNormDetail/dto/status");
 var react_uuid_1 = require("react-uuid");
+var abpUtility_1 = require("../../lib/abpUtility");
+var normStatus_1 = require("../../services/kNorm/dto/normStatus");
 var Step = antd_1.Steps.Step;
 var NormDetailTimeLine = function (_a) {
-    var visible = _a.visible, onCancel = _a.onCancel, title = _a.title, data = _a.data;
+    var visible = _a.visible, onCancel = _a.onCancel, title = _a.title, data = _a.data, norm = _a.norm;
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
-        console.log(data),
         react_1["default"].createElement(antd_1.Modal, { title: title, centered: true, visible: visible, onCancel: onCancel, width: '70%', footer: [] },
             react_1["default"].createElement(react_1["default"].Fragment, null,
                 react_1["default"].createElement(antd_1.Row, null,
-                    react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 } }),
-                    react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 } },
+                    react_1["default"].createElement(antd_1.Col, { xs: { span: 14, offset: 0 } },
+                        react_1["default"].createElement(antd_1.Descriptions, { key: react_uuid_1["default"](), title: abpUtility_1.L("RequestDetail"), layout: "vertical", bordered: true }, norm !== undefined && react_1["default"].createElement(react_1["default"].Fragment, null,
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.area.name") }, norm.bolgeAdi),
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.branch.name") }, norm.subeAdi),
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.position") }, norm.pozisyon),
+                            norm.yeniPozisyon !== null && react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.newposition") }, norm.yeniPozisyon),
+                            norm.personelId > 0 && react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.leaving.staff") }, norm.personelAdi),
+                            norm.nedeni !== '' && react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.requestreason") }, norm.nedeni),
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.requesttype") }, norm.turu),
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L("table.norm.requestdate") }, new Date(norm.creationTime).toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "2-digit", hour: "2-digit", minute: "2-digit" })),
+                            react_1["default"].createElement(antd_1.Descriptions.Item, { key: react_uuid_1["default"](), label: abpUtility_1.L('table.norm.requeststatus') }, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
+                                react_1["default"].createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
+                                    " ",
+                                    talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Waiting'),
+                                    "  ") :
+                                react_1["default"].createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
+                                    " ",
+                                    talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Reject'),
+                                    "   "))))),
+                    react_1["default"].createElement(antd_1.Col, { xs: { span: 8, offset: 2 } },
                         react_1["default"].createElement(antd_1.Steps, { direction: "vertical" }, data !== undefined && data.map(function (x) { return react_1["default"].createElement(react_1["default"].Fragment, null,
-                            react_1["default"].createElement(Step, { key: react_uuid_1["default"](), status: (x.status === status_1["default"].Apporved) ? "finish" : (x.status === status_1["default"].Waiting ? "wait" : "error"), title: talepDurumu_1["default"][x.talepDurumuStr], description: "\n                                    " + (x.lastModificationTime !== null && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "2-digit",
-                                    hour: "2-digit",
-                                    minute: "2-digit"
-                                })) + "      " + (x.description !== null ? x.description : '') + " " })); }))))))));
+                            react_1["default"].createElement(Step, { key: react_uuid_1["default"](), status: (x.status === status_1["default"].Apporved) ? "finish" : (x.status === status_1["default"].Waiting ? "wait" : "error"), title: talepDurumu_1["default"][x.talepDurumuStr], description: react_1["default"].createElement(react_1["default"].Fragment, null,
+                                    react_1["default"].createElement("p", { className: 'step-time' },
+                                        " ",
+                                        ((x.lastModificationTime !== null && x.status !== status_1["default"].Waiting) && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "2-digit",
+                                            hour: "2-digit",
+                                            minute: "2-digit"
+                                        }))),
+                                    react_1["default"].createElement("p", { className: 'step-description' },
+                                        " ",
+                                        (x.description !== null ? x.description : ''),
+                                        " "),
+                                    "   ") })); }))))))));
 };
 NormDetailTimeLine.propTypes = {
     visible: prop_types_1["default"].bool.isRequired,

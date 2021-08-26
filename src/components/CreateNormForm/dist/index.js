@@ -69,6 +69,7 @@ var icons_1 = require("@ant-design/icons");
 var talepTuru_1 = require("../../services/kNorm/dto/talepTuru");
 var talepNedeni_1 = require("../../services/kNorm/dto/talepNedeni");
 var antd_1 = require("antd");
+var react_uuid_1 = require("react-uuid");
 var TabPane = antd_1.Tabs.TabPane;
 var TextArea = antd_1.Input.TextArea;
 var Option = antd_1.Select.Option;
@@ -223,31 +224,31 @@ var CreateNormForm = /** @class */ (function (_super) {
                         React.createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: tip, name: 'tip', rules: createNormForm_validation_1["default"].tip },
                             React.createElement(antd_1.Input, { style: { display: 'none' } })),
                         React.createElement(antd_1.Form.Item, __assign({ className: 'mt-5', label: abpUtility_1.L('RequestType') }, formItemLayout, { name: 'TalepTuru', rules: createNormForm_validation_1["default"].requestType }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleChangeFormItems }, Object.keys(talepTuru_1["default"]).map(function (value, index) { return React.createElement(Option, { key: index, value: value },
+                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleChangeFormItems }, Object.keys(talepTuru_1["default"]).map(function (value, index) { return React.createElement(Option, { key: react_uuid_1["default"](), value: value },
                                 " ",
                                 talepTuru_1["default"][value],
                                 "  "); }))),
                         !this.state.positionVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
-                            React.createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
+                            React.createElement(antd_1.Select, { key: react_uuid_1["default"](), notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
                                 ? []
-                                : position.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.adi },
+                                : position.items.map(function (value, index) { return React.createElement(Option, { key: react_uuid_1["default"](), value: value.adi },
                                     " ",
                                     value.adi,
                                     " "); })))),
                         !this.state.newPositionVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NewPosition') }, formItemLayout, { name: 'YeniPozisyon', rules: createNormForm_validation_1["default"].newPosition }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
+                            React.createElement(antd_1.Select, { key: react_uuid_1["default"](), placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
                                 ? []
-                                : position.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.adi },
+                                : position.items.map(function (value, index) { return React.createElement(Option, { key: react_uuid_1["default"](), value: value.adi },
                                     " ",
                                     value.adi,
                                     " "); })))),
                         !this.state.normRequestReasonVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NormRequestReason') }, formItemLayout, { name: 'TalepNedeni', rules: createNormForm_validation_1["default"].requestReason }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return React.createElement(React.Fragment, null, employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : React.createElement(Option, { key: index, value: value },
+                            React.createElement(antd_1.Select, { key: react_uuid_1["default"](), placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return React.createElement(React.Fragment, null, employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : React.createElement(Option, { key: react_uuid_1["default"](), value: value },
                                 " ",
                                 talepNedeni_1["default"][value],
                                 " ")); })))),
                         !this.state.employeeVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Employee') }, formItemLayout, { name: 'PersonelId', rules: createNormForm_validation_1["default"].employeeId }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, employees != undefined && employees.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.objId },
+                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, employees != undefined && employees.items.map(function (value, index) { return React.createElement(Option, { key: react_uuid_1["default"](), value: value.objId },
                                 " ",
                                 value.ad,
                                 " ",

@@ -25,18 +25,19 @@ import uuid from 'react-uuid';
 
 
 export interface INormRequestListTableState {
-    searchFilter: string;
     subeObjId: string;
     requestId: number;
+    totalSize: number;
     inputValue: string;
+    searchFilter: string;
     skipNormCount: number;
     currentUserId: number;
+    getAllKNormOutput: any;
     subeOrBolgeAdi: string;
     maxNormResultCount: number;
     detaillModalVisible: boolean;
-    totalSize: number;
     normRejectDescriptionModalVisible: boolean;
-    filter: { offset: number, limit: number, current: number }
+    filter: { offset: number, limit: number, current: number };
 }
 
 
@@ -74,14 +75,15 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         totalSize: 0,
         subeObjId: '0',
         inputValue: '',
+        currentUserId: 0,
         skipNormCount: 0,
         searchFilter: '',
         subeOrBolgeAdi: '',
         maxNormResultCount: 5,
         detaillModalVisible: false,
         normRejectDescriptionModalVisible: false,
-        currentUserId: 0,
-        filter: { offset: 0, limit: 5, current: 0, }
+        filter: { offset: 0, limit: 5, current: 0, },
+        getAllKNormOutput: {}
     }
 
     formRef = React.createRef<FormInstance>();
@@ -148,7 +150,6 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             this.getNormRequests()
 
         await this.getAllNormDetails();
-
     }
 
 
@@ -161,7 +162,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     };
 
     async detailModalOpen(id: number, name: string) {
-        this.props.kNormDetailStore.getDetails(id);
+        await this.props.kNormDetailStore.getDetails(id); 
+        let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
+        this.setState({ getAllKNormOutput: norm }) 
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
     }
 
@@ -268,11 +271,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         const { kNorms } = this.props.kNormStore;
         const { isHoverable, tableTitle, table, isModal } = this.props;
         const { kNormAllDetails, kNormDetails } = this.props.kNormDetailStore;
-        const { subeOrBolgeAdi, detaillModalVisible } = this.state;
+        const { subeOrBolgeAdi, detaillModalVisible, getAllKNormOutput } = this.state;
 
         const columnsNorm = [
             {
-                title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 60, render: (text: Date) => <div>
+                title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: uuid(), width: 60, render: (text: Date) => <div key={uuid()}>
                     {
                         new Date(text).toLocaleDateString("tr-TR", {
                             year: "numeric",
@@ -285,34 +288,30 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 </div>
             },
             {
-                title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: 'durumu', width: 200, render: (text, norm) => (<>
+                title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
 
                     {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
-                        <div className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
-                        <div className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Reject')}   </div>}
+                        <div key={uuid()} className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Waiting')}  </div> :
+                        <div key={uuid()} className={'requeststatus'}> {TalepDurumu[norm.durumu] + ' ' + L('Reject')}   </div>}
                 </>)
-
             },
-
-
-            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 50, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 50, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: uuid(), width: 100, render: (text: string) => <div key={uuid()}>{text}</div> },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: uuid(), width: 100, render: (text: string) => <div key={uuid()}>{text}</div> },
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div key={uuid()}>{text}</div> },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div key={uuid()}>{TalepNedeni[text]}</div> },
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div key={uuid()}>{TalepTuru[text]}</div> },
             {
                 title: "İşlem",
                 dataIndex: 'id',
-                key: 'id',
+                key: uuid(),
                 width: 50,
                 render: (text, norm: GetAllKNormOutput) => (
                     <>
-                        <Space size={'small'}>
+                        <Space key={uuid()} size={'small'}>
                             {
-                                kNormDetails !== undefined && (isGranted('knorm.detail') && <Tooltip placement="topLeft" title={L('Detail')}>
-                                    <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                                kNormDetails !== undefined && (isGranted('knorm.detail') && <Tooltip key={uuid()} placement="topLeft" title={L('Detail')}>
+                                    <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined key={uuid()} />} type="primary" ></Button>
                                 </Tooltip>)
-
                             }
                             {
                                 kNormDetails !== undefined &&
@@ -324,15 +323,15 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     <>
                                         {
                                             isGranted('knorm.approve') && <>
-                                                <Tooltip placement="topLeft" title={L('Accept')}>
-                                                    <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary"></Button>
+                                                <Tooltip key={uuid()} placement="topLeft" title={L('Accept')}>
+                                                    <Button key={uuid()} onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined key={uuid()} />} type="primary"></Button>
                                                 </Tooltip>
 
                                             </>
                                         }
                                         {
-                                            isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Reject')}>
-                                                <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary"></Button>
+                                            isGranted('knorm.reject') && <Tooltip key={uuid()} placement="topLeft" title={L('Reject')}>
+                                                <Button key={uuid()} danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined key={uuid()} />} type="primary"></Button>
                                             </Tooltip>
                                         }
                                     </>
@@ -346,13 +345,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         return (
             <>
-                <Card hoverable={isHoverable} style={{ marginTop: 15 }}>
-                    <Row>
-                        <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
+                <Card key={uuid()} hoverable={isHoverable} style={{ marginTop: 15 }}>
+                    <Row key={uuid()}>
+                        <Col key={uuid()} xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                             {' '}
-                            <h2>{L(tableTitle)}</h2>
+                            <h2 key={uuid()}>{L(tableTitle)}</h2>
                         </Col>
-                        <Col
+                        <Col key={uuid()}
                             xs={{ span: 14, offset: 0 }}
                             sm={{ span: 15, offset: 0 }}
                             md={{ span: 15, offset: 0 }}
@@ -361,13 +360,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             xxl={{ span: 1, offset: 21 }}>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col sm={{ span: 10, offset: 0 }}>
-                            <Search placeholder={L('Filter')} onSearch={this.handleNormSearch} />
+                    <Row key={uuid()}>
+                        <Col key={uuid()} sm={{ span: 10, offset: 0 }}>
+                            <Search key={uuid()} placeholder={L('Filter')} onSearch={this.handleNormSearch} />
                         </Col>
                     </Row>
-                    <Row style={{ marginTop: 20 }}>
-                        <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
+                    <Row key={uuid()} style={{ marginTop: 20 }}>
+                        <Col key={uuid()} xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             {
                                 isModal ? (
                                     <Table
@@ -386,7 +385,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                         key={uuid()}
                                         locale={{ emptyText: L('NoData') }}
                                         rowKey={uuid()}
-                                        bordered={false} 
+                                        bordered={false}
                                         pagination={tablePagination}
                                         columns={columnsNorm}
                                         loading={kNorms === undefined ? true : false}
@@ -401,16 +400,15 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     </Row>
                 </Card>
                 <NormDetailTimeLine
+                    key={uuid()}
                     data={kNormAllDetails}
                     title={subeOrBolgeAdi}
+                    norm={getAllKNormOutput}
                     visible={detaillModalVisible}
-                    onCancel={() => {
-                        this.setState({
-                            detaillModalVisible: false,
-                        });
-                    }} />
+                    onCancel={() => { this.setState({ detaillModalVisible: false, }); }} />
 
                 <NormRejectDescription
+                    key={uuid()}
                     formRef={this.formRef}
                     title={L('RequestRejectForm')}
                     reuestId={this.state.requestId}

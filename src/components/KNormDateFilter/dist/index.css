@@ -1,0 +1,5 @@
+.range-picker,
+.ant-space,
+.ant-space-vertical {
+  min-width: 100% !important;
+}

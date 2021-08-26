@@ -121,6 +121,12 @@ class KNormStore {
         let result = await kNormService.get(entityDto);
         this.editKNorm = result;
     }
+    
+    @action
+    async getById(entityDto: EntityDto) {
+        let result = await kNormService.getById(entityDto);
+        this.editKNorm = result;
+    }
  
     @action
     async create(createKNormInput: CreateKNormInput) { 

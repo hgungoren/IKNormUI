@@ -10,9 +10,7 @@ class KHierarchyService {
     }
 
     public async getUnits(): Promise<PagedResultDto<UnitOutput>> {
-        let result = await http.get('/api/services/app/Unit/GetAll');
-
-        console.log(result)
+        let result = await http.get('/api/services/app/Unit/GetAll'); 
         return result.data.result;
     }
 

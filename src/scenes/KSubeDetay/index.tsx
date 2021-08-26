@@ -258,7 +258,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async detailModalOpen(id: number) {
-        this.props.kNormDetailStore.getDetails(id);
+
+    console.log(this.props.kNormStore)
+        await this.props.kNormStore.getById({ id: id });
+        await this.props.kNormDetailStore.getDetails(id);
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
     }
 
@@ -323,12 +326,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     public render() {
 
-        const { kNorms } = this.props.kNormStore;
+        const { kNorms, editKNorm } = this.props.kNormStore;
         const { norms } = this.props.kSubeNormStore;
+        const { kPersonels } = this.props.kPersonelStore!;
         const { kHierarchies } = this.props.kHierarchyStore;
         const { kNormAllDetails } = this.props.kNormDetailStore;
-        const { kPersonels } = this.props.kPersonelStore!;
-        const { breadcrumbBolgeAdi, breadcrumbSubeAdi } = this.state;
+        const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
 
         const normEmployeeCoumns = [
             { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
@@ -414,9 +417,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     columns={normEmployeeCoumns}
                                     rowKey={(record) => record.id}
                                     locale={{ emptyText: L('NoData') }}
-                                    loading={this.state.groupData.length == 1 ? true : false}
-                                    dataSource={this.state.groupData === undefined ? [] : this.state.groupData}
-                                    pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : this.state.groupData.length, defaultCurrent: 1 }}
+                                    loading={groupData.length == 1 ? true : false}
+                                    dataSource={groupData === undefined ? [] : groupData}
+                                    pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : groupData.length, defaultCurrent: 1 }}
                                 />
                             </Col>
                         </Row>
@@ -505,15 +508,15 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
                 <CreateNormForm
                     modalType={'create'}
-                    tip={this.state.tip}
+                    tip={tip}
                     formRef={this.formRef}
-                    subeId={this.state.id}
+                    subeId={id}
                     hierarchy={kHierarchies}
                     employees={kPersonels}
                     onCreateNorm={this.createNorm}
-                    visible={this.state.modalVisible}
-                    createFormState={this.state.createFormState}
-                    bagliOlduguSubeId={this.state.bagliOlduguSubeId}
+                    visible={modalVisible}
+                    createFormState={createFormState}
+                    bagliOlduguSubeId={bagliOlduguSubeId}
                     position={this.props.kInkaLookUpTableStore.positions}
                     normCount={norms !== undefined ? norms.items.length : 0}
                     onCancel={() => {
@@ -525,9 +528,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     }} />
 
                 <NormDetailTimeLine
+                    norm={editKNorm}
                     data={kNormAllDetails}
                     title={breadcrumbSubeAdi}
-                    visible={this.state.detaillModalVisible}
+                    visible={detaillModalVisible}
                     onCancel={() => {
                         this.setState({
                             detaillModalVisible: false,
