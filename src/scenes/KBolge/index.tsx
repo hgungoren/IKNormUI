@@ -23,6 +23,7 @@ import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
 import moment from 'moment';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export interface IBolgeProps {
     kNormStore: KNormStore;
@@ -342,11 +343,35 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         } = this.props.kNormStore;
 
         const columns = [
-            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div> },
-            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div> },
-            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
+
+            {
+                title: L('AreaInformations xs'),
+                render: (record) => (
+                  <React.Fragment>
+                    <span className={'responsive-title'}>{L('table.area.name')}</span> : {record.adi}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.area.type')}</span>  : {record.tip}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.area.employeecount')} </span> : {record.personelSayisi}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.area.normcount')}</span>  : {record.normSayisi}
+                    <br />
+                    <span className={'responsive-title'}> {L('table.area.normgap')}</span>  : {record.normEksigi}
+                    <br/>
+                    <span className={'responsive-title'}> {L('Actions')}</span>  : {record.text}
+                  </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+                
+              },
+
+            
+
+            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div>  ,responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
             {
                 title: L('Actions'),
                 width: 150,
@@ -374,6 +399,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         </Dropdown>
                     </div >
                 ),
+                responsive: ['sm'] as Breakpoint[]
             },
         ];
         return (

@@ -28,6 +28,7 @@ import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
 import NormStatus from '../../services/kNorm/dto/normStatus';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 
 
@@ -337,10 +338,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
     }
 
- 
+
 
     public render() {
-       
+
         const { kNorms, editKNorm } = this.props.kNormStore;
         const { norms } = this.props.kSubeNormStore;
         const { kPersonels } = this.props.kPersonelStore!;
@@ -349,20 +350,79 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
 
         const normEmployeeCoumns = [
-            { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (key, value) => <div key={'gorev-' + key}>{value.gorev}</div> },
-            { title: L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (key, value) => <div key={'employeeCount-' + key}>{value.employeeCount}</div> },
-            { title: L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (key, value) => <div key={'nomrCount-' + key}>{value.nomrCount}</div> },
-            { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (key, value) => <div key={'norm-' + key}>{value.norm}</div> }
+
+            {
+                title: L('NormEmployeeInformations xs'),
+                render: (record) => (
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('table.branch.duty')}</span> : {record.gorev}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.employeecount')}</span>  : {record.employeeCount}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.normcount')} </span> : {record.nomrCount}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.normgap')}</span>  : {record.norm}
+                        <br />
+                    </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+            },
+
+            { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (key, value) => <div key={'gorev-' + key}>{value.gorev}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (key, value) => <div key={'employeeCount-' + key}>{value.employeeCount}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (key, value) => <div key={'nomrCount-' + key}>{value.nomrCount}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (key, value) => <div key={'norm-' + key}>{value.norm}</div>, responsive: ['sm'] as Breakpoint[] }
         ]
 
         const columns = [
-            { title: L('table.employee.name'), dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.employee.surname'), dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.employee.duty'), dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.employee.registrationnumber'), dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div> }
+
+            {
+                title: L('NormEmployeeInformations xs'),
+                render: (record) => (
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('table.employee.name')}</span> : {record.ad}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.employee.surname')}</span>  : {record.soyad}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.employee.duty')} </span> : {record.gorevi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.employee.registrationnumber')}</span>  : {record.sicilNo}
+                        <br />
+                    </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+            },
+
+            { title: L('table.employee.name'), dataIndex: 'ad', key: 'ad', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.employee.surname'), dataIndex: 'soyad', key: 'soyad', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.employee.duty'), dataIndex: 'gorevi', key: 'gorevi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.employee.registrationnumber'), dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] }
         ];
 
         const columnsNorm = [
+
+            {
+                title: L('NormInformations xs'),
+                render: (record) => (
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('table.norm.requestdatee')}</span> : {record.creationTime}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.requeststatus')}</span>  : {record.durumu}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.area.name')} </span> : {record.bolgeAdi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.branch.name')}</span>  : {record.subeAdi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.position')}</span>  : {record.pozisyon}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.requestreason')}</span>  : {record.nedeni}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.requesttype')}</span>  : {record.turu}
+                    </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+            },
+
             {
                 title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 100, render: (text: string) => <div>
                     {
@@ -374,7 +434,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             minute: "2-digit"
                         })
                     }
-                </div>
+                </div>,
+                    responsive: ['sm'] as Breakpoint[]
             },
             {
                 title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
@@ -386,13 +447,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             <Tooltip placement="topLeft" title={L('Reject')}>   <Tag color={'rgb(250, 84, 28)'} icon={<StopOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
                             <Tooltip placement="topLeft" title={L('Approved')}> <Tag color={'rgb(29, 165, 122)'} icon={<CheckCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip>
                     }
-                </>)
+                </>),
+                responsive: ['sm'] as Breakpoint[]
             },
-            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div> },
-            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div> },
+
+
+
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[], },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 150, render: (text: TalepNedeni) => <div>{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 150, render: (text: TalepTuru) => <div>{TalepTuru[text]}</div>, responsive: ['sm'] as Breakpoint[] },
             {
                 title: L("table.norm.transactions"),
                 dataIndex: 'id',
@@ -401,6 +466,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 render: (text: number) => (
                     <Button className={'info'} onClick={() => this.detailModalOpen(text)} icon={<FileSearchOutlined />} type="primary" ></Button>
                 ),
+                responsive: ['sm'] as Breakpoint[]
             }
         ];
 

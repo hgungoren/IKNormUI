@@ -22,6 +22,7 @@ import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
 import moment from 'moment';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export interface INormProps {
     kSubeStore: KSubeStore;
@@ -346,12 +347,38 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         } = this.props.kNormStore;
 
         const columns = [
-            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> },
-            { title: L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> },
+
+
+            {
+                title: L('BranchInformations xs'),
+                render: (record) => (
+                  <React.Fragment>
+                    <span className={'responsive-title'}>{L('Area')}</span> : {record.adi}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.branch.name')}</span>  : {record.adi}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.branch.type')} </span> : {record.tip}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.branch.employeecount')}</span>  : {record.personelSayisi}
+                    <br />
+                    <span className={'responsive-title'}> {L('table.branch.normcount')}</span>  : {record.normSayisi}
+                    <br/>
+                    <span className={'responsive-title'}> {L('table.branch.normgap')}</span>  : {record.normEksigi}
+                    <br/>
+                    <span className={'responsive-title'}> {L('table.branch.transactions')}</span>  : {record.text}
+                  </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+                
+              },
+
+
+            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.branch.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
             {
                 title: L('table.branch.transactions'),
                 width: 150,
@@ -382,6 +409,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </Dropdown>
                     </div >
                 ),
+                 responsive: ['sm'] as Breakpoint[]
             },
         ];
         return (

@@ -23,6 +23,7 @@ import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
 import { Modal, notification, Card, Col, Row, Table, Input, Button, Tooltip, Space } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-design/icons';
 import Tag from 'antd/es/tag';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 
 export interface INormRequestListTableState {
@@ -313,6 +314,32 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         const { subeOrBolgeAdi, detaillModalVisible, getAllKNormOutput } = this.state;
 
         const columnsNorm = [
+
+            {
+                title: L('NormRequestListTableInformations xs'),
+                render: (record) => (
+                  <React.Fragment>
+                    <span className={'responsive-title'}>{L('table.norm.requestdate')}</span> : {record.creationTime}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.norm.requeststatus')}</span>  : {record.durumu}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.norm.area.name')} </span> : {record.bolgeAdi}
+                    <br />
+                    <span className={'responsive-title'}>{L('table.norm.branch.name')}</span>  : {record.subeAdi}
+                    <br />
+                    <span className={'responsive-title'}> {L('table.norm.position')}</span>  : {record.pozisyon}
+                    <br />
+                    <br />
+                    <span className={'responsive-title'}> {L('table.norm.requestreason')}</span>  : {record.nedeni}
+                    <br />
+                    <span className={'responsive-title'}> {L('table.norm.requesttype')}</span>  : {record.turu}
+                    <br />
+                    <span className={'responsive-title'}> {L('İşlem')}</span>  : {record.id}
+                  </React.Fragment>
+                ),
+                responsive: ['xs'] as Breakpoint[]
+              },
+
             {
                 title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: uuid(), width: 60, render: (text: Date) => <div >
                     {
@@ -324,7 +351,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             minute: "2-digit"
                         })
                     }
-                </div>
+                </div>,
+                  responsive: ['sm'] as Breakpoint[]
             },
             {
                 title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
@@ -336,13 +364,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             <Tooltip placement="topLeft" title={L('Reject')}>   <Tag color={'rgb(250, 84, 28)'} icon={<StopOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]}    </Tag ></Tooltip> :
                             <Tooltip placement="topLeft" title={L('Approved')}> <Tag color={'rgb(29, 165, 122)'} icon={<CheckCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]}  </Tag ></Tooltip>
                     }
-                </>)
+                </>), responsive: ['sm'] as Breakpoint[]
             },
-            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div> },
-            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div> },
-            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div >{text}</div> },
-            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div> },
-            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div> },
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div >{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div> , responsive: ['sm'] as Breakpoint[]},
             {
                 title: "İşlem",
                 dataIndex: 'id',

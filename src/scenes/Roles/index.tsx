@@ -13,6 +13,7 @@ import Stores from '../../stores/storeIdentifier';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import RoleDetailDrawer from '../../components/RoleDetailDrawer';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export interface IRoleProps {
   roleStore: RoleStore;
@@ -130,38 +131,57 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     const { drawerVisible } = this.state;
     const { allPermissions, roles } = this.props.roleStore;
 
-    const columns = [
-      { title: L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('table.role.description'), dataIndex: 'description', key: 'description', width: 150, render: (text: string) => <div>{text}</div> },
-      {
-        title: L('table.role.transactions'),
-        width: 150,
-        render: (text: string, item: any) => (
-          <div>
-            <Dropdown
-              trigger={['click']}
-              overlay={
-                <Menu>
-                  {
-                    isGranted('role.create') && <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
-                  }
-                  {
-                    isGranted('role.update') && <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
-                  }
-                  {
-                    isGranted('role.delete') && <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
-                  }
-                </Menu>
-              }
-              placement="bottomLeft"
-            >
-              <Button type="primary" icon={<SettingOutlined />}> {L('Actions')} </Button>
-            </Dropdown>
-          </div>
-        ),
-      },
-    ];
+    const columns =
+      [
+
+        {
+          title: L('UserInformations xs'),
+          render: (record) => (
+            <React.Fragment>
+              <span className={'responsive-title'}>{L('table.role.rolename')}</span> : {record.name}
+              <br />
+              <span className={'responsive-title'}>{L('table.role.displayname')}</span>  : {record.displayName}
+              <br />
+              <span className={'responsive-title'}>{L('table.role.description')} </span> : {record.description}
+              <br />
+              <span className={'responsive-title'}>{L('table.role.transactions')}</span>  : {record.transactions}
+            </React.Fragment>
+          ),
+          responsive: ['xs'] as Breakpoint[]
+        },
+
+        { title: L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+        { title: L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+        { title: L('table.role.description'), dataIndex: 'description', key: 'description', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+        {
+          title: L('table.role.transactions'),
+          width: 150,
+          render: (text: string, item: any) => (
+            <div>
+              <Dropdown
+                trigger={['click']}
+                overlay={
+                  <Menu>
+                    {
+                      isGranted('role.create') && <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
+                    }
+                    {
+                      isGranted('role.update') && <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
+                    }
+                    {
+                      isGranted('role.delete') && <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
+                    }
+                  </Menu>
+                }
+                placement="bottomLeft"
+              >
+                <Button type="primary" icon={<SettingOutlined />}> {L('Actions')} </Button>
+              </Dropdown>
+            </div>
+          ),
+          responsive: ['sm'] as Breakpoint[]
+        },
+      ];
 
     return (
       <>
