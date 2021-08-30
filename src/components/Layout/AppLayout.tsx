@@ -21,7 +21,7 @@ const { Content } = Layout;
 class AppLayout extends React.Component<any> {
 
   state = {
-    collapsed: false,
+    collapsed: true,
   };
 
   toggle = () => {
