@@ -21,7 +21,7 @@ const { Content } = Layout;
 class AppLayout extends React.Component<any> {
 
   state = {
-    collapsed: false, 
+    collapsed: false,
   };
 
   toggle = () => {
@@ -34,7 +34,7 @@ class AppLayout extends React.Component<any> {
     this.setState({ collapsed });
   };
 
-  hideDrawer = async ( ) => {
+  hideDrawer = async () => {
     this.setState({ drawerVisible: false });
   }
   render() {
@@ -44,14 +44,19 @@ class AppLayout extends React.Component<any> {
     } = this.props;
 
     const { path } = this.props.match;
-    const { collapsed  } = this.state;
+    const { collapsed } = this.state;
 
     const layout = (
       <Layout style={{ minHeight: '100vh' }}>
         <SiderMenu path={path} onCollapse={this.onCollapse} history={history} collapsed={collapsed} />
         <Layout>
           <Layout.Header style={{ background: '#fff', minHeight: 52, padding: 0 }}>
-            <Header notificationStore={this.props.notificationStore} sessionStore={this.props.sessionStore} accountStore= {this.props.accountStore} authenticationStore={this.props.authenticationStore} collapsed={this.state.collapsed} toggle={this.toggle} />
+            <Header notificationStore={this.props.notificationStore}
+              sessionStore={this.props.sessionStore}
+              accountStore={this.props.accountStore}
+              authenticationStore={this.props.authenticationStore}
+              collapsed={this.state.collapsed}
+              toggle={this.toggle} />
           </Layout.Header>
           <Content style={{ margin: 16 }}>
             <Switch>
@@ -67,7 +72,7 @@ class AppLayout extends React.Component<any> {
                   />
                 ))}
               {pathname !== '/' && <NotFoundRoute />}
-            </Switch> 
+            </Switch>
           </Content>
           <Footer />
         </Layout>
@@ -79,3 +84,4 @@ class AppLayout extends React.Component<any> {
 }
 
 export default AppLayout;
+ 

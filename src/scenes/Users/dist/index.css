@@ -7,3 +7,6 @@
 .firstname {
   text-transform: capitalize;
 }
+.responsive-title {
+  font-weight: 500;
+}

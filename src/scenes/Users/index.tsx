@@ -11,6 +11,11 @@ import AppComponentBase from '../../components/AppComponentBase';
 import CreateOrUpdateUser from './components/createOrUpdateUser';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table, Tag } from 'antd';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+
+
+
+
 
 
 export interface IUserProps {
@@ -118,23 +123,118 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   };
 
 
-
   public render() {
     const { users } = this.props.userStore;
 
 
     const columns = [
-      { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: (text: string) => <div>{text}</div> },
-      { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: (text: string) => <div className={"firstname"}>{text}</div> },
-      { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: (text: string) => <div className={"surname"}>{text}</div> },
-      { title: L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div> },
-      { title: L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div> },
+
+
+
+      {
+        title: L('UserInformations xs'),
+        render: (record) => (
+          <React.Fragment>
+            <span className={'responsive-title'}>{L('table.user.username')}</span> : {record.userName}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.name')}</span>  : {record.name}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.surname')} </span> : {record.surname}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.duty')}</span>  : {record.title}
+            <br />
+            <span className={'responsive-title'}> {L('table.user.email')}</span>  : {record.emailAddress}
+            <br />
+            <span className={'responsive-title'}> {L('table.user.status')} </span> : {(record.isActive === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>)}
+          </React.Fragment>
+        ),
+        responsive: ['xs'] as Breakpoint[]
+      },
+
+      {
+        title: L('UserInformations sm'),
+        render: (record) => (
+          <React.Fragment>
+            <span className={'responsive-title'}>{L('table.user.username')}</span> : {record.userName}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.name')}</span>  : {record.name}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.surname')} </span> : {record.surname}
+
+          </React.Fragment>
+        ),
+        responsive: ['sm'] as Breakpoint[]
+      },
+      {
+        title: L('UserInformations sm'),
+        render: (record) => (
+          <React.Fragment>
+            <span className={'responsive-title'}>{L('table.user.duty')}</span>  : {record.title}
+            <br />
+            <span className={'responsive-title'}> {L('table.user.email')}</span>  : {record.emailAddress}
+            <br />
+            <span className={'responsive-title'}> {L('table.user.status')} </span> : {(record.isActive === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>)}
+          </React.Fragment>
+        ),
+        responsive: ['sm'] as Breakpoint[],
+        classNames: 10 > 0 ? 'none' : 'block'
+      },
+
+
+      {
+        title: L('UserInformations md'),
+        render: (record) => (
+          <React.Fragment>
+            <span className={'responsive-title'}>{L('table.user.username')}</span> : {record.userName}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.name')}</span>  : {record.name}
+          </React.Fragment>
+        ),
+        responsive: ['md'] as Breakpoint[]
+      },
+
+      {
+        title: L('UserInformations md'),
+        render: (record) => (
+          <React.Fragment>
+            <span className={'responsive-title'}>{L('table.user.surname')} </span> : {record.surname}
+            <br />
+            <span className={'responsive-title'}>{L('table.user.duty')}</span>  : {record.title}
+
+          </React.Fragment>
+        ),
+        responsive: ['md'] as Breakpoint[]
+      },
+
+      {
+        title: L('UserInformations md'),
+        render: (record) => (
+          <React.Fragment>
+
+            <span className={'responsive-title'}> {L('table.user.email')}</span>  : {record.emailAddress}
+            <br />
+            <span className={'responsive-title'}> {L('table.user.status')} </span> : {(record.isActive === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>)}
+          </React.Fragment>
+        ),
+        responsive: ['md'] as Breakpoint[]
+      },
+
+
+
+
+
+
+      { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: (text: string) => <div>{text}</div>, responsive: ['lg'] as Breakpoint[] },
+      { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: (text: string) => <div className={"firstname"}>{text}</div>, responsive: ['lg'] as Breakpoint[] },
+      { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: (text: string) => <div className={"surname"}>{text}</div>, responsive: ['lg'] as Breakpoint[] },
+      { title: L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['lg'] as Breakpoint[] },
+      { title: L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['lg'] as Breakpoint[] },
       {
         title: L('table.user.status'),
         dataIndex: 'isActive',
         key: 'isActive',
         width: 50,
-        render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>),
+        render: (text: boolean) => (text === true ? <Tag color="#2db7f5">{L('Active')}</Tag> : <Tag color="red">{L('Passive')}</Tag>), responsive: ['lg'] as Breakpoint[]
       },
       {
         title: L('table.user.transactions'),
@@ -156,7 +256,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
               </Button>
             </Dropdown>
           </div>
-        ),
+        ), responsive: ['lg'] as Breakpoint[]
       },
     ];
 
@@ -165,9 +265,9 @@ class User extends AppComponentBase<IUserProps, IUserState> {
         <Card>
           <Row>
             <Col
-              xs={{ span: 4, offset: 0 }}
-              sm={{ span: 4, offset: 0 }}
-              md={{ span: 4, offset: 0 }}
+              xs={{ span: 2, offset: 0 }}
+              sm={{ span: 2, offset: 0 }}
+              md={{ span: 2, offset: 0 }}
               lg={{ span: 2, offset: 0 }}
               xl={{ span: 2, offset: 0 }}
               xxl={{ span: 2, offset: 0 }}
@@ -176,9 +276,9 @@ class User extends AppComponentBase<IUserProps, IUserState> {
               <h2>{L('Users')}</h2>
             </Col>
             <Col
-              xs={{ span: 14, offset: 0 }}
-              sm={{ span: 15, offset: 0 }}
-              md={{ span: 15, offset: 0 }}
+              xs={{ span: 1, offset: 21 }}
+              sm={{ span: 1, offset: 21 }}
+              md={{ span: 1, offset: 21 }}
               lg={{ span: 1, offset: 21 }}
               xl={{ span: 1, offset: 21 }}
               xxl={{ span: 1, offset: 21 }}
