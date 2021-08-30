@@ -1,22 +1,45 @@
-import React, { useState, useEffect } from 'react';
 import './index.less';
 import { Row } from 'antd';
 import KCart from '../KCart';
 import PropTypes from 'prop-types';
+import KNormDateFilter from '../KNormDateFilter';
+import React, { useState, useEffect } from 'react';
 import { isGranted, L } from '../../lib/abpUtility';
 import NormRequestListTableModal from '../NormRequestListTableModal';
-import KNormDateFilter from '../KNormDateFilter';
+
+interface KCartListProps {
+    moment?: any;
+    type;
+    bolgeId;
+    subeObjId;
+    normCount;
+    kNormStore;
+    cardLoading;
+    onDateFilter;
+    kPersonelCount;
+    kNormDetailStore;
+    getTotalNormUpdateRequestCount: number;
+    getPendingNormFillRequestCount: number;
+    getTotalNormFillingRequestCount: number;
+    getAcceptedNormFillRequestCount: number;
+    getCanceledNormFillRequestCount: number;
+    getPendingNormUpdateRequestCount: number;
+    getAcceptedNormUpdateRequestCount: number;
+    getCanceledNormUpdateRequestCount: number;
+}
 
 
 function KCartList({
-    bolgeId,
+    moment,
     type,
-    kNormDetailStore,
-    cardLoading,
-    normCount,
-    kPersonelCount,
-    kNormStore,
+    bolgeId,
     subeObjId,
+    normCount,
+    kNormStore,
+    cardLoading,
+    onDateFilter,
+    kPersonelCount,
+    kNormDetailStore,
     getTotalNormUpdateRequestCount,
     getPendingNormFillRequestCount,
     getTotalNormFillingRequestCount,
@@ -25,20 +48,20 @@ function KCartList({
     getPendingNormUpdateRequestCount,
     getAcceptedNormUpdateRequestCount,
     getCanceledNormUpdateRequestCount
-}) {
+}: KCartListProps) {
 
-    const [visible, setVisible] = useState(false)
-    const [table, setTable] = useState('')
     const [key, setKey] = useState(0)
+    const [table, setTable] = useState('')
+    const [visible, setVisible] = useState(false)
 
 
-    const [totalNormFillingRequest, setTotalNormFillingRequest] = useState(0)
     const [totalNormUpdateRequest, setTotalNormUpdateRequest] = useState(0)
     const [pendingNormFillRequest, setPendingNormFillRequest] = useState(0)
-    const [pendingNormUpdateRequest, setPendingNormUpdateRequest] = useState(0)
-    const [acceptedNormFillRequest, setAcceptedNormFillRequest] = useState(0)
-    const [acceptedNormUpdateRequest, setAcceptedNormUpdateRequest] = useState(0)
     const [canceledNormFillRequest, setCanceledNormFillRequest] = useState(0)
+    const [acceptedNormFillRequest, setAcceptedNormFillRequest] = useState(0)
+    const [totalNormFillingRequest, setTotalNormFillingRequest] = useState(0)
+    const [pendingNormUpdateRequest, setPendingNormUpdateRequest] = useState(0)
+    const [acceptedNormUpdateRequest, setAcceptedNormUpdateRequest] = useState(0)
     const [canceledNormUpdateRequest, setCanceledNormUpdateRequest] = useState(0)
 
     const onOpenModal = (card: string) => {
@@ -69,14 +92,13 @@ function KCartList({
 
     return (
         <>
-            <Row gutter={16}>
-                {/* <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} > */}
-                <KNormDateFilter cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)'  />
+            <Row gutter={16}> 
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
-
             </Row>
-
+            <Row gutter={16}>
+                <KNormDateFilter cursor={'context-menu'} onChange={onDateFilter} cardLoading={cardLoading} />
+            </Row>
             <Row gutter={16}>
                 {
                     isGranted('knorm.gettotalnormfillingrequest') && <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}
@@ -136,16 +158,18 @@ function KCartList({
             </Row>
 
             <NormRequestListTableModal
-                bolgeId={bolgeId}
                 key={key}
                 type={type}
-                kNormDetailStore={kNormDetailStore}
-                title={table.replace('get', '')}
                 table={table}
-                onCancel={onCancelModal}
-                kNormStore={kNormStore}
+                moment={moment}
+                bolgeId={bolgeId}
+                visible={visible}
                 subeObjId={subeObjId}
-                visible={visible} />
+                kNormStore={kNormStore}
+                onCancel={onCancelModal}
+                title={table.replace('get', '')}
+                kNormDetailStore={kNormDetailStore}
+            />
         </>
     );
 }

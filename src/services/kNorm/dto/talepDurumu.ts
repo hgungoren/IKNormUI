@@ -9,7 +9,7 @@ enum TalepDurumu {
     MIKRO_OPERASYONLARI_MUDURU = "mikro operasyonları müdürü",
     AKTARMA_OPERASYONLARI_MUDURU = "aktarma operasyonları müdürü",
     GENEL_MUDUR = "genel müdür",
-    IK_GENEL_MUDUR_YRD = "ik genel müdür yrd",
+    INSAN_KAYNAKLARI_GENEL_MUDUR_YRD = "ik genel müdür yrd",
     OPERASYON_GENEL_MUDUR_YRD = "operasyon genel müdür yrd",
 }
 export default TalepDurumu;

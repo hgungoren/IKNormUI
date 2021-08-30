@@ -247,7 +247,7 @@ var User = /** @class */ (function (_super) {
                         React.createElement(antd_1.Button, { type: "primary", shape: "circle", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } }))),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { placeholder: this.L('Filter'), onSearch: this.handleSearch }))),
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, columns: columns, pagination: { pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }, loading: users === undefined ? true : false, dataSource: users === undefined ? [] : users.items, onChange: this.handleTableChange }))),

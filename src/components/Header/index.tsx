@@ -4,14 +4,21 @@ import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
 import LanguageSelect from '../LanguageSelect';
 import profilePicture from '../../images/user.png';
-import { Avatar, Badge, Col, Dropdown, Menu, Row } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined } from '@ant-design/icons';
-
-
+import { Avatar, Badge, Col, Dropdown, Menu, Row, Space } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined, BellOutlined } from '@ant-design/icons';
+import NotificationDrawer from '../../components/NotificationDrawer';
+import SessionStore from '../../stores/sessionStore';
+import AccountStore from '../../stores/accountStore';
+import AuthenticationStore from '../../stores/authenticationStore';
+import NotificationStore from '../../stores/notificationStore';
 
 export interface IHeaderProps {
   collapsed?: any;
   toggle?: any;
+  sessionStore: SessionStore;
+  accountStore: AccountStore;
+  notificationStore: NotificationStore;
+  authenticationStore: AuthenticationStore;
 }
 
 const userDropdownMenu = (
@@ -26,9 +33,24 @@ const userDropdownMenu = (
 );
 
 export class Header extends React.Component<IHeaderProps> {
+
+
+  state = {
+    visible: false,
+    notificationCount: 0
+  }
+
+  onNotificationHandler = () => {
+    this.setState({ visible: !this.state.visible })
+  }
+
+  hideDrawer = async () => {
+    this.setState({ visible: false });
+  }
   render() {
+    const { visible, notificationCount } = this.state;
     return (
-      <Row className={'header-container'}> 
+      <Row className={'header-container'}>
         <Col style={{ textAlign: 'left' }} span={12}>
           {this.props.collapsed ? (
             <MenuUnfoldOutlined className="trigger" onClick={this.props.toggle} />
@@ -36,14 +58,25 @@ export class Header extends React.Component<IHeaderProps> {
             <MenuFoldOutlined className="trigger" onClick={this.props.toggle} />
           )}
         </Col>
+
         <Col style={{ padding: '0px 15px 0px 15px', textAlign: 'right' }} span={12}>
-          <LanguageSelect /> {'   '}
-          <Dropdown overlay={userDropdownMenu} trigger={['click']}>
-            {/* TODO : Bu alanda kullanıcıya ait okunmamış bildirim adedi eklenecektir */}
-            <Badge style={{}} count={""}>
-              <Avatar style={{ height: 24, width: 24 }} shape="circle" alt={'profile'} src={profilePicture} />
+
+          <Space>
+
+            <Badge count={notificationCount} >
+              <Avatar size="small" shape="circle" alt={'profile'} icon={<BellOutlined onClick={this.onNotificationHandler} />} />
             </Badge>
-          </Dropdown>
+
+
+            <LanguageSelect />
+
+
+            <Dropdown className={'header-drop'} overlay={userDropdownMenu} trigger={['click']}>
+              <Avatar size="small" shape="circle" alt={'profile'} src={profilePicture} />
+            </Dropdown>
+
+            <NotificationDrawer notificationStore={this.props.notificationStore} sessionStore={this.props.sessionStore} accountStore= {this.props.accountStore} authenticationStore={this.props.authenticationStore} visible={visible} showOrHideDrawer={this.hideDrawer} notificationCount={notificationCount} /></Space>
+
         </Col>
       </Row>
     );

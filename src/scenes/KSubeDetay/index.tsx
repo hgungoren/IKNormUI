@@ -1,5 +1,6 @@
 /*eslint-disable */
 import './index.less';
+import uuid from 'react-uuid';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FormInstance } from 'antd/lib/form';
@@ -22,10 +23,13 @@ import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
-import { FileSearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, FileSearchOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
 import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
-import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tag } from 'antd';
+import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
+import NormStatus from '../../services/kNorm/dto/normStatus';
+
+
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -213,7 +217,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async componentDidMount() {
+        abp.event.on('knorm_added', function (userNotification) {
 
+            alert('saf')
+            alert(userNotification)
+        })
         await this.setPageState();
         if (isGranted('ksubedetail.employee.list')) {
             await this.getAllEmployees();
@@ -223,7 +231,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
         if (isGranted('ksubedetail.norm.request.list')) {
             await this.getNormRequests();
-            await this.getKHierarchy();
+            // await this.getKHierarchy();
             await this.getAllEmployees();
         }
 
@@ -258,8 +266,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     async detailModalOpen(id: number) {
-
-    console.log(this.props.kNormStore)
         await this.props.kNormStore.getById({ id: id });
         await this.props.kNormDetailStore.getDetails(id);
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
@@ -280,10 +286,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             await this.props.kNormStore.create(values);
             this.openNotificationWithIcon('success')
             form!.resetFields();
+            this.setState({ modalVisible: false })
             await this.getNormRequests();
-            setTimeout(() => {
-                this.setState({ modalVisible: false })
-            }, 500);
         });
     }
 
@@ -324,8 +328,19 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
 
-    public render() {
+    getHierarchy = async (subeId: string, bolgeId: string, tip: string, pozisyon: string) => {
+        await this.props.kHierarchyStore.generateHierarchy({
+            subeId,
+            bolgeId,
+            tip,
+            pozisyon
+        })
+    }
 
+ 
+
+    public render() {
+       
         const { kNorms, editKNorm } = this.props.kNormStore;
         const { norms } = this.props.kSubeNormStore;
         const { kPersonels } = this.props.kPersonelStore!;
@@ -334,10 +349,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
 
         const normEmployeeCoumns = [
-            { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (text: string) => <div>{text}</div> },
-            { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (text: string) => <div>{text}</div> }
+            { title: L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: (key, value) => <div key={'gorev-' + key}>{value.gorev}</div> },
+            { title: L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: (key, value) => <div key={'employeeCount-' + key}>{value.employeeCount}</div> },
+            { title: L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: (key, value) => <div key={'nomrCount-' + key}>{value.nomrCount}</div> },
+            { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (key, value) => <div key={'norm-' + key}>{value.norm}</div> }
         ]
 
         const columns = [
@@ -361,7 +376,18 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     }
                 </div>
             },
-            { title: L("table.norm.requeststatus"), dataIndex: 'durumu', key: 'durumu', width: 150, render: (text: TalepDurumu) => <div> <Tag color="warning">  {TalepDurumu[text] + ' ' + L('Waiting')}</Tag></div> },
+            {
+                title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
+
+                    {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
+                        <Tooltip placement="topLeft" title={L('Waiting')}> <Tag color={'rgb(250, 173, 20)'} icon={<ClockCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
+                        (NormStatus[norm.normStatusValue] === NormStatus.Iptal) ?
+
+                            <Tooltip placement="topLeft" title={L('Reject')}>   <Tag color={'rgb(250, 84, 28)'} icon={<StopOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
+                            <Tooltip placement="topLeft" title={L('Approved')}> <Tag color={'rgb(29, 165, 122)'} icon={<CheckCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip>
+                    }
+                </>)
+            },
             { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: (text: string) => <div>{text}</div> },
             { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: (text: string) => <div>{text}</div> },
             { title: L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
@@ -411,7 +437,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 {
                     isGranted('ksubedetail.norm.employee.list') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
-                            <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
+                            <Col
+                                xs={{ span: 24, offset: 0 }}
+                                sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                                 <Table
                                     bordered={false}
                                     columns={normEmployeeCoumns}
@@ -425,7 +453,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         </Row>
                     </Card>
                 }
-
 
                 {
                     isGranted('ksubedetail.employee.list') && <Card hoverable>
@@ -442,11 +469,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 xl={{ span: 1, offset: 21 }}
                                 xxl={{ span: 1, offset: 21 }} >
                             </Col>
-
                         </Row>
                         <Row>
                             <Col sm={{ span: 10, offset: 0 }}>
-                                <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+                                <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
                             </Col>
                         </Row>
                         <Row style={{ marginTop: 20 }}>
@@ -486,7 +512,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         </Row>
                         <Row>
                             <Col sm={{ span: 10, offset: 0 }}>
-                                <Search placeholder={this.L('Filter')} onSearch={this.handleNormSearch} />
+                                <Search placeholder={L('Filter')} onSearch={this.handleNormSearch} />
                             </Col>
                         </Row>
                         <Row style={{ marginTop: 20 }}>
@@ -507,6 +533,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 }
 
                 <CreateNormForm
+                    getHierarchy={this.getHierarchy}
                     modalType={'create'}
                     tip={tip}
                     formRef={this.formRef}

@@ -1,8 +1,10 @@
 import { PagedFilterAndSortedRequest } from '../../dto/pagedFilterAndSortedRequest';
 
 export interface PagedKNormResultRequestDto extends PagedFilterAndSortedRequest {
-    keyword: string,
-    id: string,
-    bolgeId: string,
-    type: string
+    end?: Date;
+    id: string;
+    start?: Date;
+    type: string;
+    keyword: string;
+    bolgeId: string; 
 }

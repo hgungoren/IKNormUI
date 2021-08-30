@@ -64,6 +64,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 exports.__esModule = true;
 /*eslint-disable */
 require("./index.less");
+var react_uuid_1 = require("react-uuid");
 var React = require("react");
 var react_router_dom_1 = require("react-router-dom");
 var mobx_react_1 = require("mobx-react");
@@ -77,6 +78,7 @@ var AppComponentBase_1 = require("../../components/AppComponentBase");
 var icons_1 = require("@ant-design/icons");
 var NormDetailTimeLine_1 = require("../../components/NormDetailTimeLine");
 var antd_1 = require("antd");
+var normStatus_1 = require("../../services/kNorm/dto/normStatus");
 var Search = antd_1.Input.Search;
 var KSubeDetay = /** @class */ (function (_super) {
     __extends(KSubeDetay, _super);
@@ -172,7 +174,6 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.createNorm = function () {
             var form = _this.formRef.current;
             form.validateFields().then(function (values) { return __awaiter(_this, void 0, void 0, function () {
-                var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -182,12 +183,10 @@ var KSubeDetay = /** @class */ (function (_super) {
                             _a.sent();
                             this.openNotificationWithIcon('success');
                             form.resetFields();
+                            this.setState({ modalVisible: false });
                             return [4 /*yield*/, this.getNormRequests()];
                         case 2:
                             _a.sent();
-                            setTimeout(function () {
-                                _this.setState({ modalVisible: false });
-                            }, 500);
                             return [2 /*return*/];
                     }
                 });
@@ -227,6 +226,21 @@ var KSubeDetay = /** @class */ (function (_super) {
                 });
                 this.setState({ groupData: groupData });
                 return [2 /*return*/];
+            });
+        }); };
+        _this.getHierarchy = function (subeId, bolgeId, tip, pozisyon) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kHierarchyStore.generateHierarchy({
+                            subeId: subeId,
+                            bolgeId: bolgeId,
+                            tip: tip,
+                            pozisyon: pozisyon
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         }); };
         return _this;
@@ -371,7 +385,12 @@ var KSubeDetay = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.setPageState()];
+                    case 0:
+                        abp.event.on('knorm_added', function (userNotification) {
+                            alert('saf');
+                            alert(userNotification);
+                        });
+                        return [4 /*yield*/, this.setPageState()];
                     case 1:
                         _a.sent();
                         if (!abpUtility_1.isGranted('ksubedetail.employee.list')) return [3 /*break*/, 3];
@@ -382,36 +401,35 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 3: return [4 /*yield*/, this.pageSettings({ id: this.state.id })];
                     case 4:
                         _a.sent();
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.request.list')) return [3 /*break*/, 8];
+                        if (!abpUtility_1.isGranted('ksubedetail.norm.request.list')) return [3 /*break*/, 7];
                         return [4 /*yield*/, this.getNormRequests()];
                     case 5:
                         _a.sent();
-                        return [4 /*yield*/, this.getKHierarchy()];
-                    case 6:
-                        _a.sent();
+                        // await this.getKHierarchy();
                         return [4 /*yield*/, this.getAllEmployees()];
-                    case 7:
+                    case 6:
+                        // await this.getKHierarchy();
                         _a.sent();
-                        _a.label = 8;
-                    case 8:
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.employee.list')) return [3 /*break*/, 14];
+                        _a.label = 7;
+                    case 7:
+                        if (!abpUtility_1.isGranted('ksubedetail.norm.employee.list')) return [3 /*break*/, 13];
                         return [4 /*yield*/, this.getAllEmployeesForGroupBy()];
-                    case 9:
+                    case 8:
                         _a.sent();
                         return [4 /*yield*/, this.getAllSubeNormForGroupBy()];
-                    case 10:
+                    case 9:
                         _a.sent();
                         return [4 /*yield*/, this.setAllEmployeesGroupBy()];
-                    case 11:
+                    case 10:
                         _a.sent();
                         return [4 /*yield*/, this.setAllSubeNormGroupBy()];
-                    case 12:
+                    case 11:
                         _a.sent();
                         return [4 /*yield*/, this.mergeArray()];
-                    case 13:
+                    case 12:
                         _a.sent();
-                        _a.label = 14;
-                    case 14: return [2 /*return*/];
+                        _a.label = 13;
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -429,9 +447,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(this.props.kNormStore);
-                        return [4 /*yield*/, this.props.kNormStore.getById({ id: id })];
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getById({ id: id })];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, this.props.kNormDetailStore.getDetails(id)];
@@ -452,10 +468,10 @@ var KSubeDetay = /** @class */ (function (_super) {
         var kNormAllDetails = this.props.kNormDetailStore.kNormAllDetails;
         var _b = this.state, breadcrumbBolgeAdi = _b.breadcrumbBolgeAdi, breadcrumbSubeAdi = _b.breadcrumbSubeAdi, detaillModalVisible = _b.detaillModalVisible, groupData = _b.groupData, createFormState = _b.createFormState, modalVisible = _b.modalVisible, tip = _b.tip, id = _b.id, bagliOlduguSubeId = _b.bagliOlduguSubeId;
         var normEmployeeCoumns = [
-            { title: abpUtility_1.L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: function (text) { return React.createElement("div", null, text); } }
+            { title: abpUtility_1.L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: function (key, value) { return React.createElement("div", { key: 'gorev-' + key }, value.gorev); } },
+            { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: function (key, value) { return React.createElement("div", { key: 'employeeCount-' + key }, value.employeeCount); } },
+            { title: abpUtility_1.L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: function (key, value) { return React.createElement("div", { key: 'nomrCount-' + key }, value.nomrCount); } },
+            { title: abpUtility_1.L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: function (key, value) { return React.createElement("div", { key: 'norm-' + key }, value.norm); } }
         ];
         var columns = [
             { title: abpUtility_1.L('table.employee.name'), dataIndex: 'ad', key: 'ad', width: 150, render: function (text) { return React.createElement("div", null, text); } },
@@ -474,11 +490,29 @@ var KSubeDetay = /** @class */ (function (_super) {
                     minute: "2-digit"
                 })); }
             },
-            { title: abpUtility_1.L("table.norm.requeststatus"), dataIndex: 'durumu', key: 'durumu', width: 150, render: function (text) { return React.createElement("div", null,
-                    " ",
-                    React.createElement(antd_1.Tag, { color: "warning" },
-                        "  ",
-                        talepDurumu_1["default"][text] + ' ' + abpUtility_1.L('Waiting'))); } },
+            {
+                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
+                render: function (text, norm) { return (React.createElement(React.Fragment, null, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
+                    React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Waiting') },
+                        " ",
+                        React.createElement(antd_1.Tag, { color: 'rgb(250, 173, 20)', icon: React.createElement(icons_1.ClockCircleOutlined, null), className: 'requeststatus' },
+                            " ",
+                            talepDurumu_1["default"][norm.durumu],
+                            " ")) :
+                    (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Iptal) ?
+                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
+                            "   ",
+                            React.createElement(antd_1.Tag, { color: 'rgb(250, 84, 28)', icon: React.createElement(icons_1.StopOutlined, null), className: 'requeststatus' },
+                                " ",
+                                talepDurumu_1["default"][norm.durumu],
+                                " ")) :
+                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approved') },
+                            " ",
+                            React.createElement(antd_1.Tag, { color: 'rgb(29, 165, 122)', icon: React.createElement(icons_1.CheckCircleOutlined, null), className: 'requeststatus' },
+                                " ",
+                                talepDurumu_1["default"][norm.durumu],
+                                " ")))); }
+            },
             { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); } },
             { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); } },
             { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: function (text) { return React.createElement("div", null, text); } },
@@ -520,7 +554,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                     React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { placeholder: this.L('Filter'), onSearch: this.handleSearch }))),
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handleTableChange, rowKey: function (record) { return record.objId.toString(); }, loading: kPersonels === undefined ? true : false, dataSource: kPersonels === undefined ? [] : kPersonels.items, pagination: { pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 } })))),
@@ -535,11 +569,11 @@ var KSubeDetay = /** @class */ (function (_super) {
                         " "))),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { placeholder: this.L('Filter'), onSearch: this.handleNormSearch }))),
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, columns: columnsNorm, locale: { emptyText: abpUtility_1.L('NoData') }, onChange: this.handleNormTableChange, rowKey: function (record) { return record.id; }, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, pagination: { pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 } })))),
-            React.createElement(CreateNormForm_1["default"], { modalType: 'create', tip: tip, formRef: this.formRef, subeId: id, hierarchy: kHierarchies, employees: kPersonels, onCreateNorm: this.createNorm, visible: modalVisible, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
+            React.createElement(CreateNormForm_1["default"], { getHierarchy: this.getHierarchy, modalType: 'create', tip: tip, formRef: this.formRef, subeId: id, hierarchy: kHierarchies, employees: kPersonels, onCreateNorm: this.createNorm, visible: modalVisible, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
                     var form = _this.formRef.current;
                     _this.setState({
                         modalVisible: false

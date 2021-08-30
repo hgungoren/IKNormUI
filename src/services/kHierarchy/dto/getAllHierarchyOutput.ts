@@ -59,3 +59,10 @@ export interface UnitOutput {
     positions: PositionOutput[];
 }
 
+
+export interface GenerateHierarchyDto {
+    subeId: string,
+    bolgeId: string,
+    tip: string,
+    pozisyon: string
+}

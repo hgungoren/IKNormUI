@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -65,36 +76,164 @@ var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var KLineChart_1 = require("./components/KLineChart");
 var KCartList_1 = require("../../components/KCartList");
 var abpUtility_1 = require("../../lib/abpUtility");
+var moment_1 = require("moment");
+var icons_1 = require("@ant-design/icons");
+var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
+var currentDate = moment_1["default"]().toDate();
 var Dashboard = /** @class */ (function (_super) {
     __extends(Dashboard, _super);
     function Dashboard() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
-            totalFill: [],
-            totalUpdate: [],
             cardLoading: true,
-            lineFillLoading: true,
-            lineUpdateLoading: true,
             barChartLoading: true,
-            pieChartLoading: true
+            lineFillLoading: true,
+            pieChartLoading: true,
+            totalFill: [],
+            lineUpdateLoading: true,
+            totalUpdate: [],
+            moment: [],
+            lineChartView: false
         };
-        _this.lineChartModel = function (data) { return __awaiter(_this, void 0, Promise, function () {
-            var date, currentDate, week, i, result, retVal, iptalWeek1, iptalWeek2, iptalWeek3, iptalWeek4, iptalWeek5, iptalWeek6, iptalWeek7, iptal, onaylandi, onaylandiWeek1, onaylandiWeek2, onaylandiWeek3, onaylandiWeek4, onaylandiWeek5, onaylandiWeek6, onaylandiWeek7, beklemede, beklemedeWeek1, beklemedeWeek2, beklemedeWeek3, beklemedeWeek4, beklemedeWeek5, beklemedeWeek6, beklemedeWeek7, toplamWeek1, toplamWeek2, toplamWeek3, toplamWeek4, toplamWeek5, toplamWeek6, toplamWeek7, model, model;
+        _this.getEmployeeCount = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, this.props.kPersonelStore.getEmployeeCount()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); };
+        _this.getNormCount = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, this.props.kSubeNormStore.getNormCount()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); };
+        _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
+            var start, end;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(date !== null)) return [3 /*break*/, 3];
+                        start = void 0;
+                        end = void 0;
+                        if (date[0] !== null) {
+                            start = date[0]._d;
+                        }
+                        if (date[1] !== null) {
+                            end = date[1]._d;
+                        }
+                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                    case 2:
+                        _a.sent();
+                        this.setState({ moment: date });
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.getNormRequests = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
+                            id: '0',
+                            type: '',
+                            end: end,
+                            keyword: '',
+                            start: start,
+                            bolgeId: '0',
+                            skipCount: 0,
+                            maxResultCount: 100000
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.getNormRequestCounts = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
+                            id: '0',
+                            type: '',
+                            end: end,
+                            keyword: '',
+                            start: start,
+                            skipCount: 0,
+                            bolgeId: '0',
+                            maxResultCount: 100000
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
+            var resultFill, resultUpdate;
             var _this = this;
             return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        setTimeout(function () { return _this.setState({ cardLoading: false }); }, 1000);
+                        setTimeout(function () { return _this.setState({ barChartLoading: false }); }, 2000);
+                        setTimeout(function () { return _this.setState({ pieChartLoading: false }); }, 1000);
+                        if (!(abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') ||
+                            abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.getcancelednormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.gettotalnormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getcancelednormupdaterequest'))) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormRequestCounts(startOfMonth, currentDate)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, this.getEmployeeCount()];
+                    case 4:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormCount()];
+                    case 5:
+                        _a.sent();
+                        return [4 /*yield*/, this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest)];
+                    case 6:
+                        resultFill = _a.sent();
+                        return [4 /*yield*/, this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest)];
+                    case 7:
+                        resultUpdate = _a.sent();
+                        this.setState({
+                            totalFill: resultFill,
+                            lineFillLoading: false,
+                            totalUpdate: resultUpdate,
+                            lineUpdateLoading: false,
+                            moment: [startOfMonth, currentDate]
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.lineChartModel = function (data) { return __awaiter(_this, void 0, Promise, function () {
+            var week, currentDate, weekStart, i, startDateOfWeek, endDateOfWeek, result, retVal, iptalWeek1, iptalWeek2, iptalWeek3, iptalWeek4, iptalWeek5, iptalWeek6, iptalWeek7, iptal, onaylandi, onaylandiWeek1, onaylandiWeek2, onaylandiWeek3, onaylandiWeek4, onaylandiWeek5, onaylandiWeek6, onaylandiWeek7, beklemede, beklemedeWeek1, beklemedeWeek2, beklemedeWeek3, beklemedeWeek4, beklemedeWeek5, beklemedeWeek6, beklemedeWeek7, toplamWeek1, toplamWeek2, toplamWeek3, toplamWeek4, toplamWeek5, toplamWeek6, toplamWeek7, model, model;
+            return __generator(this, function (_a) {
+                week = [];
+                currentDate = moment_1["default"]();
+                weekStart = currentDate.clone().startOf('isoWeek');
+                for (i = 0; i <= 6; i++) {
+                    week.push(moment_1["default"](moment_1["default"](weekStart).add(i, 'days')).toDate());
+                }
+                startDateOfWeek = moment_1["default"]().startOf('isoWeek').toDate();
+                endDateOfWeek = moment_1["default"]().endOf('isoWeek').toDate();
                 if (data === undefined)
                     [];
-                date = new Date();
-                currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                week = new Array();
-                currentDate.setDate((currentDate.getDate() - currentDate.getDay() + 1));
-                for (i = 0; i < 7; i++) {
-                    week.push(new Date(currentDate));
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
                 result = data.filter(function (item) {
-                    return _this.parseDate(item.creationTime).getTime() >= week[0].getTime() &&
-                        _this.parseDate(item.creationTime).getTime() <= week[week.length - 1].getTime();
+                    return moment_1["default"](item.creationTime).toDate().getTime() >= startDateOfWeek.getTime() &&
+                        moment_1["default"](item.creationTime).toDate().getTime() <= endDateOfWeek.getTime();
                 });
                 retVal = result.reduce(function (result, currentValue) {
                     (result[currentValue['normStatusValue']] = result[currentValue['normStatusValue']] || [])
@@ -110,13 +249,13 @@ var Dashboard = /** @class */ (function (_super) {
                 iptalWeek7 = 0;
                 iptal = retVal['Iptal'];
                 if (iptal !== undefined) {
-                    iptalWeek1 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[0].getDate(); }).length;
-                    iptalWeek2 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[1].getDate(); }).length;
-                    iptalWeek3 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[2].getDate(); }).length;
-                    iptalWeek4 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[3].getDate(); }).length;
-                    iptalWeek5 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[4].getDate(); }).length;
-                    iptalWeek6 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[5].getDate(); }).length;
-                    iptalWeek7 = iptal.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[6].getDate(); }).length;
+                    iptalWeek1 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[0].getDate(); }).length;
+                    iptalWeek2 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[1].getDate(); }).length;
+                    iptalWeek3 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[2].getDate(); }).length;
+                    iptalWeek4 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[3].getDate(); }).length;
+                    iptalWeek5 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[4].getDate(); }).length;
+                    iptalWeek6 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[5].getDate(); }).length;
+                    iptalWeek7 = iptal.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[6].getDate(); }).length;
                 }
                 onaylandi = retVal['Onaylandi'];
                 onaylandiWeek1 = 0;
@@ -127,13 +266,13 @@ var Dashboard = /** @class */ (function (_super) {
                 onaylandiWeek6 = 0;
                 onaylandiWeek7 = 0;
                 if (onaylandi !== undefined) {
-                    onaylandiWeek1 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[0].getDate(); }).length;
-                    onaylandiWeek2 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[1].getDate(); }).length;
-                    onaylandiWeek3 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[2].getDate(); }).length;
-                    onaylandiWeek4 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[3].getDate(); }).length;
-                    onaylandiWeek5 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[4].getDate(); }).length;
-                    onaylandiWeek6 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[5].getDate(); }).length;
-                    onaylandiWeek7 = onaylandi.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[6].getDate(); }).length;
+                    onaylandiWeek1 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[0].getDate(); }).length;
+                    onaylandiWeek2 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[1].getDate(); }).length;
+                    onaylandiWeek3 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[2].getDate(); }).length;
+                    onaylandiWeek4 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[3].getDate(); }).length;
+                    onaylandiWeek5 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[4].getDate(); }).length;
+                    onaylandiWeek6 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[5].getDate(); }).length;
+                    onaylandiWeek7 = onaylandi.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[6].getDate(); }).length;
                 }
                 beklemede = retVal['Beklemede'];
                 beklemedeWeek1 = 0;
@@ -144,13 +283,13 @@ var Dashboard = /** @class */ (function (_super) {
                 beklemedeWeek6 = 0;
                 beklemedeWeek7 = 0;
                 if (beklemede !== undefined) {
-                    beklemedeWeek1 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[0].getDate(); }).length;
-                    beklemedeWeek2 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[1].getDate(); }).length;
-                    beklemedeWeek3 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[2].getDate(); }).length;
-                    beklemedeWeek4 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[3].getDate(); }).length;
-                    beklemedeWeek5 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[4].getDate(); }).length;
-                    beklemedeWeek6 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[5].getDate(); }).length;
-                    beklemedeWeek7 = beklemede.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[6].getDate(); }).length;
+                    beklemedeWeek1 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[0].getDate(); }).length;
+                    beklemedeWeek2 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[1].getDate(); }).length;
+                    beklemedeWeek3 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[2].getDate(); }).length;
+                    beklemedeWeek4 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[3].getDate(); }).length;
+                    beklemedeWeek5 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[4].getDate(); }).length;
+                    beklemedeWeek6 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[5].getDate(); }).length;
+                    beklemedeWeek7 = beklemede.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[6].getDate(); }).length;
                 }
                 toplamWeek1 = 0;
                 toplamWeek2 = 0;
@@ -160,13 +299,13 @@ var Dashboard = /** @class */ (function (_super) {
                 toplamWeek6 = 0;
                 toplamWeek7 = 0;
                 if (beklemede !== undefined) {
-                    toplamWeek1 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[0].getDate(); }).length;
-                    toplamWeek2 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[1].getDate(); }).length;
-                    toplamWeek3 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[2].getDate(); }).length;
-                    toplamWeek4 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[3].getDate(); }).length;
-                    toplamWeek5 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[4].getDate(); }).length;
-                    toplamWeek6 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[5].getDate(); }).length;
-                    toplamWeek7 = data.filter(function (x) { return _this.parseDate(x.creationTime).getDate() === week[6].getDate(); }).length;
+                    toplamWeek1 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[0].getDate(); }).length;
+                    toplamWeek2 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[1].getDate(); }).length;
+                    toplamWeek3 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[2].getDate(); }).length;
+                    toplamWeek4 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[3].getDate(); }).length;
+                    toplamWeek5 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[4].getDate(); }).length;
+                    toplamWeek6 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[5].getDate(); }).length;
+                    toplamWeek7 = data.filter(function (x) { return moment_1["default"](x.creationTime).toDate().getDate() === week[6].getDate(); }).length;
                 }
                 if (abp.localization.currentLanguage.name === "tr") {
                     model = [
@@ -195,124 +334,45 @@ var Dashboard = /** @class */ (function (_super) {
                 return [2 /*return*/];
             });
         }); };
+        _this.changeLineViewHandler = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.setState({ lineChartView: !this.state.lineChartView });
+                return [2 /*return*/];
+            });
+        }); };
         return _this;
     }
-    Dashboard.prototype.getEmployeeCount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kPersonelStore.getEmployeeCount()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Dashboard.prototype.getNormCount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kSubeNormStore.getNormCount()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Dashboard.prototype.getNormRequests = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
-                            maxResultCount: 100000,
-                            skipCount: 0,
-                            keyword: '',
-                            id: '0',
-                            bolgeId: '0',
-                            type: ''
-                        })];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
-                                maxResultCount: 100000,
-                                skipCount: 0,
-                                keyword: '',
-                                id: '0',
-                                bolgeId: '0',
-                                type: ''
-                            })];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Dashboard.prototype.componentDidMount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var resultFill, resultUpdate;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        setTimeout(function () { return _this.setState({ cardLoading: false }); }, 1000);
-                        setTimeout(function () { return _this.setState({ barChartLoading: false }); }, 2000);
-                        setTimeout(function () { return _this.setState({ pieChartLoading: false }); }, 1000);
-                        if (!(abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') ||
-                            abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.getcancelednormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.gettotalnormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getcancelednormupdaterequest'))) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getNormRequests()];
-                    case 1:
-                        _a.sent();
-                        _a.label = 2;
-                    case 2: return [4 /*yield*/, this.getEmployeeCount()];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, this.getNormCount()];
-                    case 4:
-                        _a.sent();
-                        return [4 /*yield*/, this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest)];
-                    case 5:
-                        resultFill = _a.sent();
-                        return [4 /*yield*/, this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest)];
-                    case 6:
-                        resultUpdate = _a.sent();
-                        this.setState({ totalFill: resultFill, lineFillLoading: false });
-                        this.setState({ totalUpdate: resultUpdate, lineUpdateLoading: false });
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Dashboard.prototype.parseDate = function (input) {
-        var parts = input.match(/(\d+)/g);
-        return new Date(parts[0], parts[1] - 1, parts[2]);
-    };
-    Dashboard.prototype.addDays = function (days) {
-        var futureDate = new Date();
-        futureDate.setDate(futureDate.getDate() + days);
-        return futureDate;
-    };
     Dashboard.prototype.render = function () {
-        var _a = this.state, cardLoading = _a.cardLoading, lineFillLoading = _a.lineFillLoading, lineUpdateLoading = _a.lineUpdateLoading;
+        var _a = this.state, cardLoading = _a.cardLoading, lineFillLoading = _a.lineFillLoading, lineUpdateLoading = _a.lineUpdateLoading, moment = _a.moment, lineChartView = _a.lineChartView;
         var kPersonelCount = this.props.kPersonelStore.kPersonelCount;
         var normCount = this.props.kSubeNormStore.normCount;
         var _b = this.props.kNormStore, getTotalNormUpdateRequestCount = _b.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _b.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _b.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _b.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _b.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _b.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _b.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _b.getCanceledNormUpdateRequestCount;
+        var lineChartLayout = {
+            onePiece: {
+                xs: { offset: 1, span: 22 },
+                sm: { offset: 1, span: 22 },
+                md: { offset: 1, span: 22 },
+                lg: { offset: 1, span: 22 },
+                xl: { offset: 0, span: 24 },
+                xxl: { offset: 0, span: 24 }
+            },
+            twoPiece: {
+                xs: { offset: 1, span: 23 },
+                sm: { offset: 1, span: 23 },
+                md: { offset: 1, span: 23 },
+                lg: { offset: 1, span: 23 },
+                xl: { offset: 0, span: 12 },
+                xxl: { offset: 0, span: 12 }
+            }
+        };
         return (React.createElement(React.Fragment, null,
-            React.createElement(KCartList_1["default"], { type: "", bolgeId: 0, subeObjId: 0, normCount: normCount, cardLoading: cardLoading, kPersonelCount: kPersonelCount, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+            React.createElement(KCartList_1["default"], { moment: moment, type: "", bolgeId: 0, subeObjId: 0, normCount: normCount, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
             React.createElement(antd_1.Row, { gutter: 16 },
-                React.createElement(antd_1.Col, { span: 12 },
-                    React.createElement(antd_1.Card, { hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormFillingRequestWeeklyStatistics'), loading: lineFillLoading, bordered: false },
+                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)),
+                    React.createElement(antd_1.Card, { extra: React.createElement(antd_1.Button, { onClick: this.changeLineViewHandler, icon: (lineChartView ? React.createElement(icons_1.FullscreenExitOutlined, null) : React.createElement(icons_1.FullscreenOutlined, null)) }), hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormFillingRequestWeeklyStatistics'), loading: lineFillLoading, bordered: false },
                         React.createElement(KLineChart_1["default"], { data: this.state.totalFill }))),
-                React.createElement(antd_1.Col, { span: 12 },
-                    React.createElement(antd_1.Card, { hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormUpdateRequestWeeklyStatistics'), loading: lineUpdateLoading, bordered: false },
+                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)),
+                    React.createElement(antd_1.Card, { extra: React.createElement(antd_1.Button, { onClick: this.changeLineViewHandler, icon: (lineChartView ? React.createElement(icons_1.FullscreenExitOutlined, null) : React.createElement(icons_1.FullscreenOutlined, null)) }), hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormUpdateRequestWeeklyStatistics'), loading: lineUpdateLoading, bordered: false },
                         React.createElement(KLineChart_1["default"], { data: this.state.totalUpdate }))))));
     };
     Dashboard = __decorate([

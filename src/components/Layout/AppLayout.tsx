@@ -10,13 +10,18 @@ import NotFoundRoute from '../Router/NotFoundRoute';
 import { appRouters } from '../Router/router.config';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import ProtectedRoute from '../../components/Router/ProtectedRoute';
+import Stores from '../../stores/storeIdentifier';
+import { inject, observer } from 'mobx-react';
 
 const { Content } = Layout;
 
+@inject(Stores.NotificationStore)
+@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
+@observer
 class AppLayout extends React.Component<any> {
 
   state = {
-    collapsed: false,
+    collapsed: false, 
   };
 
   toggle = () => {
@@ -29,6 +34,9 @@ class AppLayout extends React.Component<any> {
     this.setState({ collapsed });
   };
 
+  hideDrawer = async ( ) => {
+    this.setState({ drawerVisible: false });
+  }
   render() {
     const {
       history,
@@ -36,14 +44,14 @@ class AppLayout extends React.Component<any> {
     } = this.props;
 
     const { path } = this.props.match;
-    const { collapsed } = this.state;
+    const { collapsed  } = this.state;
 
     const layout = (
       <Layout style={{ minHeight: '100vh' }}>
         <SiderMenu path={path} onCollapse={this.onCollapse} history={history} collapsed={collapsed} />
         <Layout>
           <Layout.Header style={{ background: '#fff', minHeight: 52, padding: 0 }}>
-            <Header collapsed={this.state.collapsed} toggle={this.toggle} />
+            <Header notificationStore={this.props.notificationStore} sessionStore={this.props.sessionStore} accountStore= {this.props.accountStore} authenticationStore={this.props.authenticationStore} collapsed={this.state.collapsed} toggle={this.toggle} />
           </Layout.Header>
           <Content style={{ margin: 16 }}>
             <Switch>
@@ -59,7 +67,7 @@ class AppLayout extends React.Component<any> {
                   />
                 ))}
               {pathname !== '/' && <NotFoundRoute />}
-            </Switch>
+            </Switch> 
           </Content>
           <Footer />
         </Layout>

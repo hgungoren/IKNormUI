@@ -1,6 +1,6 @@
 import { PagedResultDto } from '../dto/pagedResultDto';
 import http from '../httpService';
-import { GetAllHierarchyOutput, UnitOutput, ChangeStatus } from './dto/getAllHierarchyOutput';
+import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto } from './dto/getAllHierarchyOutput';
 
 class KHierarchyService {
 
@@ -10,7 +10,7 @@ class KHierarchyService {
     }
 
     public async getUnits(): Promise<PagedResultDto<UnitOutput>> {
-        let result = await http.get('/api/services/app/Unit/GetAll'); 
+        let result = await http.get('/api/services/app/Unit/GetAll');
         return result.data.result;
     }
 
@@ -18,6 +18,14 @@ class KHierarchyService {
         let result = await http.put('/api/services/app/Node/UpdateStatus', changeStatus);
         return result.data.result;
     }
+
+    public async generateHierarchy(generateHierarchyDto: GenerateHierarchyDto): Promise<GetAllHierarchyOutput[]> {
+        let result = await http.get('api/services/app/KHierarchy/GetHierarchy', {
+            params: generateHierarchyDto
+        });
+        return result.data.result;
+    }
+
 }
 
 export default new KHierarchyService();

@@ -68,6 +68,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 require("./index.less");
+var react_uuid_1 = require("react-uuid");
 var React = require("react");
 var mobx_react_1 = require("mobx-react");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
@@ -81,7 +82,7 @@ var talepNedeni_1 = require("../../services/kNorm/dto/talepNedeni");
 var talepDurumu_1 = require("../../services/kNorm/dto/talepDurumu");
 var antd_1 = require("antd");
 var icons_1 = require("@ant-design/icons");
-var react_uuid_1 = require("react-uuid");
+var tag_1 = require("antd/es/tag");
 var confirm = antd_1.Modal.confirm;
 var Search = antd_1.Input.Search;
 var NormRequestListTable = /** @class */ (function (_super) {
@@ -98,10 +99,12 @@ var NormRequestListTable = /** @class */ (function (_super) {
             searchFilter: '',
             subeOrBolgeAdi: '',
             maxNormResultCount: 5,
+            getAllKNormOutput: {},
             detaillModalVisible: false,
             normRejectDescriptionModalVisible: false,
             filter: { offset: 0, limit: 5, current: 0 },
-            getAllKNormOutput: {}
+            dateStart: '',
+            dateEnd: ''
         };
         _this.formRef = React.createRef();
         _this.getNormRequests = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -113,6 +116,21 @@ var NormRequestListTable = /** @class */ (function (_super) {
                     id: this.props.subeObjId,
                     keyword: this.state.searchFilter,
                     skipCount: this.state.skipNormCount
+                });
+                return [2 /*return*/];
+            });
+        }); };
+        _this.getNormRequestCounts = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.props.kNormStore.getMaxAllCount({
+                    end: end,
+                    skipCount: 0,
+                    start: start,
+                    type: this.props.type,
+                    id: this.props.subeObjId,
+                    maxResultCount: 1000000000,
+                    bolgeId: this.props.bolgeId,
+                    keyword: this.state.searchFilter
                 });
                 return [2 /*return*/];
             });
@@ -132,7 +150,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
             if (_this.props.isModal)
                 _this.setState({ searchFilter: value }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.getNormRequestsAll()];
+                        case 0: return [4 /*yield*/, this.getNormRequestsAll(this.props.moment[0]._d, this.props.moment[1]._d)];
                         case 1: return [2 /*return*/, _a.sent()];
                     }
                 }); }); });
@@ -148,7 +166,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
             if (_this.props.isModal)
                 _this.setState({ skipNormCount: (pagination.current - 1) * _this.state.maxNormResultCount }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.getNormRequestsAll()];
+                        case 0: return [4 /*yield*/, this.getNormRequestsAll(this.props.moment[0]._d, this.props.moment[1]._d)];
                         case 1: return [2 /*return*/, _a.sent()];
                     }
                 }); }); });
@@ -161,10 +179,10 @@ var NormRequestListTable = /** @class */ (function (_super) {
                 }); }); });
             }
         };
-        _this.openNotificationWithIcon = function (type) {
+        _this.notification = function (type, message) {
             antd_1.notification[type]({
-                message: type === "success" ? abpUtility_1.L('NormCreateNotificationMessageTitle') : abpUtility_1.L('NormRejectNotificationMessageTitle'),
-                description: type === "success" ? abpUtility_1.L('NormCreateNotificationMessageDescription') : abpUtility_1.L('NormRejectNotificationMessageDescription'),
+                message: abpUtility_1.L(message.title),
+                description: abpUtility_1.L(message.description),
                 duration: 3
             });
         };
@@ -191,12 +209,15 @@ var NormRequestListTable = /** @class */ (function (_super) {
                                                     id: _this.state.requestId,
                                                     normStatus: normStatus_1["default"].Iptal
                                                 }).then(function () {
-                                                    _this.openNotificationWithIcon('success');
-                                                    _this.getNormRequestsAll();
+                                                    _this.notification('error', {
+                                                        title: 'NormRejectNotificationMessageTitle',
+                                                        description: 'NormRejectNotificationMessageDescription'
+                                                    });
                                                     _this.getAllNormDetails();
+                                                    _this.getNormRequestsAll(_this.state.dateStart, _this.state.dateEnd);
+                                                    _this.getNormRequestCounts(_this.state.dateStart, _this.state.dateEnd);
                                                 });
                                             })["catch"](function (err) {
-                                                _this.openNotificationWithIcon('error');
                                                 return;
                                             })];
                                     case 1:
@@ -229,12 +250,18 @@ var NormRequestListTable = /** @class */ (function (_super) {
                         }).then(function () {
                             _this.props.kNormStore.setStatusAsync({
                                 id: id
-                            }).then(function () { _this.getNormRequestsAll(); _this.getAllNormDetails(); });
+                            }).then(function () {
+                                _this.getAllNormDetails();
+                                _this.getNormRequestsAll(_this.state.dateStart, _this.state.dateEnd);
+                                _this.getNormRequestCounts(_this.state.dateStart, _this.state.dateEnd);
+                                _this.notification('success', {
+                                    title: 'NormApproveNotificationMessageTitle',
+                                    description: 'NormApproveNotificationMessageDescription'
+                                });
+                            });
                         })["catch"](function (err) {
-                            _this.openNotificationWithIcon('error');
                             return;
                         });
-                        _this.openNotificationWithIcon('success');
                     },
                     onCancel: function () { console.log(abpUtility_1.L('Cancel')); }
                 });
@@ -250,31 +277,18 @@ var NormRequestListTable = /** @class */ (function (_super) {
         };
         return _this;
     }
-    NormRequestListTable.prototype.getNormRequestsAll = function () {
+    NormRequestListTable.prototype.getNormRequestsAll = function (start, end) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 this.props.kNormStore.getMaxAll({
+                    end: end,
                     skipCount: 0,
+                    start: start,
                     type: this.props.type,
                     id: this.props.subeObjId,
-                    keyword: this.state.searchFilter,
                     maxResultCount: 1000000000,
-                    bolgeId: this.props.bolgeId
-                });
-                return [2 /*return*/];
-            });
-        });
-    };
-    NormRequestListTable.prototype.getNormRequestsAllCount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.props.kNormStore.getMaxAllCount({
-                    skipCount: 0,
-                    type: this.props.type,
-                    id: this.props.subeObjId,
-                    keyword: this.state.searchFilter,
-                    maxResultCount: 1000000000,
-                    bolgeId: this.props.bolgeId
+                    bolgeId: this.props.bolgeId,
+                    keyword: this.state.searchFilter
                 });
                 return [2 /*return*/];
             });
@@ -282,22 +296,34 @@ var NormRequestListTable = /** @class */ (function (_super) {
     };
     NormRequestListTable.prototype.componentDidMount = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var start, end;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!this.props.isModal) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.getNormRequestsAll()];
+                        if (this.props.isModal) {
+                            if (this.props.moment.length > 0) {
+                                start = void 0;
+                                end = void 0;
+                                if (this.props.moment[0] !== undefined) {
+                                    start = this.props.moment[0]._d;
+                                    this.setState({ dateStart: start });
+                                }
+                                if (this.props.moment[1] !== undefined) {
+                                    end = this.props.moment[1]._d;
+                                    this.setState({ dateStart: end });
+                                }
+                                this.getNormRequestsAll(start, end);
+                                this.getNormRequestCounts(start, end);
+                            }
+                            else {
+                                this.getNormRequestsAll();
+                                this.getNormRequestCounts();
+                            }
+                        }
+                        else
+                            this.getNormRequests();
+                        return [4 /*yield*/, this.getAllNormDetails()];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.getNormRequestsAllCount()];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        this.getNormRequests();
-                        _a.label = 4;
-                    case 4: return [4 /*yield*/, this.getAllNormDetails()];
-                    case 5:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -342,11 +368,11 @@ var NormRequestListTable = /** @class */ (function (_super) {
         var kNorms = this.props.kNormStore.kNorms;
         var _b = this.props, isHoverable = _b.isHoverable, tableTitle = _b.tableTitle, table = _b.table, isModal = _b.isModal;
         var _c = this.props.kNormDetailStore, kNormAllDetails = _c.kNormAllDetails, kNormDetails = _c.kNormDetails;
-        var _d = this.state, subeOrBolgeAdi = _d.subeOrBolgeAdi, detaillModalVisible = _d.detaillModalVisible, getAllKNormOutput = _d.getAllKNormOutput;
+        var _e = this.state, subeOrBolgeAdi = _e.subeOrBolgeAdi, detaillModalVisible = _e.detaillModalVisible, getAllKNormOutput = _e.getAllKNormOutput;
         var columnsNorm = [
             {
                 title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: react_uuid_1["default"](), width: 60,
-                render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, new Date(text).toLocaleDateString("tr-TR", {
+                render: function (text) { return React.createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
                     year: "numeric",
                     month: "numeric",
                     day: "2-digit",
@@ -357,55 +383,60 @@ var NormRequestListTable = /** @class */ (function (_super) {
             {
                 title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
                 render: function (text, norm) { return (React.createElement(React.Fragment, null, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
-                    React.createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
+                    React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Waiting') },
                         " ",
-                        talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Waiting'),
-                        "  ") :
-                    React.createElement("div", { key: react_uuid_1["default"](), className: 'requeststatus' },
-                        " ",
-                        talepDurumu_1["default"][norm.durumu] + ' ' + abpUtility_1.L('Reject'),
-                        "   "))); }
+                        React.createElement(tag_1["default"], { color: 'rgb(250, 173, 20)', icon: React.createElement(icons_1.ClockCircleOutlined, null), className: 'requeststatus' },
+                            " ",
+                            talepDurumu_1["default"][norm.durumu])) :
+                    (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Iptal) ?
+                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
+                            "   ",
+                            React.createElement(tag_1["default"], { color: 'rgb(250, 84, 28)', icon: React.createElement(icons_1.StopOutlined, null), className: 'requeststatus' },
+                                " ",
+                                talepDurumu_1["default"][norm.durumu],
+                                "    ")) :
+                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approved') },
+                            " ",
+                            React.createElement(tag_1["default"], { color: 'rgb(29, 165, 122)', icon: React.createElement(icons_1.CheckCircleOutlined, null), className: 'requeststatus' },
+                                " ",
+                                talepDurumu_1["default"][norm.durumu],
+                                "  ")))); }
             },
-            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
-            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
-            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, text); } },
-            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, talepNedeni_1["default"][text]); } },
-            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", { key: react_uuid_1["default"]() }, talepTuru_1["default"][text]); } },
+            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); } },
+            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); } },
+            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", null, text); } },
+            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); } },
+            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); } },
             {
                 title: "İşlem",
                 dataIndex: 'id',
                 key: react_uuid_1["default"](),
                 width: 50,
-                render: function (text, norm) { return (React.createElement(React.Fragment, null,
-                    React.createElement(antd_1.Space, { key: react_uuid_1["default"](), size: 'small' },
-                        kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail') && React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Detail') },
-                            React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(norm.id, norm.subeAdi); }, icon: React.createElement(icons_1.FileSearchOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))),
-                        kNormDetails !== undefined &&
-                            (_this.props.isConfirmOrCancel &&
-                                (!tableTitle.search('Pending') || !tableTitle.search('Total')) &&
-                                normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede &&
-                                kNormDetails.items.filter(function (x) { var _a; return x.status == status_1["default"].Waiting && x.kNormId === norm.id && ((_a = _this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.id) === x.userId && x.visible; }).length > 0) && (React.createElement(React.Fragment, null,
-                            abpUtility_1.isGranted('knorm.approve') && React.createElement(React.Fragment, null,
-                                React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Accept') },
-                                    React.createElement(antd_1.Button, { key: react_uuid_1["default"](), onClick: function () { return _this.approveRequestClick(norm.id); }, icon: React.createElement(icons_1.CheckCircleOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))),
-                            abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { key: react_uuid_1["default"](), placement: "topLeft", title: abpUtility_1.L('Reject') },
-                                React.createElement(antd_1.Button, { key: react_uuid_1["default"](), danger: true, onClick: function () { return _this.normRejectDescriptionModalOpen(norm.id); }, icon: React.createElement(icons_1.StopOutlined, { key: react_uuid_1["default"]() }), type: "primary" }))))))); }
+                render: function (text, norm) { return React.createElement(antd_1.Space, { size: 'small' },
+                    kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail')) && (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Detail') },
+                        React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(norm.id, norm.subeAdi); }, icon: React.createElement(icons_1.FileSearchOutlined, null), type: "primary" }))),
+                    (kNormDetails !== undefined && _this.props.isConfirmOrCancel && (!tableTitle.search('Pending') || !tableTitle.search('Total')) && normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede &&
+                        kNormDetails.items.filter(function (x) { var _a; return x.status == status_1["default"].Waiting && x.kNormId === norm.id && ((_a = _this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.id) === x.userId && x.visible; }).length > 0) && React.createElement(React.Fragment, null,
+                        abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approve') },
+                            React.createElement(antd_1.Button, { onClick: function () { return _this.approveRequestClick(norm.id); }, icon: React.createElement(icons_1.CheckCircleOutlined, null), type: "primary" })),
+                        abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
+                            React.createElement(antd_1.Button, { danger: true, onClick: function () { return _this.normRejectDescriptionModalOpen(norm.id); }, icon: React.createElement(icons_1.StopOutlined, null), type: "primary" })))); }
             }
         ];
         return (React.createElement(React.Fragment, null,
-            React.createElement(antd_1.Card, { key: react_uuid_1["default"](), hoverable: isHoverable, style: { marginTop: 15 } },
-                React.createElement(antd_1.Row, { key: react_uuid_1["default"]() },
-                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
+            React.createElement(antd_1.Card, { hoverable: isHoverable, style: { marginTop: 15 } },
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
-                        React.createElement("h2", { key: react_uuid_1["default"]() }, abpUtility_1.L(tableTitle))),
-                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
-                React.createElement(antd_1.Row, { key: react_uuid_1["default"]() },
-                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { key: react_uuid_1["default"](), placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
-                React.createElement(antd_1.Row, { key: react_uuid_1["default"](), style: { marginTop: 20 } },
-                    React.createElement(antd_1.Col, { key: react_uuid_1["default"](), xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { key: react_uuid_1["default"](), locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
-            React.createElement(NormDetailTimeLine_1["default"], { key: react_uuid_1["default"](), data: kNormAllDetails, title: subeOrBolgeAdi, norm: getAllKNormOutput, visible: detaillModalVisible, onCancel: function () { _this.setState({ detaillModalVisible: false }); } }),
-            React.createElement(NormRejectDescription_1["default"], { key: react_uuid_1["default"](), formRef: this.formRef, title: abpUtility_1.L('RequestRejectForm'), reuestId: this.state.requestId, rejectRequestClick: this.rejectRequestClick, visible: this.state.normRejectDescriptionModalVisible, onCancel: function () {
+                        React.createElement("h2", null, abpUtility_1.L(tableTitle))),
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
+                React.createElement(antd_1.Row, { style: { marginTop: 20 } },
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
+            React.createElement(NormDetailTimeLine_1["default"], { data: kNormAllDetails, title: subeOrBolgeAdi, norm: getAllKNormOutput, visible: detaillModalVisible, onCancel: function () { _this.setState({ detaillModalVisible: false }); } }),
+            React.createElement(NormRejectDescription_1["default"], { formRef: this.formRef, title: abpUtility_1.L('RequestRejectForm'), reuestId: this.state.requestId, rejectRequestClick: this.rejectRequestClick, visible: this.state.normRejectDescriptionModalVisible, onCancel: function () {
                     _this.setState({
                         normRejectDescriptionModalVisible: false
                     });

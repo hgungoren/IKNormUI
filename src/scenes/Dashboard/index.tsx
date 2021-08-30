@@ -1,7 +1,7 @@
 /*eslint-disable */
 import './index.less';
 import * as React from 'react';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
@@ -14,11 +14,16 @@ import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import KLineChartModel from '../../models/KLineChart/kLineChart';
-import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
 import AuthenticationStore from '../../stores/authenticationStore';
+import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
 import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
+import moment from 'moment';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 declare var abp: any;
+const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
+const currentDate = moment().toDate();
+
 
 export interface IDashboardProps {
   kNormStore: KNormStore;
@@ -36,11 +41,14 @@ export interface IBolgeState {
   totalUpdate: any[];
   cardLoading: boolean;
   lineFillLoading: boolean;
-  lineUpdateLoading: boolean;
   barChartLoading: boolean;
   pieChartLoading: boolean;
+  lineUpdateLoading: boolean;
+  moment: any;
+  lineChartView: boolean;
 
 }
+declare var abp: any;
 
 @inject(Stores.KNormStore)
 @inject(Stores.KPersonelStore)
@@ -51,48 +59,73 @@ export interface IBolgeState {
 export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   state = {
-    totalFill: [] as any[],
-    totalUpdate: [] as any[],
     cardLoading: true,
-    lineFillLoading: true,
-    lineUpdateLoading: true,
     barChartLoading: true,
-    pieChartLoading: true
+    lineFillLoading: true,
+    pieChartLoading: true,
+    totalFill: [] as any[],
+    lineUpdateLoading: true,
+    totalUpdate: [] as any[],
+    moment: [] as any,
+    lineChartView: false
   }
 
 
 
-  async getEmployeeCount() {
-    await this.props.kPersonelStore.getEmployeeCount();
+  getEmployeeCount = async () => await this.props.kPersonelStore.getEmployeeCount();
+  getNormCount = async () => await this.props.kSubeNormStore.getNormCount();
+
+
+
+  onDateFilter = async (date) => {
+
+    if (date !== null) {
+      let start: any;
+      let end: any;
+
+      if (date[0] !== null) {
+        start = date[0]._d;
+      }
+      if (date[1] !== null) {
+        end = date[1]._d;
+      }
+
+      await this.getNormRequests(start, end);
+      await this.getNormRequestCounts(start, end);
+
+      this.setState({ moment: date })
+    }
   }
 
-  async getNormCount() {
-    await this.props.kSubeNormStore.getNormCount();
-  }
 
-  async getNormRequests() {
-
+  getNormRequests = async (start?: Date, end?: Date) => {
     await this.props.kNormStore.getMaxAll({
-      maxResultCount: 100000,
-      skipCount: 0,
-      keyword: '',
       id: '0',
-      bolgeId: '0',
-      type: ''
-    });
-
-    await this.props.kNormStore.getMaxAllCount({
-      maxResultCount: 100000,
-      skipCount: 0,
+      type: '',
+      end: end,
       keyword: '',
-      id: '0',
+      start: start,
       bolgeId: '0',
-      type: ''
+      skipCount: 0,
+      maxResultCount: 100000,
     });
-    // await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
   }
 
-  async componentDidMount() {
+  getNormRequestCounts = async (start?: Date, end?: Date) => {
+    await this.props.kNormStore.getMaxAllCount({
+      id: '0',
+      type: '',
+      end: end,
+      keyword: '',
+      start: start,
+      skipCount: 0,
+      bolgeId: '0',
+      maxResultCount: 100000,
+    });
+  }
+
+  componentDidMount = async () => {
+
 
     setTimeout(() => this.setState({ cardLoading: false }), 1000);
     setTimeout(() => this.setState({ barChartLoading: false }), 2000);
@@ -107,46 +140,46 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       isGranted('knorm.getpendingnormupdaterequest') ||
       isGranted('knorm.getacceptednormupdaterequest') ||
       isGranted('knorm.getcancelednormupdaterequest')) {
-      await this.getNormRequests();
+
+      await this.getNormRequests(startOfMonth, currentDate);
+      await this.getNormRequestCounts(startOfMonth, currentDate);
     }
 
     await this.getEmployeeCount();
     await this.getNormCount();
 
-    let resultFill   = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
+    let resultFill = await this.lineChartModel(this.props.kNormStore.getTotalNormFillingRequest);
     let resultUpdate = await this.lineChartModel(this.props.kNormStore.getTotalNormUpdateRequest);
 
+    this.setState({
+      totalFill: resultFill,
+      lineFillLoading: false,
+      totalUpdate: resultUpdate,
+      lineUpdateLoading: false,
+      moment: [startOfMonth, currentDate]
+    })
 
-    this.setState({ totalFill: resultFill, lineFillLoading: false })
-    this.setState({ totalUpdate: resultUpdate, lineUpdateLoading: false })
   }
-
-  parseDate(input) {
-    var parts = input.match(/(\d+)/g);
-    return new Date(parts[0], parts[1] - 1, parts[2]);
-  }
-
+  
   lineChartModel = async (data: GetAllKNormOutput[]): Promise<any[]> => {
+    let week: Date[] = []
+    var currentDate = moment();
+    var weekStart = currentDate.clone().startOf('isoWeek');
+ 
+    for (var i = 0; i <= 6; i++) {
+      week.push(moment(moment(weekStart).add(i, 'days')).toDate());
+    }
+   
+ 
+    const startDateOfWeek = moment().startOf('isoWeek').toDate();
+    const endDateOfWeek = moment().endOf('isoWeek').toDate();
 
     if (data === undefined) [];
 
-    let date = new Date();
-    let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-
-    var week = new Array();
-
-    currentDate.setDate((currentDate.getDate() - currentDate.getDay() + 1));
-
-    for (var i = 0; i < 7; i++) {
-      week.push(
-        new Date(currentDate)
-      );
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
 
     let result = data.filter((item: GetAllKNormOutput) =>
-      this.parseDate(item.creationTime).getTime() >= week[0].getTime() &&
-      this.parseDate(item.creationTime).getTime() <= week[week.length - 1].getTime()
+      moment(item.creationTime).toDate().getTime() >= startDateOfWeek.getTime() &&
+      moment(item.creationTime).toDate().getTime() <= endDateOfWeek.getTime()
     );
 
     let retVal = result.reduce((result, currentValue) => {
@@ -156,6 +189,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
         );
       return result;
     }, {});
+
 
     let iptalWeek1 = 0;
     let iptalWeek2 = 0;
@@ -167,17 +201,14 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     let iptal = retVal['Iptal'] as GetAllKNormOutput[];
     if (iptal !== undefined) {
 
-      iptalWeek1 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[0].getDate()).length
-      iptalWeek2 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[1].getDate()).length
-      iptalWeek3 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[2].getDate()).length
-      iptalWeek4 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[3].getDate()).length
-      iptalWeek5 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[4].getDate()).length
-      iptalWeek6 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[5].getDate()).length
-      iptalWeek7 = iptal.filter(x => this.parseDate(x.creationTime).getDate() === week[6].getDate()).length
+      iptalWeek1 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[0].getDate()).length
+      iptalWeek2 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[1].getDate()).length
+      iptalWeek3 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[2].getDate()).length
+      iptalWeek4 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[3].getDate()).length
+      iptalWeek5 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[4].getDate()).length
+      iptalWeek6 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[5].getDate()).length
+      iptalWeek7 = iptal.filter(x => moment(x.creationTime).toDate().getDate() === week[6].getDate()).length
     }
-
-
-
 
     let onaylandi = retVal['Onaylandi'] as GetAllKNormOutput[];
     let onaylandiWeek1 = 0;
@@ -189,13 +220,13 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     let onaylandiWeek7 = 0;
 
     if (onaylandi !== undefined) {
-      onaylandiWeek1 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[0].getDate()).length
-      onaylandiWeek2 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[1].getDate()).length
-      onaylandiWeek3 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[2].getDate()).length
-      onaylandiWeek4 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[3].getDate()).length
-      onaylandiWeek5 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[4].getDate()).length
-      onaylandiWeek6 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[5].getDate()).length
-      onaylandiWeek7 = onaylandi.filter(x => this.parseDate(x.creationTime).getDate() === week[6].getDate()).length
+      onaylandiWeek1 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[0].getDate()).length
+      onaylandiWeek2 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[1].getDate()).length
+      onaylandiWeek3 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[2].getDate()).length
+      onaylandiWeek4 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[3].getDate()).length
+      onaylandiWeek5 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[4].getDate()).length
+      onaylandiWeek6 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[5].getDate()).length
+      onaylandiWeek7 = onaylandi.filter(x => moment(x.creationTime).toDate().getDate() === week[6].getDate()).length
     }
 
 
@@ -210,13 +241,13 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
     if (beklemede !== undefined) {
 
-      beklemedeWeek1 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[0].getDate()).length
-      beklemedeWeek2 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[1].getDate()).length
-      beklemedeWeek3 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[2].getDate()).length
-      beklemedeWeek4 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[3].getDate()).length
-      beklemedeWeek5 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[4].getDate()).length
-      beklemedeWeek6 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[5].getDate()).length
-      beklemedeWeek7 = beklemede.filter(x => this.parseDate(x.creationTime).getDate() === week[6].getDate()).length
+      beklemedeWeek1 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[0].getDate()).length
+      beklemedeWeek2 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[1].getDate()).length
+      beklemedeWeek3 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[2].getDate()).length
+      beklemedeWeek4 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[3].getDate()).length
+      beklemedeWeek5 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[4].getDate()).length
+      beklemedeWeek6 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[5].getDate()).length
+      beklemedeWeek7 = beklemede.filter(x => moment(x.creationTime).toDate().getDate() === week[6].getDate()).length
     }
 
 
@@ -229,17 +260,14 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     let toplamWeek7 = 0;
 
     if (beklemede !== undefined) {
-      toplamWeek1 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[0].getDate()).length
-      toplamWeek2 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[1].getDate()).length
-      toplamWeek3 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[2].getDate()).length
-      toplamWeek4 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[3].getDate()).length
-      toplamWeek5 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[4].getDate()).length
-      toplamWeek6 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[5].getDate()).length
-      toplamWeek7 = data.filter(x => this.parseDate(x.creationTime).getDate() === week[6].getDate()).length
+      toplamWeek1 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[0].getDate()).length
+      toplamWeek2 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[1].getDate()).length
+      toplamWeek3 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[2].getDate()).length
+      toplamWeek4 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[3].getDate()).length
+      toplamWeek5 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[4].getDate()).length
+      toplamWeek6 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[5].getDate()).length
+      toplamWeek7 = data.filter(x => moment(x.creationTime).toDate().getDate() === week[6].getDate()).length
     }
-
-
-
 
     if (abp.localization.currentLanguage.name === "tr") {
       let model: KLineChartModel[] = [
@@ -265,20 +293,17 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
         { name: L('Saturday'), request: toplamWeek6, waiting: beklemedeWeek6, amt: 0, approved: onaylandiWeek6, cancel: iptalWeek6 },
         { name: L('Sunday'), request: toplamWeek7, waiting: beklemedeWeek7, amt: 0, approved: onaylandiWeek7, cancel: iptalWeek7 }
       ]
-
       return model;
     }
-  }
+  } 
 
-  addDays(days: number): Date {
-    var futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + days);
-    return futureDate;
+  changeLineViewHandler = async () => {
+    this.setState({ lineChartView: !this.state.lineChartView })
   }
 
   render() {
 
-    const { cardLoading, lineFillLoading, lineUpdateLoading } = this.state;
+    const { cardLoading, lineFillLoading, lineUpdateLoading, moment, lineChartView } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
@@ -293,15 +318,39 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     } = this.props.kNormStore;
 
 
+
+    const lineChartLayout = {
+      onePiece: {
+        xs: { offset: 1, span: 22 },
+        sm: { offset: 1, span: 22 },
+        md: { offset: 1, span: 22 },
+        lg: { offset: 1, span: 22 },
+        xl: { offset: 0, span: 24 },
+        xxl: { offset: 0, span: 24 }
+      },
+      twoPiece: {
+        xs: { offset: 1, span: 23 },
+        sm: { offset: 1, span: 23 },
+        md: { offset: 1, span: 23 },
+        lg: { offset: 1, span: 23 },
+        xl: { offset: 0, span: 12 },
+        xxl: { offset: 0, span: 12 }
+      },
+    };
+
+
+
     return (
       <React.Fragment>
         <KCartList
+          moment={moment}
           type={""}
           bolgeId={0}
           subeObjId={0}
           normCount={normCount}
           cardLoading={cardLoading}
           kPersonelCount={kPersonelCount}
+          onDateFilter={this.onDateFilter}
           kNormStore={this.props.kNormStore}
           kNormDetailStore={this.props.kNormDetailStore}
           getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
@@ -313,14 +362,16 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
           getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
         />
+
+
         <Row gutter={16}>
-          <Col span={12}>
-            <Card hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
+          <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
+            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
               <KLineChart data={this.state.totalFill} />
             </Card>
           </Col>
-          <Col span={12}>
-            <Card hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
+          <Col  {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
+            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
               <KLineChart data={this.state.totalUpdate} />
             </Card>
           </Col>

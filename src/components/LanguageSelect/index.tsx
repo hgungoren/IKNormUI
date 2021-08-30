@@ -1,7 +1,7 @@
-import * as React from 'react'; 
+import * as React from 'react';
 
 import './index.less';
-import 'famfamfam-flags/dist/sprite/famfamfam-flags.css'; 
+import 'famfamfam-flags/dist/sprite/famfamfam-flags.css';
 
 import classNames from 'classnames';
 import { inject } from 'mobx-react';
@@ -9,7 +9,7 @@ import { Dropdown, Menu } from 'antd';
 import { L } from '../../lib/abpUtility';
 import UserStore from '../../stores/userStore';
 import Stores from '../../stores/storeIdentifier';
-import { GlobalOutlined } from '@ant-design/icons'; 
+import { GlobalOutlined } from '@ant-design/icons';
 
 declare var abp: any;
 

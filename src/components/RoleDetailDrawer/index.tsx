@@ -13,14 +13,14 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
         let children = permissions.filter(y => y.name.startsWith(x.name.split('.')[1])).map((c: GetAllPermissionsOutput, i: number) => {
             return {
-                title: L(c.displayName),
+                title: L(c.displayName)    + ' name : ' +  c.name,
                 key: `${y}-0-0-${i}`,
                 value: c.name
             }
         });
 
         return {
-            title: L(x.displayName),
+            title: L(x.displayName)  +  ' name : ' +  x.name,
             key: `${y}-0-0`,
             value: x.displayName,
             children: children
@@ -129,7 +129,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }
 
     return (<>
-        <Drawer width={600}
+        <Drawer width={1000}
             footer={
                 <Row align="middle">
                     <Col span={4}>

@@ -2,7 +2,6 @@
 import './index.less';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KSubeStore from '../../stores/kSubeStore';
@@ -10,6 +9,7 @@ import KNormStore from '../../stores/kNormStore';
 import Stores from '../../stores/storeIdentifier';
 import KCartList from '../../components/KCartList';
 import { SettingOutlined } from '@ant-design/icons';
+import { isGranted, L } from '../../lib/abpUtility';
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
@@ -21,7 +21,7 @@ import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-
+import moment from 'moment';
 
 export interface INormProps {
     kSubeStore: KSubeStore;
@@ -37,20 +37,23 @@ export interface INormProps {
 
 export interface INormState {
     id: string;
+    moment: any;
     normId: string;
     subeAdi: string;
     subeObjId: string;
+    totalSize: number;
     skipCount: number;
     searchFilter: string;
     cardLoading: boolean;
     modalVisible: boolean;
     maxResultCount: number;
     kPersonelCount: number;
-    totalSize: number;
     filter: { offset: number, limit: number, current: number }
 }
 
 const confirm = Modal.confirm;
+const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
+const currentDate = moment().toDate();
 
 @inject(Stores.KSubeStore)
 @inject(Stores.KNormStore)
@@ -75,32 +78,56 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         kPersonelCount: 0,
         modalVisible: false,
         totalSize: 0,
-        filter: { offset: 0, limit: 5, current: 0, }
+        filter: { offset: 0, limit: 5, current: 0, },
+        moment: [] as any
     };
-
-    async getNormRequests(id: string) {
+ 
+    getNormRequests = async (id: string, start?: Date, end?: Date) => {
 
         await this.props.kNormStore.getMaxAll({
             id: '0',
             keyword: '',
+            bolgeId: id,
+            type: 'sube',
             skipCount: 0,
             maxResultCount: 100000,
-            bolgeId: id,
-            type: 'sube'
+            end: end,
+            start: start,
         });
 
     }
-    async getNormRequestsCount(id: string) {
+    getNormRequestCounts = async (id: string, start?: Date, end?: Date) => {
 
         await this.props.kNormStore.getMaxAllCount({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
             id: '0',
+            keyword: '',
             bolgeId: id,
-            type: 'sube'
+            type: 'sube',
+            skipCount: 0,
+            maxResultCount: 100000,
+            end: end,
+            start: start
         });
     }
+    onDateFilter = async (date) => {
+        if (date !== null) {
+            let start: any;
+            let end: any;
+
+            if (date[0] !== null) {
+                start = date[0]._d;
+            }
+            if (date[1] !== null) {
+                end = date[1]._d;
+            }
+
+            await this.getNormRequests(start, end);
+            await this.getNormRequestCounts(start, end);
+
+            this.setState({ moment: date })
+        }
+    }
+
 
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
@@ -263,8 +290,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         await this.get({ id: this.state.id });
         await this.getEmployeeCount(this.state.id);
         await this.getNormCount(this.state.id);
-        await this.getNormRequests(this.state.id)
-        await this.getNormRequestsCount(this.state.id)
+        await this.getNormRequests(this.state.id, startOfMonth, currentDate)
+        await this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)
     }
 
     handleTableChange = (pagination: any) => {
@@ -302,7 +329,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         };
 
         const Search = Input.Search;
-        const { cardLoading } = this.state;
+        const { cardLoading, moment } = this.state;
         const { kPersonelCount } = this.props.kPersonelStore;
         const { positions } = this.props.kInkaLookUpTableStore;
         const { kSubes, editKSube, normCount } = this.props.kSubeStore;
@@ -374,12 +401,14 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                 </Card>
 
                 <KCartList
+                    moment={moment}
                     type="sube"
                     bolgeId={this.state.id}
                     normCount={normCount}
                     subeObjId={this.state.id}
                     cardLoading={cardLoading}
                     kPersonelCount={kPersonelCount}
+                    onDateFilter={this.onDateFilter}
                     kNormStore={this.props.kNormStore}
                     kNormDetailStore={this.props.kNormDetailStore}
                     getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
@@ -407,7 +436,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                     </Row>
                     <Row>
                         <Col sm={{ span: 10, offset: 0 }}>
-                            <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+                            <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
                         </Col>
                     </Row>
                     <Row style={{ marginTop: 20 }}>
@@ -420,25 +449,23 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                             xxl={{ span: 24, offset: 0 }}
                         >
                             <Table
+                                bordered={false}
+                                columns={columns}
+                                pagination={tablePagination}
+                                onChange={this.handlePagination}
                                 locale={{ emptyText: L('NoData') }}
                                 rowKey={(record) => record.objId.toString()}
-                                bordered={false}
-                                columns={columns} 
-                                pagination={tablePagination}
                                 loading={kSubes === undefined ? true : false}
                                 dataSource={kSubes === undefined ? [] : kSubes.items}
-                                onChange={this.handlePagination}
-
                             />
                         </Col>
                     </Row>
                 </Card>
                 <CreateKSubeNorm
-                    bolgeAdi={this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : ''}
-                    subeAdi={this.state.subeAdi}
                     modalType={'create'}
                     formRef={this.formRef}
                     positionSelect={positions}
+                    subeAdi={this.state.subeAdi}
                     subeObjId={this.state.subeObjId}
                     visible={this.state.modalVisible}
                     kSubeNormEdit={this.kSubeNormEdit}
@@ -447,11 +474,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                     kPosizyonKontrol={this.kPosizyonKontrol}
                     kSubeNormStore={this.props.kSubeNormStore}
                     kSubeNorms={this.props.kSubeNormStore.norms}
-                    onCancel={() => {
-                        this.setState({
-                            modalVisible: false,
-                        });
-                    }}
+                    onCancel={() => { this.setState({ modalVisible: false, }); }}
+                    bolgeAdi={this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : ''}
                 />
             </React.Fragment >
             </>

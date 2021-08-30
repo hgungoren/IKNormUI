@@ -29,7 +29,7 @@ class KNormDetailStore {
 
     @action
     async getDetails(id: number) {
-        let result = await kNormDetailService.getDetails(id);
+        let result = await kNormDetailService.getDetails(id); 
         this.kNormAllDetails = result;  
     }
 

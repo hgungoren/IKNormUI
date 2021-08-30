@@ -57,7 +57,7 @@ var KNormStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!(pagedFilterAndSortedRequest.type === "sube")) return [3 /*break*/, 2];
-                        return [4 /*yield*/, kNormService_1["default"].getAllSubeCount(pagedFilterAndSortedRequest.bolgeId)];
+                        return [4 /*yield*/, kNormService_1["default"].getAllSubeCount(pagedFilterAndSortedRequest)];
                     case 1:
                         result = _a.sent();
                         return [3 /*break*/, 6];
@@ -67,7 +67,7 @@ var KNormStore = /** @class */ (function () {
                     case 3:
                         result = _a.sent();
                         return [3 /*break*/, 6];
-                    case 4: return [4 /*yield*/, kNormService_1["default"].getAllBolgeCount()];
+                    case 4: return [4 /*yield*/, kNormService_1["default"].getAllBolgeCount(pagedFilterAndSortedRequest)];
                     case 5:
                         result = _a.sent();
                         _a.label = 6;

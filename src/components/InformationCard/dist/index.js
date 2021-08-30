@@ -31,13 +31,7 @@ var Meta_1 = require("antd/lib/card/Meta");
 var InformationCart = /** @class */ (function (_super) {
     __extends(InformationCart, _super);
     function InformationCart() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = {
-            cardLoading: false,
-            title: '',
-            emailAddress: ''
-        };
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     InformationCart.prototype.componentDidMount = function () {
         var _a;
@@ -48,18 +42,14 @@ var InformationCart = /** @class */ (function (_super) {
         });
     };
     InformationCart.prototype.render = function () {
-        var _this = this;
-        var _a, _b;
-        var _c = this.state, title = _c.title, emailAddress = _c.emailAddress;
+        var _a, _b, _c, _d;
         return (React.createElement(React.Fragment, null,
-            React.createElement(Meta_1["default"], { avatar: React.createElement(antd_1.Avatar, { size: 100, icon: React.createElement(icons_1.AntDesignOutlined, null) }), title: React.createElement("p", { className: 'metaUserName' }, (_a = this.props.sessionStore) === null || _a === void 0 ? void 0 :
-                    _a.currentLogin.user.name,
-                    " ", (_b = this.props.sessionStore) === null || _b === void 0 ? void 0 :
-                    _b.currentLogin.user.surname), description: React.createElement(React.Fragment, null, setTimeout(function () {
-                    _this.props.sessionStore !== undefined && React.createElement(React.Fragment, null,
-                        React.createElement("p", null, title),
-                        React.createElement("p", null, emailAddress));
-                }, 1000)) })));
+            React.createElement(Meta_1["default"], { avatar: React.createElement(antd_1.Avatar, { size: 100, icon: React.createElement(icons_1.AntDesignOutlined, null) }), title: React.createElement("p", { className: 'metaUserName' },
+                    ((_a = this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.name) || '',
+                    " ",
+                    ((_b = this.props.sessionStore) === null || _b === void 0 ? void 0 : _b.currentLogin.user.surname) || ''), description: React.createElement(React.Fragment, null, React.createElement(React.Fragment, null,
+                    React.createElement("p", null, ((_c = this.props.sessionStore) === null || _c === void 0 ? void 0 : _c.currentLogin.user.title) || ''),
+                    React.createElement("p", null, ((_d = this.props.sessionStore) === null || _d === void 0 ? void 0 : _d.currentLogin.user.emailAddress) || ''))) })));
     };
     InformationCart = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),

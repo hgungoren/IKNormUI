@@ -70,17 +70,20 @@ exports.__esModule = true;
 require("./index.less");
 var React = require("react");
 var react_router_dom_1 = require("react-router-dom");
-var abpUtility_1 = require("../../lib/abpUtility");
 var mobx_react_1 = require("mobx-react");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var KCartList_1 = require("../../components/KCartList");
 var icons_1 = require("@ant-design/icons");
+var abpUtility_1 = require("../../lib/abpUtility");
+var bolgeTip_1 = require("../../services/kBolge/dto/bolgeTip");
 var createKBolgeNorm_1 = require("./components/createKBolgeNorm");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var antd_1 = require("antd");
-var bolgeTip_1 = require("../../services/kBolge/dto/bolgeTip");
+var moment_1 = require("moment");
 var Search = antd_1.Input.Search;
 var confirm = antd_1.Modal.confirm;
+var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
+var currentDate = moment_1["default"]().toDate();
 var KBolge = /** @class */ (function (_super) {
     __extends(KBolge, _super);
     function KBolge() {
@@ -98,8 +101,73 @@ var KBolge = /** @class */ (function (_super) {
             maxResultCount: 5,
             searchFilter: '',
             modalVisible: false,
-            filter: { offset: 0, limit: 5, current: 0 }
+            filter: { offset: 0, limit: 5, current: 0 },
+            moment: []
         };
+        _this.getNormRequests = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
+                            id: '0',
+                            keyword: '',
+                            skipCount: 0,
+                            bolgeId: '0',
+                            type: 'bolge',
+                            maxResultCount: 100000,
+                            end: end,
+                            start: start
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.getNormRequestCounts = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
+                            id: '0',
+                            keyword: '',
+                            skipCount: 0,
+                            bolgeId: '0',
+                            type: 'bolge',
+                            maxResultCount: 100000,
+                            end: end,
+                            start: start
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
+            var start, end;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(date !== null)) return [3 /*break*/, 3];
+                        start = void 0;
+                        end = void 0;
+                        if (date[0] !== null) {
+                            start = date[0]._d;
+                        }
+                        if (date[1] !== null) {
+                            end = date[1]._d;
+                        }
+                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                    case 2:
+                        _a.sent();
+                        this.setState({ moment: date });
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
         _this.kPosizyonKontrol = function (key) {
             _this.getKSubeNorms();
             var form = _this.formRef.current;
@@ -214,44 +282,6 @@ var KBolge = /** @class */ (function (_super) {
                             skipCount: 0,
                             id: this.state.subeObjId,
                             maxResultCount: 5
-                        })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    KBolge.prototype.getNormRequests = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
-                            maxResultCount: 100000,
-                            skipCount: 0,
-                            keyword: '',
-                            id: '0',
-                            bolgeId: '0',
-                            type: 'bolge'
-                        })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    KBolge.prototype.getNormRequestsAllCount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
-                            maxResultCount: 100000,
-                            skipCount: 0,
-                            keyword: '',
-                            id: '0',
-                            bolgeId: '0',
-                            type: 'bolge'
                         })];
                     case 1:
                         _a.sent();
@@ -386,10 +416,10 @@ var KBolge = /** @class */ (function (_super) {
                             abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
                             abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
                             abpUtility_1.isGranted('knorm.gettotalnormfillingrequest'))) return [3 /*break*/, 7];
-                        return [4 /*yield*/, this.getNormRequests()];
+                        return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
                     case 5:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestsAllCount()];
+                        return [4 /*yield*/, this.getNormRequestCounts(startOfMonth, currentDate)];
                     case 6:
                         _a.sent();
                         _a.label = 7;
@@ -400,7 +430,7 @@ var KBolge = /** @class */ (function (_super) {
     };
     KBolge.prototype.render = function () {
         var _this = this;
-        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize;
+        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize, moment = _a.moment;
         var tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -461,7 +491,7 @@ var KBolge = /** @class */ (function (_super) {
                             " ",
                             abpUtility_1.L('RegionalOffices'),
                             " ")) })),
-            React.createElement(KCartList_1["default"], { type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+            React.createElement(KCartList_1["default"], { moment: moment, type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
             this.isGranted('kbolge.areas.list') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 6, offset: 0 }, sm: { span: 6, offset: 0 }, md: { span: 6, offset: 0 }, lg: { span: 4, offset: 0 }, xl: { span: 4, offset: 0 }, xxl: { span: 4, offset: 0 } },
@@ -469,7 +499,7 @@ var KBolge = /** @class */ (function (_super) {
                         React.createElement("h2", null, abpUtility_1.L('Areas')))),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                        React.createElement(Search, { placeholder: this.L('Filter'), onSearch: this.handleSearch }))),
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handlePagination, rowKey: function (record) { return record.objId.toString(); }, loading: kBolge === undefined ? true : false, dataSource: kBolge === undefined ? [] : kBolge.items, pagination: tablePagination })))),

@@ -2,7 +2,6 @@
 import './index.less';
 import *  as React from 'react';
 import { Link } from 'react-router-dom';
-import { isGranted, L } from '../../lib/abpUtility';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import KNormStore from '../../stores/kNormStore';
@@ -10,18 +9,20 @@ import Stores from '../../stores/storeIdentifier';
 import KBolgeStore from '../../stores/kBolgeStore';
 import KCartList from '../../components/KCartList';
 import { SettingOutlined } from '@ant-design/icons';
+import { isGranted, L } from '../../lib/abpUtility';
+import AccountStore from '../../stores/accountStore';
+import SessionStore from '../../stores/sessionStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
 import { EntityDto } from '../../services/dto/entityDto';
 import KPersonelStore from '../../stores/kPersonelStore';
+import BolgeTip from '../../services/kBolge/dto/bolgeTip';
 import CreateKBolgeNorm from './components/createKBolgeNorm';
 import KNormDetailStore from '../../stores/kNormDetailStore';
 import AppComponentBase from '../../components/AppComponentBase';
+import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-import SessionStore from '../../stores/sessionStore';
-import AuthenticationStore from '../../stores/authenticationStore';
-import AccountStore from '../../stores/accountStore';
-import BolgeTip from '../../services/kBolge/dto/bolgeTip';
+import moment from 'moment';
 
 export interface IBolgeProps {
     kNormStore: KNormStore;
@@ -48,10 +49,14 @@ export interface IBolgeState {
     modalVisible: boolean;
     maxResultCount: number;
     filter: { offset: number, limit: number, current: number }
+    moment: any;
 }
 
 const Search = Input.Search;
 const confirm = Modal.confirm;
+const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
+const currentDate = moment().toDate();
+
 
 @inject(Stores.KNormStore)
 @inject(Stores.KBolgeStore)
@@ -77,7 +82,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         maxResultCount: 5,
         searchFilter: '',
         modalVisible: false,
-        filter: { offset: 0, limit: 5, current: 0, }
+        filter: { offset: 0, limit: 5, current: 0, },
+        moment: [] as any
     };
 
 
@@ -91,26 +97,51 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     }
 
 
-    async getNormRequests() {
+    getNormRequests = async (start?: Date, end?: Date) => {
         await this.props.kNormStore.getMaxAll({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
             id: '0',
+            keyword: '',
+            skipCount: 0,
             bolgeId: '0',
-            type: 'bolge'
+            type: 'bolge',
+            maxResultCount: 100000,
+            end: end,
+            start: start
         });
     }
 
-    async getNormRequestsAllCount() {
+    getNormRequestCounts = async (start?: Date, end?: Date) => {
         await this.props.kNormStore.getMaxAllCount({
-            maxResultCount: 100000,
-            skipCount: 0,
-            keyword: '',
             id: '0',
+            keyword: '',
+            skipCount: 0,
             bolgeId: '0',
-            type: 'bolge'
+            type: 'bolge',
+            maxResultCount: 100000,
+            end: end,
+            start: start
         });
+    }
+
+
+    onDateFilter = async (date) => {  
+
+        if (date !== null) {
+            let start: any;
+            let end: any;
+
+            if (date[0] !== null) {
+                start = date[0]._d;
+            }
+            if (date[1] !== null) {
+                end = date[1]._d;
+            }
+
+            await this.getNormRequests(start, end);
+            await this.getNormRequestCounts(start, end);
+
+            this.setState({ moment: date })
+        }
     }
 
     async getNormCount() {
@@ -149,12 +180,11 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
     permissionNotification = type => {
         notification[type]({
-            message:   L('YouAreNotAuthorizedToAddRecordsTitle')  ,
-            description:  L('YouAreNotAuthorizedToAddRecordsDescription') ,
+            message: L('YouAreNotAuthorizedToAddRecordsTitle'),
+            description: L('YouAreNotAuthorizedToAddRecordsDescription'),
             duration: 3
         });
     };
-
 
     kSubeNormCreate = () => {
         const form = this.formRef.current;
@@ -191,8 +221,6 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             form!.setFieldsValue({ ...this.props.kSubeNormStore.editNorm });
         }, 200);
     }
-
-
 
     kSubeNormDelete = (input: EntityDto<string>) => {
         const self = this;
@@ -232,9 +260,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                 }
             );
     }
-
-
-
+ 
     async createOrUpdateModalOpen(tip: string, id: string, subeAdi: string) {
         this.formRef.current?.resetFields();
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
@@ -245,9 +271,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         }
 
         this.setState({ modalVisible: !this.state.modalVisible });
-    }
-
-
+    } 
 
     async setPageState() {
         this.setState({ id: this.props["match"].params["id"] });
@@ -268,8 +292,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             isGranted('knorm.getpendingnormfillrequest') ||
             isGranted('knorm.gettotalnormfillingrequest')
         ) {
-            await this.getNormRequests();
-            await this.getNormRequestsAllCount();
+            await this.getNormRequests(startOfMonth, currentDate);
+            await this.getNormRequestCounts(startOfMonth, currentDate);
         }
     }
 
@@ -291,7 +315,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     };
 
     public render() {
-        const { filter, totalSize } = this.state;
+        const { filter, totalSize, moment } = this.state;
         const tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -367,12 +391,14 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     </PageHeader>
                 </Card>
                 <KCartList
+                    moment={moment}
                     type={"bolge"}
                     subeObjId={0}
                     normCount={normCount}
                     bolgeId={this.state.id}
                     cardLoading={cardLoading}
                     kPersonelCount={kPersonelCount}
+                    onDateFilter={this.onDateFilter}
                     kNormStore={this.props.kNormStore}
                     kNormDetailStore={this.props.kNormDetailStore}
                     getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
@@ -400,7 +426,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         </Row>
                         <Row>
                             <Col sm={{ span: 10, offset: 0 }}>
-                                <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+                                <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
                             </Col>
                         </Row>
                         <Row style={{ marginTop: 20 }}>

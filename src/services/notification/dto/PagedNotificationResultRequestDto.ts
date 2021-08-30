@@ -1,7 +1,7 @@
 import UserNotificationState from "./userNotificationState";
 
 interface PagedNotificationResultRequestDto {
-    userId: string;
+    userId: number;
     tenantId?: number;
     skipCount?: number;
     takeCount?: number;

@@ -70,15 +70,18 @@ exports.__esModule = true;
 require("./index.less");
 var React = require("react");
 var react_router_dom_1 = require("react-router-dom");
-var abpUtility_1 = require("../../lib/abpUtility");
 var mobx_react_1 = require("mobx-react");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var KCartList_1 = require("../../components/KCartList");
 var icons_1 = require("@ant-design/icons");
+var abpUtility_1 = require("../../lib/abpUtility");
 var createKSubeNorm_1 = require("./components/createKSubeNorm");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var antd_1 = require("antd");
+var moment_1 = require("moment");
 var confirm = antd_1.Modal.confirm;
+var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
+var currentDate = moment_1["default"]().toDate();
 var KSube = /** @class */ (function (_super) {
     __extends(KSube, _super);
     function KSube() {
@@ -96,8 +99,73 @@ var KSube = /** @class */ (function (_super) {
             kPersonelCount: 0,
             modalVisible: false,
             totalSize: 0,
-            filter: { offset: 0, limit: 5, current: 0 }
+            filter: { offset: 0, limit: 5, current: 0 },
+            moment: []
         };
+        _this.getNormRequests = function (id, start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
+                            id: '0',
+                            keyword: '',
+                            bolgeId: id,
+                            type: 'sube',
+                            skipCount: 0,
+                            maxResultCount: 100000,
+                            end: end,
+                            start: start
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.getNormRequestCounts = function (id, start, end) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
+                            id: '0',
+                            keyword: '',
+                            bolgeId: id,
+                            type: 'sube',
+                            skipCount: 0,
+                            maxResultCount: 100000,
+                            end: end,
+                            start: start
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
+            var start, end;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(date !== null)) return [3 /*break*/, 3];
+                        start = void 0;
+                        end = void 0;
+                        if (date[0] !== null) {
+                            start = date[0]._d;
+                        }
+                        if (date[1] !== null) {
+                            end = date[1]._d;
+                        }
+                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                    case 2:
+                        _a.sent();
+                        this.setState({ moment: date });
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
         _this.kPosizyonKontrol = function (key) {
             _this.getKSubeNorms();
             var form = _this.formRef.current;
@@ -211,44 +279,6 @@ var KSube = /** @class */ (function (_super) {
         };
         return _this;
     }
-    KSube.prototype.getNormRequests = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAll({
-                            id: '0',
-                            keyword: '',
-                            skipCount: 0,
-                            maxResultCount: 100000,
-                            bolgeId: id,
-                            type: 'sube'
-                        })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    KSube.prototype.getNormRequestsCount = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kNormStore.getMaxAllCount({
-                            maxResultCount: 100000,
-                            skipCount: 0,
-                            keyword: '',
-                            id: '0',
-                            bolgeId: id,
-                            type: 'sube'
-                        })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     // Şubeye ait norm listesini getirir
     KSube.prototype.getKSubeNorms = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -395,10 +425,10 @@ var KSube = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.getNormCount(this.state.id)];
                     case 5:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequests(this.state.id)];
+                        return [4 /*yield*/, this.getNormRequests(this.state.id, startOfMonth, currentDate)];
                     case 6:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestsCount(this.state.id)];
+                        return [4 /*yield*/, this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)];
                     case 7:
                         _a.sent();
                         return [2 /*return*/];
@@ -418,11 +448,11 @@ var KSube = /** @class */ (function (_super) {
             locale: { items_per_page: abpUtility_1.L('page') }
         };
         var Search = antd_1.Input.Search;
-        var cardLoading = this.state.cardLoading;
+        var _b = this.state, cardLoading = _b.cardLoading, moment = _b.moment;
         var kPersonelCount = this.props.kPersonelStore.kPersonelCount;
         var positions = this.props.kInkaLookUpTableStore.positions;
-        var _b = this.props.kSubeStore, kSubes = _b.kSubes, editKSube = _b.editKSube, normCount = _b.normCount;
-        var _c = this.props.kNormStore, getTotalNormUpdateRequestCount = _c.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _c.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _c.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _c.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _c.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _c.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _c.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _c.getCanceledNormUpdateRequestCount;
+        var _c = this.props.kSubeStore, kSubes = _c.kSubes, editKSube = _c.editKSube, normCount = _c.normCount;
+        var _e = this.props.kNormStore, getTotalNormUpdateRequestCount = _e.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _e.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _e.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _e.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _e.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _e.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _e.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _e.getCanceledNormUpdateRequestCount;
         var columns = [
             { title: abpUtility_1.L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, editKSube === undefined ? '' : editKSube.adi); } },
             { title: abpUtility_1.L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
@@ -468,22 +498,18 @@ var KSube = /** @class */ (function (_super) {
                                 " ",
                                 editKSube === undefined ? '' : editKSube.adi,
                                 " ")) })),
-                React.createElement(KCartList_1["default"], { type: "sube", bolgeId: this.state.id, normCount: normCount, subeObjId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+                React.createElement(KCartList_1["default"], { moment: moment, type: "sube", bolgeId: this.state.id, normCount: normCount, subeObjId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
                 React.createElement(antd_1.Card, { hoverable: true },
                     React.createElement(antd_1.Row, null,
                         React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },
                             React.createElement("h2", null, abpUtility_1.L('KSube')))),
                     React.createElement(antd_1.Row, null,
                         React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                            React.createElement(Search, { placeholder: this.L('Filter'), onSearch: this.handleSearch }))),
+                            React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                     React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                         React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
-                            React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.objId.toString(); }, bordered: false, columns: columns, pagination: tablePagination, loading: kSubes === undefined ? true : false, dataSource: kSubes === undefined ? [] : kSubes.items, onChange: this.handlePagination })))),
-                React.createElement(createKSubeNorm_1["default"], { bolgeAdi: this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : '', subeAdi: this.state.subeAdi, modalType: 'create', formRef: this.formRef, positionSelect: positions, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () {
-                        _this.setState({
-                            modalVisible: false
-                        });
-                    } }))));
+                            React.createElement(antd_1.Table, { bordered: false, columns: columns, pagination: tablePagination, onChange: this.handlePagination, locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.objId.toString(); }, loading: kSubes === undefined ? true : false, dataSource: kSubes === undefined ? [] : kSubes.items })))),
+                React.createElement(createKSubeNorm_1["default"], { modalType: 'create', formRef: this.formRef, positionSelect: positions, subeAdi: this.state.subeAdi, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); }, bolgeAdi: this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : '' }))));
     };
     KSube = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KSubeStore),

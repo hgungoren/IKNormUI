@@ -188,7 +188,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
           </Row>
           <Row>
             <Col sm={{ span: 10, offset: 0 }}>
-              <Search placeholder={this.L('Filter')} onSearch={this.handleSearch} />
+              <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
             </Col>
           </Row>
           <Row style={{ marginTop: 20 }}>

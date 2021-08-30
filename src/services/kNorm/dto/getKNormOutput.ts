@@ -1,3 +1,4 @@
+
 import TalepDurumu from "./talepDurumu";
 import TalepNedeni from "./talepNedeni";
 import TalepTuru from "./talepTuru";
@@ -21,4 +22,5 @@ export interface GetKNormOutput {
     telepNedeni: TalepNedeni;
     talepDurumu: TalepDurumu;
     bagliOlduguSubeObjId?: string;
+    creatorUserId: string;
 }

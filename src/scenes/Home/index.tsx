@@ -9,7 +9,9 @@ import AuthenticationStore from '../../stores/authenticationStore';
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 import NotificationStore from '../../stores/notificationStore';
-import InformationCart from '../../components/InformationCard'; 
+import InformationCart from '../../components/InformationCard';
+
+
 
 interface IHomeProps {
   sessionStore?: SessionStore;
@@ -21,6 +23,7 @@ interface IHomeProps {
 interface IHomeState { }
 
 
+declare var abp: any;
 
 @inject(Stores.NotificationStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
@@ -28,33 +31,15 @@ interface IHomeState { }
 export class Home extends React.Component<IHomeProps, IHomeState> {
 
 
-  getNotifications = async () => {
-    await this.props.notificationStore.getAll({
-      userId: '3',
-      userNotificationState: 0
-    });
-  }
+ 
+  render() {  
+    abp.event.on('knorm_added', function (userNotification) {
 
-
-  componentDidMount = async () => {
-    await this.getNotifications()
-    // setTimeout(() => {
-    //   if (this.props.notificationStore.notifications !== undefined) {
-
-    //     // console.log(this.props.notificationStore.notifications)
-    //   //   this.props.notificationStore.notifications.items.map(x =>
-    //   // console.log(x.notification.data.properties.detail)
-    //   //   )
-    //   }
-    // }, 5000);
-  }
-
-  render() {
-
-    // const { notifications } = this.props.notificationStore;
-
+      alert('saf')
+      alert(userNotification)
+     })
     return (
-      <Row gutter={16}>
+      <Row gutter={16} >
 
         <Col
           xs={{ span: 10, offset: 0 }}

@@ -89,6 +89,20 @@ var KHierarchyStore = /** @class */ (function () {
             });
         });
     };
+    KHierarchyStore.prototype.generateHierarchy = function (generateHierarchyDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].generateHierarchy(generateHierarchyDto)];
+                    case 1:
+                        result = _a.sent();
+                        this.kHierarchies = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     __decorate([
         mobx_1.observable
     ], KHierarchyStore.prototype, "kHierarchies");
@@ -107,6 +121,9 @@ var KHierarchyStore = /** @class */ (function () {
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "update");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "generateHierarchy");
     return KHierarchyStore;
 }());
 exports["default"] = KHierarchyStore;

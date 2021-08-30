@@ -92,12 +92,12 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    KNormService.prototype.getAllBolgeCount = function () {
+    KNormService.prototype.getAllBolgeCount = function (pagedFilterAndSortedRequest) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetBolgeNormsCount')];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -118,12 +118,12 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    KNormService.prototype.getAllSubeCount = function (id) {
+    KNormService.prototype.getAllSubeCount = function (pagedFilterAndSortedRequest) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeNormsCount?id=' + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];

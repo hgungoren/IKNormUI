@@ -1,5 +1,4 @@
-enum NormStatus {
-    None = "None",
+enum NormStatus { 
     Beklemede = 'Beklemede',
     Onaylandi = 'Onaylandi',
     Iptal = 'Iptal'

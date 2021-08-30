@@ -23,7 +23,7 @@ class KNormDetailService {
     }
 
     public async getDetails(id: number): Promise<GetAllKNormDetailOutput[]> {
-        let result = await http.get('api/services/app/KNormDetail/GetDetails?Id=' + id); 
+        let result = await http.get('api/services/app/KNormDetail/GetDetails?Id=' + id);  
         return result.data.result;
     }
 }
