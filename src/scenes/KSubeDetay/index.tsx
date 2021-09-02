@@ -51,7 +51,7 @@ export interface IKSubeDatayState {
     tip: string,
     groupNorm: {},
     userId: number,
-    filter: string,
+    filter: { offset: number, limit: number, current: number }
     groupData: any[],
     groupEmployee: {},
     skipCount: number,
@@ -66,6 +66,10 @@ export interface IKSubeDatayState {
     maxNormResultCount: number,
     detaillModalVisible: boolean,
     normFilter: string,
+    totalSize: number,
+    searchFilter: string;
+ 
+    
 }
 
 
@@ -95,7 +99,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         normFilter: '',
         groupNorm: {},
         skipCount: 0,
-        filter: '',
         userId: 0,
         tip: '',
         id: '0',
@@ -113,7 +116,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             "pane": "PositionSelect",
         },
         breadcrumbSubeAdi: '',
-        breadcrumbBolgeAdi: ''
+        breadcrumbBolgeAdi: '',
+        filter: { offset: 0, limit: 5, current: 0, },
+        totalSize: 0,
+        searchFilter: ""
+
     };
 
     async getPosition(key: string) {
@@ -185,7 +192,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.props.kPersonelStore.getAll({
             maxResultCount: this.state.maxResultCount,
             skipCount: this.state.skipCount,
-            keyword: this.state.filter,
+            keyword: '',
             id: this.state.id
         });
     }
@@ -250,7 +257,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     };
 
     handleSearch = (value: string) => {
-        this.setState({ filter: value }, async () => await this.getAllEmployees());
+        this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
     };
 
     handleNormTableChange = (pagination: any) => {
@@ -339,6 +346,20 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
 
+    handlePagination = pagination => {
+        const { filter } = this.state;
+        const { pageSize, current } = pagination;
+
+        this.setState({
+            filter: {
+                ...filter,
+                current,
+                limit: pageSize
+            }
+        });
+    };
+
+
 
     public render() {
 
@@ -348,6 +369,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { kHierarchies } = this.props.kHierarchyStore;
         const { kNormAllDetails } = this.props.kNormDetailStore;
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
+
+        const { filter, totalSize } = this.state;
+        const tablePagination = {
+            pageSize: filter.limit,
+            current: filter.current || 1,
+            total: totalSize,
+            locale: { items_per_page: L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
+        };
 
         const normEmployeeCoumns = [
 
@@ -513,7 +544,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     locale={{ emptyText: L('NoData') }}
                                     loading={groupData.length == 1 ? true : false}
                                     dataSource={groupData === undefined ? [] : groupData}
-                                    pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : groupData.length, defaultCurrent: 1 }}
+                                    pagination={tablePagination}
                                 />
                             </Col>
                         </Row>
@@ -551,7 +582,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     rowKey={(record) => record.objId.toString()}
                                     loading={kPersonels === undefined ? true : false}
                                     dataSource={kPersonels === undefined ? [] : kPersonels.items}
-                                    pagination={{ pageSize: 5, total: kPersonels === undefined ? 0 : kPersonels.totalCount, defaultCurrent: 1 }}
+                                    pagination={tablePagination}
                                 />
                             </Col>
                         </Row>
@@ -591,7 +622,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     rowKey={(record) => record.id}
                                     loading={kNorms === undefined ? true : false}
                                     dataSource={kNorms === undefined ? [] : kNorms.items}
-                                    pagination={{ pageSize: 5, total: kNorms === undefined ? 0 : kNorms.totalCount, defaultCurrent: 1 }}
+                                    pagination={tablePagination}
                                 />
                             </Col>
                         </Row>
