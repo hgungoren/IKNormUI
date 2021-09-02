@@ -138,7 +138,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             );
     }
 
-    async getNormRequests() {
+    async getNormRequests() { 
         this.props.kNormStore.getAll({
             id: this.state.id,
             keyword: this.state.normFilter,

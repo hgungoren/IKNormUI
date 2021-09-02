@@ -14,6 +14,10 @@ const { Step } = Steps;
 const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => { 
     return (
         <>
+
+        {
+            console.log(norm)
+        }
             <Modal title={title} centered visible={visible} onCancel={onCancel} width={'70%'} footer={[]}>
                 <>
                     <Row gutter={16}>

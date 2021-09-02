@@ -14,6 +14,7 @@ var Step = antd_1.Steps.Step;
 var NormDetailTimeLine = function (_a) {
     var visible = _a.visible, onCancel = _a.onCancel, title = _a.title, data = _a.data, norm = _a.norm;
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
+        console.log(norm),
         react_1["default"].createElement(antd_1.Modal, { title: title, centered: true, visible: visible, onCancel: onCancel, width: '70%', footer: [] },
             react_1["default"].createElement(react_1["default"].Fragment, null,
                 react_1["default"].createElement(antd_1.Row, { gutter: 16 },

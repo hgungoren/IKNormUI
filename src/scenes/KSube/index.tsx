@@ -121,23 +121,23 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     }
 
 
-    onDateFilter = async (date) => { 
+    onDateFilter = async (date) => {
         let startDate: any;
-        let endDate: any; 
-        if (date === null) { 
+        let endDate: any;
+        if (date === null) {
             startDate = dateHelper.getMonthFirstDate('tr');
             endDate = dateHelper.getTodayDate('tr');
         }
         else {
             startDate = dateHelper.getMonthWidthFirstDate(date[0], 'tr');
             endDate = dateHelper.getTodayWidthDate(date[1], 'tr');
-        } 
+        }
         await this.getNormRequests(this.state.id, startDate, endDate);
         await this.getNormRequestCounts(this.state.id, startDate, endDate);
         this.setState({ moment: [startDate, endDate] })
     }
- 
-    
+
+
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
         await this.props.kSubeNormStore.getAllNorms({
@@ -207,6 +207,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             }
             form!.resetFields();
             await this.getKSubeNorms();
+            await this.getKSubeEmployees();
+            await this.mergeArray()
         });
     };
 
@@ -235,7 +237,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                     self.getKSubeEmployees();
                     self.mergeArray();
 
-                }).catch((err) => console.log(err)) 
+                }).catch((err) => console.log(err))
             },
             onCancel() {
                 console.log('Cancel');

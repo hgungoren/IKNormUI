@@ -14,5 +14,7 @@ var TalepDurumu;
     TalepDurumu["GENEL_MUDUR"] = "genel m\u00FCd\u00FCr";
     TalepDurumu["INSAN_KAYNAKLARI_GENEL_MUDUR_YRD"] = "ik genel m\u00FCd\u00FCr yrd";
     TalepDurumu["OPERASYON_GENEL_MUDUR_YRD"] = "operasyon genel m\u00FCd\u00FCr yrd";
+    TalepDurumu["OPERASYON_MUDURU"] = "operasyon m\u00FCd\u00FCr\u00FC";
+    TalepDurumu["ONAYLANDI_SONLANDI"] = "onaylandi";
 })(TalepDurumu || (TalepDurumu = {}));
 exports["default"] = TalepDurumu;

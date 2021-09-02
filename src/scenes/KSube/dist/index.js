@@ -222,6 +222,12 @@ var KSube = /** @class */ (function (_super) {
                             return [4 /*yield*/, this.getKSubeNorms()];
                         case 8:
                             _a.sent();
+                            return [4 /*yield*/, this.getKSubeEmployees()];
+                        case 9:
+                            _a.sent();
+                            return [4 /*yield*/, this.mergeArray()];
+                        case 10:
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });

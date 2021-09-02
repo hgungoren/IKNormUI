@@ -11,5 +11,7 @@ enum TalepDurumu {
     GENEL_MUDUR = "genel müdür",
     INSAN_KAYNAKLARI_GENEL_MUDUR_YRD = "ik genel müdür yrd",
     OPERASYON_GENEL_MUDUR_YRD = "operasyon genel müdür yrd",
+    OPERASYON_MUDURU = "operasyon müdürü",
+    ONAYLANDI_SONLANDI = "onaylandi"
 }
 export default TalepDurumu;

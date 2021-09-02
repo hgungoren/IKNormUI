@@ -251,6 +251,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
     approveRequestClick = async (id: number) => {
+
         confirm({
             icon: <ExclamationCircleOutlined />,
             content: L('DoYouWantToConfirm'),
@@ -377,8 +378,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 key: uuid(),
                 width: 50,
                 render: (text, norm: GetAllKNormOutput) => <Space size={'small'}>
-
-
+ 
                     {
                         kNormDetails !== undefined && (isGranted('knorm.detail')) && (
                             <Tooltip placement="topLeft" title={L('Detail')}>

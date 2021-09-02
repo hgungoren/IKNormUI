@@ -138,6 +138,8 @@ var KNormStore = /** @class */ (function () {
                         return [4 /*yield*/, kNormService_1["default"].getAllSubeDetail(pagedFilterAndSortedRequest)];
                     case 3:
                         result = _a.sent();
+                        console.log(result);
+                        console.log(pagedFilterAndSortedRequest);
                         return [3 /*break*/, 6];
                     case 4: return [4 /*yield*/, kNormService_1["default"].getAllBolge(pagedFilterAndSortedRequest)];
                     case 5:
