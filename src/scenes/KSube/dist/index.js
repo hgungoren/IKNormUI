@@ -78,10 +78,8 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var createKSubeNorm_1 = require("./components/createKSubeNorm");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var antd_1 = require("antd");
-var moment_1 = require("moment");
+var date_1 = require("../../helper/date");
 var confirm = antd_1.Modal.confirm;
-var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
-var currentDate = moment_1["default"]().toDate();
 var KSube = /** @class */ (function (_super) {
     __extends(KSube, _super);
     function KSube() {
@@ -100,7 +98,8 @@ var KSube = /** @class */ (function (_super) {
             modalVisible: false,
             totalSize: 0,
             filter: { offset: 0, limit: 5, current: 0 },
-            moment: []
+            moment: [],
+            normList: []
         };
         _this.getNormRequests = function (id, start, end) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -141,28 +140,26 @@ var KSube = /** @class */ (function (_super) {
             });
         }); };
         _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
-            var start, end;
+            var startDate, endDate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(date !== null)) return [3 /*break*/, 3];
-                        start = void 0;
-                        end = void 0;
-                        if (date[0] !== null) {
-                            start = date[0]._d;
+                        if (date === null) {
+                            startDate = date_1.dateHelper.getMonthFirstDate('tr');
+                            endDate = date_1.dateHelper.getTodayDate('tr');
                         }
-                        if (date[1] !== null) {
-                            end = date[1]._d;
+                        else {
+                            startDate = date_1.dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+                            endDate = date_1.dateHelper.getTodayWidthDate(date[1], 'tr');
                         }
-                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                        return [4 /*yield*/, this.getNormRequests(this.state.id, startDate, endDate)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                        return [4 /*yield*/, this.getNormRequestCounts(this.state.id, startDate, endDate)];
                     case 2:
                         _a.sent();
-                        this.setState({ moment: date });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                        this.setState({ moment: [startDate, endDate] });
+                        return [2 /*return*/];
                 }
             });
         }); };
@@ -277,8 +274,40 @@ var KSube = /** @class */ (function (_super) {
                 filter: __assign(__assign({}, filter), { current: current, limit: pageSize })
             });
         };
+        _this.mergeArray = function () { return __awaiter(_this, void 0, void 0, function () {
+            var normList;
+            var _this = this;
+            return __generator(this, function (_a) {
+                normList = this.props.kSubeNormStore.norms.items.map(function (record, index) { return Object.assign({
+                    id: record.id,
+                    position: record.pozisyon,
+                    creationTime: record.creationTime,
+                    normCount: _this.props.kSubeNormStore.norms.items.filter(function (x) { return x.pozisyon === record.pozisyon; })[0].adet,
+                    employeeCount: _this.props.kPersonelStore.kPersonels.items.filter(function (x) { return x.gorevi === record.pozisyon; }).length
+                }); });
+                this.setState({ normList: normList });
+                return [2 /*return*/];
+            });
+        }); };
         return _this;
     }
+    KSube.prototype.getKSubeEmployees = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kPersonelStore.getAll({
+                            keyword: '',
+                            skipCount: 0,
+                            id: this.state.subeObjId,
+                            maxResultCount: 5
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     // Şubeye ait norm listesini getirir
     KSube.prototype.getKSubeNorms = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -374,12 +403,18 @@ var KSube = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.getPosition(tip)];
                     case 2:
                         _b.sent();
-                        if (!abpUtility_1.isGranted('ksubenorm.view')) return [3 /*break*/, 4];
+                        if (!abpUtility_1.isGranted('ksubenorm.view')) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.getKSubeNorms()];
                     case 3:
                         _b.sent();
-                        _b.label = 4;
+                        return [4 /*yield*/, this.getKSubeEmployees()];
                     case 4:
+                        _b.sent();
+                        return [4 /*yield*/, this.mergeArray()];
+                    case 5:
+                        _b.sent();
+                        _b.label = 6;
+                    case 6:
                         this.setState({ modalVisible: !this.state.modalVisible });
                         return [2 /*return*/];
                 }
@@ -408,9 +443,13 @@ var KSube = /** @class */ (function (_super) {
     };
     KSube.prototype.componentDidMount = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var currentDate, startOfMonth;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.setPageState()];
+                    case 0:
+                        currentDate = date_1.dateHelper.getTodayDate('tr');
+                        startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
+                        return [4 /*yield*/, this.setPageState()];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, this.getAll()];
@@ -452,14 +491,54 @@ var KSube = /** @class */ (function (_super) {
         var kPersonelCount = this.props.kPersonelStore.kPersonelCount;
         var positions = this.props.kInkaLookUpTableStore.positions;
         var _c = this.props.kSubeStore, kSubes = _c.kSubes, editKSube = _c.editKSube, normCount = _c.normCount;
-        var _e = this.props.kNormStore, getTotalNormUpdateRequestCount = _e.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _e.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _e.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _e.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _e.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _e.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _e.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _e.getCanceledNormUpdateRequestCount;
+        var _d = this.props.kNormStore, getTotalNormUpdateRequestCount = _d.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _d.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _d.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _d.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _d.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _d.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _d.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _d.getCanceledNormUpdateRequestCount;
         var columns = [
-            { title: abpUtility_1.L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, editKSube === undefined ? '' : editKSube.adi); } },
-            { title: abpUtility_1.L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
+            {
+                title: abpUtility_1.L('BranchInformations xs'),
+                render: function (record) { return (React.createElement(React.Fragment, null,
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('Area')),
+                    " : ",
+                    record.adi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.branch.name')),
+                    "  : ",
+                    record.adi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        abpUtility_1.L('table.branch.type'),
+                        " "),
+                    " : ",
+                    record.tip,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.branch.employeecount')),
+                    "  : ",
+                    record.personelSayisi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.branch.normcount')),
+                    "  : ",
+                    record.normSayisi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.branch.normgap')),
+                    "  : ",
+                    record.normEksigi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.branch.transactions')),
+                    "  : ",
+                    record.text)); },
+                responsive: ['xs']
+            },
+            { title: abpUtility_1.L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, editKSube === undefined ? '' : editKSube.adi); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
             {
                 title: abpUtility_1.L('table.branch.transactions'),
                 width: 150,
@@ -479,7 +558,8 @@ var KSube = /** @class */ (function (_super) {
                                     abpUtility_1.L('NormCreate'),
                                     " "),
                                 " ")), placement: "bottomLeft" },
-                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); }
+                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); },
+                responsive: ['sm']
             },
         ];
         return (React.createElement(React.Fragment, null,
@@ -509,7 +589,7 @@ var KSube = /** @class */ (function (_super) {
                     React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                         React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                             React.createElement(antd_1.Table, { bordered: false, columns: columns, pagination: tablePagination, onChange: this.handlePagination, locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.objId.toString(); }, loading: kSubes === undefined ? true : false, dataSource: kSubes === undefined ? [] : kSubes.items })))),
-                React.createElement(createKSubeNorm_1["default"], { modalType: 'create', formRef: this.formRef, positionSelect: positions, subeAdi: this.state.subeAdi, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); }, bolgeAdi: this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : '' }))));
+                React.createElement(createKSubeNorm_1["default"], { modalType: 'create', normList: this.state.normList, formRef: this.formRef, positionSelect: positions, subeAdi: this.state.subeAdi, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); }, bolgeAdi: this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : '' }))));
     };
     KSube = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KSubeStore),

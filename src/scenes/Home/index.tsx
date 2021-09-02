@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 import AuthenticationStore from '../../stores/authenticationStore';
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
-import NotificationStore from '../../stores/notificationStore';
+// import NotificationStore from '../../stores/notificationStore';
 import InformationCart from '../../components/InformationCard';
 
 
@@ -16,7 +16,7 @@ import InformationCart from '../../components/InformationCard';
 interface IHomeProps {
   sessionStore?: SessionStore;
   accountStore?: AccountStore;
-  notificationStore: NotificationStore;
+  // notificationStore: NotificationStore;
   authenticationStore?: AuthenticationStore;
 }
 
@@ -25,7 +25,7 @@ interface IHomeState { }
 
 declare var abp: any;
 
-@inject(Stores.NotificationStore)
+// @inject(Stores.NotificationStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 export class Home extends React.Component<IHomeProps, IHomeState> {

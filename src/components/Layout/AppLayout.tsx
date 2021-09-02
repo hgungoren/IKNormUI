@@ -15,7 +15,7 @@ import { inject, observer } from 'mobx-react';
 
 const { Content } = Layout;
 
-@inject(Stores.NotificationStore)
+// @inject(Stores.NotificationStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 class AppLayout extends React.Component<any> {
@@ -51,7 +51,9 @@ class AppLayout extends React.Component<any> {
         <SiderMenu path={path} onCollapse={this.onCollapse} history={history} collapsed={collapsed} />
         <Layout>
           <Layout.Header style={{ background: '#fff', minHeight: 52, padding: 0 }}>
-            <Header notificationStore={this.props.notificationStore}
+            <Header 
+            
+            // notificationStore={this.props.notificationStore}
               sessionStore={this.props.sessionStore}
               accountStore={this.props.accountStore}
               authenticationStore={this.props.authenticationStore}

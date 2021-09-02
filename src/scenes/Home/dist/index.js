@@ -25,7 +25,9 @@ var React = require("react");
 var antd_1 = require("antd");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var mobx_react_1 = require("mobx-react");
+// import NotificationStore from '../../stores/notificationStore';
 var InformationCard_1 = require("../../components/InformationCard");
+// @inject(Stores.NotificationStore)
 var Home = /** @class */ (function (_super) {
     __extends(Home, _super);
     function Home() {
@@ -44,7 +46,6 @@ var Home = /** @class */ (function (_super) {
                 React.createElement(antd_1.Card, { hoverable: true }))));
     };
     Home = __decorate([
-        mobx_react_1.inject(storeIdentifier_1["default"].NotificationStore),
         mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),
         mobx_react_1.observer
     ], Home);

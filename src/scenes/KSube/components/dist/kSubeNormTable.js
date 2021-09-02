@@ -24,12 +24,11 @@ var KSubeNormTable = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     KSubeNormTable.prototype.render = function () {
-        var norms = this.props.kSubeNorms;
         var _a = this.props, kSubeNormDelete = _a.kSubeNormDelete, kSubeNormEdit = _a.kSubeNormEdit;
         var columns = [
-            { title: abpUtility_1.L('Position'), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: function (text) { return react_1["default"].createElement("div", null, text); } },
-            { title: abpUtility_1.L('NormCount'), dataIndex: 'adet', key: 'adet', width: 30, render: function (text) { return react_1["default"].createElement("div", null, text); } },
-            { title: abpUtility_1.L('Personel Sayısı'), dataIndex: 'adet', key: 'adet', width: 30, render: function (text) { return react_1["default"].createElement("div", null, text); } },
+            { title: abpUtility_1.L('Position'), dataIndex: 'position', key: 'position', width: 100, render: function (text) { return react_1["default"].createElement("div", null, text); } },
+            { title: abpUtility_1.L('NormCount'), dataIndex: 'normCount', key: 'normCount', width: 30, render: function (text) { return react_1["default"].createElement("div", null, text); } },
+            { title: abpUtility_1.L('Personel Sayısı'), dataIndex: 'employeeCount', key: 'employeeCount', width: 30, render: function (text) { return react_1["default"].createElement("div", null, text); } },
             {
                 title: abpUtility_1.L('CreationTime'), dataIndex: 'creationTime', key: 'creationTime', width: 150,
                 render: function (text) { return react_1["default"].createElement("div", null, react_1["default"].createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
@@ -52,7 +51,7 @@ var KSubeNormTable = /** @class */ (function (_super) {
                             react_1["default"].createElement(antd_1.Button, { style: { marginLeft: 3 }, type: "primary", onClick: function () { return kSubeNormDelete({ id: item.id }); }, danger: true, icon: react_1["default"].createElement(icons_1.DeleteOutlined, null) }))))); }
             },
         ];
-        return (react_1["default"].createElement(react_1["default"].Fragment, null, abpUtility_1.isGranted('ksubenorm.view') && react_1["default"].createElement(antd_2.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, bordered: false, columns: columns, pagination: { pageSize: 5, total: norms === undefined ? 0 : norms.items.length, defaultCurrent: 1 }, loading: norms === undefined ? true : false, dataSource: norms === undefined ? [] : norms.items })));
+        return (react_1["default"].createElement(react_1["default"].Fragment, null, abpUtility_1.isGranted('ksubenorm.view') && react_1["default"].createElement(antd_2.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, bordered: false, columns: columns, pagination: { pageSize: 5, total: this.props.normList === undefined ? 0 : this.props.normList.length, defaultCurrent: 1 }, loading: this.props.normList === undefined ? true : false, dataSource: this.props.normList === undefined ? [] : this.props.normList })));
     };
     return KSubeNormTable;
 }(react_1["default"].Component));

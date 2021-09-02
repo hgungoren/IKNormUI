@@ -58,7 +58,6 @@ var LanguageSelect_1 = require("../LanguageSelect");
 var user_png_1 = require("../../images/user.png");
 var antd_1 = require("antd");
 var icons_1 = require("@ant-design/icons");
-var NotificationDrawer_1 = require("../../components/NotificationDrawer");
 var userDropdownMenu = (React.createElement(antd_1.Menu, null,
     React.createElement(antd_1.Menu.Item, { key: "2" },
         React.createElement(react_router_dom_1.Link, { to: "/logout" },
@@ -86,7 +85,9 @@ var Header = /** @class */ (function (_super) {
         return _this;
     }
     Header.prototype.render = function () {
-        var _a = this.state, visible = _a.visible, notificationCount = _a.notificationCount;
+        var 
+        // visible,
+        notificationCount = this.state.notificationCount;
         return (React.createElement(antd_1.Row, { className: 'header-container' },
             React.createElement(antd_1.Col, { style: { textAlign: 'left' }, span: 12 }, this.props.collapsed ? (React.createElement(icons_1.MenuUnfoldOutlined, { className: "trigger", onClick: this.props.toggle })) : (React.createElement(icons_1.MenuFoldOutlined, { className: "trigger", onClick: this.props.toggle }))),
             React.createElement(antd_1.Col, { style: { padding: '0px 15px 0px 15px', textAlign: 'right' }, span: 12 },
@@ -95,8 +96,7 @@ var Header = /** @class */ (function (_super) {
                         React.createElement(antd_1.Avatar, { size: "small", shape: "circle", alt: 'profile', icon: React.createElement(icons_1.BellOutlined, { onClick: this.onNotificationHandler }) })),
                     React.createElement(LanguageSelect_1["default"], null),
                     React.createElement(antd_1.Dropdown, { className: 'header-drop', overlay: userDropdownMenu, trigger: ['click'] },
-                        React.createElement(antd_1.Avatar, { size: "small", shape: "circle", alt: 'profile', src: user_png_1["default"] })),
-                    React.createElement(NotificationDrawer_1["default"], { notificationStore: this.props.notificationStore, sessionStore: this.props.sessionStore, accountStore: this.props.accountStore, authenticationStore: this.props.authenticationStore, visible: visible, showOrHideDrawer: this.hideDrawer, notificationCount: notificationCount })))));
+                        React.createElement(antd_1.Avatar, { size: "small", shape: "circle", alt: 'profile', src: user_png_1["default"] }))))));
     };
     return Header;
 }(React.Component));

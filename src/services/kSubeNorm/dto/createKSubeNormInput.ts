@@ -7,6 +7,6 @@ export interface CreateKSubeNormInput {
   creationTime: Date;   
   id: number; 
   creatorUserId: number;
-  lastModificationTime: Date;
+  lastModificationTime?: Date;
   lastModifierUserId: number; 
 }

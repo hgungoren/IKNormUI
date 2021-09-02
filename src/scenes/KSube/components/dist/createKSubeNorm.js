@@ -38,7 +38,7 @@ var CreateKSubeNorm = /** @class */ (function (_super) {
                     React.createElement(antd_1.Button, { onClick: onCancel, type: "primary", danger: true, key: "1" }, abpUtility_1.L('Close'))
                 ], width: '50%', visible: visible, title: bolgeAdi + ' / ' + subeAdi + ' / ' + abpUtility_1.L('NormInsertOperation'), onCancel: onCancel, destroyOnClose: true },
                 React.createElement(kSubeNormForm_1["default"], { formRef: formRef, subeObjId: subeObjId, positionSelect: positionSelect, kSubeNormStore: kSubeNormStore, kSubeNormCreate: kSubeNormCreate, kPosizyonKontrol: kPosizyonKontrol }),
-                React.createElement(kSubeNormTable_1["default"], { kSubeNormEdit: kSubeNormEdit, kSubeNormStore: kSubeNormStore, kSubeNormDelete: kSubeNormDelete, kSubeNorms: this.props.kSubeNorms }))));
+                React.createElement(kSubeNormTable_1["default"], { normList: this.props.normList, kSubeNormEdit: kSubeNormEdit, kSubeNormStore: kSubeNormStore, kSubeNormDelete: kSubeNormDelete, kSubeNorms: this.props.kSubeNorms }))));
     };
     return CreateKSubeNorm;
 }(React.Component));

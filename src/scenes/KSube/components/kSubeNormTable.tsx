@@ -14,18 +14,20 @@ export interface ICreateNormTableProps {
     kSubeNorms: PagedResultDto<GetKSubeNormOutput>;
     kSubeNormEdit: (input: EntityDto<string>) => void;
     kSubeNormDelete: (input: EntityDto<string>) => void;
+    normList: []
 }
 
 class KSubeNormTable extends React.Component<ICreateNormTableProps> {
 
     render() {
 
-        const norms = this.props.kSubeNorms;
+
+
         const { kSubeNormDelete, kSubeNormEdit } = this.props;
         const columns = [
-            { title: L('Position'),        dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: (text: string) => <div>{text}</div> },
-            { title: L('NormCount'),       dataIndex: 'adet',     key: 'adet',     width: 30,  render: (text: string) => <div>{text}</div> },
-            { title: L('Personel Sayısı'), dataIndex: 'adet',     key: 'adet',     width: 30,  render: (text: string) => <div>{text}</div> },
+            { title: L('Position'), dataIndex: 'position', key: 'position', width: 100, render: (text: string) => <div>{text}</div> },
+            { title: L('NormCount'), dataIndex: 'normCount', key: 'normCount', width: 30, render: (text: string) => <div>{text}</div> },
+            { title: L('Personel Sayısı'), dataIndex: 'employeeCount', key: 'employeeCount', width: 30, render: (text: string) => <div>{text}</div> },
             {
                 title: L('CreationTime'), dataIndex: 'creationTime', key: 'creationTime', width: 150, render: (text: Date) => <div>{
 
@@ -74,9 +76,9 @@ class KSubeNormTable extends React.Component<ICreateNormTableProps> {
                         rowKey={(record) => record.id.toString()}
                         bordered={false}
                         columns={columns}
-                        pagination={{ pageSize: 5, total: norms === undefined ? 0 : norms.items.length, defaultCurrent: 1 }}
-                        loading={norms === undefined ? true : false}
-                        dataSource={norms === undefined ? [] : norms.items}
+                        pagination={{ pageSize: 5, total: this.props.normList === undefined ? 0 : this.props.normList.length, defaultCurrent: 1 }}
+                        loading={this.props.normList === undefined ? true : false}
+                        dataSource={this.props.normList === undefined ? [] : this.props.normList}
                     />
                 }
 

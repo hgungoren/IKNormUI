@@ -62,7 +62,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 /*eslint-disable */
 require("./index.less");
-var React = require("react");
+var react_1 = require("react");
 var abpUtility_1 = require("../../lib/abpUtility");
 var createNormForm_validation_1 = require("./createNormForm.validation");
 var icons_1 = require("@ant-design/icons");
@@ -91,7 +91,8 @@ var CreateNormForm = /** @class */ (function (_super) {
             descriptionVisible: true,
             talepTuru: '',
             buttonVisible: false,
-            pozisyon: ''
+            pozisyon: '',
+            submitVisible: false
         };
         _this.changeActiveTab = function () {
             var form = _this.props.formRef.current;
@@ -217,85 +218,89 @@ var CreateNormForm = /** @class */ (function (_super) {
                 xxl: { span: 18 }
             }
         };
-        var _a = this.props, tip = _a.tip, visible = _a.visible, onCancel = _a.onCancel, employees = _a.employees, position = _a.position, onCreateNorm = _a.onCreateNorm, subeId = _a.subeId, normCount = _a.normCount, hierarchy = _a.hierarchy, bagliOlduguSubeId = _a.bagliOlduguSubeId, getHierarchy = _a.getHierarchy;
+        var _a = this.props, tip = _a.tip, visible = _a.visible, onCancel = _a.onCancel, employees = _a.employees, position = _a.position, onCreateNorm = _a.onCreateNorm, subeId = _a.subeId, normCount = _a.normCount, hierarchy = _a.hierarchy, bagliOlduguSubeId = _a.bagliOlduguSubeId, getHierarchy = _a.getHierarchy, modalWidth = _a.modalWidth;
         var pozisyon = this.state.pozisyon;
-        return (React.createElement(antd_1.Modal, { footer: [
-                !this.state.buttonVisible && (React.createElement(antd_1.Button, { key: "next", onClick: function () { _this.changeActiveTab(), getHierarchy(subeId, bagliOlduguSubeId, tip, pozisyon); } }, abpUtility_1.L(this.state.defaultActiveKey.name))),
-                (this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" && !this.state.buttonVisible) && (React.createElement(antd_1.Button, { onClick: function () { onCreateNorm(), _this.CreateNorm(); }, className: 'right', type: "primary" }, abpUtility_1.L('Send')))
-            ], onCancel: function () { onCancel(); _this.resetForm(); }, width: '50%', visible: visible, cancelText: abpUtility_1.L('Cancel'), okText: abpUtility_1.L('OK'), title: abpUtility_1.L('Position'), destroyOnClose: true },
-            React.createElement(antd_1.Form, { ref: this.props.formRef },
-                React.createElement(antd_1.Tabs, { defaultActiveKey: this.state.defaultActiveKey.pane, size: 'small', tabBarGutter: 64, activeKey: this.state.defaultActiveKey.pane },
-                    React.createElement(TabPane, { tab: abpUtility_1.L('PositionSelect'), key: 'PositionSelect', className: 'ant-tab-form' },
-                        React.createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: subeId, name: 'subeObjId' },
-                            React.createElement(antd_1.Input, { style: { display: 'none' } })),
-                        React.createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: bagliOlduguSubeId, name: 'bagliOlduguSubeObjId' },
-                            React.createElement(antd_1.Input, { style: { display: 'none' } })),
-                        React.createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: tip, name: 'tip', rules: createNormForm_validation_1["default"].tip },
-                            React.createElement(antd_1.Input, { style: { display: 'none' } })),
-                        React.createElement(antd_1.Form.Item, __assign({ className: 'mt-5', label: abpUtility_1.L('RequestType') }, formItemLayout, { name: 'TalepTuru', rules: createNormForm_validation_1["default"].requestType }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleChangeFormItems }, Object.keys(talepTuru_1["default"]).map(function (value, index) { return React.createElement(Option, { value: value },
-                                " ",
-                                abpUtility_1.L(talepTuru_1["default"][value].replace(' ', '')),
-                                "  "); }))),
-                        !this.state.positionVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
-                            React.createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x }); } }, position === undefined
-                                ? []
-                                : position.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.adi },
-                                    " ",
-                                    value.adi,
-                                    " "); })))),
-                        !this.state.newPositionVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NewPosition') }, formItemLayout, { name: 'YeniPozisyon', rules: [
-                                {
-                                    required: true,
-                                    message: abpUtility_1.L('ThisFieldIsRequired')
-                                },
-                                {
-                                    validator: this.compareToPositions
-                                }
-                            ] }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
-                                ? []
-                                : position.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.adi },
-                                    " ",
-                                    value.adi,
-                                    " "); })))),
-                        !this.state.normRequestReasonVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NormRequestReason') }, formItemLayout, { name: 'TalepNedeni', rules: createNormForm_validation_1["default"].requestReason }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return React.createElement(React.Fragment, null, employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : React.createElement(Option, { key: index, value: value },
-                                " ",
-                                talepNedeni_1["default"][value],
-                                " ")); })))),
-                        !this.state.employeeVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Employee') }, formItemLayout, { name: 'PersonelId', rules: createNormForm_validation_1["default"].employeeId }),
-                            React.createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, employees != undefined && employees.items.map(function (value, index) { return React.createElement(Option, { key: index, value: value.objId },
-                                " ",
-                                value.ad,
-                                " ",
-                                value.soyad,
-                                " "); })))),
-                        !this.state.descriptionVisible && (React.createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Description') }, formItemLayout, { name: 'Aciklama', rules: createNormForm_validation_1["default"].description }),
-                            React.createElement(TextArea, { rows: 8 })))),
-                    React.createElement(TabPane, { className: 'form-tabPane', tab: abpUtility_1.L('AuthoritiesHierarchy'), key: 'AuthoritiesHierarchy', forceRender: true },
-                        React.createElement(antd_1.Steps, { direction: "vertical" }, hierarchy !== undefined && hierarchy.map(function (value, index) { return React.createElement(Step, { icon: React.createElement(icons_1.MailOutlined, null), key: index, status: "finish", title: '', description: React.createElement(React.Fragment, null,
-                                React.createElement(antd_1.Row, null,
-                                    React.createElement(antd_1.Col, { key: 'title' + index, xs: { span: 8, offset: 0 }, sm: { span: 8, offset: 0 }, md: { span: 8, offset: 0 }, lg: { span: 8, offset: 0 }, xl: { span: 8, offset: 0 }, xxl: { span: 8, offset: 0 } },
-                                        "            ",
-                                        value.title,
-                                        "            "),
-                                    React.createElement(antd_1.Col, { key: 'firstName' + index, xs: { span: 3, offset: 0 }, sm: { span: 3, offset: 0 }, md: { span: 3, offset: 0 }, lg: { span: 3, offset: 0 }, xl: { span: 3, offset: 0 }, xxl: { span: 3, offset: 0 } },
-                                        "            ",
-                                        value.firstName,
-                                        "        "),
-                                    React.createElement(antd_1.Col, { key: 'lastName' + index, xs: { span: 3, offset: 0 }, sm: { span: 3, offset: 0 }, md: { span: 3, offset: 0 }, lg: { span: 3, offset: 0 }, xl: { span: 3, offset: 0 }, xxl: { span: 3, offset: 0 } },
-                                        "            ",
-                                        value.lastName,
-                                        "         "),
-                                    React.createElement(antd_1.Col, { key: 'mail' + index, xs: { span: 10, offset: 0 }, sm: { span: 10, offset: 0 }, md: { span: 10, offset: 0 }, lg: { span: 10, offset: 0 }, xl: { span: 10, offset: 0 }, xxl: { span: 10, offset: 0 } },
-                                        "   ",
-                                        React.createElement("strong", null,
+        return (react_1["default"].createElement(antd_1.Row, null,
+            react_1["default"].createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 18, offset: 0 }, lg: { span: 18, offset: 0 }, xl: { span: 18, offset: 0 }, xxl: { span: 18, offset: 0 } },
+                react_1["default"].createElement(antd_1.Modal, { footer: [
+                        !this.state.buttonVisible && (react_1["default"].createElement(antd_1.Button, { key: "next", onClick: function () { _this.changeActiveTab(), getHierarchy(subeId, bagliOlduguSubeId, tip, pozisyon); } }, abpUtility_1.L(this.state.defaultActiveKey.name))),
+                        (this.state.defaultActiveKey.pane === "AuthoritiesHierarchy" && !this.state.buttonVisible) && (react_1["default"].createElement(antd_1.Button, { onClick: function () {
+                                onCreateNorm(),
+                                    _this.CreateNorm();
+                            }, className: 'right', type: "primary" }, abpUtility_1.L('Send')))
+                    ], onCancel: function () { onCancel(); _this.resetForm(); }, width: modalWidth, visible: visible, cancelText: abpUtility_1.L('Cancel'), okText: abpUtility_1.L('OK'), title: abpUtility_1.L('Position'), destroyOnClose: true },
+                    react_1["default"].createElement(antd_1.Form, { ref: this.props.formRef },
+                        react_1["default"].createElement(antd_1.Tabs, { defaultActiveKey: this.state.defaultActiveKey.pane, size: 'small', tabBarGutter: 64, activeKey: this.state.defaultActiveKey.pane },
+                            react_1["default"].createElement(TabPane, { tab: abpUtility_1.L('PositionSelect'), key: 'PositionSelect', className: 'ant-tab-form' },
+                                react_1["default"].createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: subeId, name: 'subeObjId' },
+                                    react_1["default"].createElement(antd_1.Input, { style: { display: 'none' } })),
+                                react_1["default"].createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: bagliOlduguSubeId, name: 'bagliOlduguSubeObjId' },
+                                    react_1["default"].createElement(antd_1.Input, { style: { display: 'none' } })),
+                                react_1["default"].createElement(antd_1.Form.Item, { className: 'hidden-form-item', initialValue: tip, name: 'tip', rules: createNormForm_validation_1["default"].tip },
+                                    react_1["default"].createElement(antd_1.Input, { style: { display: 'none' } })),
+                                react_1["default"].createElement(antd_1.Form.Item, __assign({ className: 'mt-5', label: abpUtility_1.L('RequestType') }, formItemLayout, { name: 'TalepTuru', rules: createNormForm_validation_1["default"].requestType }),
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleChangeFormItems }, Object.keys(talepTuru_1["default"]).map(function (value, index) { return react_1["default"].createElement(Option, { value: value },
+                                        " ",
+                                        abpUtility_1.L(talepTuru_1["default"][value].replace(' ', '')),
+                                        "  "); }))),
+                                !this.state.positionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
+                                    react_1["default"].createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x }); } }, position === undefined
+                                        ? []
+                                        : position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
                                             " ",
-                                            value.mail,
+                                            value.adi,
+                                            " "); })))),
+                                !this.state.newPositionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NewPosition') }, formItemLayout, { name: 'YeniPozisyon', rules: [
+                                        {
+                                            required: true,
+                                            message: abpUtility_1.L('ThisFieldIsRequired')
+                                        },
+                                        {
+                                            validator: this.compareToPositions
+                                        }
+                                    ] }),
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
+                                        ? []
+                                        : position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
+                                            " ",
+                                            value.adi,
+                                            " "); })))),
+                                !this.state.normRequestReasonVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NormRequestReason') }, formItemLayout, { name: 'TalepNedeni', rules: createNormForm_validation_1["default"].requestReason }),
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return react_1["default"].createElement(react_1["default"].Fragment, null, employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : react_1["default"].createElement(Option, { value: value },
+                                        " ",
+                                        talepNedeni_1["default"][value],
+                                        " ")); })))),
+                                !this.state.employeeVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Employee') }, formItemLayout, { name: 'PersonelId', rules: createNormForm_validation_1["default"].employeeId }),
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, employees != undefined && employees.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.objId },
+                                        " ",
+                                        value.ad,
+                                        " ",
+                                        value.soyad,
+                                        " "); })))),
+                                !this.state.descriptionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Description') }, formItemLayout, { name: 'Aciklama', rules: createNormForm_validation_1["default"].description }),
+                                    react_1["default"].createElement(TextArea, { rows: 8 })))),
+                            react_1["default"].createElement(TabPane, { className: 'form-tabPane', tab: abpUtility_1.L('AuthoritiesHierarchy'), key: 'AuthoritiesHierarchy', forceRender: true },
+                                react_1["default"].createElement(antd_1.Steps, { direction: "vertical" }, hierarchy !== undefined && hierarchy.map(function (data) { return react_1["default"].createElement(Step, { icon: react_1["default"].createElement(icons_1.MailOutlined, null), status: "finish", title: '', description: react_1["default"].createElement(antd_1.Row, null,
+                                        react_1["default"].createElement(antd_1.Col, { xs: { span: 8, offset: 0 }, sm: { span: 8, offset: 0 }, md: { span: 8, offset: 0 }, lg: { span: 8, offset: 0 }, xl: { span: 8, offset: 0 }, xxl: { span: 8, offset: 0 } },
+                                            " ",
+                                            data.title,
                                             " "),
-                                        "   "))) }); })))))));
+                                        react_1["default"].createElement(antd_1.Col, { xs: { span: 3, offset: 0 }, sm: { span: 3, offset: 0 }, md: { span: 3, offset: 0 }, lg: { span: 3, offset: 0 }, xl: { span: 3, offset: 0 }, xxl: { span: 3, offset: 0 } },
+                                            " ",
+                                            data.firstName,
+                                            " "),
+                                        react_1["default"].createElement(antd_1.Col, { xs: { span: 3, offset: 0 }, sm: { span: 3, offset: 0 }, md: { span: 3, offset: 0 }, lg: { span: 3, offset: 0 }, xl: { span: 3, offset: 0 }, xxl: { span: 3, offset: 0 } },
+                                            " ",
+                                            data.lastName,
+                                            " "),
+                                        react_1["default"].createElement(antd_1.Col, { xs: { span: 10, offset: 0 }, sm: { span: 10, offset: 0 }, md: { span: 10, offset: 0 }, lg: { span: 10, offset: 0 }, xl: { span: 10, offset: 0 }, xxl: { span: 10, offset: 0 } },
+                                            "   ",
+                                            react_1["default"].createElement("strong", null,
+                                                " ",
+                                                data.mail,
+                                                " "),
+                                            "   ")) }); })))))))));
     };
     return CreateNormForm;
-}(React.Component));
+}(react_1["default"].Component));
 exports["default"] = CreateNormForm;

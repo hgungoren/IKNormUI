@@ -61,18 +61,14 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var antd_1 = require("antd");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var mobx_react_1 = require("mobx-react");
+// @inject(Stores.NotificationStore)
 var NotificationDrawer = /** @class */ (function (_super) {
     __extends(NotificationDrawer, _super);
     function NotificationDrawer() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.getNotifications = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.notificationStore.getAll("8")];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         }); };
         _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -99,7 +95,6 @@ var NotificationDrawer = /** @class */ (function (_super) {
             title: abpUtility_1.L('Notifications'), visible: visible, onClose: showOrHideDrawer, destroyOnClose: true }, this.content()));
     };
     NotificationDrawer = __decorate([
-        mobx_react_1.inject(storeIdentifier_1["default"].NotificationStore),
         mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),
         mobx_react_1.observer
     ], NotificationDrawer);

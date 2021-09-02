@@ -1,7 +1,15 @@
 import moment from 'moment';
 
 export const dateHelper = {
+ 
     getMomentInstance: (date, lang) => moment(date || new Date()).locale(lang),
+    getTodayDate: (lang) => moment().locale(lang).format('MM DD YYYY, h:mm:ss a'),
+    getMonthFirstDate: (lang) => moment().startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'),
+
+    getTodayWidthDate: (date, lang) => moment(date|| new Date()).locale(lang).format('MM DD YYYY, h:mm:ss a'),
+    getMonthWidthFirstDate: (date, lang) => moment(date|| new Date()).startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'),
+
+ 
     getToday: (date) => moment(date || new Date).startOf('day').toDate(),
     getTodayRange: (date) => ({
         startDate: moment(date || new Date()).startOf('day').toDate(),
