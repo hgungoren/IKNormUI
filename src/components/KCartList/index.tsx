@@ -81,12 +81,12 @@ function KCartList({
 
         if (isGranted('knorm.getcancelednormupdaterequest')) { setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount) }
         if (isGranted('knorm.getacceptednormupdaterequest')) { setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount) }
-        if (isGranted('knorm.getpendingnormupdaterequest')) { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
-        if (isGranted('knorm.gettotalnormupdaterequest')) { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
-        if (isGranted('knorm.getcancelednormfillrequest')) { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
-        if (isGranted('knorm.getacceptednormfillrequest')) { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
-        if (isGranted('knorm.getpendingnormfillrequest')) { setPendingNormFillRequest(getPendingNormFillRequestCount) }
-        if (isGranted('knorm.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
+        if (isGranted('knorm.getpendingnormupdaterequest'))  { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
+        if (isGranted('knorm.gettotalnormupdaterequest'))    { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
+        if (isGranted('knorm.getcancelednormfillrequest'))   { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
+        if (isGranted('knorm.getacceptednormfillrequest'))   { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
+        if (isGranted('knorm.getpendingnormfillrequest'))    { setPendingNormFillRequest(getPendingNormFillRequestCount) }
+        if (isGranted('knorm.gettotalnormfillingrequest'))   { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
     }, 500)
 
 

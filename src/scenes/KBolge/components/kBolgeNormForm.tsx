@@ -20,6 +20,7 @@ export interface IKBolgeNorFormProps {
 
 
 class KBolgeNormForm extends React.Component<IKBolgeNorFormProps> {
+ 
     render() {
         const formItemLayout = {
             labelCol: { xs: { span: 4 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 }, },

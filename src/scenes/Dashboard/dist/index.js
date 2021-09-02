@@ -78,6 +78,7 @@ var KCartList_1 = require("../../components/KCartList");
 var abpUtility_1 = require("../../lib/abpUtility");
 var moment_1 = require("moment");
 var icons_1 = require("@ant-design/icons");
+var date_1 = require("../../helper/date");
 var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
 var currentDate = moment_1["default"]().toDate();
 var Dashboard = /** @class */ (function (_super) {
@@ -108,28 +109,26 @@ var Dashboard = /** @class */ (function (_super) {
             }
         }); }); };
         _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
-            var start, end;
+            var startDate, endDate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(date !== null)) return [3 /*break*/, 3];
-                        start = void 0;
-                        end = void 0;
-                        if (date[0] !== null) {
-                            start = date[0]._d;
+                        if (date === null) {
+                            startDate = date_1.dateHelper.getMonthFirstDate('tr');
+                            endDate = date_1.dateHelper.getTodayDate('tr');
                         }
-                        if (date[1] !== null) {
-                            end = date[1]._d;
+                        else {
+                            startDate = date_1.dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+                            endDate = date_1.dateHelper.getTodayWidthDate(date[1], 'tr');
                         }
-                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                        return [4 /*yield*/, this.getNormRequests(startDate, endDate)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                        return [4 /*yield*/, this.getNormRequestCounts(startDate, endDate)];
                     case 2:
                         _a.sent();
-                        this.setState({ moment: date });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                        this.setState({ moment: [startDate, endDate] });
+                        return [2 /*return*/];
                 }
             });
         }); };

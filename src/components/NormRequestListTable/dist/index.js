@@ -305,11 +305,11 @@ var NormRequestListTable = /** @class */ (function (_super) {
                                 start = void 0;
                                 end = void 0;
                                 if (this.props.moment[0] !== undefined) {
-                                    start = this.props.moment[0]._d;
+                                    start = this.props.moment[0];
                                     this.setState({ dateStart: start });
                                 }
                                 if (this.props.moment[1] !== undefined) {
-                                    end = this.props.moment[1]._d;
+                                    end = this.props.moment[1];
                                     this.setState({ dateStart: end });
                                 }
                                 this.getNormRequestsAll(start, end);
@@ -371,6 +371,53 @@ var NormRequestListTable = /** @class */ (function (_super) {
         var _e = this.state, subeOrBolgeAdi = _e.subeOrBolgeAdi, detaillModalVisible = _e.detaillModalVisible, getAllKNormOutput = _e.getAllKNormOutput;
         var columnsNorm = [
             {
+                title: abpUtility_1.L('NormRequestListTableInformations xs'),
+                render: function (record) { return (React.createElement(React.Fragment, null,
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requestdate')),
+                    " : ",
+                    record.creationTime,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requeststatus')),
+                    "  : ",
+                    record.durumu,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        abpUtility_1.L('table.norm.area.name'),
+                        " "),
+                    " : ",
+                    record.bolgeAdi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.branch.name')),
+                    "  : ",
+                    record.subeAdi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.norm.position')),
+                    "  : ",
+                    record.pozisyon,
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.norm.requestreason')),
+                    "  : ",
+                    record.nedeni,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.norm.requesttype')),
+                    "  : ",
+                    record.turu,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('İşlem')),
+                    "  : ",
+                    record.id)); },
+                responsive: ['xs']
+            },
+            {
                 title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: react_uuid_1["default"](), width: 60,
                 render: function (text) { return React.createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
                     year: "numeric",
@@ -378,7 +425,8 @@ var NormRequestListTable = /** @class */ (function (_super) {
                     day: "2-digit",
                     hour: "2-digit",
                     minute: "2-digit"
-                })); }
+                })); },
+                responsive: ['sm']
             },
             {
                 title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
@@ -400,13 +448,13 @@ var NormRequestListTable = /** @class */ (function (_super) {
                             React.createElement(tag_1["default"], { color: 'rgb(29, 165, 122)', icon: React.createElement(icons_1.CheckCircleOutlined, null), className: 'requeststatus' },
                                 " ",
                                 talepDurumu_1["default"][norm.durumu],
-                                "  ")))); }
+                                "  ")))); }, responsive: ['sm']
             },
-            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); } },
-            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); } },
+            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); }, responsive: ['sm'] },
             {
                 title: "İşlem",
                 dataIndex: 'id',

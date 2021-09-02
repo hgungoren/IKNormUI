@@ -2,18 +2,13 @@ import React from 'react';
 import './index.less';
 import { Card, Col, ConfigProvider, DatePicker, Space } from 'antd';
 import trTR from 'antd/lib/locale/tr_TR';
-import locale from 'antd/es/date-picker/locale/tr_TR'
-import moment from 'moment';
 const { RangePicker } = DatePicker;
 
-const dateFormat = 'DD-MM-YYYY';
-const startOfMonth = moment().startOf('month').format('DD-MM-YYYY');
-const currentDate = moment();
 
 function KNormDateFilter({ cardLoading, cursor = '', onChange }) {
     return (
         <>
-            <Col className={'dashboardCard'} 
+            <Col className={'dashboardCard'}
                 xs={{ offset: 1, span: 22 }}
                 sm={{ offset: 1, span: 22 }}
                 md={{ offset: 1, span: 22 }}
@@ -33,8 +28,7 @@ function KNormDateFilter({ cardLoading, cursor = '', onChange }) {
                         <Space direction="vertical" size={24}>
                             <ConfigProvider locale={trTR}>
                                 <RangePicker
-                                    defaultValue={[moment(startOfMonth, dateFormat), moment(currentDate, dateFormat)]}
-                                    locale={locale}
+                                    format={"DD MM YYYY"}
                                     size={'large'}
                                     className={'range-picker'}
                                     onCalendarChange={onChange}

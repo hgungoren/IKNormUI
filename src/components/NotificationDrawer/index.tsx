@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 import AuthenticationStore from '../../stores/authenticationStore';
-import NotificationStore from '../../stores/notificationStore';
+// import NotificationStore from '../../stores/notificationStore';
 
 export interface INotificationProps {
     visible: boolean;
@@ -15,18 +15,18 @@ export interface INotificationProps {
     showOrHideDrawer: () => void;
     sessionStore: SessionStore;
     accountStore: AccountStore;
-    notificationStore: NotificationStore;
+    // notificationStore: NotificationStore;
     authenticationStore: AuthenticationStore;
 }
 
 
-@inject(Stores.NotificationStore)
+// @inject(Stores.NotificationStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
 class NotificationDrawer extends React.Component<INotificationProps>  {
 
     getNotifications = async () => {
-        await this.props.notificationStore.getAll("8");
+        // await this.props.notificationStore.getAll("8");
     }
 
 

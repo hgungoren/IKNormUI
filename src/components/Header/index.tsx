@@ -6,18 +6,18 @@ import LanguageSelect from '../LanguageSelect';
 import profilePicture from '../../images/user.png';
 import { Avatar, Badge, Col, Dropdown, Menu, Row, Space } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined, BellOutlined } from '@ant-design/icons';
-import NotificationDrawer from '../../components/NotificationDrawer';
+// import NotificationDrawer from '../../components/NotificationDrawer';
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 import AuthenticationStore from '../../stores/authenticationStore';
-import NotificationStore from '../../stores/notificationStore';
+// import NotificationStore from '../../stores/notificationStore';
 
 export interface IHeaderProps {
   collapsed?: any;
   toggle?: any;
   sessionStore: SessionStore;
   accountStore: AccountStore;
-  notificationStore: NotificationStore;
+  // notificationStore: NotificationStore;
   authenticationStore: AuthenticationStore;
 }
 
@@ -48,7 +48,9 @@ export class Header extends React.Component<IHeaderProps> {
     this.setState({ visible: false });
   }
   render() {
-    const { visible, notificationCount } = this.state;
+    const { 
+      // visible,
+       notificationCount } = this.state;
     return (
       <Row className={'header-container'}>
         <Col style={{ textAlign: 'left' }} span={12}>
@@ -75,8 +77,8 @@ export class Header extends React.Component<IHeaderProps> {
               <Avatar size="small" shape="circle" alt={'profile'} src={profilePicture} />
             </Dropdown>
 
-            <NotificationDrawer notificationStore={this.props.notificationStore} sessionStore={this.props.sessionStore} accountStore= {this.props.accountStore} authenticationStore={this.props.authenticationStore} visible={visible} showOrHideDrawer={this.hideDrawer} notificationCount={notificationCount} /></Space>
-
+            {/* <NotificationDrawer notificationStore={this.props.notificationStore} sessionStore={this.props.sessionStore} accountStore= {this.props.accountStore} authenticationStore={this.props.authenticationStore} visible={visible} showOrHideDrawer={this.hideDrawer} notificationCount={notificationCount} />*/}
+          </Space>
         </Col>
       </Row>
     );

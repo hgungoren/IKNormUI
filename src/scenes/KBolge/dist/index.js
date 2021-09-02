@@ -79,11 +79,9 @@ var bolgeTip_1 = require("../../services/kBolge/dto/bolgeTip");
 var createKBolgeNorm_1 = require("./components/createKBolgeNorm");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var antd_1 = require("antd");
-var moment_1 = require("moment");
+var date_1 = require("../../helper/date");
 var Search = antd_1.Input.Search;
 var confirm = antd_1.Modal.confirm;
-var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
-var currentDate = moment_1["default"]().toDate();
 var KBolge = /** @class */ (function (_super) {
     __extends(KBolge, _super);
     function KBolge() {
@@ -102,7 +100,8 @@ var KBolge = /** @class */ (function (_super) {
             searchFilter: '',
             modalVisible: false,
             filter: { offset: 0, limit: 5, current: 0 },
-            moment: []
+            moment: [],
+            normList: []
         };
         _this.getNormRequests = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -143,28 +142,26 @@ var KBolge = /** @class */ (function (_super) {
             });
         }); };
         _this.onDateFilter = function (date) { return __awaiter(_this, void 0, void 0, function () {
-            var start, end;
+            var startDate, endDate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(date !== null)) return [3 /*break*/, 3];
-                        start = void 0;
-                        end = void 0;
-                        if (date[0] !== null) {
-                            start = date[0]._d;
+                        if (date === null) {
+                            startDate = date_1.dateHelper.getMonthFirstDate('tr');
+                            endDate = date_1.dateHelper.getTodayDate('tr');
                         }
-                        if (date[1] !== null) {
-                            end = date[1]._d;
+                        else {
+                            startDate = date_1.dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+                            endDate = date_1.dateHelper.getTodayWidthDate(date[1], 'tr');
                         }
-                        return [4 /*yield*/, this.getNormRequests(start, end)];
+                        return [4 /*yield*/, this.getNormRequests(startDate, endDate)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestCounts(start, end)];
+                        return [4 /*yield*/, this.getNormRequestCounts(startDate, endDate)];
                     case 2:
                         _a.sent();
-                        this.setState({ moment: date });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                        this.setState({ moment: [startDate, endDate] });
+                        return [2 /*return*/];
                 }
             });
         }); };
@@ -227,6 +224,12 @@ var KBolge = /** @class */ (function (_super) {
                             return [4 /*yield*/, this.getKSubeNorms()];
                         case 8:
                             _a.sent();
+                            return [4 /*yield*/, this.getKSubeEmployees()];
+                        case 9:
+                            _a.sent();
+                            return [4 /*yield*/, this.mergeArray()];
+                        case 10:
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });
@@ -240,17 +243,20 @@ var KBolge = /** @class */ (function (_super) {
                 form.setFieldsValue(__assign({}, _this.props.kSubeNormStore.editNorm));
             }, 200);
         };
+        // del = (input) => {
+        //     this.props.kSubeNormStore.delete(input);
+        //     // this.getKSubeNorms();
+        //     // this.getKSubeEmployees();
+        //     // this.mergeArray();
+        //     // console.log('sa')
+        // }
         _this.kSubeNormDelete = function (input) {
             var self = _this;
             confirm({
                 okText: abpUtility_1.L('Yes'),
                 cancelText: abpUtility_1.L('No'),
                 title: abpUtility_1.L('ConfirmDelete'),
-                onOk: function () {
-                    self.getKSubeNorms();
-                    self.props.kSubeNormStore["delete"](input);
-                    self.getKSubeNorms();
-                },
+                onOk: function () { self.props.kSubeNormStore["delete"](input); },
                 onCancel: function () {
                     console.log('Cancel');
                 }
@@ -271,6 +277,22 @@ var KBolge = /** @class */ (function (_super) {
                 filter: __assign(__assign({}, filter), { current: current, limit: pageSize })
             });
         };
+        _this.mergeArray = function () { return __awaiter(_this, void 0, void 0, function () {
+            var normList;
+            var _this = this;
+            return __generator(this, function (_a) {
+                normList = this.props.kSubeNormStore.norms.items.map(function (record, index) { return Object.assign({
+                    id: record.id,
+                    position: record.pozisyon,
+                    creationTime: record.creationTime,
+                    lastModificationTime: record.lastModificationTime,
+                    normCount: _this.props.kSubeNormStore.norms.items.filter(function (x) { return x.pozisyon === record.pozisyon; })[0].adet,
+                    employeeCount: _this.props.kPersonelStore.kPersonels.items.filter(function (x) { return x.gorevi === record.pozisyon; }).length
+                }); });
+                this.setState({ normList: normList });
+                return [2 /*return*/];
+            });
+        }); };
         return _this;
     }
     KBolge.prototype.getKSubeNorms = function () {
@@ -278,6 +300,23 @@ var KBolge = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.props.kSubeNormStore.getAllNorms({
+                            keyword: '',
+                            skipCount: 0,
+                            id: this.state.subeObjId,
+                            maxResultCount: 5
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    KBolge.prototype.getKSubeEmployees = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.props.kPersonelStore.getAll({
                             keyword: '',
                             skipCount: 0,
                             id: this.state.subeObjId,
@@ -372,12 +411,18 @@ var KBolge = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.getPosition(tip)];
                     case 2:
                         _b.sent();
-                        if (!abpUtility_1.isGranted('kbolge.norm.view')) return [3 /*break*/, 4];
+                        if (!abpUtility_1.isGranted('kbolge.norm.view')) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.getKSubeNorms()];
                     case 3:
                         _b.sent();
-                        _b.label = 4;
+                        return [4 /*yield*/, this.getKSubeEmployees()];
                     case 4:
+                        _b.sent();
+                        return [4 /*yield*/, this.mergeArray()];
+                    case 5:
+                        _b.sent();
+                        _b.label = 6;
+                    case 6:
                         this.setState({ modalVisible: !this.state.modalVisible });
                         return [2 /*return*/];
                 }
@@ -394,6 +439,7 @@ var KBolge = /** @class */ (function (_super) {
     };
     KBolge.prototype.componentDidMount = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var currentDate, startOfMonth;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.setPageState()];
@@ -408,6 +454,8 @@ var KBolge = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.getNormCount()];
                     case 4:
                         _a.sent();
+                        currentDate = date_1.dateHelper.getTodayDate('tr');
+                        startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
                         if (!(abpUtility_1.isGranted('knorm.getcancelednormupdaterequest') ||
                             abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
                             abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
@@ -423,7 +471,9 @@ var KBolge = /** @class */ (function (_super) {
                     case 6:
                         _a.sent();
                         _a.label = 7;
-                    case 7: return [2 /*return*/];
+                    case 7:
+                        this.setState({ moment: [startOfMonth, currentDate] });
+                        return [2 /*return*/];
                 }
             });
         });
@@ -446,11 +496,45 @@ var KBolge = /** @class */ (function (_super) {
         var positions = this.props.kInkaLookUpTableStore.positions;
         var _b = this.props.kNormStore, getTotalNormUpdateRequestCount = _b.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _b.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _b.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _b.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _b.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _b.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _b.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _b.getCanceledNormUpdateRequestCount;
         var columns = [
-            { title: abpUtility_1.L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: function (text) { return React.createElement("div", null, bolgeTip_1["default"][text]); } },
-            { title: abpUtility_1.L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: function (text) { return React.createElement("div", null, text); } },
+            {
+                title: abpUtility_1.L('AreaInformations xs'),
+                render: function (record) { return (React.createElement(React.Fragment, null,
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.area.name')),
+                    " : ",
+                    record.adi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.area.type')),
+                    "  : ",
+                    record.tip,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        abpUtility_1.L('table.area.employeecount'),
+                        " "),
+                    " : ",
+                    record.personelSayisi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.area.normcount')),
+                    "  : ",
+                    record.normSayisi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('table.area.normgap')),
+                    "  : ",
+                    record.normEksigi,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        " ",
+                        abpUtility_1.L('Actions')),
+                    "  : ",
+                    record.text)); },
+                responsive: ['xs']
+            },
+            { title: abpUtility_1.L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: function (text) { return React.createElement("div", null, bolgeTip_1["default"][text]); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
             {
                 title: abpUtility_1.L('Actions'),
                 width: 150,
@@ -477,7 +561,8 @@ var KBolge = /** @class */ (function (_super) {
                                     abpUtility_1.L('NormCreate'),
                                     " "),
                                 " "))), placement: "bottomLeft" },
-                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); }
+                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); },
+                responsive: ['sm']
             },
         ];
         return (React.createElement(React.Fragment, null,
@@ -503,7 +588,7 @@ var KBolge = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handlePagination, rowKey: function (record) { return record.objId.toString(); }, loading: kBolge === undefined ? true : false, dataSource: kBolge === undefined ? [] : kBolge.items, pagination: tablePagination })))),
-            React.createElement(createKBolgeNorm_1["default"], { modalType: 'create', formRef: this.formRef, positionSelect: positions, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); } })));
+            React.createElement(createKBolgeNorm_1["default"], { modalType: 'create', formRef: this.formRef, positionSelect: positions, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); }, normList: this.state.normList })));
     };
     KBolge = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KNormStore),

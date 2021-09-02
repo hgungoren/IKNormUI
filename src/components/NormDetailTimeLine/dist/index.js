@@ -49,6 +49,7 @@ var NormDetailTimeLine = function (_a) {
                                             talepDurumu_1["default"][norm.durumu],
                                             " ")))))),
                     react_1["default"].createElement(antd_1.Col, { xs: { span: 24, offset: 2 }, sm: { span: 10, offset: 2 } },
+                        react_1["default"].createElement(antd_1.Steps, { direction: "vertical" }),
                         react_1["default"].createElement(antd_1.Steps, { direction: "vertical" }, data !== undefined && data.map(function (x) { return react_1["default"].createElement(react_1["default"].Fragment, null,
                             react_1["default"].createElement(Step, { key: react_uuid_1["default"](), status: (x.status === status_1["default"].Apporved) ? "finish" : (x.status === status_1["default"].Waiting ? "wait" : "error"), title: talepDurumu_1["default"][x.talepDurumuStr], description: react_1["default"].createElement(react_1["default"].Fragment, null,
                                     react_1["default"].createElement("p", { className: 'step-time' },
@@ -63,8 +64,7 @@ var NormDetailTimeLine = function (_a) {
                                     react_1["default"].createElement("p", { className: 'step-description' },
                                         " ",
                                         (x.description !== null ? x.description : ''),
-                                        " "),
-                                    "   ") })); }))))))));
+                                        " ")) })); }))))))));
 };
 NormDetailTimeLine.propTypes = {
     visible: prop_types_1["default"].bool.isRequired,

@@ -22,8 +22,8 @@ import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-import moment from 'moment';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { dateHelper } from '../../helper/date';
 
 export interface IBolgeProps {
     kNormStore: KNormStore;
@@ -51,13 +51,11 @@ export interface IBolgeState {
     maxResultCount: number;
     filter: { offset: number, limit: number, current: number }
     moment: any;
+    normList: any;
 }
 
 const Search = Input.Search;
 const confirm = Modal.confirm;
-const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
-const currentDate = moment().toDate();
-
 
 @inject(Stores.KNormStore)
 @inject(Stores.KBolgeStore)
@@ -84,7 +82,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         searchFilter: '',
         modalVisible: false,
         filter: { offset: 0, limit: 5, current: 0, },
-        moment: [] as any
+        moment: [] as any,
+        normList: [] as any
     };
 
 
@@ -97,8 +96,16 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     }
 
+    async getKSubeEmployees() {
+        await this.props.kPersonelStore.getAll({
+            keyword: '',
+            skipCount: 0,
+            id: this.state.subeObjId,
+            maxResultCount: 5,
+        });
+    }
 
-    getNormRequests = async (start?: Date, end?: Date) => {
+    getNormRequests = async (start?: any, end?: any) => {
         await this.props.kNormStore.getMaxAll({
             id: '0',
             keyword: '',
@@ -111,7 +118,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         });
     }
 
-    getNormRequestCounts = async (start?: Date, end?: Date) => {
+    getNormRequestCounts = async (start?: any, end?: any) => {
         await this.props.kNormStore.getMaxAllCount({
             id: '0',
             keyword: '',
@@ -125,24 +132,20 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     }
 
 
-    onDateFilter = async (date) => {  
-
-        if (date !== null) {
-            let start: any;
-            let end: any;
-
-            if (date[0] !== null) {
-                start = date[0]._d;
-            }
-            if (date[1] !== null) {
-                end = date[1]._d;
-            }
-
-            await this.getNormRequests(start, end);
-            await this.getNormRequestCounts(start, end);
-
-            this.setState({ moment: date })
+    onDateFilter = async (date) => {
+        let startDate: any;
+        let endDate: any;
+        if (date === null) {
+            startDate = dateHelper.getMonthFirstDate('tr');
+            endDate = dateHelper.getTodayDate('tr');
         }
+        else {
+            startDate = dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+            endDate = dateHelper.getTodayWidthDate(date[1], 'tr');
+        }
+        await this.getNormRequests(startDate, endDate);
+        await this.getNormRequestCounts(startDate, endDate);
+        this.setState({ moment: [startDate, endDate] })
     }
 
     async getNormCount() {
@@ -209,6 +212,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                 }
                 form!.resetFields();
                 await this.getKSubeNorms();
+                await this.getKSubeEmployees();
+                await this.mergeArray()
             });
     };
 
@@ -223,17 +228,23 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         }, 200);
     }
 
+
+    // del = (input) => {
+    //     this.props.kSubeNormStore.delete(input);
+    //     // this.getKSubeNorms();
+    //     // this.getKSubeEmployees();
+    //     // this.mergeArray();
+    //     // console.log('sa')
+    // }
+
+
     kSubeNormDelete = (input: EntityDto<string>) => {
         const self = this;
         confirm({
             okText: L('Yes'),
             cancelText: L('No'),
             title: L('ConfirmDelete'),
-            onOk() {
-                self.getKSubeNorms();
-                self.props.kSubeNormStore.delete(input);
-                self.getKSubeNorms();
-            },
+            onOk() { self.props.kSubeNormStore.delete(input) },
             onCancel() {
                 console.log('Cancel');
             },
@@ -261,7 +272,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                 }
             );
     }
- 
+
     async createOrUpdateModalOpen(tip: string, id: string, subeAdi: string) {
         this.formRef.current?.resetFields();
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
@@ -269,10 +280,12 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
         if (isGranted('kbolge.norm.view')) {
             await this.getKSubeNorms();
+            await this.getKSubeEmployees();
+            await this.mergeArray();
         }
 
         this.setState({ modalVisible: !this.state.modalVisible });
-    } 
+    }
 
     async setPageState() {
         this.setState({ id: this.props["match"].params["id"] });
@@ -283,6 +296,9 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         await this.getAll();
         await this.getEmployeeCount();
         await this.getNormCount();
+
+        let currentDate = dateHelper.getTodayDate('tr');
+        let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
         if (isGranted('knorm.getcancelednormupdaterequest') ||
             isGranted('knorm.getacceptednormupdaterequest') ||
@@ -296,6 +312,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             await this.getNormRequests(startOfMonth, currentDate);
             await this.getNormRequestCounts(startOfMonth, currentDate);
         }
+
+        this.setState({ moment: [startOfMonth, currentDate] })
     }
 
     handleSearch = (value: string) => {
@@ -314,6 +332,22 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             }
         });
     };
+
+
+    mergeArray = async () => {
+
+        let normList = this.props.kSubeNormStore.norms.items.map((record, index) => Object.assign({
+            id: record.id,
+            position: record.pozisyon,
+            creationTime: record.creationTime,
+            lastModificationTime:record.lastModificationTime,
+            normCount: this.props.kSubeNormStore.norms.items.filter(x => x.pozisyon === record.pozisyon)[0].adet,
+            employeeCount: this.props.kPersonelStore.kPersonels.items.filter(x => x.gorevi === record.pozisyon).length
+        }))
+
+        this.setState({ normList: normList });
+    }
+
 
     public render() {
         const { filter, totalSize, moment } = this.state;
@@ -347,31 +381,31 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             {
                 title: L('AreaInformations xs'),
                 render: (record) => (
-                  <React.Fragment>
-                    <span className={'responsive-title'}>{L('table.area.name')}</span> : {record.adi}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.area.type')}</span>  : {record.tip}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.area.employeecount')} </span> : {record.personelSayisi}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.area.normcount')}</span>  : {record.normSayisi}
-                    <br />
-                    <span className={'responsive-title'}> {L('table.area.normgap')}</span>  : {record.normEksigi}
-                    <br/>
-                    <span className={'responsive-title'}> {L('Actions')}</span>  : {record.text}
-                  </React.Fragment>
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('table.area.name')}</span> : {record.adi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.area.type')}</span>  : {record.tip}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.area.employeecount')} </span> : {record.personelSayisi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.area.normcount')}</span>  : {record.normSayisi}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.area.normgap')}</span>  : {record.normEksigi}
+                        <br />
+                        <span className={'responsive-title'}> {L('Actions')}</span>  : {record.text}
+                    </React.Fragment>
                 ),
                 responsive: ['xs'] as Breakpoint[]
-                
-              },
 
-            
+            },
 
-            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div>  ,responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
-            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
-            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div>  ,responsive: ['sm'] as Breakpoint[]},
+
+
+            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
             {
                 title: L('Actions'),
                 width: 150,
@@ -491,6 +525,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                     kSubeNormStore={this.props.kSubeNormStore}
                     kSubeNorms={this.props.kSubeNormStore.norms}
                     onCancel={() => { this.setState({ modalVisible: false, }) }}
+                    normList={this.state.normList}
                 />
             </React.Fragment >
         )

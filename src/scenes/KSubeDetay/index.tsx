@@ -28,9 +28,7 @@ import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
 import NormStatus from '../../services/kNorm/dto/normStatus';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
-
-
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve'; 
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -336,9 +334,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             tip,
             pozisyon
         })
-    }
-
-
+    } 
 
     public render() {
 
@@ -435,7 +431,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         })
                     }
                 </div>,
-                    responsive: ['sm'] as Breakpoint[]
+                responsive: ['sm'] as Breakpoint[]
             },
             {
                 title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
@@ -596,9 +592,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                             </Col>
                         </Row>
                     </Card>
-                }
+                } 
 
                 <CreateNormForm
+                    modalWidth={'60%'}
                     getHierarchy={this.getHierarchy}
                     modalType={'create'}
                     tip={tip}

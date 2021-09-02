@@ -161,11 +161,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 let end: any;
 
                 if (this.props.moment[0] !== undefined) {
-                    start = this.props.moment[0]._d;
+                    start = this.props.moment[0];
                     this.setState({ dateStart: start })
                 }
                 if (this.props.moment[1] !== undefined) {
-                    end = this.props.moment[1]._d;
+                    end = this.props.moment[1];
                     this.setState({ dateStart: end })
                 }
 
@@ -174,7 +174,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             }
             else {
                 this.getNormRequestsAll();
-                this.getNormRequestCounts( );
+                this.getNormRequestCounts();
             }
         }
         else
@@ -233,8 +233,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     this.notification('error', {
                                         title: 'NormRejectNotificationMessageTitle',
                                         description: 'NormRejectNotificationMessageDescription'
-                                    }); 
-                                    this.getAllNormDetails(); 
+                                    });
+                                    this.getAllNormDetails();
                                     this.getNormRequestsAll(this.state.dateStart, this.state.dateEnd);
                                     this.getNormRequestCounts(this.state.dateStart, this.state.dateEnd);
                                 });
@@ -265,7 +265,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     this.props.kNormStore.setStatusAsync({
                         id: id
                     }).then(() => {
-                        this.getAllNormDetails(); 
+                        this.getAllNormDetails();
                         this.getNormRequestsAll(this.state.dateStart, this.state.dateEnd);
                         this.getNormRequestCounts(this.state.dateStart, this.state.dateEnd);
                         this.notification('success', {
@@ -318,27 +318,27 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             {
                 title: L('NormRequestListTableInformations xs'),
                 render: (record) => (
-                  <React.Fragment>
-                    <span className={'responsive-title'}>{L('table.norm.requestdate')}</span> : {record.creationTime}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.norm.requeststatus')}</span>  : {record.durumu}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.norm.area.name')} </span> : {record.bolgeAdi}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.norm.branch.name')}</span>  : {record.subeAdi}
-                    <br />
-                    <span className={'responsive-title'}> {L('table.norm.position')}</span>  : {record.pozisyon}
-                    <br />
-                    <br />
-                    <span className={'responsive-title'}> {L('table.norm.requestreason')}</span>  : {record.nedeni}
-                    <br />
-                    <span className={'responsive-title'}> {L('table.norm.requesttype')}</span>  : {record.turu}
-                    <br />
-                    <span className={'responsive-title'}> {L('İşlem')}</span>  : {record.id}
-                  </React.Fragment>
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('table.norm.requestdate')}</span> : {record.creationTime}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.requeststatus')}</span>  : {record.durumu}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.area.name')} </span> : {record.bolgeAdi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.norm.branch.name')}</span>  : {record.subeAdi}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.norm.position')}</span>  : {record.pozisyon}
+                        <br />
+                        <br />
+                        <span className={'responsive-title'}> {L('table.norm.requestreason')}</span>  : {record.nedeni}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.norm.requesttype')}</span>  : {record.turu}
+                        <br />
+                        <span className={'responsive-title'}> {L('İşlem')}</span>  : {record.id}
+                    </React.Fragment>
                 ),
                 responsive: ['xs'] as Breakpoint[]
-              },
+            },
 
             {
                 title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: uuid(), width: 60, render: (text: Date) => <div >
@@ -352,7 +352,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         })
                     }
                 </div>,
-                  responsive: ['sm'] as Breakpoint[]
+                responsive: ['sm'] as Breakpoint[]
             },
             {
                 title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
@@ -368,9 +368,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             },
             { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
             { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div >{text}</div> , responsive: ['sm'] as Breakpoint[]},
-            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div> , responsive: ['sm'] as Breakpoint[]},
-            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div>, responsive: ['sm'] as Breakpoint[] },
             {
                 title: "İşlem",
                 dataIndex: 'id',
@@ -490,3 +490,5 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 }
 
 export default NormRequestListTable;
+
+

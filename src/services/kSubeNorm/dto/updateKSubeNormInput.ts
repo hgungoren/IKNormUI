@@ -1,12 +1,9 @@
 export interface UpdateKSubeNormInput {
-  pozisyon: string;
-  adet: number;
-  subeObjId: string;
-  isActive: boolean; 
-  lastLoginTime: Date;
-  creationTime: Date;   
   id: string; 
-  creatorUserId: number;
-  lastModificationTime: Date;
+  pozisyon: string;
+  adet: number; 
+  subeObjId: string;
+  isActive: boolean;   
+  lastModificationTime?: Date;
   lastModifierUserId: number; 
 }

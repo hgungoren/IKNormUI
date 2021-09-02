@@ -21,8 +21,9 @@ import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
-import moment from 'moment';
+
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { dateHelper } from '../../helper/date';
 
 export interface INormProps {
     kSubeStore: KSubeStore;
@@ -49,13 +50,11 @@ export interface INormState {
     modalVisible: boolean;
     maxResultCount: number;
     kPersonelCount: number;
-    filter: { offset: number, limit: number, current: number }
+    filter: { offset: number, limit: number, current: number },
+    normList: any;
 }
 
 const confirm = Modal.confirm;
-const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
-const currentDate = moment().toDate();
-
 @inject(Stores.KSubeStore)
 @inject(Stores.KNormStore)
 @inject(Stores.KSubeNormStore)
@@ -80,10 +79,11 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         modalVisible: false,
         totalSize: 0,
         filter: { offset: 0, limit: 5, current: 0, },
-        moment: [] as any
+        moment: [] as any,
+        normList: [] as any
     };
- 
-    getNormRequests = async (id: string, start?: Date, end?: Date) => {
+
+    getNormRequests = async (id: string, start?: any, end?: any) => {
 
         await this.props.kNormStore.getMaxAll({
             id: '0',
@@ -97,7 +97,16 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         });
 
     }
-    getNormRequestCounts = async (id: string, start?: Date, end?: Date) => {
+    async getKSubeEmployees() {
+        await this.props.kPersonelStore.getAll({
+            keyword: '',
+            skipCount: 0,
+            id: this.state.subeObjId,
+            maxResultCount: 5,
+        });
+    }
+
+    getNormRequestCounts = async (id: string, start?: any, end?: any) => {
 
         await this.props.kNormStore.getMaxAllCount({
             id: '0',
@@ -110,26 +119,27 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             start: start
         });
     }
-    onDateFilter = async (date) => {
-        if (date !== null) {
-            let start: any;
-            let end: any;
 
-            if (date[0] !== null) {
-                start = date[0]._d;
-            }
-            if (date[1] !== null) {
-                end = date[1]._d;
-            }
 
-            await this.getNormRequests(start, end);
-            await this.getNormRequestCounts(start, end);
-
-            this.setState({ moment: date })
+    onDateFilter = async (date) => { 
+        let startDate: any;
+        let endDate: any; 
+        if (date === null) { 
+            startDate = dateHelper.getMonthFirstDate('tr');
+            endDate = dateHelper.getTodayDate('tr');
         }
+        else {
+            startDate = dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+            endDate = dateHelper.getTodayWidthDate(date[1], 'tr');
+        } 
+        await this.getNormRequests(this.state.id, startDate, endDate);
+        await this.getNormRequestCounts(this.state.id, startDate, endDate);
+        this.setState({ moment: [startDate, endDate] })
     }
 
 
+
+    
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
         await this.props.kSubeNormStore.getAllNorms({
@@ -270,6 +280,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
         if (isGranted('ksubenorm.view')) {
             await this.getKSubeNorms();
+            await this.getKSubeEmployees();
+            await this.mergeArray();
         }
 
         this.setState({ modalVisible: !this.state.modalVisible });
@@ -286,6 +298,11 @@ class KSube extends AppComponentBase<INormProps, INormState>{
     }
 
     async componentDidMount() {
+
+        let currentDate = dateHelper.getTodayDate('tr');
+        let startOfMonth = dateHelper.getMonthFirstDate('tr');
+
+
         await this.setPageState();
         await this.getAll();
         await this.get({ id: this.state.id });
@@ -315,6 +332,20 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             }
         });
     };
+
+
+    mergeArray = async () => {
+
+        let normList = this.props.kSubeNormStore.norms.items.map((record, index) => Object.assign({
+            id: record.id,
+            position: record.pozisyon,
+            creationTime: record.creationTime,
+            normCount: this.props.kSubeNormStore.norms.items.filter(x => x.pozisyon === record.pozisyon)[0].adet,
+            employeeCount: this.props.kPersonelStore.kPersonels.items.filter(x => x.gorevi === record.pozisyon).length
+        }))
+
+        this.setState({ normList: normList });
+    }
 
     public render() {
 
@@ -352,33 +383,33 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             {
                 title: L('BranchInformations xs'),
                 render: (record) => (
-                  <React.Fragment>
-                    <span className={'responsive-title'}>{L('Area')}</span> : {record.adi}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.branch.name')}</span>  : {record.adi}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.branch.type')} </span> : {record.tip}
-                    <br />
-                    <span className={'responsive-title'}>{L('table.branch.employeecount')}</span>  : {record.personelSayisi}
-                    <br />
-                    <span className={'responsive-title'}> {L('table.branch.normcount')}</span>  : {record.normSayisi}
-                    <br/>
-                    <span className={'responsive-title'}> {L('table.branch.normgap')}</span>  : {record.normEksigi}
-                    <br/>
-                    <span className={'responsive-title'}> {L('table.branch.transactions')}</span>  : {record.text}
-                  </React.Fragment>
+                    <React.Fragment>
+                        <span className={'responsive-title'}>{L('Area')}</span> : {record.adi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.name')}</span>  : {record.adi}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.type')} </span> : {record.tip}
+                        <br />
+                        <span className={'responsive-title'}>{L('table.branch.employeecount')}</span>  : {record.personelSayisi}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.branch.normcount')}</span>  : {record.normSayisi}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.branch.normgap')}</span>  : {record.normEksigi}
+                        <br />
+                        <span className={'responsive-title'}> {L('table.branch.transactions')}</span>  : {record.text}
+                    </React.Fragment>
                 ),
                 responsive: ['xs'] as Breakpoint[]
-                
-              },
+
+            },
 
 
-            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div> , responsive: ['sm'] as Breakpoint[]},
-            { title: L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
-            { title: L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('Area'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{editKSube === undefined ? '' : editKSube.adi}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
             { title: L('table.branch.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: string) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
-            { title: L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div> , responsive: ['sm'] as Breakpoint[]},
+            { title: L('table.branch.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.branch.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
             {
                 title: L('table.branch.transactions'),
                 width: 150,
@@ -409,7 +440,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                         </Dropdown>
                     </div >
                 ),
-                 responsive: ['sm'] as Breakpoint[]
+                responsive: ['sm'] as Breakpoint[]
             },
         ];
         return (
@@ -491,6 +522,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                 </Card>
                 <CreateKSubeNorm
                     modalType={'create'}
+                    normList={this.state.normList}
                     formRef={this.formRef}
                     positionSelect={positions}
                     subeAdi={this.state.subeAdi}

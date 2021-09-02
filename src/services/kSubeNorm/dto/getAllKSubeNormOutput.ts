@@ -7,6 +7,6 @@ export interface GetAllKSubeNormOutput {
   creationTime: Date;   
   id: string; 
   creatorUserId: number;
-  lastModificationTime: Date;
+  lastModificationTime?: Date;
   lastModifierUserId: number; 
 }

@@ -19,6 +19,7 @@ import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
 import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
 import moment from 'moment';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { dateHelper } from '../../helper/date';
 
 declare var abp: any;
 const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
@@ -74,29 +75,24 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   getEmployeeCount = async () => await this.props.kPersonelStore.getEmployeeCount();
   getNormCount = async () => await this.props.kSubeNormStore.getNormCount();
-
-
-
+ 
   onDateFilter = async (date) => {
-
-    if (date !== null) {
-      let start: any;
-      let end: any;
-
-      if (date[0] !== null) {
-        start = date[0]._d;
-      }
-      if (date[1] !== null) {
-        end = date[1]._d;
-      }
-
-      await this.getNormRequests(start, end);
-      await this.getNormRequestCounts(start, end);
-
-      this.setState({ moment: date })
+    let startDate: any;
+    let endDate: any;
+    if (date === null) {
+      startDate = dateHelper.getMonthFirstDate('tr');
+      endDate = dateHelper.getTodayDate('tr');
     }
-  }
+    else {
+      startDate = dateHelper.getMonthWidthFirstDate(date[0], 'tr');
+      endDate = dateHelper.getTodayWidthDate(date[1], 'tr');
+    }
+    
+    await this.getNormRequests(startDate, endDate);
+    await this.getNormRequestCounts(startDate, endDate); 
+    this.setState({ moment: [startDate, endDate] })
 
+  }
 
   getNormRequests = async (start?: Date, end?: Date) => {
     await this.props.kNormStore.getMaxAll({
@@ -160,17 +156,17 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     })
 
   }
-  
+
   lineChartModel = async (data: GetAllKNormOutput[]): Promise<any[]> => {
     let week: Date[] = []
     var currentDate = moment();
     var weekStart = currentDate.clone().startOf('isoWeek');
- 
+
     for (var i = 0; i <= 6; i++) {
       week.push(moment(moment(weekStart).add(i, 'days')).toDate());
     }
-   
- 
+
+
     const startDateOfWeek = moment().startOf('isoWeek').toDate();
     const endDateOfWeek = moment().endOf('isoWeek').toDate();
 
@@ -295,7 +291,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       ]
       return model;
     }
-  } 
+  }
 
   changeLineViewHandler = async () => {
     this.setState({ lineChartView: !this.state.lineChartView })

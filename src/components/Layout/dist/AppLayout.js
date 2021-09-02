@@ -70,12 +70,13 @@ var ProtectedRoute_1 = require("../../components/Router/ProtectedRoute");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var mobx_react_1 = require("mobx-react");
 var Content = antd_1.Layout.Content;
+// @inject(Stores.NotificationStore)
 var AppLayout = /** @class */ (function (_super) {
     __extends(AppLayout, _super);
     function AppLayout() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
-            collapsed: false
+            collapsed: true
         };
         _this.toggle = function () {
             _this.setState({
@@ -101,7 +102,11 @@ var AppLayout = /** @class */ (function (_super) {
             React.createElement(SiderMenu_1["default"], { path: path, onCollapse: this.onCollapse, history: history, collapsed: collapsed }),
             React.createElement(antd_1.Layout, null,
                 React.createElement(antd_1.Layout.Header, { style: { background: '#fff', minHeight: 52, padding: 0 } },
-                    React.createElement(Header_1["default"], { notificationStore: this.props.notificationStore, sessionStore: this.props.sessionStore, accountStore: this.props.accountStore, authenticationStore: this.props.authenticationStore, collapsed: this.state.collapsed, toggle: this.toggle })),
+                    React.createElement(Header_1["default"]
+                    // notificationStore={this.props.notificationStore}
+                    , { 
+                        // notificationStore={this.props.notificationStore}
+                        sessionStore: this.props.sessionStore, accountStore: this.props.accountStore, authenticationStore: this.props.authenticationStore, collapsed: this.state.collapsed, toggle: this.toggle })),
                 React.createElement(Content, { style: { margin: 16 } },
                     React.createElement(react_router_dom_1.Switch, null,
                         pathname === '/' && React.createElement(react_router_dom_1.Redirect, { from: "/", to: "/home" }),
@@ -113,7 +118,6 @@ var AppLayout = /** @class */ (function (_super) {
         return React.createElement(react_document_title_1["default"], { title: utils_1["default"].getPageTitle(pathname) }, layout);
     };
     AppLayout = __decorate([
-        mobx_react_1.inject(storeIdentifier_1["default"].NotificationStore),
         mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),
         mobx_react_1.observer
     ], AppLayout);

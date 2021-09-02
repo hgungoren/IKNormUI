@@ -4,6 +4,10 @@ exports.dateHelper = void 0;
 var moment_1 = require("moment");
 exports.dateHelper = {
     getMomentInstance: function (date, lang) { return moment_1["default"](date || new Date()).locale(lang); },
+    getTodayDate: function (lang) { return moment_1["default"]().locale(lang).format('MM DD YYYY, h:mm:ss a'); },
+    getMonthFirstDate: function (lang) { return moment_1["default"]().startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'); },
+    getTodayWidthDate: function (date, lang) { return moment_1["default"](date || new Date()).locale(lang).format('MM DD YYYY, h:mm:ss a'); },
+    getMonthWidthFirstDate: function (date, lang) { return moment_1["default"](date || new Date()).startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'); },
     getToday: function (date) { return moment_1["default"](date || new Date).startOf('day').toDate(); },
     getTodayRange: function (date) { return ({
         startDate: moment_1["default"](date || new Date()).startOf('day').toDate(),

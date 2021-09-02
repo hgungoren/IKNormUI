@@ -9,7 +9,7 @@ import { EntityDto } from '../../../services/dto/entityDto';
 import { PagedResultDto } from '../../../services/dto/pagedResultDto';
 import { GetKSubeNormOutput } from '../../../services/kSubeNorm/dto/getKSubeNormOutput';
 import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
- 
+
 
 export interface ICreateNormProps {
   visible: boolean;
@@ -26,6 +26,7 @@ export interface ICreateNormProps {
   positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
   subeAdi: string;
   bolgeAdi: string;
+  normList: []
 }
 
 
@@ -77,6 +78,7 @@ class CreateKSubeNorm extends React.Component<ICreateNormProps> {
           />
 
           <KSubeNormTable
+            normList={this.props.normList}
             kSubeNormEdit={kSubeNormEdit}
             kSubeNormStore={kSubeNormStore}
             kSubeNormDelete={kSubeNormDelete}

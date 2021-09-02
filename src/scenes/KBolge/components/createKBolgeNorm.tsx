@@ -10,7 +10,8 @@ import { PagedResultDto } from '../../../services/dto/pagedResultDto';
 import { GetKSubeNormOutput } from '../../../services/kSubeNorm/dto/getKSubeNormOutput';
 import { GetKInkaLookUpTableOutput } from '../../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
 
-export interface ICreateNormProps {
+export interface Props {
+  normList: [];
   visible: boolean;
   modalType: string;
   subeObjId: string;
@@ -25,15 +26,17 @@ export interface ICreateNormProps {
   positionSelect: PagedResultDto<GetKInkaLookUpTableOutput>;
 }
 
+export interface State {
+  id: string;
+  adet: number;
+  userId: string;
+  pozisyon: string;
+  confirmDirty: boolean;
+}
 
-class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
-  state = {
-    id: '0',
-    adet: 0,
-    userId: '0',
-    pozisyon: '',
-    confirmDirty: false,
-  };
+
+class CreateKBolgeNorm extends React.Component<Props, State> {
+  state = { id: '0', adet: 0, userId: '0', pozisyon: '', confirmDirty: false, };
 
   render() {
     const {
@@ -46,6 +49,7 @@ class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
       kSubeNormStore,
       kSubeNormCreate,
       kSubeNormDelete,
+      normList
     } = this.props;
     return (
       <>
@@ -71,10 +75,9 @@ class CreateKBolgeNorm extends React.Component<ICreateNormProps> {
           />
 
           <KBolgeNormTable
-            kSubeNormEdit={kSubeNormEdit}
-            kSubeNormStore={kSubeNormStore}
-            kSubeNormDelete={kSubeNormDelete}
-            kSubeNorms={this.props.kSubeNorms}
+            normList={normList}
+            kSubeNormEdit={kSubeNormEdit} 
+            kSubeNormDelete={kSubeNormDelete} 
           />
         </Modal >
       </>
