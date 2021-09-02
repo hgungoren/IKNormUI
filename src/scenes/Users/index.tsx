@@ -26,6 +26,8 @@ export interface IUserState {
   userId: number;
   filter: string;
   drawerVisible: boolean;
+  totalSizeTable: number,
+  filterTable: { offset: number, limit: number, current: number }
 }
 
 const confirm = Modal.confirm;
@@ -43,6 +45,8 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     userId: 0,
     filter: '',
     drawerVisible: false,
+    totalSizeTable: 0,
+    filterTable: { offset: 0, limit: 5, current: 0, }
   };
 
   async componentDidMount() {
@@ -53,9 +57,9 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     await this.props.userStore.getAll({ maxResultCount: this.state.maxResultCount, skipCount: this.state.skipCount, keyword: this.state.filter });
   }
 
-  handleTableChange = (pagination: any) => {
-    this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
-  };
+  // handleTableChange = (pagination: any) => {
+  //   this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+  // };
 
   Modal = () => {
     this.setState({
@@ -119,9 +123,28 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     this.setState({ filter: value }, async () => await this.getAll());
   };
 
+  handlePaginationTable = pagination => {
+    console.log(pagination)
+    const { filterTable } = this.state;
+    const { pageSize, current } = pagination;
+    this.setState({
+      filterTable: { ...filterTable, current, limit: pageSize }
+    });
+  };
 
   public render() {
     const { users } = this.props.userStore;
+
+    const {filterTable, totalSizeTable} = this.state;
+
+    const tablePaginationTable = {
+      pageSize: filterTable.limit,
+      current: filterTable.current || 1,
+      total: totalSizeTable,
+      locale: { items_per_page: L('page') },
+      pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+      showSizeChanger: true,
+  };
 
 
     const columns = [
@@ -146,7 +169,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
         responsive: ['xs'] as Breakpoint[]
       },
 
- 
+
       { title: L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
       { title: L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: (text: string) => <div className={"firstname"}>{text}</div>, responsive: ['sm'] as Breakpoint[] },
       { title: L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: (text: string) => <div className={"surname"}>{text}</div>, responsive: ['sm'] as Breakpoint[] },
@@ -227,10 +250,10 @@ class User extends AppComponentBase<IUserProps, IUserState> {
                 locale={{ emptyText: L('NoData') }}
                 rowKey={(record) => record.id.toString()}
                 columns={columns}
-                pagination={{ pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }}
                 loading={users === undefined ? true : false}
                 dataSource={users === undefined ? [] : users.items}
-                onChange={this.handleTableChange}
+                onChange={this.handlePaginationTable}
+                pagination={tablePaginationTable}
               />
             </Col>
           </Row>

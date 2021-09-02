@@ -26,6 +26,8 @@ export interface IRoleState {
   roleId: number;
   filter: string;
   drawerVisible: boolean;
+  totalSizeTable: number,
+  filterTable: { offset: number, limit: number, current: number }
 }
 
 const confirm = Modal.confirm;
@@ -42,7 +44,9 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     skipCount: 0,
     roleId: 0,
     filter: '',
-    drawerVisible: false
+    drawerVisible: false,
+    totalSizeTable: 0,
+    filterTable: { offset: 0, limit: 5, current: 0, }
   };
 
   async componentDidMount() {
@@ -53,9 +57,9 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     await this.props.roleStore.getAll({ maxResultCount: this.state.maxResultCount, skipCount: this.state.skipCount, keyword: this.state.filter });
   }
 
-  handleTableChange = (pagination: any) => {
-    this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
-  };
+  // handleTableChange = (pagination: any) => {
+  //   this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+  // };
 
   Modal = () => {
     this.setState({
@@ -126,10 +130,29 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     this.setState({ drawerVisible: false });
   }
 
+  handlePaginationTable = pagination => {
+    console.log(pagination)
+    const { filterTable } = this.state;
+    const { pageSize, current } = pagination;
+    this.setState({
+      filterTable: { ...filterTable, current, limit: pageSize }
+    });
+  };
 
   public render() {
     const { drawerVisible } = this.state;
     const { allPermissions, roles } = this.props.roleStore;
+
+    const {filterTable, totalSizeTable} = this.state;
+
+    const tablePaginationTable = {
+      pageSize: filterTable.limit,
+      current: filterTable.current || 1,
+      total: totalSizeTable,
+      locale: { items_per_page: L('page') },
+      pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+      showSizeChanger: true,
+  };
 
     const columns =
       [
@@ -225,11 +248,11 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               <Table
                 locale={{ emptyText: L('NoData') }}
                 rowKey="id"
-                pagination={{ pageSize: this.state.maxResultCount, total: roles === undefined ? 0 : roles.totalCount, defaultCurrent: 1 }}
+                pagination={tablePaginationTable}
                 columns={columns}
                 loading={roles === undefined ? true : false}
                 dataSource={roles === undefined ? [] : roles.items}
-                onChange={this.handleTableChange}
+                onChange={this.handlePaginationTable}
               />
             </Col>
           </Row>
