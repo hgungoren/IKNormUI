@@ -69,18 +69,16 @@ exports.__esModule = true;
 exports.Dashboard = void 0;
 /*eslint-disable */
 require("./index.less");
+var moment_1 = require("moment");
 var React = require("react");
 var antd_1 = require("antd");
 var mobx_react_1 = require("mobx-react");
-var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var date_1 = require("../../helper/date");
 var KLineChart_1 = require("./components/KLineChart");
+var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var KCartList_1 = require("../../components/KCartList");
 var abpUtility_1 = require("../../lib/abpUtility");
-var moment_1 = require("moment");
 var icons_1 = require("@ant-design/icons");
-var date_1 = require("../../helper/date");
-var startOfMonth = moment_1["default"](moment_1["default"]().startOf('month').format('DD-MM-YYYY')).toDate();
-var currentDate = moment_1["default"]().toDate();
 var Dashboard = /** @class */ (function (_super) {
     __extends(Dashboard, _super);
     function Dashboard() {
@@ -171,7 +169,7 @@ var Dashboard = /** @class */ (function (_super) {
             });
         }); };
         _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
-            var resultFill, resultUpdate;
+            var currentDate, startOfMonth, resultFill, resultUpdate;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -179,6 +177,8 @@ var Dashboard = /** @class */ (function (_super) {
                         setTimeout(function () { return _this.setState({ cardLoading: false }); }, 1000);
                         setTimeout(function () { return _this.setState({ barChartLoading: false }); }, 2000);
                         setTimeout(function () { return _this.setState({ pieChartLoading: false }); }, 1000);
+                        currentDate = date_1.dateHelper.getTodayDate('tr');
+                        startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
                         if (!(abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') ||
                             abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
                             abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||

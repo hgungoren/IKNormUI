@@ -1,11 +1,13 @@
 /*eslint-disable */
 import './index.less';
+import moment from 'moment';
 import * as React from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
+import { dateHelper } from '../../helper/date';
 import KNormStore from '../../stores/kNormStore';
-import Stores from '../../stores/storeIdentifier';
 import KLineChart from './components/KLineChart';
+import Stores from '../../stores/storeIdentifier';
 import KCartList from '../../components/KCartList';
 import { isGranted, L } from '../../lib/abpUtility';
 import AccountStore from '../../stores/accountStore';
@@ -17,14 +19,9 @@ import KLineChartModel from '../../models/KLineChart/kLineChart';
 import AuthenticationStore from '../../stores/authenticationStore';
 import KLineChartModelEN from '../../models/KLineChart/kLineChartEn';
 import { GetAllKNormOutput } from '../../services/kNorm/dto/getAllKNormOutput';
-import moment from 'moment';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import { dateHelper } from '../../helper/date';
 
 declare var abp: any;
-const startOfMonth = moment(moment().startOf('month').format('DD-MM-YYYY')).toDate();
-const currentDate = moment().toDate();
-
 
 export interface IDashboardProps {
   kNormStore: KNormStore;
@@ -75,7 +72,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   getEmployeeCount = async () => await this.props.kPersonelStore.getEmployeeCount();
   getNormCount = async () => await this.props.kSubeNormStore.getNormCount();
- 
+
   onDateFilter = async (date) => {
     let startDate: any;
     let endDate: any;
@@ -87,14 +84,14 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       startDate = dateHelper.getMonthWidthFirstDate(date[0], 'tr');
       endDate = dateHelper.getTodayWidthDate(date[1], 'tr');
     }
-    
+
     await this.getNormRequests(startDate, endDate);
-    await this.getNormRequestCounts(startDate, endDate); 
+    await this.getNormRequestCounts(startDate, endDate);
     this.setState({ moment: [startDate, endDate] })
 
   }
 
-  getNormRequests = async (start?: Date, end?: Date) => {
+  getNormRequests = async (start?: any, end?: any) => {
     await this.props.kNormStore.getMaxAll({
       id: '0',
       type: '',
@@ -107,7 +104,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     });
   }
 
-  getNormRequestCounts = async (start?: Date, end?: Date) => {
+  getNormRequestCounts = async (start?: any, end?: any) => {
     await this.props.kNormStore.getMaxAllCount({
       id: '0',
       type: '',
@@ -126,6 +123,8 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     setTimeout(() => this.setState({ cardLoading: false }), 1000);
     setTimeout(() => this.setState({ barChartLoading: false }), 2000);
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
+    let currentDate = dateHelper.getTodayDate('tr');
+    let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
     if (
       isGranted('knorm.gettotalnormfillingrequest') ||
@@ -139,6 +138,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
       await this.getNormRequests(startOfMonth, currentDate);
       await this.getNormRequestCounts(startOfMonth, currentDate);
+   
     }
 
     await this.getEmployeeCount();
@@ -153,8 +153,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       totalUpdate: resultUpdate,
       lineUpdateLoading: false,
       moment: [startOfMonth, currentDate]
-    })
-
+    })  
   }
 
   lineChartModel = async (data: GetAllKNormOutput[]): Promise<any[]> => {
@@ -312,9 +311,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       getAcceptedNormUpdateRequestCount,
       getCanceledNormUpdateRequestCount
     } = this.props.kNormStore;
-
-
-
+ 
     const lineChartLayout = {
       onePiece: {
         xs: { offset: 1, span: 22 },
