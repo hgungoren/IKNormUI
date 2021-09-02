@@ -191,6 +191,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     };
 
     kSubeNormCreate = () => {
+
+
         const form = this.formRef.current;
         form!.validateFields()
             .then(async (values: any) => {
@@ -218,11 +220,9 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     };
 
     kSubeNormEdit = (input: EntityDto<string>) => {
-
         this.props.kSubeNormStore.get(input);
         const form = this.formRef.current;
         this.setState({ normId: input.id })
-
         setTimeout(() => {
             form!.setFieldsValue({ ...this.props.kSubeNormStore.editNorm });
         }, 200);
@@ -238,17 +238,25 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
     // }
 
 
-    kSubeNormDelete = (input: EntityDto<string>) => {
-        const self = this;
+    kSubeNormDelete = async (input: EntityDto<string>) => {
+        const self = this; 
         confirm({
             okText: L('Yes'),
             cancelText: L('No'),
             title: L('ConfirmDelete'),
-            onOk() { self.props.kSubeNormStore.delete(input) },
+            onOk() {
+                self.props.kSubeNormStore.delete(input).then(() => {
+
+                    self.getKSubeNorms();
+                    self.getKSubeEmployees();
+                    self.mergeArray();
+
+                }).catch((err) => console.log(err))
+            },
             onCancel() {
                 console.log('Cancel');
             },
-        });
+        });  
     }
 
     async getAll() {
@@ -340,7 +348,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             id: record.id,
             position: record.pozisyon,
             creationTime: record.creationTime,
-            lastModificationTime:record.lastModificationTime,
+            lastModificationTime: record.lastModificationTime,
             normCount: this.props.kSubeNormStore.norms.items.filter(x => x.pozisyon === record.pozisyon)[0].adet,
             employeeCount: this.props.kPersonelStore.kPersonels.items.filter(x => x.gorevi === record.pozisyon).length
         }))

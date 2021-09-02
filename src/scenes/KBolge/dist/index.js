@@ -250,18 +250,28 @@ var KBolge = /** @class */ (function (_super) {
         //     // this.mergeArray();
         //     // console.log('sa')
         // }
-        _this.kSubeNormDelete = function (input) {
-            var self = _this;
-            confirm({
-                okText: abpUtility_1.L('Yes'),
-                cancelText: abpUtility_1.L('No'),
-                title: abpUtility_1.L('ConfirmDelete'),
-                onOk: function () { self.props.kSubeNormStore["delete"](input); },
-                onCancel: function () {
-                    console.log('Cancel');
-                }
+        _this.kSubeNormDelete = function (input) { return __awaiter(_this, void 0, void 0, function () {
+            var self;
+            return __generator(this, function (_a) {
+                self = this;
+                confirm({
+                    okText: abpUtility_1.L('Yes'),
+                    cancelText: abpUtility_1.L('No'),
+                    title: abpUtility_1.L('ConfirmDelete'),
+                    onOk: function () {
+                        self.props.kSubeNormStore["delete"](input).then(function () {
+                            self.getKSubeNorms();
+                            self.getKSubeEmployees();
+                            self.mergeArray();
+                        })["catch"](function (err) { return console.log(err); });
+                    },
+                    onCancel: function () {
+                        console.log('Cancel');
+                    }
+                });
+                return [2 /*return*/];
             });
-        };
+        }); };
         _this.handleSearch = function (value) {
             _this.setState({ searchFilter: value }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 switch (_a.label) {

@@ -372,7 +372,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
             { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div>, responsive: ['sm'] as Breakpoint[] },
             {
-                title: "İşlem",
+                title: L("table.norm.transactions"),
                 dataIndex: 'id',
                 key: uuid(),
                 width: 50,

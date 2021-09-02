@@ -242,9 +242,11 @@ var KSube = /** @class */ (function (_super) {
                 cancelText: abpUtility_1.L('No'),
                 title: abpUtility_1.L('ConfirmDelete'),
                 onOk: function () {
-                    self.getKSubeNorms();
-                    self.props.kSubeNormStore["delete"](input);
-                    self.getKSubeNorms();
+                    self.props.kSubeNormStore["delete"](input).then(function () {
+                        self.getKSubeNorms();
+                        self.getKSubeEmployees();
+                        self.mergeArray();
+                    })["catch"](function (err) { return console.log(err); });
                 },
                 onCancel: function () {
                     console.log('Cancel');

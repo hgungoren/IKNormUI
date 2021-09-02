@@ -456,7 +456,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
             { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); }, responsive: ['sm'] },
             { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); }, responsive: ['sm'] },
             {
-                title: "İşlem",
+                title: abpUtility_1.L("table.norm.transactions"),
                 dataIndex: 'id',
                 key: react_uuid_1["default"](),
                 width: 50,

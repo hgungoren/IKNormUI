@@ -136,9 +136,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         await this.getNormRequestCounts(this.state.id, startDate, endDate);
         this.setState({ moment: [startDate, endDate] })
     }
-
-
-
+ 
     
     // Şubeye ait norm listesini getirir
     async getKSubeNorms() {
@@ -230,9 +228,14 @@ class KSube extends AppComponentBase<INormProps, INormState>{
             cancelText: L('No'),
             title: L('ConfirmDelete'),
             onOk() {
-                self.getKSubeNorms();
-                self.props.kSubeNormStore.delete(input);
-                self.getKSubeNorms();
+
+                self.props.kSubeNormStore.delete(input).then(() => {
+
+                    self.getKSubeNorms();
+                    self.getKSubeEmployees();
+                    self.mergeArray();
+
+                }).catch((err) => console.log(err)) 
             },
             onCancel() {
                 console.log('Cancel');
