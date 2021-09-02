@@ -28,7 +28,7 @@ import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
 import NormStatus from '../../services/kNorm/dto/normStatus';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve'; 
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -49,25 +49,27 @@ export interface IKSubeDatayState {
     tip: string,
     groupNorm: {},
     userId: number,
-    filter: { offset: number, limit: number, current: number }
     groupData: any[],
     groupEmployee: {},
     skipCount: number,
+    normFilter: string,
     createFormState: {},
     cardLoading: boolean,
+    searchFilter: string;
     modalVisible: boolean,
     skipNormCount: number,
     maxResultCount: number,
+    totalSizeTable1: number,
+    totalSizeTable2: number,
+    totalSizeTable3: number,
     breadcrumbSubeAdi: string,
     bagliOlduguSubeId: string,
     breadcrumbBolgeAdi: string,
     maxNormResultCount: number,
     detaillModalVisible: boolean,
-    normFilter: string,
-    totalSize: number,
-    searchFilter: string;
- 
-    
+    filterTable1: { offset: number, limit: number, current: number }
+    filterTable2: { offset: number, limit: number, current: number }
+    filterTable3: { offset: number, limit: number, current: number }
 }
 
 
@@ -115,8 +117,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         },
         breadcrumbSubeAdi: '',
         breadcrumbBolgeAdi: '',
-        filter: { offset: 0, limit: 5, current: 0, },
-        totalSize: 0,
+        filterTable1: { offset: 0, limit: 5, current: 0, },
+        filterTable2: { offset: 0, limit: 5, current: 0, },
+        filterTable3: { offset: 0, limit: 5, current: 0, },
+        totalSizeTable1: 0,
+        totalSizeTable2: 0,
+        totalSizeTable3: 0,
         searchFilter: ""
 
     };
@@ -250,17 +256,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         }
     }
 
-    handleTableChange = (pagination: any) => {
-        this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAllEmployees());
-    };
+    // handleTableChange = (pagination: any) => {
+    //     this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAllEmployees());
+    // };
 
     handleSearch = (value: string) => {
         this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
     };
 
-    handleNormTableChange = (pagination: any) => {
-        this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
-    };
+    // handleNormTableChange = (pagination: any) => {
+    //     this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
+    // };
 
     handleNormSearch = (value: string) => {
         this.setState({ normFilter: value }, async () => await this.getNormRequests());
@@ -341,27 +347,34 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             tip,
             pozisyon
         })
-<<<<<<< HEAD
     }
 
-
-    handlePagination = pagination => {
-        const { filter } = this.state;
+    handlePaginationTable1 = pagination => {
+        console.log(pagination)
+        const { filterTable1 } = this.state;
         const { pageSize, current } = pagination;
-
         this.setState({
-            filter: {
-                ...filter,
-                current,
-                limit: pageSize
-            }
+            filterTable1: { ...filterTable1, current, limit: pageSize }
         });
     };
 
+    handlePaginationTable2 = pagination => {
+        console.log(pagination)
+        const { filterTable2 } = this.state;
+        const { pageSize, current } = pagination;
+        this.setState({
+            filterTable2: { ...filterTable2, current, limit: pageSize }
+        });
+    };
 
-=======
-    } 
->>>>>>> f391a34ae748a6affe03cba08f3ce7df9a8650d5
+    handlePaginationTable3 = pagination => {
+        console.log(pagination)
+        const { filterTable3 } = this.state;
+        const { pageSize, current } = pagination;
+        this.setState({
+            filterTable3: { ...filterTable3, current, limit: pageSize }
+        });
+    };
 
     public render() {
 
@@ -372,16 +385,36 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { kNormAllDetails } = this.props.kNormDetailStore;
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
 
-        const { filter, totalSize } = this.state;
-        const tablePagination = {
-            pageSize: filter.limit,
-            current: filter.current || 1,
-            total: totalSize,
+        const { filterTable1, filterTable2, filterTable3, totalSizeTable1, totalSizeTable2, totalSizeTable3} = this.state;
+
+
+
+        const tablePaginationTable1 = {
+            pageSize: filterTable1.limit,
+            current: filterTable1.current || 1,
+            total: totalSizeTable1,
             locale: { items_per_page: L('page') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true,
         };
 
+        const tablePaginationTable2 = {
+            pageSize: filterTable2.limit,
+            current: filterTable2.current || 1,
+            total: totalSizeTable2,
+            locale: { items_per_page: L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
+        };
+
+        const tablePaginationTable3 = {
+            pageSize: filterTable3.limit,
+            current: filterTable3.current || 1,
+            total: totalSizeTable3,
+            locale: { items_per_page: L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true,
+        };
         const normEmployeeCoumns = [
 
             {
@@ -541,12 +574,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                                 <Table
                                     bordered={false}
+                                    onChange={this.handlePaginationTable1}
                                     columns={normEmployeeCoumns}
                                     rowKey={(record) => record.id}
                                     locale={{ emptyText: L('NoData') }}
                                     loading={groupData.length == 1 ? true : false}
                                     dataSource={groupData === undefined ? [] : groupData}
-                                    pagination={tablePagination}
+                                    pagination={tablePaginationTable1}
                                 />
                             </Col>
                         </Row>
@@ -580,11 +614,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     locale={{ emptyText: L('NoData') }}
                                     bordered={false}
                                     columns={columns}
-                                    onChange={this.handleTableChange}
+                                    onChange={this.handlePaginationTable2}
                                     rowKey={(record) => record.objId.toString()}
                                     loading={kPersonels === undefined ? true : false}
                                     dataSource={kPersonels === undefined ? [] : kPersonels.items}
-                                    pagination={tablePagination}
+                                    pagination={tablePaginationTable2}
                                 />
                             </Col>
                         </Row>
@@ -620,16 +654,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                     bordered={false}
                                     columns={columnsNorm}
                                     locale={{ emptyText: L('NoData') }}
-                                    onChange={this.handleNormTableChange}
+                                    onChange={this.handlePaginationTable3}
                                     rowKey={(record) => record.id}
                                     loading={kNorms === undefined ? true : false}
                                     dataSource={kNorms === undefined ? [] : kNorms.items}
-                                    pagination={tablePagination}
+                                    pagination={tablePaginationTable3}
                                 />
                             </Col>
                         </Row>
                     </Card>
-                } 
+                }
 
                 <CreateNormForm
                     modalWidth={'60%'}
