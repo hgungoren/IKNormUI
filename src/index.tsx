@@ -1,17 +1,16 @@
 import './index.css';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import moment from 'moment';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import moment from 'moment';
+import * as React from 'react';
 import Utils from './utils/utils';
-import abpUserConfigurationService from './services/abpUserConfigurationService';
+import * as ReactDOM from 'react-dom';
+import { Provider } from 'mobx-react';
+import { BrowserRouter } from 'react-router-dom';
 import initializeStores from './stores/storeInitializer';
 import registerServiceWorker from './registerServiceWorker';
+import abpUserConfigurationService from './services/abpUserConfigurationService';
 
 declare var abp: any;
-
 Utils.setLocalization();
 
 abpUserConfigurationService.getAll().then(data => {
@@ -102,6 +101,8 @@ abpUserConfigurationService.getAll().then(data => {
     document.getElementById('root') as HTMLElement
   );
 
-  init();
+  if (abp.localization.currentCulture.name === 'tr') {
+    init();
+  }
   registerServiceWorker();
 });

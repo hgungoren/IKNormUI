@@ -1,23 +1,21 @@
 import './index.less';
 import React from 'react';
-import { Col, Descriptions, Modal, Row, Steps, Tag, Tooltip } from 'antd';
-import PropTypes from 'prop-types';
-import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
-import Status from '../../services/kNormDetail/dto/status';
 import uuid from 'react-uuid';
+import DateCart from '../DateCart';
+import PropTypes from 'prop-types';
 import { L } from '../../lib/abpUtility';
+import Status from '../../services/kNormDetail/dto/status';
 import NormStatus from '../../services/kNorm/dto/normStatus';
+import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
+import { Col, Descriptions, Modal, Row, Steps, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, StopOutlined } from '@ant-design/icons';
+
 
 const { Step } = Steps;
 
-const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => { 
+const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
     return (
         <>
-
-        {
-            console.log(norm)
-        }
             <Modal title={title} centered visible={visible} onCancel={onCancel} width={'70%'} footer={[]}>
                 <>
                     <Row gutter={16}>
@@ -31,10 +29,9 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                                     {norm.yeniPozisyon !== null && <Descriptions.Item key={uuid()} label={L("table.norm.newposition")}>{norm.yeniPozisyon}</Descriptions.Item>}
                                     <Descriptions.Item key={uuid()} label={L("table.norm.description")}>{norm.aciklama}</Descriptions.Item>
                                     {norm.personelId > 0 && <Descriptions.Item key={uuid()} label={L("table.norm.leaving.staff")}>{norm.personelAdi}</Descriptions.Item>}
-                                    {norm.nedeni !== '' && <Descriptions.Item key={uuid()} label={L("table.norm.requestreason")}>{norm.nedeni}</Descriptions.Item>}
+                                    {norm.nedeni !== '' && <Descriptions.Item key={uuid()} label={L("table.norm.requestreason")}> {L(norm.nedeni)} </Descriptions.Item>}
                                     <Descriptions.Item key={uuid()} label={L("table.norm.requesttype")}>{L(norm.turu)}</Descriptions.Item>
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.requestdate")}>{
-                                        new Date(norm.creationTime).toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "2-digit", hour: "2-digit", minute: "2-digit" })}</Descriptions.Item> 
+                                    <Descriptions.Item key={uuid()} label={L("table.norm.requestdate")}>{<DateCart date={norm.creationTime} />}</Descriptions.Item>
                                     <Descriptions.Item key={uuid()} label={L('table.norm.requeststatus')}>{(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
 
                                         <Tooltip placement="topLeft" title={L('Waiting')}> <Tag color={'rgb(250, 173, 20)'} icon={<ClockCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
@@ -44,7 +41,6 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                                             <Tooltip placement="topLeft" title={L('Reject')}>   <Tag color={'rgb(250, 84, 28)'} icon={<StopOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
                                             <Tooltip placement="topLeft" title={L('Approved')}> <Tag color={'rgb(29, 165, 122)'} icon={<CheckCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip>
                                     }
-
                                     </Descriptions.Item>
                                 </>
                                 }
@@ -58,25 +54,12 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                             </Steps>
                             <Steps direction="vertical" >
                                 {
-                                    data !== undefined && data.map((x) => <>
-
-                                        <Step key={uuid()} status={(x.status === Status.Apporved) ? "finish" : (x.status === Status.Waiting ? "wait" : "error")}
-                                            title={TalepDurumu[x.talepDurumuStr]}
-                                            description={<>
-
-                                                {
-                                                    <p className='step-time'> {((x.lastModificationTime !== null && x.status !== Status.Waiting) && new Date(x.lastModificationTime).toLocaleDateString("tr-TR", {
-                                                        year: "numeric",
-                                                        month: "long",
-                                                        day: "2-digit",
-                                                        hour: "2-digit",
-                                                        minute: "2-digit"
-                                                    }))}
-
-                                                    </p>
-                                                }
-                                                <p className='step-description'> {(x.description !== null ? x.description : '')} </p></>} />
-
+                                    data !== undefined && data.map((record) => <>
+                                        <Step key={uuid()} status={(record.status === Status.Apporved) ? "finish" : (record.status === Status.Waiting ? "wait" : "error")}
+                                            title={TalepDurumu[record.talepDurumuStr]}
+                                            description={<> 
+                                                {((record.lastModificationTime !== null && record.status !== Status.Waiting) && <DateCart date={record.lastModificationTime} />)} 
+                                                <p className='step-description'> {(record.description !== null ? record.description : '')} </p></>} />
                                     </>)
                                 }
                             </Steps>
@@ -94,3 +77,6 @@ NormDetailTimeLine.propTypes = {
 };
 
 export default NormDetailTimeLine;
+
+
+

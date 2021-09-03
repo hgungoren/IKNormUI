@@ -48,16 +48,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 require("./index.css");
-var React = require("react");
-var ReactDOM = require("react-dom");
-var moment_1 = require("moment");
 var App_1 = require("./App");
-var react_router_dom_1 = require("react-router-dom");
-var mobx_react_1 = require("mobx-react");
+var moment_1 = require("moment");
+var React = require("react");
 var utils_1 = require("./utils/utils");
-var abpUserConfigurationService_1 = require("./services/abpUserConfigurationService");
+var ReactDOM = require("react-dom");
+var mobx_react_1 = require("mobx-react");
+var react_router_dom_1 = require("react-router-dom");
 var storeInitializer_1 = require("./stores/storeInitializer");
 var registerServiceWorker_1 = require("./registerServiceWorker");
+var abpUserConfigurationService_1 = require("./services/abpUserConfigurationService");
 utils_1["default"].setLocalization();
 abpUserConfigurationService_1["default"].getAll().then(function (data) {
     utils_1["default"].extend(true, abp, data.data.result);
@@ -139,6 +139,8 @@ abpUserConfigurationService_1["default"].getAll().then(function (data) {
     ReactDOM.render(React.createElement(mobx_react_1.Provider, __assign({}, stores),
         React.createElement(react_router_dom_1.BrowserRouter, null,
             React.createElement(App_1["default"], null))), document.getElementById('root'));
-    init();
+    if (abp.localization.currentCulture.name === 'tr') {
+        init();
+    }
     registerServiceWorker_1["default"]();
 });

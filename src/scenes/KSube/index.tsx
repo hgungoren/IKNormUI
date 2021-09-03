@@ -25,7 +25,7 @@ import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, I
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { dateHelper } from '../../helper/date';
 
-export interface INormProps {
+export interface Props {
     kSubeStore: KSubeStore;
     kNormStore: KNormStore;
     sessionStore?: SessionStore;
@@ -35,9 +35,10 @@ export interface INormProps {
     kNormDetailStore: KNormDetailStore;
     authenticationStore?: AuthenticationStore;
     kInkaLookUpTableStore: KInkaLookUpTableStore;
+
 }
 
-export interface INormState {
+export interface State {
     id: string;
     moment: any;
     normId: string;
@@ -52,6 +53,7 @@ export interface INormState {
     kPersonelCount: number;
     filter: { offset: number, limit: number, current: number },
     normList: any;
+    dateFilter: boolean;
 }
 
 const confirm = Modal.confirm;
@@ -63,7 +65,7 @@ const confirm = Modal.confirm;
 @inject(Stores.KInkaLookUpTableStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-class KSube extends AppComponentBase<INormProps, INormState>{
+class KSube extends AppComponentBase<Props, State>{
     formRef = React.createRef<FormInstance>();
 
     state = {
@@ -80,7 +82,8 @@ class KSube extends AppComponentBase<INormProps, INormState>{
         totalSize: 0,
         filter: { offset: 0, limit: 5, current: 0, },
         moment: [] as any,
-        normList: [] as any
+        normList: [] as any,
+        dateFilter: false
     };
 
     getNormRequests = async (id: string, start?: any, end?: any) => {
@@ -306,15 +309,27 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
         let currentDate = dateHelper.getTodayDate('tr');
         let startOfMonth = dateHelper.getMonthFirstDate('tr');
+        if (
+            isGranted('knorm.gettotalnormfillingrequest') ||
+            isGranted('knorm.getpendingnormfillrequest') ||
+            isGranted('knorm.getacceptednormfillrequest') ||
+            isGranted('knorm.getcancelednormfillrequest') ||
+            isGranted('knorm.gettotalnormupdaterequest') ||
+            isGranted('knorm.getpendingnormupdaterequest') ||
+            isGranted('knorm.getacceptednormupdaterequest') ||
+            isGranted('knorm.getcancelednormupdaterequest')) {
+            this.setState({ dateFilter: true })
+            await this.getNormRequests(this.state.id, startOfMonth, currentDate)
+            await this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)
 
+        }
 
         await this.setPageState();
         await this.getAll();
         await this.get({ id: this.state.id });
         await this.getEmployeeCount(this.state.id);
         await this.getNormCount(this.state.id);
-        await this.getNormRequests(this.state.id, startOfMonth, currentDate)
-        await this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)
+
     }
 
     handleTableChange = (pagination: any) => {
@@ -354,7 +369,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
 
     public render() {
 
-        const { filter, totalSize } = this.state;
+        const { filter, totalSize, dateFilter } = this.state;
         const tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -465,6 +480,7 @@ class KSube extends AppComponentBase<INormProps, INormState>{
                 </Card>
 
                 <KCartList
+                    dateFilter={dateFilter}
                     moment={moment}
                     type="sube"
                     bolgeId={this.state.id}

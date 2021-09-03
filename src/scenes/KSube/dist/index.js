@@ -99,7 +99,8 @@ var KSube = /** @class */ (function (_super) {
             totalSize: 0,
             filter: { offset: 0, limit: 5, current: 0 },
             moment: [],
-            normList: []
+            normList: [],
+            dateFilter: false
         };
         _this.getNormRequests = function (id, start, end) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -457,26 +458,36 @@ var KSube = /** @class */ (function (_super) {
                     case 0:
                         currentDate = date_1.dateHelper.getTodayDate('tr');
                         startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
-                        return [4 /*yield*/, this.setPageState()];
+                        if (!(abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') ||
+                            abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.getcancelednormfillrequest') ||
+                            abpUtility_1.isGranted('knorm.gettotalnormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
+                            abpUtility_1.isGranted('knorm.getcancelednormupdaterequest'))) return [3 /*break*/, 3];
+                        this.setState({ dateFilter: true });
+                        return [4 /*yield*/, this.getNormRequests(this.state.id, startOfMonth, currentDate)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.getAll()];
+                        return [4 /*yield*/, this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.get({ id: this.state.id })];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, this.getEmployeeCount(this.state.id)];
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, this.setPageState()];
                     case 4:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormCount(this.state.id)];
+                        return [4 /*yield*/, this.getAll()];
                     case 5:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequests(this.state.id, startOfMonth, currentDate)];
+                        return [4 /*yield*/, this.get({ id: this.state.id })];
                     case 6:
                         _a.sent();
-                        return [4 /*yield*/, this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)];
+                        return [4 /*yield*/, this.getEmployeeCount(this.state.id)];
                     case 7:
+                        _a.sent();
+                        return [4 /*yield*/, this.getNormCount(this.state.id)];
+                    case 8:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -485,7 +496,7 @@ var KSube = /** @class */ (function (_super) {
     };
     KSube.prototype.render = function () {
         var _this = this;
-        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize;
+        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize, dateFilter = _a.dateFilter;
         var tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -586,7 +597,7 @@ var KSube = /** @class */ (function (_super) {
                                 " ",
                                 editKSube === undefined ? '' : editKSube.adi,
                                 " ")) })),
-                React.createElement(KCartList_1["default"], { moment: moment, type: "sube", bolgeId: this.state.id, normCount: normCount, subeObjId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+                React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "sube", bolgeId: this.state.id, normCount: normCount, subeObjId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
                 React.createElement(antd_1.Card, { hoverable: true },
                     React.createElement(antd_1.Row, null,
                         React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },

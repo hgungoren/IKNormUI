@@ -2,8 +2,10 @@ import React from 'react';
 import './index.less';
 import { Card, Col, ConfigProvider, DatePicker, Space } from 'antd';
 import trTR from 'antd/lib/locale/tr_TR';
+import en_US from 'antd/lib/locale/en_US';
 const { RangePicker } = DatePicker;
 
+declare var abp: any;
 
 function KNormDateFilter({ cardLoading, cursor = '', onChange }) {
     return (
@@ -26,11 +28,11 @@ function KNormDateFilter({ cardLoading, cursor = '', onChange }) {
 
                     <Col span={24}>
                         <Space direction="vertical" size={24}>
-                            <ConfigProvider locale={trTR}>
+                            <ConfigProvider locale={abp.localization.currentLanguage.name === 'tr' ? trTR : en_US}>
                                 <RangePicker
                                     format={"DD MM YYYY"}
                                     size={'large'}
-                                    className={'range-picker'}
+                                    className={'range-picker'} 
                                     onCalendarChange={onChange}
                                     dateRender={current => {
                                         const style = { border: '', borderRadius: '' };

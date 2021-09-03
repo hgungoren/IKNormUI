@@ -8,6 +8,7 @@ import { isGranted, L } from '../../lib/abpUtility';
 import NormRequestListTableModal from '../NormRequestListTableModal';
 
 interface KCartListProps {
+    dateFilter: boolean;
     moment?: any;
     type;
     bolgeId;
@@ -30,6 +31,7 @@ interface KCartListProps {
 
 
 function KCartList({
+    dateFilter,
     moment,
     type,
     bolgeId,
@@ -81,24 +83,29 @@ function KCartList({
 
         if (isGranted('knorm.getcancelednormupdaterequest')) { setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount) }
         if (isGranted('knorm.getacceptednormupdaterequest')) { setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount) }
-        if (isGranted('knorm.getpendingnormupdaterequest'))  { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
-        if (isGranted('knorm.gettotalnormupdaterequest'))    { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
-        if (isGranted('knorm.getcancelednormfillrequest'))   { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
-        if (isGranted('knorm.getacceptednormfillrequest'))   { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
-        if (isGranted('knorm.getpendingnormfillrequest'))    { setPendingNormFillRequest(getPendingNormFillRequestCount) }
-        if (isGranted('knorm.gettotalnormfillingrequest'))   { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
+        if (isGranted('knorm.getpendingnormupdaterequest')) { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
+        if (isGranted('knorm.gettotalnormupdaterequest')) { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
+        if (isGranted('knorm.getcancelednormfillrequest')) { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
+        if (isGranted('knorm.getacceptednormfillrequest')) { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
+        if (isGranted('knorm.getpendingnormfillrequest')) { setPendingNormFillRequest(getPendingNormFillRequestCount) }
+        if (isGranted('knorm.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
     }, 500)
 
 
     return (
         <>
-            <Row gutter={16}> 
+            <Row gutter={16}>
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
                 <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
             </Row>
-            <Row gutter={16}>
-                <KNormDateFilter cursor={'context-menu'} onChange={onDateFilter} cardLoading={cardLoading} />
-            </Row>
+            
+            {
+                dateFilter && <Row gutter={16}>
+                    <KNormDateFilter cursor={'context-menu'} onChange={onDateFilter} cardLoading={cardLoading} />
+                </Row>
+            }
+
+
             <Row gutter={16}>
                 {
                     isGranted('knorm.gettotalnormfillingrequest') && <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}

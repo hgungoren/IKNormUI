@@ -101,7 +101,8 @@ var KBolge = /** @class */ (function (_super) {
             modalVisible: false,
             filter: { offset: 0, limit: 5, current: 0 },
             moment: [],
-            normList: []
+            normList: [],
+            dateFilter: false
         };
         _this.getNormRequests = function (start, end) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -474,6 +475,7 @@ var KBolge = /** @class */ (function (_super) {
                             abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
                             abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
                             abpUtility_1.isGranted('knorm.gettotalnormfillingrequest'))) return [3 /*break*/, 7];
+                        this.setState({ dateFilter: true });
                         return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
                     case 5:
                         _a.sent();
@@ -490,7 +492,7 @@ var KBolge = /** @class */ (function (_super) {
     };
     KBolge.prototype.render = function () {
         var _this = this;
-        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize, moment = _a.moment;
+        var _a = this.state, filter = _a.filter, totalSize = _a.totalSize, moment = _a.moment, dateFilter = _a.dateFilter;
         var tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -579,14 +581,13 @@ var KBolge = /** @class */ (function (_super) {
             React.createElement(antd_1.Card, { style: { marginBottom: 20 } },
                 React.createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: React.createElement(antd_1.Breadcrumb, null,
                         React.createElement(antd_1.Breadcrumb.Item, null,
-                            " ",
-                            React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')),
+                            abpUtility_1.isGranted('dashboard.view') ? React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : React.createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Dashboard')),
                             "  "),
                         React.createElement(antd_1.Breadcrumb.Item, null,
                             " ",
                             abpUtility_1.L('RegionalOffices'),
                             " ")) })),
-            React.createElement(KCartList_1["default"], { moment: moment, type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+            React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
             this.isGranted('kbolge.areas.list') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 6, offset: 0 }, sm: { span: 6, offset: 0 }, md: { span: 6, offset: 0 }, lg: { span: 4, offset: 0 }, xl: { span: 4, offset: 0 }, xxl: { span: 4, offset: 0 } },

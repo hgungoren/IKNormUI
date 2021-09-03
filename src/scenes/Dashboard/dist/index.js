@@ -92,7 +92,8 @@ var Dashboard = /** @class */ (function (_super) {
             lineUpdateLoading: true,
             totalUpdate: [],
             moment: [],
-            lineChartView: false
+            lineChartView: false,
+            dateFilter: false
         };
         _this.getEmployeeCount = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
@@ -187,6 +188,7 @@ var Dashboard = /** @class */ (function (_super) {
                             abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
                             abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
                             abpUtility_1.isGranted('knorm.getcancelednormupdaterequest'))) return [3 /*break*/, 3];
+                        this.setState({ dateFilter: true });
                         return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
                     case 1:
                         _a.sent();
@@ -342,7 +344,7 @@ var Dashboard = /** @class */ (function (_super) {
         return _this;
     }
     Dashboard.prototype.render = function () {
-        var _a = this.state, cardLoading = _a.cardLoading, lineFillLoading = _a.lineFillLoading, lineUpdateLoading = _a.lineUpdateLoading, moment = _a.moment, lineChartView = _a.lineChartView;
+        var _a = this.state, cardLoading = _a.cardLoading, lineFillLoading = _a.lineFillLoading, lineUpdateLoading = _a.lineUpdateLoading, moment = _a.moment, lineChartView = _a.lineChartView, dateFilter = _a.dateFilter;
         var kPersonelCount = this.props.kPersonelStore.kPersonelCount;
         var normCount = this.props.kSubeNormStore.normCount;
         var _b = this.props.kNormStore, getTotalNormUpdateRequestCount = _b.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _b.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _b.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _b.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _b.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _b.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _b.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _b.getCanceledNormUpdateRequestCount;
@@ -365,7 +367,7 @@ var Dashboard = /** @class */ (function (_super) {
             }
         };
         return (React.createElement(React.Fragment, null,
-            React.createElement(KCartList_1["default"], { moment: moment, type: "", bolgeId: 0, subeObjId: 0, normCount: normCount, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
+            React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "", bolgeId: 0, subeObjId: 0, normCount: normCount, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
             React.createElement(antd_1.Row, { gutter: 16 },
                 React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)),
                     React.createElement(antd_1.Card, { extra: React.createElement(antd_1.Button, { onClick: this.changeLineViewHandler, icon: (lineChartView ? React.createElement(icons_1.FullscreenExitOutlined, null) : React.createElement(icons_1.FullscreenOutlined, null)) }), hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormFillingRequestWeeklyStatistics'), loading: lineFillLoading, bordered: false },

@@ -19,16 +19,16 @@ import KHierarchyStore from '../../stores/kHierarchyStore';
 import TalepTuru from '../../services/kNorm/dto/talepTuru';
 import CreateNormForm from '../../components/CreateNormForm';
 import KNormDetailStore from '../../stores/kNormDetailStore';
+import NormStatus from '../../services/kNorm/dto/normStatus';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import TalepNedeni from '../../services/kNorm/dto/talepNedeni';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
 import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
-import { CheckCircleOutlined, ClockCircleOutlined, FileSearchOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
 import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
-import NormStatus from '../../services/kNorm/dto/normStatus';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { CheckCircleOutlined, ClockCircleOutlined, FileSearchOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -138,7 +138,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             );
     }
 
-    async getNormRequests() { 
+    async getNormRequests() {
         this.props.kNormStore.getAll({
             id: this.state.id,
             keyword: this.state.normFilter,
@@ -207,16 +207,27 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             this.state.bagliOlduguSubeId);
     }
 
-    async pageSettings(entityDto: EntityDto<string>) {
+    pageSettings = async () => {
 
-        await this.props.kSubeStore.get(entityDto);
+        console.log(this.props.kSubeStore.editKSube)
+
+        let tur = this.props.kSubeStore.editKSube.tur;
+        if (tur === 'Acente') {
+            this.setState({ tip: tur })
+        }
+        else {
+            this.setState({ tip: this.props.kSubeStore.editKSube.tip })
+        }
+
         this.setState({
-            tip: this.props.kSubeStore.editKSube.tip,
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
         })
 
         if (isGranted('kbolge.view')) {
-            await this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
+            this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
+
+
+            
             this.setState({
                 breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
                 breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
@@ -226,24 +237,18 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     setPageState = async () => {
         this.setState({ id: this.props["match"].params["id"] });
+        this.props.kSubeStore.get({ id: this.state.id })
     }
 
-    async componentDidMount() {
-        abp.event.on('knorm_added', function (userNotification) {
-
-            alert('saf')
-            alert(userNotification)
-        })
+    componentDidMount = async () => {
         await this.setPageState();
+
         if (isGranted('ksubedetail.employee.list')) {
             await this.getAllEmployees();
         }
 
-        await this.pageSettings({ id: this.state.id });
-
         if (isGranted('ksubedetail.norm.request.list')) {
             await this.getNormRequests();
-            // await this.getKHierarchy();
             await this.getAllEmployees();
         }
 
@@ -253,26 +258,20 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             await this.setAllEmployeesGroupBy();
             await this.setAllSubeNormGroupBy();
             await this.mergeArray();
-        }
-    }
+        } 
 
-    // handleTableChange = (pagination: any) => {
-    //     this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAllEmployees());
-    // };
+        await this.pageSettings();
+    }
 
     handleSearch = (value: string) => {
         this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
     };
 
-    // handleNormTableChange = (pagination: any) => {
-    //     this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
-    // };
-
     handleNormSearch = (value: string) => {
         this.setState({ normFilter: value }, async () => await this.getNormRequests());
     };
 
-    async createOrUpdateModalOpen(entityDto: EntityDto) {
+    async createOrUpdateModalOpen(entityDto: EntityDto) { 
         this.setState({ modalVisible: !this.state.modalVisible });
         this.getPosition(this.state.tip);
     }
@@ -384,10 +383,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { kHierarchies } = this.props.kHierarchyStore;
         const { kNormAllDetails } = this.props.kNormDetailStore;
         const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
-
-        const { filterTable1, filterTable2, filterTable3, totalSizeTable1, totalSizeTable2, totalSizeTable3} = this.state;
-
-
+        const { filterTable1, filterTable2, filterTable3, totalSizeTable1, totalSizeTable2, totalSizeTable3 } = this.state;
 
         const tablePaginationTable1 = {
             pageSize: filterTable1.limit,
@@ -666,16 +662,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 }
 
                 <CreateNormForm
-                    modalWidth={'60%'}
-                    getHierarchy={this.getHierarchy}
-                    modalType={'create'}
                     tip={tip}
-                    formRef={this.formRef}
                     subeId={id}
-                    hierarchy={kHierarchies}
+                    modalWidth={'60%'}
+                    modalType={'create'}
+                    formRef={this.formRef}
                     employees={kPersonels}
-                    onCreateNorm={this.createNorm}
                     visible={modalVisible}
+                    hierarchy={kHierarchies}
+                    onCreateNorm={this.createNorm}
+                    getHierarchy={this.getHierarchy}
                     createFormState={createFormState}
                     bagliOlduguSubeId={bagliOlduguSubeId}
                     position={this.props.kInkaLookUpTableStore.positions}

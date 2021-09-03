@@ -9,7 +9,7 @@ var react_1 = require("react");
 var abpUtility_1 = require("../../lib/abpUtility");
 var NormRequestListTableModal_1 = require("../NormRequestListTableModal");
 function KCartList(_a) {
-    var moment = _a.moment, type = _a.type, bolgeId = _a.bolgeId, subeObjId = _a.subeObjId, normCount = _a.normCount, kNormStore = _a.kNormStore, cardLoading = _a.cardLoading, onDateFilter = _a.onDateFilter, kPersonelCount = _a.kPersonelCount, kNormDetailStore = _a.kNormDetailStore, getTotalNormUpdateRequestCount = _a.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _a.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _a.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _a.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _a.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _a.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _a.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _a.getCanceledNormUpdateRequestCount;
+    var dateFilter = _a.dateFilter, moment = _a.moment, type = _a.type, bolgeId = _a.bolgeId, subeObjId = _a.subeObjId, normCount = _a.normCount, kNormStore = _a.kNormStore, cardLoading = _a.cardLoading, onDateFilter = _a.onDateFilter, kPersonelCount = _a.kPersonelCount, kNormDetailStore = _a.kNormDetailStore, getTotalNormUpdateRequestCount = _a.getTotalNormUpdateRequestCount, getPendingNormFillRequestCount = _a.getPendingNormFillRequestCount, getTotalNormFillingRequestCount = _a.getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount = _a.getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount = _a.getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount = _a.getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount = _a.getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount = _a.getCanceledNormUpdateRequestCount;
     var _b = react_1.useState(0), key = _b[0], setKey = _b[1];
     var _c = react_1.useState(''), table = _c[0], setTable = _c[1];
     var _d = react_1.useState(false), visible = _d[0], setVisible = _d[1];
@@ -60,7 +60,7 @@ function KCartList(_a) {
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
             react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('NormCount'), icon: 'UsergroupAddOutlined', number: normCount }),
             react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('EmployeeCount'), icon: 'UserAddOutlined', number: kPersonelCount })),
-        react_1["default"].createElement(antd_1.Row, { gutter: 16 },
+        dateFilter && react_1["default"].createElement(antd_1.Row, { gutter: 16 },
             react_1["default"].createElement(KNormDateFilter_1["default"], { cursor: 'context-menu', onChange: onDateFilter, cardLoading: cardLoading })),
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
             abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getTotalNormFillingRequest'); }, cardLoading: cardLoading, color: 'rgb(83, 29, 171)', title: abpUtility_1.L('TotalNormFillingRequest'), icon: 'FileDoneOutlined', number: totalNormFillingRequest }),

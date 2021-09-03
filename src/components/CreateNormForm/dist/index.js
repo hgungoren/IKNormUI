@@ -78,21 +78,21 @@ var CreateNormForm = /** @class */ (function (_super) {
     function CreateNormForm() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
-            confirmDirty: false,
             defaultActiveKey: {
                 "name": "Next",
                 "pane": "PositionSelect",
                 "visible": false
             },
+            pozisyon: '',
+            talepTuru: '',
+            confirmDirty: false,
+            submitVisible: false,
+            buttonVisible: false,
             employeeVisible: true,
             positionVisible: true,
             newPositionVisible: true,
-            normRequestReasonVisible: true,
             descriptionVisible: true,
-            talepTuru: '',
-            buttonVisible: false,
-            pozisyon: '',
-            submitVisible: false
+            normRequestReasonVisible: true
         };
         _this.changeActiveTab = function () {
             var form = _this.props.formRef.current;
@@ -244,7 +244,7 @@ var CreateNormForm = /** @class */ (function (_super) {
                                         abpUtility_1.L(talepTuru_1["default"][value].replace(' ', '')),
                                         "  "); }))),
                                 !this.state.positionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
-                                    react_1["default"].createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x }); } }, position === undefined
+                                    react_1["default"].createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x.toString() }); } }, position === undefined
                                         ? []
                                         : position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
                                             " ",

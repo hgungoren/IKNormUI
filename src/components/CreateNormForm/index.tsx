@@ -18,12 +18,13 @@ const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 const { Option } = Select;
 
-export interface ICreateNormFormProps {
+export interface Props {
   tip: string;
   subeId: string;
   visible: boolean;
   normCount: number;
   modalType: string;
+  modalWidth: string;
   createFormState: {};
   onCancel: () => void;
   onCreateNorm: () => void;
@@ -33,42 +34,41 @@ export interface ICreateNormFormProps {
   employees: PagedResultDto<GetKPersonelOutput>;
   position: PagedResultDto<GetKInkaLookUpTableOutput>;
   getHierarchy: (subeId: string, bolgeId: string, tip: string, pozisyon: string) => void;
-  modalWidth: string;
 }
 
 
-export interface ICreateNormFormState {
-  confirmDirty: boolean;
+export interface State {
+  pozisyon: string;
+  talepTuru: string;
   defaultActiveKey: {};
+  confirmDirty: boolean;
+  buttonVisible: boolean;
+  submitVisible: boolean;
   employeeVisible: boolean;
   positionVisible: boolean;
   newPositionVisible: boolean;
-  normRequestReasonVisible: boolean;
   descriptionVisible: boolean;
-  talepTuru: string;
-  buttonVisible: boolean;
-  pozisyon: string;
-  submitVisible: boolean;
+  normRequestReasonVisible: boolean;
 }
 
-class CreateNormForm extends React.Component<ICreateNormFormProps> {
+class CreateNormForm extends React.Component<Props, State> {
 
   state = {
-    confirmDirty: false,
     defaultActiveKey: {
       "name": "Next",
       "pane": "PositionSelect",
       "visible": false
     },
+    pozisyon: '',
+    talepTuru: '',
+    confirmDirty: false,
+    submitVisible: false,
+    buttonVisible: false,
     employeeVisible: true,
     positionVisible: true,
     newPositionVisible: true,
-    normRequestReasonVisible: true,
     descriptionVisible: true,
-    talepTuru: '',
-    buttonVisible: false,
-    pozisyon: '',
-    submitVisible: false
+    normRequestReasonVisible: true,
   };
 
 
@@ -276,7 +276,8 @@ class CreateNormForm extends React.Component<ICreateNormFormProps> {
 
                   {
                     !this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
-                      <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')} onSelect={(x) => this.setState({ pozisyon: x })} >
+                      <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')}
+                        onSelect={(x) => this.setState({ pozisyon: x.toString() })} >
                         {
                           position === undefined
                             ? []

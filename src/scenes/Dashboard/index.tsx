@@ -23,7 +23,7 @@ import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 declare var abp: any;
 
-export interface IDashboardProps {
+export interface Props {
   kNormStore: KNormStore;
   sessionStore?: SessionStore;
   accountStore?: AccountStore;
@@ -34,7 +34,7 @@ export interface IDashboardProps {
 }
 
 
-export interface IBolgeState {
+export interface State {
   totalFill: any[];
   totalUpdate: any[];
   cardLoading: boolean;
@@ -44,7 +44,7 @@ export interface IBolgeState {
   lineUpdateLoading: boolean;
   moment: any;
   lineChartView: boolean;
-
+  dateFilter: boolean;
 }
 declare var abp: any;
 
@@ -54,7 +54,7 @@ declare var abp: any;
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
+export class Dashboard extends React.Component<Props, State> {
 
   state = {
     cardLoading: true,
@@ -65,7 +65,8 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     lineUpdateLoading: true,
     totalUpdate: [] as any[],
     moment: [] as any,
-    lineChartView: false
+    lineChartView: false,
+    dateFilter: false
   }
 
 
@@ -135,10 +136,10 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       isGranted('knorm.getpendingnormupdaterequest') ||
       isGranted('knorm.getacceptednormupdaterequest') ||
       isGranted('knorm.getcancelednormupdaterequest')) {
-
+      this.setState({ dateFilter: true })
       await this.getNormRequests(startOfMonth, currentDate);
       await this.getNormRequestCounts(startOfMonth, currentDate);
-   
+
     }
 
     await this.getEmployeeCount();
@@ -153,7 +154,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       totalUpdate: resultUpdate,
       lineUpdateLoading: false,
       moment: [startOfMonth, currentDate]
-    })  
+    })
   }
 
   lineChartModel = async (data: GetAllKNormOutput[]): Promise<any[]> => {
@@ -298,7 +299,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
 
   render() {
 
-    const { cardLoading, lineFillLoading, lineUpdateLoading, moment, lineChartView } = this.state;
+    const { cardLoading, lineFillLoading, lineUpdateLoading, moment, lineChartView, dateFilter } = this.state;
     const { kPersonelCount } = this.props.kPersonelStore;
     const { normCount } = this.props.kSubeNormStore;
     const {
@@ -311,7 +312,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
       getAcceptedNormUpdateRequestCount,
       getCanceledNormUpdateRequestCount
     } = this.props.kNormStore;
- 
+
     const lineChartLayout = {
       onePiece: {
         xs: { offset: 1, span: 22 },
@@ -336,6 +337,7 @@ export class Dashboard extends React.Component<IDashboardProps, IBolgeState> {
     return (
       <React.Fragment>
         <KCartList
+          dateFilter={dateFilter}
           moment={moment}
           type={""}
           bolgeId={0}

@@ -1,7 +1,6 @@
 /*eslint-disable */
 
 import './index.less';
-import uuid from 'react-uuid';
 import * as React from 'react';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
@@ -24,6 +23,7 @@ import { Modal, notification, Card, Col, Row, Table, Input, Button, Tooltip, Spa
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, FileSearchOutlined, StopOutlined } from '@ant-design/icons';
 import Tag from 'antd/es/tag';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import DateCart from '../DateCart';
 
 
 export interface INormRequestListTableState {
@@ -342,21 +342,15 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             },
 
             {
-                title: L("table.norm.requestdate"), dataIndex: 'creationTime', key: uuid(), width: 60, render: (text: Date) => <div >
+                title: L("table.norm.requestdate"), dataIndex: 'creationTime', width: 100, render: (text: Date) => <div >
                     {
-                        new Date(text).toLocaleDateString("tr-TR", {
-                            year: "numeric",
-                            month: "numeric",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        })
+                        <DateCart date={text} />
                     }
                 </div>,
                 responsive: ['sm'] as Breakpoint[]
             },
             {
-                title: L('table.norm.requeststatus'), dataIndex: 'durumu', key: uuid(), width: 200, render: (text, norm) => (<>
+                title: L('table.norm.requeststatus'), dataIndex: 'durumu', width: 200, render: (text, norm) => (<>
 
                     {(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
                         <Tooltip placement="topLeft" title={L('Waiting')}> <Tag color={'rgb(250, 173, 20)'} icon={<ClockCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]}</Tag ></Tooltip> :
@@ -367,18 +361,17 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     }
                 </>), responsive: ['sm'] as Breakpoint[]
             },
-            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', key: uuid(), width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.position"), dataIndex: 'pozisyon', key: uuid(), width: 150, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', key: uuid(), width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.requesttype"), dataIndex: 'turu', key: uuid(), width: 50, render: (text: TalepTuru) => <div >{TalepTuru[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.area.name"),      dataIndex: 'bolgeAdi',  width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.branch.name"),    dataIndex: 'subeAdi',   width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.position"),       dataIndex: 'pozisyon',  width: 150, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requestreason"),  dataIndex: 'nedeni',    width: 50,  render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requesttype"),    dataIndex: 'turu',      width: 50,  render: (text: TalepTuru) => <div >{L( text )}</div>,  responsive: ['sm'] as Breakpoint[] },
             {
                 title: L("table.norm.transactions"),
                 dataIndex: 'id',
-                key: uuid(),
                 width: 50,
                 render: (text, norm: GetAllKNormOutput) => <Space size={'small'}>
- 
+
                     {
                         kNormDetails !== undefined && (isGranted('knorm.detail')) && (
                             <Tooltip placement="topLeft" title={L('Detail')}>
@@ -437,7 +430,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     <Table
 
                                         locale={{ emptyText: L('NoData') }}
-                                        rowKey={uuid()}
+
                                         bordered={false}
                                         columns={columnsNorm}
                                         pagination={tablePagination}
@@ -449,7 +442,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     <Table
 
                                         locale={{ emptyText: L('NoData') }}
-                                        rowKey={uuid()}
+
                                         bordered={false}
                                         pagination={tablePagination}
                                         columns={columnsNorm}

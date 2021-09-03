@@ -68,13 +68,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 require("./index.less");
-var react_uuid_1 = require("react-uuid");
 var React = require("react");
 var mobx_react_1 = require("mobx-react");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var abpUtility_1 = require("../../lib/abpUtility");
 var NormDetailTimeLine_1 = require("../NormDetailTimeLine");
-var talepTuru_1 = require("../../services/kNorm/dto/talepTuru");
 var status_1 = require("../../services/kNormDetail/dto/status");
 var NormRejectDescription_1 = require("../NormRejectDescription");
 var normStatus_1 = require("../../services/kNorm/dto/normStatus");
@@ -83,6 +81,7 @@ var talepDurumu_1 = require("../../services/kNorm/dto/talepDurumu");
 var antd_1 = require("antd");
 var icons_1 = require("@ant-design/icons");
 var tag_1 = require("antd/es/tag");
+var DateCart_1 = require("../DateCart");
 var confirm = antd_1.Modal.confirm;
 var Search = antd_1.Input.Search;
 var NormRequestListTable = /** @class */ (function (_super) {
@@ -418,18 +417,12 @@ var NormRequestListTable = /** @class */ (function (_super) {
                 responsive: ['xs']
             },
             {
-                title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: react_uuid_1["default"](), width: 60,
-                render: function (text) { return React.createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
-                    year: "numeric",
-                    month: "numeric",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })); },
+                title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', width: 100,
+                render: function (text) { return React.createElement("div", null, React.createElement(DateCart_1["default"], { date: text })); },
                 responsive: ['sm']
             },
             {
-                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
+                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', width: 200,
                 render: function (text, norm) { return (React.createElement(React.Fragment, null, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
                     React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Waiting') },
                         " ",
@@ -450,15 +443,14 @@ var NormRequestListTable = /** @class */ (function (_super) {
                                 talepDurumu_1["default"][norm.durumu],
                                 "  ")))); }, responsive: ['sm']
             },
-            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: react_uuid_1["default"](), width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: react_uuid_1["default"](), width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: react_uuid_1["default"](), width: 50, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', width: 50, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); }, responsive: ['sm'] },
+            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', width: 50, render: function (text) { return React.createElement("div", null, abpUtility_1.L(text)); }, responsive: ['sm'] },
             {
                 title: abpUtility_1.L("table.norm.transactions"),
                 dataIndex: 'id',
-                key: react_uuid_1["default"](),
                 width: 50,
                 render: function (text, norm) { return React.createElement(antd_1.Space, { size: 'small' },
                     kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail')) && (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Detail') },
@@ -482,7 +474,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
                         React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
-                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: react_uuid_1["default"](), bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } }, isModal ? (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columnsNorm, pagination: tablePagination, loading: this.props.kNormStore[table] === undefined ? true : false, dataSource: this.props.kNormStore[table] === undefined ? [] : this.props.kNormStore[table], onChange: this.handlePagination })) : (React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, pagination: tablePagination, columns: columnsNorm, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, onChange: this.handlePagination }))))),
             React.createElement(NormDetailTimeLine_1["default"], { data: kNormAllDetails, title: subeOrBolgeAdi, norm: getAllKNormOutput, visible: detaillModalVisible, onCancel: function () { _this.setState({ detaillModalVisible: false }); } }),
             React.createElement(NormRejectDescription_1["default"], { formRef: this.formRef, title: abpUtility_1.L('RequestRejectForm'), reuestId: this.state.requestId, rejectRequestClick: this.rejectRequestClick, visible: this.state.normRejectDescriptionModalVisible, onCancel: function () {
                     _this.setState({

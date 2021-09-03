@@ -4,6 +4,7 @@ var react_1 = require("react");
 require("./index.less");
 var antd_1 = require("antd");
 var tr_TR_1 = require("antd/lib/locale/tr_TR");
+var en_US_1 = require("antd/lib/locale/en_US");
 var RangePicker = antd_1.DatePicker.RangePicker;
 function KNormDateFilter(_a) {
     var cardLoading = _a.cardLoading, _b = _a.cursor, cursor = _b === void 0 ? '' : _b, onChange = _a.onChange;
@@ -12,7 +13,7 @@ function KNormDateFilter(_a) {
             react_1["default"].createElement(antd_1.Card, { className: 'kcard-date-picker', hoverable: true, style: { cursor: cursor }, bodyStyle: { padding: 10 }, loading: cardLoading, bordered: false },
                 react_1["default"].createElement(antd_1.Col, { span: 24 },
                     react_1["default"].createElement(antd_1.Space, { direction: "vertical", size: 24 },
-                        react_1["default"].createElement(antd_1.ConfigProvider, { locale: tr_TR_1["default"] },
+                        react_1["default"].createElement(antd_1.ConfigProvider, { locale: abp.localization.currentLanguage.name === 'tr' ? tr_TR_1["default"] : en_US_1["default"] },
                             react_1["default"].createElement(RangePicker, { format: "DD MM YYYY", size: 'large', className: 'range-picker', onCalendarChange: onChange, dateRender: function (current) {
                                     var style = { border: '', borderRadius: '' };
                                     if (current.date() === 1) {

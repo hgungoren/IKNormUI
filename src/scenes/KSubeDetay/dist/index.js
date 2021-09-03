@@ -83,13 +83,13 @@ var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var abpUtility_1 = require("../../lib/abpUtility");
 var talepTuru_1 = require("../../services/kNorm/dto/talepTuru");
 var CreateNormForm_1 = require("../../components/CreateNormForm");
+var normStatus_1 = require("../../services/kNorm/dto/normStatus");
 var talepNedeni_1 = require("../../services/kNorm/dto/talepNedeni");
 var talepDurumu_1 = require("../../services/kNorm/dto/talepDurumu");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
-var icons_1 = require("@ant-design/icons");
 var NormDetailTimeLine_1 = require("../../components/NormDetailTimeLine");
 var antd_1 = require("antd");
-var normStatus_1 = require("../../services/kNorm/dto/normStatus");
+var icons_1 = require("@ant-design/icons");
 var Search = antd_1.Input.Search;
 var KSubeDetay = /** @class */ (function (_super) {
     __extends(KSubeDetay, _super);
@@ -143,15 +143,82 @@ var KSubeDetay = /** @class */ (function (_super) {
                 }
             });
         }); };
-        _this.setPageState = function () { return __awaiter(_this, void 0, void 0, function () {
+        _this.pageSettings = function () { return __awaiter(_this, void 0, void 0, function () {
+            var tur;
             return __generator(this, function (_a) {
-                this.setState({ id: this.props["match"].params["id"] });
+                console.log(this.props.kSubeStore.editKSube);
+                tur = this.props.kSubeStore.editKSube.tur;
+                if (tur === 'Acente') {
+                    this.setState({ tip: tur });
+                }
+                else {
+                    this.setState({ tip: this.props.kSubeStore.editKSube.tip });
+                }
+                this.setState({
+                    bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId
+                });
+                if (abpUtility_1.isGranted('kbolge.view')) {
+                    this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
+                    this.setState({
+                        breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+                        breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+                    });
+                }
                 return [2 /*return*/];
             });
         }); };
-        // handleTableChange = (pagination: any) => {
-        //     this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAllEmployees());
-        // };
+        _this.setPageState = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.setState({ id: this.props["match"].params["id"] });
+                this.props.kSubeStore.get({ id: this.state.id });
+                return [2 /*return*/];
+            });
+        }); };
+        _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.setPageState()];
+                    case 1:
+                        _a.sent();
+                        if (!abpUtility_1.isGranted('ksubedetail.employee.list')) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.getAllEmployees()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        if (!abpUtility_1.isGranted('ksubedetail.norm.request.list')) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.getNormRequests()];
+                    case 4:
+                        _a.sent();
+                        return [4 /*yield*/, this.getAllEmployees()];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6:
+                        if (!abpUtility_1.isGranted('ksubedetail.norm.employee.list')) return [3 /*break*/, 12];
+                        return [4 /*yield*/, this.getAllEmployeesForGroupBy()];
+                    case 7:
+                        _a.sent();
+                        return [4 /*yield*/, this.getAllSubeNormForGroupBy()];
+                    case 8:
+                        _a.sent();
+                        return [4 /*yield*/, this.setAllEmployeesGroupBy()];
+                    case 9:
+                        _a.sent();
+                        return [4 /*yield*/, this.setAllSubeNormGroupBy()];
+                    case 10:
+                        _a.sent();
+                        return [4 /*yield*/, this.mergeArray()];
+                    case 11:
+                        _a.sent();
+                        _a.label = 12;
+                    case 12: return [4 /*yield*/, this.pageSettings()];
+                    case 13:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
         _this.handleSearch = function (value) {
             _this.setState({ searchFilter: value }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -160,9 +227,6 @@ var KSubeDetay = /** @class */ (function (_super) {
                 }
             }); }); });
         };
-        // handleNormTableChange = (pagination: any) => {
-        //     this.setState({ skipNormCount: (pagination.current - 1) * this.state.maxNormResultCount! }, async () => await this.getNormRequests());
-        // };
         _this.handleNormSearch = function (value) {
             _this.setState({ normFilter: value }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -383,84 +447,6 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
-                }
-            });
-        });
-    };
-    KSubeDetay.prototype.pageSettings = function (entityDto) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kSubeStore.get(entityDto)];
-                    case 1:
-                        _a.sent();
-                        this.setState({
-                            tip: this.props.kSubeStore.editKSube.tip,
-                            bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId
-                        });
-                        if (!abpUtility_1.isGranted('kbolge.view')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId })];
-                    case 2:
-                        _a.sent();
-                        this.setState({
-                            breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-                            breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
-                        });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    KSubeDetay.prototype.componentDidMount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        abp.event.on('knorm_added', function (userNotification) {
-                            alert('saf');
-                            alert(userNotification);
-                        });
-                        return [4 /*yield*/, this.setPageState()];
-                    case 1:
-                        _a.sent();
-                        if (!abpUtility_1.isGranted('ksubedetail.employee.list')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.getAllEmployees()];
-                    case 2:
-                        _a.sent();
-                        _a.label = 3;
-                    case 3: return [4 /*yield*/, this.pageSettings({ id: this.state.id })];
-                    case 4:
-                        _a.sent();
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.request.list')) return [3 /*break*/, 7];
-                        return [4 /*yield*/, this.getNormRequests()];
-                    case 5:
-                        _a.sent();
-                        // await this.getKHierarchy();
-                        return [4 /*yield*/, this.getAllEmployees()];
-                    case 6:
-                        // await this.getKHierarchy();
-                        _a.sent();
-                        _a.label = 7;
-                    case 7:
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.employee.list')) return [3 /*break*/, 13];
-                        return [4 /*yield*/, this.getAllEmployeesForGroupBy()];
-                    case 8:
-                        _a.sent();
-                        return [4 /*yield*/, this.getAllSubeNormForGroupBy()];
-                    case 9:
-                        _a.sent();
-                        return [4 /*yield*/, this.setAllEmployeesGroupBy()];
-                    case 10:
-                        _a.sent();
-                        return [4 /*yield*/, this.setAllSubeNormGroupBy()];
-                    case 11:
-                        _a.sent();
-                        return [4 /*yield*/, this.mergeArray()];
-                    case 12:
-                        _a.sent();
-                        _a.label = 13;
-                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -712,7 +698,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, columns: columnsNorm, locale: { emptyText: abpUtility_1.L('NoData') }, onChange: this.handlePaginationTable3, rowKey: function (record) { return record.id; }, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, pagination: tablePaginationTable3 })))),
-            React.createElement(CreateNormForm_1["default"], { modalWidth: '60%', getHierarchy: this.getHierarchy, modalType: 'create', tip: tip, formRef: this.formRef, subeId: id, hierarchy: kHierarchies, employees: kPersonels, onCreateNorm: this.createNorm, visible: modalVisible, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
+            React.createElement(CreateNormForm_1["default"], { tip: tip, subeId: id, modalWidth: '60%', modalType: 'create', formRef: this.formRef, employees: kPersonels, visible: modalVisible, hierarchy: kHierarchies, onCreateNorm: this.createNorm, getHierarchy: this.getHierarchy, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
                     var form = _this.formRef.current;
                     _this.setState({
                         modalVisible: false

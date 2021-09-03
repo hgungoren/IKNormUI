@@ -25,7 +25,7 @@ import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, I
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { dateHelper } from '../../helper/date';
 
-export interface IBolgeProps {
+export interface Props {
     kNormStore: KNormStore;
     kBolgeStore: KBolgeStore;
     sessionStore?: SessionStore;
@@ -37,7 +37,7 @@ export interface IBolgeProps {
     kInkaLookUpTableStore: KInkaLookUpTableStore;
 }
 
-export interface IBolgeState {
+export interface State {
     id: string;
     normId: string;
     userId: string;
@@ -52,6 +52,7 @@ export interface IBolgeState {
     filter: { offset: number, limit: number, current: number }
     moment: any;
     normList: any;
+    dateFilter: boolean;
 }
 
 const Search = Input.Search;
@@ -65,7 +66,7 @@ const confirm = Modal.confirm;
 @inject(Stores.KInkaLookUpTableStore)
 @inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
+class KBolge extends AppComponentBase<Props, State> {
 
     formRef = React.createRef<FormInstance>();
 
@@ -83,7 +84,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
         modalVisible: false,
         filter: { offset: 0, limit: 5, current: 0, },
         moment: [] as any,
-        normList: [] as any
+        normList: [] as any,
+        dateFilter: false
     };
 
 
@@ -239,7 +241,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
 
     kSubeNormDelete = async (input: EntityDto<string>) => {
-        const self = this; 
+        const self = this;
         confirm({
             okText: L('Yes'),
             cancelText: L('No'),
@@ -256,7 +258,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             onCancel() {
                 console.log('Cancel');
             },
-        });  
+        });
     }
 
     async getAll() {
@@ -317,6 +319,8 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
             isGranted('knorm.getpendingnormfillrequest') ||
             isGranted('knorm.gettotalnormfillingrequest')
         ) {
+
+            this.setState({ dateFilter: true })
             await this.getNormRequests(startOfMonth, currentDate);
             await this.getNormRequestCounts(startOfMonth, currentDate);
         }
@@ -358,7 +362,7 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
 
 
     public render() {
-        const { filter, totalSize, moment } = this.state;
+        const { filter, totalSize, moment, dateFilter } = this.state;
         const tablePagination = {
             pageSize: filter.limit,
             current: filter.current || 1,
@@ -452,13 +456,14 @@ class KBolge extends AppComponentBase<IBolgeProps, IBolgeState> {
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item> <Link to="/dashboard">{L('Dashboard')}</Link>  </Breadcrumb.Item>
+                                <Breadcrumb.Item>{isGranted('dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
                                 <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
                             </Breadcrumb>
                         }  >
                     </PageHeader>
                 </Card>
                 <KCartList
+                    dateFilter={dateFilter}
                     moment={moment}
                     type={"bolge"}
                     subeObjId={0}
