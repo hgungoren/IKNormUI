@@ -27,10 +27,18 @@
 .right {
   float: right;
 }
-.info {
+.info,
+.info:hover,
+.info:focus,
+.info:active {
   color: #fff;
   background-color: #1890ff;
   border-color: #1890ff;
+}
+.info:hover {
+  color: #fff;
+  background-color: #3a9dfa;
+  border-color: #3a9dfa;
 }
 .requeststatus {
   text-transform: capitalize;

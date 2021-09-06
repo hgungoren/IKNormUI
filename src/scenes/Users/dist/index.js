@@ -89,16 +89,13 @@ var User = /** @class */ (function (_super) {
             skipCount: 0,
             userId: 0,
             filter: '',
-            drawerVisible: false
+            drawerVisible: false,
+            totalSizeTable: 0,
+            filterTable: { offset: 0, limit: 5, current: 0 }
         };
-        _this.handleTableChange = function (pagination) {
-            _this.setState({ skipCount: (pagination.current - 1) * _this.state.maxResultCount }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getAll()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            }); }); });
-        };
+        // handleTableChange = (pagination: any) => {
+        //   this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+        // };
         _this.Modal = function () {
             _this.setState({
                 modalVisible: !_this.state.modalVisible
@@ -136,6 +133,14 @@ var User = /** @class */ (function (_super) {
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             }); }); });
+        };
+        _this.handlePaginationTable = function (pagination) {
+            console.log(pagination);
+            var filterTable = _this.state.filterTable;
+            var pageSize = pagination.pageSize, current = pagination.current;
+            _this.setState({
+                filterTable: __assign(__assign({}, filterTable), { current: current, limit: pageSize })
+            });
         };
         return _this;
     }
@@ -185,7 +190,6 @@ var User = /** @class */ (function (_super) {
                         _a.sent();
                         _a.label = 6;
                     case 6:
-                        console.log(this.props.userStore.editUser);
                         this.setState({ userId: entityDto.id });
                         this.Modal();
                         setTimeout(function () {
@@ -214,6 +218,15 @@ var User = /** @class */ (function (_super) {
     User.prototype.render = function () {
         var _this = this;
         var users = this.props.userStore.users;
+        var _a = this.state, filterTable = _a.filterTable, totalSizeTable = _a.totalSizeTable;
+        var tablePaginationTable = {
+            pageSize: filterTable.limit,
+            current: filterTable.current || 1,
+            total: totalSizeTable,
+            locale: { items_per_page: abpUtility_1.L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true
+        };
         var columns = [
             {
                 title: abpUtility_1.L('UserInformations xs'),
@@ -250,100 +263,17 @@ var User = /** @class */ (function (_super) {
                     (record.isActive === true ? React.createElement(antd_1.Tag, { color: "#2db7f5" }, abpUtility_1.L('Active')) : React.createElement(antd_1.Tag, { color: "red" }, abpUtility_1.L('Passive'))))); },
                 responsive: ['xs']
             },
-            {
-                title: abpUtility_1.L('UserInformations sm'),
-                render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.username')),
-                    " : ",
-                    record.userName,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.name')),
-                    "  : ",
-                    record.name,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' },
-                        abpUtility_1.L('table.user.surname'),
-                        " "),
-                    " : ",
-                    record.surname)); },
-                responsive: ['sm']
-            },
-            {
-                title: abpUtility_1.L('UserInformations sm'),
-                render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.duty')),
-                    "  : ",
-                    record.title,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' },
-                        " ",
-                        abpUtility_1.L('table.user.email')),
-                    "  : ",
-                    record.emailAddress,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' },
-                        " ",
-                        abpUtility_1.L('table.user.status'),
-                        " "),
-                    " : ",
-                    (record.isActive === true ? React.createElement(antd_1.Tag, { color: "#2db7f5" }, abpUtility_1.L('Active')) : React.createElement(antd_1.Tag, { color: "red" }, abpUtility_1.L('Passive'))))); },
-                responsive: ['sm'],
-                classNames: 10 > 0 ? 'none' : 'block'
-            },
-            {
-                title: abpUtility_1.L('UserInformations md'),
-                render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.username')),
-                    " : ",
-                    record.userName,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.name')),
-                    "  : ",
-                    record.name)); },
-                responsive: ['md']
-            },
-            {
-                title: abpUtility_1.L('UserInformations md'),
-                render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' },
-                        abpUtility_1.L('table.user.surname'),
-                        " "),
-                    " : ",
-                    record.surname,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.user.duty')),
-                    "  : ",
-                    record.title)); },
-                responsive: ['md']
-            },
-            {
-                title: abpUtility_1.L('UserInformations md'),
-                render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' },
-                        " ",
-                        abpUtility_1.L('table.user.email')),
-                    "  : ",
-                    record.emailAddress,
-                    React.createElement("br", null),
-                    React.createElement("span", { className: 'responsive-title' },
-                        " ",
-                        abpUtility_1.L('table.user.status'),
-                        " "),
-                    " : ",
-                    (record.isActive === true ? React.createElement(antd_1.Tag, { color: "#2db7f5" }, abpUtility_1.L('Active')) : React.createElement(antd_1.Tag, { color: "red" }, abpUtility_1.L('Passive'))))); },
-                responsive: ['md']
-            },
-            { title: abpUtility_1.L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['lg'] },
-            { title: abpUtility_1.L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: function (text) { return React.createElement("div", { className: "firstname" }, text); }, responsive: ['lg'] },
-            { title: abpUtility_1.L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: function (text) { return React.createElement("div", { className: "surname" }, text); }, responsive: ['lg'] },
-            { title: abpUtility_1.L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['lg'] },
-            { title: abpUtility_1.L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['lg'] },
+            { title: abpUtility_1.L('table.user.username'), dataIndex: 'userName', key: 'userName', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.user.name'), dataIndex: 'name', key: 'name', width: 100, render: function (text) { return React.createElement("div", { className: "firstname" }, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.user.surname'), dataIndex: 'surname', key: 'surname', width: 100, render: function (text) { return React.createElement("div", { className: "surname" }, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.user.duty'), dataIndex: 'title', key: 'title', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.user.email'), dataIndex: 'emailAddress', key: 'emailAddress', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
             {
                 title: abpUtility_1.L('table.user.status'),
                 dataIndex: 'isActive',
                 key: 'isActive',
                 width: 50,
-                render: function (text) { return (text === true ? React.createElement(antd_1.Tag, { color: "#2db7f5" }, abpUtility_1.L('Active')) : React.createElement(antd_1.Tag, { color: "red" }, abpUtility_1.L('Passive'))); }, responsive: ['lg']
+                render: function (text) { return (text === true ? React.createElement(antd_1.Tag, { color: "#2db7f5" }, abpUtility_1.L('Active')) : React.createElement(antd_1.Tag, { color: "red" }, abpUtility_1.L('Passive'))); }, responsive: ['sm']
             },
             {
                 title: abpUtility_1.L('table.user.transactions'),
@@ -352,7 +282,7 @@ var User = /** @class */ (function (_super) {
                     React.createElement(antd_1.Dropdown, { trigger: ['click'], overlay: React.createElement(antd_1.Menu, null,
                             React.createElement(antd_1.Menu.Item, { onClick: function () { return _this.createOrUpdateModalOpen({ id: item.id }); } }, abpUtility_1.L('Edit')),
                             React.createElement(antd_1.Menu.Item, { onClick: function () { return _this["delete"]({ id: item.id }); } }, abpUtility_1.L('Delete'))), placement: "bottomLeft" },
-                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); }, responsive: ['lg']
+                        React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) }, abpUtility_1.L('Actions'))))); }, responsive: ['sm']
             },
         ];
         return (React.createElement(React.Fragment, null,
@@ -368,7 +298,7 @@ var User = /** @class */ (function (_super) {
                         React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
-                        React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, columns: columns, pagination: { pageSize: 10, total: users === undefined ? 0 : users.totalCount, defaultCurrent: 1 }, loading: users === undefined ? true : false, dataSource: users === undefined ? [] : users.items, onChange: this.handleTableChange }))),
+                        React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, columns: columns, loading: users === undefined ? true : false, dataSource: users === undefined ? [] : users.items, onChange: this.handlePaginationTable, pagination: tablePaginationTable }))),
                 React.createElement(createOrUpdateUser_1["default"], { formRef: this.formRef, visible: this.state.modalVisible, onCancel: function () {
                         var _a;
                         _this.setState({

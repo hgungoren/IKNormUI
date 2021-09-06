@@ -36,7 +36,6 @@ export interface Props {
   getHierarchy: (subeId: string, bolgeId: string, tip: string, pozisyon: string) => void;
 }
 
-
 export interface State {
   pozisyon: string;
   talepTuru: string;
@@ -64,13 +63,12 @@ class CreateNormForm extends React.Component<Props, State> {
     confirmDirty: false,
     submitVisible: false,
     buttonVisible: false,
-    employeeVisible: true,
-    positionVisible: true,
-    newPositionVisible: true,
-    descriptionVisible: true,
-    normRequestReasonVisible: true,
+    employeeVisible: false,
+    positionVisible: false,
+    newPositionVisible: false,
+    descriptionVisible: false,
+    normRequestReasonVisible: false,
   };
-
 
   changeActiveTab = () => {
     const form = this.props.formRef.current;
@@ -85,7 +83,6 @@ class CreateNormForm extends React.Component<Props, State> {
     })
   }
 
-
   visibleEmployee = (param) => {
     if (param === "Ayrilma") {
       this.setState({ employeeVisible: !this.state.employeeVisible })
@@ -97,20 +94,18 @@ class CreateNormForm extends React.Component<Props, State> {
   CreateNorm = () => {
     this.setState({
       defaultActiveKey: this.props.createFormState,
-      employeeVisible: true,
-      positionVisible: true,
-      newPositionVisible: true,
-      normRequestReasonVisible: true,
-      descriptionVisible: true,
+      employeeVisible: false,
+      positionVisible: false,
+      newPositionVisible: false,
+      normRequestReasonVisible: false,
+      descriptionVisible: false,
       talepTuru: '',
-      buttonVisible: false,
-      confirmDirty: false
+      buttonVisible: true,
+      confirmDirty: true
     })
-
   }
 
   resetForm = () => {
-
     const form = this.props.formRef.current;
     this.setState({
       confirmDirty: false,
@@ -119,13 +114,13 @@ class CreateNormForm extends React.Component<Props, State> {
         "pane": "PositionSelect",
         "visible": false
       },
-      employeeVisible: true,
-      positionVisible: true,
-      newPositionVisible: true,
-      normRequestReasonVisible: true,
-      descriptionVisible: true,
+      employeeVisible: false,
+      positionVisible: false,
+      newPositionVisible: false,
+      normRequestReasonVisible: false,
+      descriptionVisible: false,
       talepTuru: '',
-      buttonVisible: false
+      buttonVisible: true
     })
 
     form?.resetFields();
@@ -138,48 +133,63 @@ class CreateNormForm extends React.Component<Props, State> {
     form!.resetFields(['Pozisyon', 'Aciklama', 'TalepNedeni', 'PersonelId', 'YeniPozisyon'])
 
     this.setState({
-      positionVisible: true,
-      normRequestReasonVisible: true,
-      descriptionVisible: true,
-      newPositionVisible: true,
-      buttonVisible: false
+      positionVisible: false,
+      normRequestReasonVisible: false,
+      descriptionVisible: false,
+      newPositionVisible: false,
+      buttonVisible: false,
+      talepTuru: ''
     });
 
-    if (param === 'Norm_Doldurma') {
-
+    if (TalepTuru[param] === TalepTuru.Norm_Doldurma) {
       this.setState({
-        positionVisible: false,          // Açık
-        normRequestReasonVisible: false, // Açık
-        descriptionVisible: false,       // Açık
-        newPositionVisible: true,        // Kapalı
-        talepTuru: ''
-      });
-    }
-
-    else if (param === 'Norm_Arttir') {
-      this.setState({
-        positionVisible: false,
-        normRequestReasonVisible: false,
-        descriptionVisible: false,
-        newPositionVisible: true,  // Kapalı
-        talepTuru: param,
-        employeeVisible: true
-      });
-    }
-
-    else if (param === 'Norm_Kaydir') {
-
-      this.setState({
-        positionVisible: false,
-        newPositionVisible: false,
-        descriptionVisible: false,
+        positionVisible: true,
         normRequestReasonVisible: true,
-        talepTuru: '',
-        employeeVisible: true
+        descriptionVisible: true,
+        newPositionVisible: false,
+        talepTuru: param
       });
     }
-    else { }
+
+    else if (TalepTuru[param] === TalepTuru.Norm_Arttir) {
+      this.setState({
+        positionVisible: true,
+        normRequestReasonVisible: true,
+        descriptionVisible: true,
+        newPositionVisible: false,
+        talepTuru: param,
+        employeeVisible: false
+      });
+    }
+
+    else if (TalepTuru[param] === TalepTuru.Norm_Kaydir) {
+
+      this.setState({
+        positionVisible: true,
+        newPositionVisible: true,
+        descriptionVisible: true,
+        normRequestReasonVisible: false,
+        talepTuru: param,
+        employeeVisible: false
+      });
+    }
+
   }
+
+  componentDidMount = async () => {
+    // this.setState({
+    //   positionVisible: false,
+    //   normRequestReasonVisible: false,
+    //   descriptionVisible: false,
+    //   newPositionVisible: false,
+    //   buttonVisible: false,
+    //   talepTuru: ''
+    // });
+
+    console.log(this.state)
+  }
+
+
 
   compareToPositions = (rule: any, value: any, callback: any) => {
     const form = this.props.formRef.current;
@@ -211,7 +221,11 @@ class CreateNormForm extends React.Component<Props, State> {
       },
     };
 
-    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId, normCount, hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
+    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId,
+
+      // normCount,
+
+      hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
     const { pozisyon } = this.state;
     return (
       <Row >
@@ -225,8 +239,7 @@ class CreateNormForm extends React.Component<Props, State> {
         >
           <Modal
             footer={
-              [
-
+              [ 
                 !this.state.buttonVisible && (<Button key="next" onClick={() => { this.changeActiveTab(), getHierarchy(subeId, bagliOlduguSubeId, tip, pozisyon) }} >
                   {L(this.state.defaultActiveKey.name)}
                 </Button>),
@@ -235,7 +248,6 @@ class CreateNormForm extends React.Component<Props, State> {
                   onCreateNorm(),
                     this.CreateNorm()
                 }} className={'right'} type="primary">{L('Send')}</Button>)
-
               ]
             }
             onCancel={() => { onCancel(); this.resetForm(); }}
@@ -275,21 +287,19 @@ class CreateNormForm extends React.Component<Props, State> {
                   </Form.Item>
 
                   {
-                    !this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
+                    this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
                       <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')}
                         onSelect={(x) => this.setState({ pozisyon: x.toString() })} >
                         {
-                          position === undefined
-                            ? []
-                            : position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>
-                            )
+                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>
+                          )
                         }
                       </Select>
                     </Form.Item>)
                   }
 
                   {
-                    !this.state.newPositionVisible && (<Form.Item label={L('NewPosition')} {...formItemLayout} name={'YeniPozisyon'} rules={
+                    this.state.newPositionVisible && (<Form.Item label={L('NewPosition')} {...formItemLayout} name={'YeniPozisyon'} rules={
                       [
                         {
                           required: true,
@@ -298,37 +308,39 @@ class CreateNormForm extends React.Component<Props, State> {
                         {
                           validator: this.compareToPositions
                         }
-
                       ]
-
                     }>
                       <Select placeholder={L('PleaseSelect')} >
                         {
-                          position === undefined
-                            ? []
-                            : position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>
-                            )
+                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>)
                         }
                       </Select>
                     </Form.Item>)
                   }
-
                   {
-                    !this.state.normRequestReasonVisible && (<Form.Item label={L('NormRequestReason')} {...formItemLayout} name={'TalepNedeni'} rules={rules.requestReason}>
+                    this.state.normRequestReasonVisible && (<Form.Item label={L('NormRequestReason')} {...formItemLayout} name={'TalepNedeni'} rules={rules.requestReason}>
                       <Select placeholder={L('PleaseSelect')} onChange={this.visibleEmployee}>
                         {
                           Object.keys(TalepNedeni).map((value, index) => <>
-                            {
+                            {/* {
                               employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option value={value}> {TalepNedeni[value]} </Option>
+                            } */}
+
+                            {
+                              (
+                                employees !== undefined &&
+                                TalepTuru[this.state.talepTuru] === TalepTuru.Norm_Doldurma &&
+                                TalepNedeni[value] !== TalepNedeni.Kadro_Genisleme) ?
+                                < Option value={value}> {TalepNedeni[value]} </Option> :
+                                (TalepTuru[this.state.talepTuru] === TalepTuru.Norm_Arttir && TalepNedeni[value] === TalepNedeni.Kadro_Genisleme) && < Option value={value}> {TalepNedeni[value]} </Option>
                             }
                           </>)
                         }
                       </Select>
                     </Form.Item>)
                   }
-
                   {
-                    !this.state.employeeVisible && (<Form.Item label={L('Employee')} {...formItemLayout} name={'PersonelId'} rules={rules.employeeId}>
+                    this.state.employeeVisible && (<Form.Item label={L('Employee')} {...formItemLayout} name={'PersonelId'} rules={rules.employeeId}>
                       <Select placeholder={L('PleaseSelect')} >
                         {
                           employees != undefined && employees.items.map((value, index) => <Option value={value.objId}> {value.ad} {value.soyad} </Option>)
@@ -336,13 +348,11 @@ class CreateNormForm extends React.Component<Props, State> {
                       </Select>
                     </Form.Item>)
                   }
-
                   {
-                    !this.state.descriptionVisible && (<Form.Item label={L('Description')} {...formItemLayout} name={'Aciklama'} rules={rules.description}>
+                    this.state.descriptionVisible && (<Form.Item label={L('Description')} {...formItemLayout} name={'Aciklama'} rules={rules.description}>
                       <TextArea rows={8} />
                     </Form.Item>)
                   }
-
                 </TabPane>
                 <TabPane className={'form-tabPane'} tab={L('AuthoritiesHierarchy')} key={'AuthoritiesHierarchy'} forceRender={true}>
                   <Steps direction="vertical" >

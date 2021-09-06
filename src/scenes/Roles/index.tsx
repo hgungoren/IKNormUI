@@ -130,8 +130,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     this.setState({ drawerVisible: false });
   }
 
-  handlePaginationTable = pagination => {
-    console.log(pagination)
+  handlePaginationTable = pagination => { 
     const { filterTable } = this.state;
     const { pageSize, current } = pagination;
     this.setState({

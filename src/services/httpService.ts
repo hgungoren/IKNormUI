@@ -45,7 +45,7 @@ http.interceptors.response.use(
         content: L(error.response.data.error.details),
       });
     } else if (!!error.response && !!error.response.data.error && !!error.response.data.error.message) {
-      console.log(error)
+   
       Modal.error({
         title: L('LoginFailed'),
         content: L(error.response.data.error.message),

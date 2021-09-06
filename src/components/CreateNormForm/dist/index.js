@@ -88,11 +88,11 @@ var CreateNormForm = /** @class */ (function (_super) {
             confirmDirty: false,
             submitVisible: false,
             buttonVisible: false,
-            employeeVisible: true,
-            positionVisible: true,
-            newPositionVisible: true,
-            descriptionVisible: true,
-            normRequestReasonVisible: true
+            employeeVisible: false,
+            positionVisible: false,
+            newPositionVisible: false,
+            descriptionVisible: false,
+            normRequestReasonVisible: false
         };
         _this.changeActiveTab = function () {
             var form = _this.props.formRef.current;
@@ -119,14 +119,14 @@ var CreateNormForm = /** @class */ (function (_super) {
         _this.CreateNorm = function () {
             _this.setState({
                 defaultActiveKey: _this.props.createFormState,
-                employeeVisible: true,
-                positionVisible: true,
-                newPositionVisible: true,
-                normRequestReasonVisible: true,
-                descriptionVisible: true,
+                employeeVisible: false,
+                positionVisible: false,
+                newPositionVisible: false,
+                normRequestReasonVisible: false,
+                descriptionVisible: false,
                 talepTuru: '',
-                buttonVisible: false,
-                confirmDirty: false
+                buttonVisible: true,
+                confirmDirty: true
             });
         };
         _this.resetForm = function () {
@@ -138,13 +138,13 @@ var CreateNormForm = /** @class */ (function (_super) {
                     "pane": "PositionSelect",
                     "visible": false
                 },
-                employeeVisible: true,
-                positionVisible: true,
-                newPositionVisible: true,
-                normRequestReasonVisible: true,
-                descriptionVisible: true,
+                employeeVisible: false,
+                positionVisible: false,
+                newPositionVisible: false,
+                normRequestReasonVisible: false,
+                descriptionVisible: false,
                 talepTuru: '',
-                buttonVisible: false
+                buttonVisible: true
             });
             form === null || form === void 0 ? void 0 : form.resetFields();
         };
@@ -152,43 +152,57 @@ var CreateNormForm = /** @class */ (function (_super) {
             var form = _this.props.formRef.current;
             form.resetFields(['Pozisyon', 'Aciklama', 'TalepNedeni', 'PersonelId', 'YeniPozisyon']);
             _this.setState({
-                positionVisible: true,
-                normRequestReasonVisible: true,
-                descriptionVisible: true,
-                newPositionVisible: true,
-                buttonVisible: false
+                positionVisible: false,
+                normRequestReasonVisible: false,
+                descriptionVisible: false,
+                newPositionVisible: false,
+                buttonVisible: false,
+                talepTuru: ''
             });
-            if (param === 'Norm_Doldurma') {
+            if (talepTuru_1["default"][param] === talepTuru_1["default"].Norm_Doldurma) {
                 _this.setState({
-                    positionVisible: false,
-                    normRequestReasonVisible: false,
-                    descriptionVisible: false,
-                    newPositionVisible: true,
-                    talepTuru: ''
-                });
-            }
-            else if (param === 'Norm_Arttir') {
-                _this.setState({
-                    positionVisible: false,
-                    normRequestReasonVisible: false,
-                    descriptionVisible: false,
-                    newPositionVisible: true,
-                    talepTuru: param,
-                    employeeVisible: true
-                });
-            }
-            else if (param === 'Norm_Kaydir') {
-                _this.setState({
-                    positionVisible: false,
-                    newPositionVisible: false,
-                    descriptionVisible: false,
+                    positionVisible: true,
                     normRequestReasonVisible: true,
-                    talepTuru: '',
-                    employeeVisible: true
+                    descriptionVisible: true,
+                    newPositionVisible: false,
+                    talepTuru: param
                 });
             }
-            else { }
+            else if (talepTuru_1["default"][param] === talepTuru_1["default"].Norm_Arttir) {
+                _this.setState({
+                    positionVisible: true,
+                    normRequestReasonVisible: true,
+                    descriptionVisible: true,
+                    newPositionVisible: false,
+                    talepTuru: param,
+                    employeeVisible: false
+                });
+            }
+            else if (talepTuru_1["default"][param] === talepTuru_1["default"].Norm_Kaydir) {
+                _this.setState({
+                    positionVisible: true,
+                    newPositionVisible: true,
+                    descriptionVisible: true,
+                    normRequestReasonVisible: false,
+                    talepTuru: param,
+                    employeeVisible: false
+                });
+            }
         };
+        _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                // this.setState({
+                //   positionVisible: false,
+                //   normRequestReasonVisible: false,
+                //   descriptionVisible: false,
+                //   newPositionVisible: false,
+                //   buttonVisible: false,
+                //   talepTuru: ''
+                // });
+                console.log(this.state);
+                return [2 /*return*/];
+            });
+        }); };
         _this.compareToPositions = function (rule, value, callback) {
             var form = _this.props.formRef.current;
             if (value && value === form.getFieldValue('Pozisyon')) {
@@ -218,7 +232,9 @@ var CreateNormForm = /** @class */ (function (_super) {
                 xxl: { span: 18 }
             }
         };
-        var _a = this.props, tip = _a.tip, visible = _a.visible, onCancel = _a.onCancel, employees = _a.employees, position = _a.position, onCreateNorm = _a.onCreateNorm, subeId = _a.subeId, normCount = _a.normCount, hierarchy = _a.hierarchy, bagliOlduguSubeId = _a.bagliOlduguSubeId, getHierarchy = _a.getHierarchy, modalWidth = _a.modalWidth;
+        var _a = this.props, tip = _a.tip, visible = _a.visible, onCancel = _a.onCancel, employees = _a.employees, position = _a.position, onCreateNorm = _a.onCreateNorm, subeId = _a.subeId, 
+        // normCount,
+        hierarchy = _a.hierarchy, bagliOlduguSubeId = _a.bagliOlduguSubeId, getHierarchy = _a.getHierarchy, modalWidth = _a.modalWidth;
         var pozisyon = this.state.pozisyon;
         return (react_1["default"].createElement(antd_1.Row, null,
             react_1["default"].createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 18, offset: 0 }, lg: { span: 18, offset: 0 }, xl: { span: 18, offset: 0 }, xxl: { span: 18, offset: 0 } },
@@ -243,14 +259,12 @@ var CreateNormForm = /** @class */ (function (_super) {
                                         " ",
                                         abpUtility_1.L(talepTuru_1["default"][value].replace(' ', '')),
                                         "  "); }))),
-                                !this.state.positionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
-                                    react_1["default"].createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x.toString() }); } }, position === undefined
-                                        ? []
-                                        : position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
-                                            " ",
-                                            value.adi,
-                                            " "); })))),
-                                !this.state.newPositionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NewPosition') }, formItemLayout, { name: 'YeniPozisyon', rules: [
+                                this.state.positionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Position') }, formItemLayout, { name: 'Pozisyon', rules: createNormForm_validation_1["default"].position }),
+                                    react_1["default"].createElement(antd_1.Select, { notFoundContent: { emptyText: abpUtility_1.L('NoSelectData') }, placeholder: abpUtility_1.L('PleaseSelect'), onSelect: function (x) { return _this.setState({ pozisyon: x.toString() }); } }, position !== undefined && position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
+                                        " ",
+                                        value.adi,
+                                        " "); })))),
+                                this.state.newPositionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NewPosition') }, formItemLayout, { name: 'YeniPozisyon', rules: [
                                         {
                                             required: true,
                                             message: abpUtility_1.L('ThisFieldIsRequired')
@@ -259,25 +273,30 @@ var CreateNormForm = /** @class */ (function (_super) {
                                             validator: this.compareToPositions
                                         }
                                     ] }),
-                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, position === undefined
-                                        ? []
-                                        : position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
-                                            " ",
-                                            value.adi,
-                                            " "); })))),
-                                !this.state.normRequestReasonVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NormRequestReason') }, formItemLayout, { name: 'TalepNedeni', rules: createNormForm_validation_1["default"].requestReason }),
-                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return react_1["default"].createElement(react_1["default"].Fragment, null, employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : react_1["default"].createElement(Option, { value: value },
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, position !== undefined && position.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.adi },
                                         " ",
-                                        talepNedeni_1["default"][value],
-                                        " ")); })))),
-                                !this.state.employeeVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Employee') }, formItemLayout, { name: 'PersonelId', rules: createNormForm_validation_1["default"].employeeId }),
+                                        value.adi,
+                                        " "); })))),
+                                this.state.normRequestReasonVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('NormRequestReason') }, formItemLayout, { name: 'TalepNedeni', rules: createNormForm_validation_1["default"].requestReason }),
+                                    react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect'), onChange: this.visibleEmployee }, Object.keys(talepNedeni_1["default"]).map(function (value, index) { return react_1["default"].createElement(react_1["default"].Fragment, null, (employees !== undefined &&
+                                        talepTuru_1["default"][_this.state.talepTuru] === talepTuru_1["default"].Norm_Doldurma &&
+                                        talepNedeni_1["default"][value] !== talepNedeni_1["default"].Kadro_Genisleme) ?
+                                        react_1["default"].createElement(Option, { value: value },
+                                            " ",
+                                            talepNedeni_1["default"][value],
+                                            " ") :
+                                        (talepTuru_1["default"][_this.state.talepTuru] === talepTuru_1["default"].Norm_Arttir && talepNedeni_1["default"][value] === talepNedeni_1["default"].Kadro_Genisleme) && react_1["default"].createElement(Option, { value: value },
+                                            " ",
+                                            talepNedeni_1["default"][value],
+                                            " ")); })))),
+                                this.state.employeeVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Employee') }, formItemLayout, { name: 'PersonelId', rules: createNormForm_validation_1["default"].employeeId }),
                                     react_1["default"].createElement(antd_1.Select, { placeholder: abpUtility_1.L('PleaseSelect') }, employees != undefined && employees.items.map(function (value, index) { return react_1["default"].createElement(Option, { value: value.objId },
                                         " ",
                                         value.ad,
                                         " ",
                                         value.soyad,
                                         " "); })))),
-                                !this.state.descriptionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Description') }, formItemLayout, { name: 'Aciklama', rules: createNormForm_validation_1["default"].description }),
+                                this.state.descriptionVisible && (react_1["default"].createElement(antd_1.Form.Item, __assign({ label: abpUtility_1.L('Description') }, formItemLayout, { name: 'Aciklama', rules: createNormForm_validation_1["default"].description }),
                                     react_1["default"].createElement(TextArea, { rows: 8 })))),
                             react_1["default"].createElement(TabPane, { className: 'form-tabPane', tab: abpUtility_1.L('AuthoritiesHierarchy'), key: 'AuthoritiesHierarchy', forceRender: true },
                                 react_1["default"].createElement(antd_1.Steps, { direction: "vertical" }, hierarchy !== undefined && hierarchy.map(function (data) { return react_1["default"].createElement(Step, { icon: react_1["default"].createElement(icons_1.MailOutlined, null), status: "finish", title: '', description: react_1["default"].createElement(antd_1.Row, null,

@@ -77,9 +77,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       await this.props.userStore.get(entityDto);
       await this.props.userStore.getRoles();
     }
-
-
-    console.log(this.props.userStore.editUser)
+ 
     this.setState({ userId: entityDto.id });
     this.Modal();
 

@@ -107,9 +107,7 @@ class KNormStore {
             result = await kNormService.getAllSube(pagedFilterAndSortedRequest);
         }
         else if (pagedFilterAndSortedRequest.type === "subedetail") {
-            result = await kNormService.getAllSubeDetail(pagedFilterAndSortedRequest);
-            console.log(result)
-            console.log(pagedFilterAndSortedRequest)
+            result = await kNormService.getAllSubeDetail(pagedFilterAndSortedRequest); 
         }
         else {
             result = await kNormService.getAllBolge(pagedFilterAndSortedRequest);

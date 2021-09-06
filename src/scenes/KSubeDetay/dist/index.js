@@ -146,7 +146,6 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.pageSettings = function () { return __awaiter(_this, void 0, void 0, function () {
             var tur;
             return __generator(this, function (_a) {
-                console.log(this.props.kSubeStore.editKSube);
                 tur = this.props.kSubeStore.editKSube.tur;
                 if (tur === 'Acente') {
                     this.setState({ tip: tur });
@@ -160,8 +159,10 @@ var KSubeDetay = /** @class */ (function (_super) {
                 if (abpUtility_1.isGranted('kbolge.view')) {
                     this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
                     this.setState({
-                        breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-                        breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+                        breadcrumbBolgeAdi: 'bölge adı',
+                        // breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+                        // breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+                        breadcrumbSubeAdi: 'şube adı gelecek'
                     });
                 }
                 return [2 /*return*/];
@@ -331,7 +332,6 @@ var KSubeDetay = /** @class */ (function (_super) {
             });
         };
         _this.handlePaginationTable3 = function (pagination) {
-            console.log(pagination);
             var filterTable3 = _this.state.filterTable3;
             var pageSize = pagination.pageSize, current = pagination.current;
             _this.setState({

@@ -34,7 +34,6 @@ http.interceptors.response.use(function (response) {
         });
     }
     else if (!!error.response && !!error.response.data.error && !!error.response.data.error.message) {
-        console.log(error);
         antd_1.Modal.error({
             title: abpUtility_1.L('LoginFailed'),
             content: abpUtility_1.L(error.response.data.error.message)

@@ -55,7 +55,6 @@ var NotificationStore = /** @class */ (function () {
                     case 0: return [4 /*yield*/, notificationService_1["default"].getAll(id)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         this.notifications = result;
                         return [2 /*return*/];
                 }

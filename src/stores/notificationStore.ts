@@ -10,8 +10,7 @@ class NotificationStore {
 
     @action
     async getAll(id: string) {
-        let result = await notificationService.getAll(id);
-        console.log(result)
+        let result = await notificationService.getAll(id); 
         this.notifications = result;
     }
 }

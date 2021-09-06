@@ -209,8 +209,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     pageSettings = async () => {
 
-        console.log(this.props.kSubeStore.editKSube)
-
         let tur = this.props.kSubeStore.editKSube.tur;
         if (tur === 'Acente') {
             this.setState({ tip: tur })
@@ -224,13 +222,14 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
 
         if (isGranted('kbolge.view')) {
+
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
-
-            
             this.setState({
-                breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-                breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+                breadcrumbBolgeAdi: 'bölge adı',
+                // breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+                // breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+                breadcrumbSubeAdi: 'şube adı gelecek'
             })
         }
     }
@@ -258,7 +257,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             await this.setAllEmployeesGroupBy();
             await this.setAllSubeNormGroupBy();
             await this.mergeArray();
-        } 
+        }
 
         await this.pageSettings();
     }
@@ -271,8 +270,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         this.setState({ normFilter: value }, async () => await this.getNormRequests());
     };
 
-    async createOrUpdateModalOpen(entityDto: EntityDto) { 
-        this.setState({ modalVisible: !this.state.modalVisible });
+    async createOrUpdateModalOpen(entityDto: EntityDto) {
+        this.setState({ modalVisible: !this.state.modalVisible }); 
         this.getPosition(this.state.tip);
     }
 
@@ -367,7 +366,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     };
 
     handlePaginationTable3 = pagination => {
-        console.log(pagination)
         const { filterTable3 } = this.state;
         const { pageSize, current } = pagination;
         this.setState({
@@ -382,7 +380,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const { kPersonels } = this.props.kPersonelStore!;
         const { kHierarchies } = this.props.kHierarchyStore;
         const { kNormAllDetails } = this.props.kNormDetailStore;
-        const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible, tip, id, bagliOlduguSubeId } = this.state;
+        const { breadcrumbBolgeAdi, breadcrumbSubeAdi, detaillModalVisible, groupData, createFormState, modalVisible,
+            tip, id, bagliOlduguSubeId } = this.state;
         const { filterTable1, filterTable2, filterTable3, totalSizeTable1, totalSizeTable2, totalSizeTable3 } = this.state;
 
         const tablePaginationTable1 = {
