@@ -289,10 +289,9 @@ class CreateNormForm extends React.Component<Props, State> {
                   {
                     this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
                       <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')}
-                        onSelect={(x) => this.setState({ pozisyon: x.toString() })} >
+                        onSelect={(x:any) => this.setState({ pozisyon: x.toString() })} >
                         {
-                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>
-                          )
+                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option> )
                         }
                       </Select>
                     </Form.Item>)

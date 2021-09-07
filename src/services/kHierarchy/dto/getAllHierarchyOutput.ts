@@ -15,11 +15,14 @@ export interface ChangeStatus {
     result: boolean;
 }
 
+export interface ChangeToPassiveStatus {
+    positionId: string;
+}
 
 export interface NodeOutput {
     id: number;
     code?: any;
-    mail: boolean;
+
     title: string;
     active: boolean;
     orderNo: number;
@@ -29,10 +32,16 @@ export interface NodeOutput {
     positionId: number;
     creatorUserId: number;
     canTerminate: boolean;
-    mailStatusChange: boolean;
     lastModificationTime: Date;
     lastModifierUserId: number;
+
+    mail: boolean;
+    mailStatusChange: boolean;
+
     pushNotificationWeb: boolean;
+    pushNotificationWebStatusChange: boolean;
+
+    pushNotificationPhoneStatusChange: boolean;
     pushNotificationPhone: boolean;
 }
 

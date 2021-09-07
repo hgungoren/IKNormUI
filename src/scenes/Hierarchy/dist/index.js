@@ -56,20 +56,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 /* eslint-disable */
-require("react-sortable-tree/style.css");
 require("./index.less");
 var react_1 = require("react");
 var react_uuid_1 = require("react-uuid");
 var antd_1 = require("antd");
+require("react-sortable-tree/style.css");
+var abpUtility_1 = require("../../lib/abpUtility");
 var mobx_react_1 = require("mobx-react");
 var react_sortable_tree_1 = require("react-sortable-tree");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var hierarchyDrawer_1 = require("./components/hierarchyDrawer");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var Hierarchy = /** @class */ (function (_super) {
     __extends(Hierarchy, _super);
     function Hierarchy() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = { treeData: [] };
+        _this.state = {
+            nodeKey: 0,
+            visible: false,
+            node: {},
+            treeData: []
+        };
         _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -78,29 +85,33 @@ var Hierarchy = /** @class */ (function (_super) {
                     case 1:
                         _a.sent();
                         setTimeout(function () {
-                            var treeData = _this.props.kHierarchyStore.units.items.map(function (x) { return ({
-                                id: x.id,
-                                title: x.name,
-                                expanded: false,
-                                subtitle: 'unit',
-                                children: x.positions.map(function (p) { return ({
-                                    id: p.id,
-                                    title: p.name,
-                                    subtitle: 'position',
-                                    children: p.nodes.map(function (n) { return ({
-                                        id: n.id,
-                                        title: n.title,
-                                        subtitle: 'title',
-                                        mail: n.mail,
-                                        active: n.active,
-                                        pushNotificationPhone: n.pushNotificationPhone,
-                                        pushNotificationWeb: n.pushNotificationWeb,
-                                        mailStatusChange: n.mailStatusChange,
-                                        canTerminate: n.canTerminate
+                            _this.setState({
+                                treeData: _this.props.kHierarchyStore.units.items.map(function (x) { return ({
+                                    id: x.id,
+                                    title: x.name,
+                                    expanded: false,
+                                    subtitle: 'unit',
+                                    children: x.positions.map(function (p) { return ({
+                                        id: p.id,
+                                        title: p.name,
+                                        subtitle: 'position',
+                                        children: p.nodes.map(function (n) { return ({
+                                            id: n.id,
+                                            title: n.title,
+                                            subtitle: 'title',
+                                            mail: n.mail,
+                                            mailStatusChange: n.mailStatusChange,
+                                            pushNotificationWeb: n.pushNotificationWeb,
+                                            pushNotificationWebStatusChange: n.pushNotificationWebStatusChange,
+                                            pushNotificationPhone: n.pushNotificationPhone,
+                                            pushNotificationPhoneStatusChange: n.pushNotificationPhoneStatusChange,
+                                            active: n.active,
+                                            canTerminate: n.canTerminate,
+                                            positionId: n.positionId
+                                        }); })
                                     }); })
                                 }); })
-                            }); });
-                            _this.setState({ treeData: treeData });
+                            });
                         }, 500);
                         return [2 /*return*/];
                 }
@@ -112,6 +123,22 @@ var Hierarchy = /** @class */ (function (_super) {
                 return [2 /*return*/];
             });
         }); };
+        _this.onPassive = function (position) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.props.kHierarchyStore.updateToPassive({ positionId: position });
+                return [2 /*return*/];
+            });
+        }); };
+        _this.drawerOnClose = function () {
+            _this.setState({ visible: false });
+        };
+        _this.drawerOnOpen = function (node) {
+            _this.setState({
+                visible: true,
+                node: node,
+                nodeKey: node.id
+            });
+        };
         return _this;
     }
     Hierarchy.prototype.render = function () {
@@ -122,27 +149,11 @@ var Hierarchy = /** @class */ (function (_super) {
                     return ({
                         canDrag: node.subtitle === "unit" ? false : node.subtitle === "position" ? false : true,
                         buttons: node.subtitle === "title" ? [
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Talep İsteği Geldiğinde Mail Gelsinmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'Mail' }); }, defaultChecked: node.mail, checkedChildren: "Mail", unCheckedChildren: "Mail", className: 'switch-btn' })),
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Talep \u0130ste\u011Fi Geldi\u011Finde Telefona Bildirim Gelsinmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'PushNotificationPhone' }); }, defaultChecked: node.pushNotificationPhone, checkedChildren: "Telefon", unCheckedChildren: "Telefon", className: 'switch-btn' })),
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Talep \u0130ste\u011Fi Geldi\u011Finde Web Bildirimi Gelsinmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'PushNotificationWeb' }); }, defaultChecked: node.pushNotificationWeb, checkedChildren: "Web", unCheckedChildren: "Web", className: 'switch-btn' })),
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Talep Durumu De\u011Fi\u015Fti\u011Finde Mail Gelsinmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'MailStatusChange' }); }, defaultChecked: node.mailStatusChange, checkedChildren: "De\u011Fi\u015Fiklik", unCheckedChildren: "De\u011Fi\u015Fiklik", className: 'switch-btn' })),
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Talebi Sonland\u0131rabilirmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'CanTerminate' }); }, defaultChecked: node.canTerminate, checkedChildren: "Sonland\u0131r", unCheckedChildren: "Sonland\u0131r", className: 'switch-btn' })),
-                            react_1["default"].createElement(antd_1.Tooltip, { placement: "topLeft", title: "Hiyerar\u015Fi Listesine Dahil Edilsinmi", arrowPointAtCenter: true },
-                                " ",
-                                react_1["default"].createElement(antd_1.Switch, { onChange: function (x) { return _this.onSwitchChange({ id: node.id, status: x, type: 'Active' }); }, defaultChecked: node.active, checkedChildren: "Aktif", unCheckedChildren: "Pasif", className: 'switch-btn' })),
+                            react_1["default"].createElement(antd_1.Button, { onClick: function () { return _this.drawerOnOpen(node); } }, abpUtility_1.L('Operations'))
                         ] : []
                     });
-                } })));
+                } }),
+            react_1["default"].createElement(hierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange })));
     };
     Hierarchy = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),

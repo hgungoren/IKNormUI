@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { PagedResultDto } from '../services/dto/pagedResultDto';
-import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto } from '../services/kHierarchy/dto/getAllHierarchyOutput';
+import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus } from '../services/kHierarchy/dto/getAllHierarchyOutput';
 import kHierarchyService from '../services/kHierarchy/kHierarchyService';
 
 class KHierarchyStore {
@@ -15,7 +15,7 @@ class KHierarchyStore {
         this.kHierarchies = result;
     }
 
-    
+
     @action
     async getUnit() {
         let result = await kHierarchyService.getUnits();
@@ -24,8 +24,15 @@ class KHierarchyStore {
 
 
     @action
-    async update(changeStatus: ChangeStatus) {
+    async update(changeStatus: ChangeStatus) { 
         let result = await kHierarchyService.update(changeStatus);
+        this.status = result;
+    }
+
+
+    @action
+    async updateToPassive(changeToPassiveStatus: ChangeToPassiveStatus) {
+        let result = await kHierarchyService.updateToPassive(changeToPassiveStatus);
         this.status = result;
     }
 
