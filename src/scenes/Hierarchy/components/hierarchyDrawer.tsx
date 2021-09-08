@@ -71,8 +71,8 @@ export function HierarchyDrawer(props: Props) {
                     <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} xl={{ offset: 0, span: 24 }} xxl={{ offset: 0, span: 24 }} >
                         <p style={{ marginBottom: '10px' }}>
                             <Alert
-                                message="Telefon Bildirimi"
-                                description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Telefonuna Bildirim Gider"
+                                message="Cep Telefonu Bildirimi"
+                                description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcının Cep Telefonuna Bildirim Gider"
                                 type="info"
                                 closable={false}
                                 action={
@@ -81,7 +81,7 @@ export function HierarchyDrawer(props: Props) {
                                             defaultChecked={props.node.pushNotificationPhone}
                                             disabled={false}
                                             onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationPhone' })}>
-                                           Bildirim
+                                            Bildirim
                                         </Checkbox>
                                     </Space>
                                 }
@@ -90,12 +90,22 @@ export function HierarchyDrawer(props: Props) {
                     </Col>
                     <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} xl={{ offset: 0, span: 24 }} xxl={{ offset: 0, span: 24 }} >
                         <p style={{ marginBottom: '10px' }}>
-                            <Checkbox
-                                defaultChecked={props.node.pushNotificationPhoneStatusChange}
-                                disabled={false}
-                                onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationPhoneStatusChange' })}>
-                                Telefon Bildirimi - Durum Değişikliği
-                            </Checkbox>
+                            <Alert
+                                message="Cep Telefonu Bildirimi - Durum Değişikliği"
+                                description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcının Cep Telefonuna Bildirim Gider"
+                                type="info"
+                                closable={false}
+                                action={
+                                    <Space direction="vertical">
+                                        <Checkbox
+                                            defaultChecked={props.node.pushNotificationPhoneStatusChange}
+                                            disabled={false}
+                                            onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationPhoneStatusChange' })}>
+                                            Bildirim
+                                        </Checkbox>
+                                    </Space>
+                                }
+                            />
                         </p>
                     </Col>
                 </Row>
@@ -103,33 +113,65 @@ export function HierarchyDrawer(props: Props) {
                 <Row gutter={16} justify="start" align="middle">
                     <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} xl={{ offset: 0, span: 24 }} xxl={{ offset: 0, span: 24 }} >
                         <p style={{ marginBottom: '10px' }}>
-                            <Checkbox
-                                defaultChecked={props.node.pushNotificationWeb}
-                                disabled={false}
-                                onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationWeb' })}>
-                                Browser Bildirimi
-                            </Checkbox>   </p>
+                            <Alert
+                                message="Browser Bildirimi"
+                                description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcıya Browser Üzerinden Bildirim Gider"
+                                type="info"
+                                closable={false}
+                                action={
+                                    <Space direction="vertical">
+                                        <Checkbox
+                                            defaultChecked={props.node.pushNotificationWeb}
+                                            disabled={false}
+                                            onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationWeb' })}>
+                                            Bildirim
+                                        </Checkbox>
+                                    </Space>
+                                }
+                            />
+                        </p>
                     </Col>
                     <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} xl={{ offset: 0, span: 24 }} xxl={{ offset: 0, span: 24 }} >
                         <p style={{ marginBottom: '10px' }}>
-                            <Checkbox
-                                defaultChecked={props.node.pushNotificationWebStatusChange}
-                                disabled={false}
-                                onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationWebStatusChange' })}>
-                                Browser Bildirimi - Durum Değişikliği
-                            </Checkbox>   </p>
+                            <Alert
+                                message="Browser Bildirimi - Durum Değişikliği"
+                                description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Browser Üzerinden Bildirim Gider"
+                                type="info"
+                                closable={false}
+                                action={
+                                    <Space direction="vertical">
+                                        <Checkbox
+                                            defaultChecked={props.node.pushNotificationWebStatusChange}
+                                            disabled={false}
+                                            onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'PushNotificationWebStatusChange' })}>
+                                            Bildirim
+                                        </Checkbox>
+                                    </Space>
+                                }
+                            />
+                        </p>
                     </Col>
                 </Row>
-
                 <Row gutter={16} justify="start" align="middle">
                     <Col xs={{ offset: 0, span: 24 }} sm={{ offset: 0, span: 24 }} md={{ offset: 0, span: 24 }} lg={{ offset: 0, span: 24 }} xl={{ offset: 0, span: 24 }} xxl={{ offset: 0, span: 24 }} >
                         <p style={{ marginBottom: '10px' }}>
-                            <Checkbox
-                                defaultChecked={props.node.pushNotificationWebStatusChange}
-                                disabled={false}
-                                onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'CanTerminate' })}>
-                                Sonlandır
-                            </Checkbox>   </p>
+                            <Alert
+                                message="Sonlandır"
+                                description="Yeni Bir Norm Talebi Geldiğinde veya Var Olan Norm Üzerinde Bir Değişiklik Olduğunda Onay Akışını Sonlardırma"
+                                type="info"
+                                closable={false}
+                                action={
+                                    <Space direction="vertical">
+                                        <Checkbox
+                                            defaultChecked={props.node.pushNotificationWebStatusChange}
+                                            disabled={false}
+                                            onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'CanTerminate' })}>
+                                            Bildirim
+                                        </Checkbox>
+                                    </Space>
+                                }
+                            />
+                        </p>
                     </Col>
                 </Row>
             </Drawer>
