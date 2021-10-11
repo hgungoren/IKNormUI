@@ -8,7 +8,7 @@ exports.dateHelper = {
     getMonthFirstDate: function (lang) { return moment_1["default"]().startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'); },
     getTodayWidthDate: function (date, lang) { return moment_1["default"](date || new Date()).locale(lang).format('MM DD YYYY, h:mm:ss a'); },
     getMonthWidthFirstDate: function (date, lang) { return moment_1["default"](date || new Date()).startOf('month').locale(lang).format('MM DD YYYY, h:mm:ss a'); },
-    getToday: function (date) { return moment_1["default"](date || new Date).startOf('day').toDate(); },
+    getToday: function (date) { return moment_1["default"](date || new Date()).startOf('day').toDate(); },
     getTodayRange: function (date) { return ({
         startDate: moment_1["default"](date || new Date()).startOf('day').toDate(),
         endDate: moment_1["default"](date || new Date()).endOf('day').toDate()

@@ -63,16 +63,11 @@ export class Header extends React.Component<IHeaderProps> {
 
         <Col style={{ padding: '0px 15px 0px 15px', textAlign: 'right' }} span={12}>
 
-          <Space>
-
+          <Space> 
             <Badge count={notificationCount} >
               <Avatar size="small" shape="circle" alt={'profile'} icon={<BellOutlined onClick={this.onNotificationHandler} />} />
-            </Badge>
-
-
-            <LanguageSelect />
-
-
+            </Badge> 
+            <LanguageSelect /> 
             <Dropdown className={'header-drop'} overlay={userDropdownMenu} trigger={['click']}>
               <Avatar size="small" shape="circle" alt={'profile'} src={profilePicture} />
             </Dropdown>

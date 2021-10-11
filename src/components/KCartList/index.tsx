@@ -71,13 +71,13 @@ function KCartList({
         setTable(card);
     }
 
-    const setDefautl = (key: string) => { }
+    const setDefault = (key: string) => { }
 
     const onCancelModal = () => {
         setVisible(!visible);
     }
 
-    useEffect(() => { setKey(key + 1) }, [visible]);
+    useEffect(() => { setKey(  key + 1) }, [visible]);
 
     setTimeout(() => {
 
@@ -95,8 +95,8 @@ function KCartList({
     return (
         <>
             <Row gutter={16}>
-                <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-                <KCart cursor={'context-menu'} onClick={() => setDefautl('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
+                <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
+                <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
             </Row>
             
             {

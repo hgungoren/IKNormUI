@@ -25,7 +25,7 @@ function KCartList(_a) {
         setVisible(!visible);
         setTable(card);
     };
-    var setDefautl = function (key) { };
+    var setDefault = function (key) { };
     var onCancelModal = function () {
         setVisible(!visible);
     };
@@ -58,8 +58,8 @@ function KCartList(_a) {
     }, 500);
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
-            react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('NormCount'), icon: 'UsergroupAddOutlined', number: normCount }),
-            react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefautl(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('EmployeeCount'), icon: 'UserAddOutlined', number: kPersonelCount })),
+            react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefault(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('NormCount'), icon: 'UsergroupAddOutlined', number: normCount }),
+            react_1["default"].createElement(KCart_1["default"], { cursor: 'context-menu', onClick: function () { return setDefault(''); }, cardLoading: cardLoading, color: 'rgb(64, 169, 255)', title: abpUtility_1.L('EmployeeCount'), icon: 'UserAddOutlined', number: kPersonelCount })),
         dateFilter && react_1["default"].createElement(antd_1.Row, { gutter: 16 },
             react_1["default"].createElement(KNormDateFilter_1["default"], { cursor: 'context-menu', onChange: onDateFilter, cardLoading: cardLoading })),
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },

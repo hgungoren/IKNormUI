@@ -33,7 +33,9 @@ var UserLayout = /** @class */ (function (_super) {
             React.createElement(antd_1.Col, { className: "container" },
                 React.createElement("div", { style: { height: 'calc(100vh - 55px)' } },
                     React.createElement("div", { className: 'lang' },
-                        React.createElement(LanguageSelect_1["default"], null)),
+                        React.createElement(antd_1.Row, null,
+                            React.createElement(antd_1.Col, { xs: { offset: 1, span: 22 }, sm: { offset: 1, span: 22 }, md: { offset: 1, span: 22 }, lg: { offset: 1, span: 22 }, xl: { offset: 1, span: 22 }, xxl: { offset: 1, span: 22 } },
+                                React.createElement(LanguageSelect_1["default"], null)))),
                     React.createElement(react_router_dom_1.Switch, null,
                         router_config_1.userRouter
                             .filter(function (item) { return !item.isLayout; })

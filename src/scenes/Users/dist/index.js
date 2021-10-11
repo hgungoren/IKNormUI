@@ -101,31 +101,45 @@ var User = /** @class */ (function (_super) {
                 modalVisible: !_this.state.modalVisible
             });
         };
-        _this.handleCreate = function () {
-            var form = _this.formRef.current;
-            form.validateFields().then(function (values) { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(this.state.userId === 0)) return [3 /*break*/, 2];
-                            return [4 /*yield*/, this.props.userStore.create(values)];
-                        case 1:
-                            _a.sent();
-                            return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, this.props.userStore.update(__assign(__assign({}, values), { id: this.state.userId }))];
-                        case 3:
-                            _a.sent();
-                            _a.label = 4;
-                        case 4: return [4 /*yield*/, this.getAll()];
-                        case 5:
-                            _a.sent();
-                            this.setState({ modalVisible: false });
-                            form.resetFields();
-                            return [2 /*return*/];
-                    }
-                });
-            }); });
-        };
+        _this.handleCreate = function () { return __awaiter(_this, void 0, void 0, function () {
+            var form;
+            var _this = this;
+            return __generator(this, function (_a) {
+                form = this.formRef.current;
+                form.validateFields().then(function (values) { return __awaiter(_this, void 0, void 0, function () {
+                    var e_1;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(this.state.userId === 0)) return [3 /*break*/, 5];
+                                _a.label = 1;
+                            case 1:
+                                _a.trys.push([1, 3, , 4]);
+                                return [4 /*yield*/, this.props.userStore.create(values)];
+                            case 2:
+                                _a.sent();
+                                return [3 /*break*/, 4];
+                            case 3:
+                                e_1 = _a.sent();
+                                console.log('dasdsa', e_1);
+                                return [3 /*break*/, 4];
+                            case 4: return [3 /*break*/, 7];
+                            case 5: return [4 /*yield*/, this.props.userStore.update(__assign(__assign({}, values), { id: this.state.userId }))];
+                            case 6:
+                                _a.sent();
+                                _a.label = 7;
+                            case 7: return [4 /*yield*/, this.getAll()];
+                            case 8:
+                                _a.sent();
+                                this.setState({ modalVisible: false });
+                                form.resetFields();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); })["catch"](function (err) { return console.log('CreateError : ', err); });
+                return [2 /*return*/];
+            });
+        }); };
         _this.handleSearch = function (value) {
             _this.setState({ filter: value }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 switch (_a.label) {
