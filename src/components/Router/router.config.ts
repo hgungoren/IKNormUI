@@ -1,5 +1,5 @@
 import LoadableComponent from './../Loadable/index';
-import { HomeOutlined, UserOutlined, TagsOutlined, AppstoreOutlined, InfoCircleOutlined,   PartitionOutlined, TableOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, TagsOutlined, AppstoreOutlined, InfoCircleOutlined,   PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined } from '@ant-design/icons';
 
 export const userRouter: any = [
   { path: '/user', name: 'User', title: 'User', component: LoadableComponent(() => import('../../components/Layout/UserLayout')), isLayout: true, showInMenu: false, },
@@ -23,6 +23,8 @@ export const appRouters: any = [
   { path: '/logout',                 permission: '',                   title: 'Logout',             name: 'Logout',                                         showInMenu: false, component: LoadableComponent(() => import('../../components/Logout')), },
   { path: '/exception?:type',        permission: '',                   title: 'Exception',          name: 'Exception',                                      showInMenu: false, component: LoadableComponent(() => import('../../scenes/Exception')), },
   { path: '/knormrequestdetail/:id', permission: 'kNormRequestDetail', title: 'KNormRequestDetail', name: 'KNormRequestDetail', icon: UserOutlined,         showInMenu: false, component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')), },
+  { path: '/hasartazmin',            permission: '',                   title: 'Hasar Tazmin',       name: 'HasarTazmin',        icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), },
+  { path: '/hasartazminsorgulama',   permission: '',                   title: 'Hasar Tazmin Sorgulama', name: 'HasarTazminSorgulama',        icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
 ];
 
 export const routers = [...userRouter, ...appRouters];

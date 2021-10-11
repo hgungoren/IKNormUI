@@ -11,12 +11,16 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
     const options = [...new Set(permissions.filter(x => x.name.startsWith('pages')).map((x: GetAllPermissionsOutput, y: number) => {
 
-        let children = permissions.filter(y => y.name.startsWith(x.name.split('.')[1])).map((c: GetAllPermissionsOutput, i: number) => {
+        let children = permissions.filter(y => y.name.startsWith(x.name.split('.')[1])).map((c: GetAllPermissionsOutput, i: number) => {       
             return {
                 title: L(c.displayName)    + ' name : ' +  c.name,
                 key: `${y}-0-0-${i}`,
                 value: c.name
+
+
             }
+            
+          
         });
 
         return {

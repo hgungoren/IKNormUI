@@ -1,3 +1,4 @@
+
 import { L } from '../../../lib/abpUtility';
 
 const rules = {
@@ -12,6 +13,7 @@ const rules = {
       message: L('TheInputIsNotValidEMail'),
     },
   ],
+
 };
 
 export default rules;
