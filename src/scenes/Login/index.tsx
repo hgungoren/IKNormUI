@@ -81,7 +81,13 @@ class Login extends React.Component<ILoginProps> {
             cancelText={L('Cancel')}
           >
             <Row>
-              <Col span={8} offset={8}>
+              <Col
+                xs={{ span: 22, offset: 1 }}
+                sm={{ span: 22, offset: 1 }}
+                md={{ span: 16, offset: 4 }}
+                lg={{ span: 10, offset: 7 }}
+                xl={{ span: 8, offset: 8 }}
+                xxl={{ span: 8, offset: 8 }}>
                 <h3>{L('TenancyName')}</h3>
               </Col>
               <Col>
@@ -94,7 +100,13 @@ class Login extends React.Component<ILoginProps> {
           </Modal>
         </Row>
         <Row style={{ marginTop: 10 }}>
-          <Col span={8} offset={8}>
+          <Col
+            xs={{ span: 22, offset: 1 }}
+            sm={{ span: 22, offset: 1 }}
+            md={{ span: 16, offset: 4 }}
+            lg={{ span: 10, offset: 7 }}
+            xl={{ span: 8, offset: 8 }}
+            xxl={{ span: 8, offset: 8 }}>
             <Card>
               <div style={{ textAlign: 'center' }}>
                 <h3>{L('WellcomeMessage')}</h3>

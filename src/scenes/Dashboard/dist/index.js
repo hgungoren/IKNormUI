@@ -180,14 +180,14 @@ var Dashboard = /** @class */ (function (_super) {
                         setTimeout(function () { return _this.setState({ pieChartLoading: false }); }, 1000);
                         currentDate = date_1.dateHelper.getTodayDate('tr');
                         startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
-                        if (!(abpUtility_1.isGranted('knorm.gettotalnormfillingrequest') ||
-                            abpUtility_1.isGranted('knorm.getpendingnormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.getacceptednormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.getcancelednormfillrequest') ||
-                            abpUtility_1.isGranted('knorm.gettotalnormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getpendingnormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getacceptednormupdaterequest') ||
-                            abpUtility_1.isGranted('knorm.getcancelednormupdaterequest'))) return [3 /*break*/, 3];
+                        if (!(abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest'))) return [3 /*break*/, 3];
                         this.setState({ dateFilter: true });
                         return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
                     case 1:

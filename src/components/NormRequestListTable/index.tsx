@@ -275,6 +275,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         })
                     });
                 }).catch((err) => {
+                    console.log('Norm Request Update Error : ', err)
                     return;
                 });
 
@@ -361,11 +362,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     }
                 </>), responsive: ['sm'] as Breakpoint[]
             },
-            { title: L("table.norm.area.name"),      dataIndex: 'bolgeAdi',  width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.branch.name"),    dataIndex: 'subeAdi',   width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.position"),       dataIndex: 'pozisyon',  width: 150, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.requestreason"),  dataIndex: 'nedeni',    width: 50,  render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L("table.norm.requesttype"),    dataIndex: 'turu',      width: 50,  render: (text: TalepTuru) => <div >{L( text )}</div>,  responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.area.name"), dataIndex: 'bolgeAdi', width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.branch.name"), dataIndex: 'subeAdi', width: 100, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.position"), dataIndex: 'pozisyon', width: 150, render: (text: string) => <div >{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requestreason"), dataIndex: 'nedeni', width: 50, render: (text: TalepNedeni) => <div >{TalepNedeni[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L("table.norm.requesttype"), dataIndex: 'turu', width: 50, render: (text: TalepTuru) => <div >{L(text)}</div>, responsive: ['sm'] as Breakpoint[] },
             {
                 title: L("table.norm.transactions"),
                 dataIndex: 'id',

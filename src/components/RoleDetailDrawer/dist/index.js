@@ -13,20 +13,30 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var antd_1 = require("antd");
 var RoleDetailDrawer = function (_a) {
     var visible = _a.visible, showOrHideDrawer = _a.showOrHideDrawer, permissions = _a.permissions, roleStore = _a.roleStore;
-    var _b = react_1.useState(['']), grantedPermissions = _b[0], setGrantedPermissions = _b[1];
-    var options = __spreadArrays(new Set(permissions.filter(function (x) { return x.name.startsWith('pages'); }).map(function (x, y) {
-        var children = permissions.filter(function (y) { return y.name.startsWith(x.name.split('.')[1]); }).map(function (c, i) {
+    var getChildItems = function (prefix, suffix, key) {
+        var children = permissions.filter(function (y) { return y.name
+            .startsWith(prefix + '.' + suffix); })
+            .map(function (c, i) {
+            var names = c.name.split('.');
+            var name = names[names.length - 1];
+            console.log(c.displayName);
             return {
-                title: abpUtility_1.L(c.displayName) + ' name : ' + c.name,
-                key: y + "-0-0-" + i,
-                value: c.name
+                title: abpUtility_1.L(c.displayName.replace('[', '').replace(']', '')),
+                key: key + "-0-0-" + i,
+                value: c.name,
+                children: getChildItems('subitems' + '.' + suffix, name, name)
             };
         });
+        return children;
+    };
+    var _b = react_1.useState(['']), grantedPermissions = _b[0], setGrantedPermissions = _b[1];
+    var options = __spreadArrays(new Set(permissions.filter(function (x) { return x.name.startsWith('pages'); }).map(function (x, y) {
+        var name = x.name.split('.')[1];
         return {
-            title: abpUtility_1.L(x.displayName) + ' name : ' + x.name,
+            title: abpUtility_1.L(x.displayName),
             key: y + "-0-0",
             value: x.displayName,
-            children: children
+            children: getChildItems('items', name, name)
         };
     })));
     var getSelectedItems = function () {
@@ -68,14 +78,14 @@ var RoleDetailDrawer = function (_a) {
         var permissions = [];
         permissions = getItems().filter(function (x) { return selected.includes(x.key); }).map(function (x) { return x.value; });
         var norms = [
-            'knorm.gettotalnormfillingrequest',
-            'knorm.getpendingnormfillrequest',
-            'knorm.getacceptednormfillrequest',
-            'knorm.getcancelednormfillrequest',
-            'knorm.gettotalnormupdaterequest',
-            'knorm.getpendingnormupdaterequest',
-            'knorm.getacceptednormupdaterequest',
-            'knorm.getcancelednormupdaterequest'
+            'subitems.dashboard.infobox.getpendingnormfillrequest',
+            'subitems.dashboard.infobox.gettotalnormupdaterequest',
+            'subitems.dashboard.infobox.getacceptednormfillrequest',
+            'subitems.dashboard.infobox.gettotalnormfillingrequest',
+            'subitems.dashboard.infobox.getcancelednormfillrequest',
+            'subitems.dashboard.infobox.getpendingnormupdaterequest',
+            'subitems.dashboard.infobox.getacceptednormupdaterequest',
+            'subitems.dashboard.infobox.getcancelednormupdaterequest',
         ];
         if (permissions.filter(function (x) { return norms.includes(x); }).length > 0) {
             permissions = __spreadArrays(permissions, ['knorm.view']);

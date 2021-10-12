@@ -5,7 +5,7 @@ import './UserLayout.less';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { Col } from 'antd';
+import { Col, Row } from 'antd';
 import DocumentTitle from 'react-document-title';
 import Footer from '../Footer';
 import LanguageSelect from '../LanguageSelect';
@@ -23,7 +23,17 @@ class UserLayout extends React.Component<any> {
         <Col className="container">
           <div style={{ height: 'calc(100vh - 55px)' }}>
             <div className={'lang'}>
-              <LanguageSelect />
+              <Row>
+                <Col
+                  xs={{ offset: 1, span: 22 }}
+                  sm={{ offset: 1, span: 22 }}
+                  md={{ offset: 1, span: 22 }}
+                  lg={{ offset: 1, span: 22 }}
+                  xl={{ offset: 1, span: 22 }}
+                  xxl={{ offset: 1, span: 22 }} >
+                  <LanguageSelect />
+                </Col>
+              </Row>
             </div>
             <Switch>
               {userRouter

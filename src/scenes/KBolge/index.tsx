@@ -310,14 +310,14 @@ class KBolge extends AppComponentBase<Props, State> {
         let currentDate = dateHelper.getTodayDate('tr');
         let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
-        if (isGranted('knorm.getcancelednormupdaterequest') ||
-            isGranted('knorm.getacceptednormupdaterequest') ||
-            isGranted('knorm.getpendingnormupdaterequest') ||
-            isGranted('knorm.gettotalnormupdaterequest') ||
-            isGranted('knorm.getcancelednormfillrequest') ||
-            isGranted('knorm.getacceptednormfillrequest') ||
-            isGranted('knorm.getpendingnormfillrequest') ||
-            isGranted('knorm.gettotalnormfillingrequest')
+        if (isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')
         ) {
 
             this.setState({ dateFilter: true })
@@ -428,13 +428,13 @@ class KBolge extends AppComponentBase<Props, State> {
                             overlay={
                                 <Menu>
                                     {
-                                        isGranted('kbolge.detail') && (<Menu.Item > <Link to={{ pathname: `/ksubedetay/${bolge.objId}`, state: { subeAdi: bolge.adi } }}> {L('UnitDetail')} </Link> </Menu.Item>)
+                                        isGranted('subitems.kareas.table.unit.detail.btn') && (<Menu.Item > <Link to={{ pathname: `/ksubedetay/${bolge.objId}`, state: { subeAdi: bolge.adi } }}> {L('UnitDetail')} </Link> </Menu.Item>)
                                     }
                                     {
-                                        isGranted('kbolge.branches') && (<Menu.Item key={"/ksube"} > <Link to={{ pathname: `/ksube/${bolge.objId}`, state: { name: bolge.adi, tipTur: bolge.tipTur, tip: bolge.tip } }}> {L('Branches')} </Link> </Menu.Item>)
+                                        isGranted('subitems.kareas.table.areas.btn') && (<Menu.Item key={"/ksube"} > <Link to={{ pathname: `/ksube/${bolge.objId}`, state: { name: bolge.adi, tipTur: bolge.tipTur, tip: bolge.tip } }}> {L('Branches')} </Link> </Menu.Item>)
                                     }
                                     {
-                                        isGranted('kbolge.norm.operation') && (<Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(bolge.tip, bolge.objId, bolge.adi)} > {L('NormCreate')} </Link> </Menu.Item>)
+                                        isGranted('subitems.kareas.table.norm.entry.btn') && (<Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(bolge.tip, bolge.objId, bolge.adi)} > {L('NormCreate')} </Link> </Menu.Item>)
                                     }
                                 </Menu>
                             }
@@ -456,7 +456,7 @@ class KBolge extends AppComponentBase<Props, State> {
                         onBack={() => window.history.back()}
                         title={
                             <Breadcrumb>
-                                <Breadcrumb.Item>{isGranted('dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
                                 <Breadcrumb.Item> {L('RegionalOffices')} </Breadcrumb.Item>
                             </Breadcrumb>
                         }  >
@@ -483,7 +483,7 @@ class KBolge extends AppComponentBase<Props, State> {
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} />
                 {
-                    this.isGranted('kbolge.areas.list') && <Card hoverable>
+                    this.isGranted('items.kareas.table') && <Card hoverable>
 
                         <Row>
                             <Col

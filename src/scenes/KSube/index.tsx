@@ -310,14 +310,14 @@ class KSube extends AppComponentBase<Props, State>{
         let currentDate = dateHelper.getTodayDate('tr');
         let startOfMonth = dateHelper.getMonthFirstDate('tr');
         if (
-            isGranted('knorm.gettotalnormfillingrequest') ||
-            isGranted('knorm.getpendingnormfillrequest') ||
-            isGranted('knorm.getacceptednormfillrequest') ||
-            isGranted('knorm.getcancelednormfillrequest') ||
-            isGranted('knorm.gettotalnormupdaterequest') ||
-            isGranted('knorm.getpendingnormupdaterequest') ||
-            isGranted('knorm.getacceptednormupdaterequest') ||
-            isGranted('knorm.getcancelednormupdaterequest')) {
+            isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
+            isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
+            isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
+            isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')) {
             this.setState({ dateFilter: true })
             await this.getNormRequests(this.state.id, startOfMonth, currentDate)
             await this.getNormRequestCounts(this.state.id, startOfMonth, currentDate)

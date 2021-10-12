@@ -33,8 +33,7 @@ class LanguageSelect extends React.Component<ILanguageSelectProps> {
       languageName,
       new Date(new Date().getTime() + 5 * 365 * 86400000), //5 year
       abp.appPath
-    );
-
+    ); 
     window.location.reload();
   }
 

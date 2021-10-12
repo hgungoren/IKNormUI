@@ -77,7 +77,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       await this.props.userStore.get(entityDto);
       await this.props.userStore.getRoles();
     }
- 
+
     this.setState({ userId: entityDto.id });
     this.Modal();
 
@@ -101,12 +101,16 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     });
   }
 
-  handleCreate = () => {
+  handleCreate = async () => {
     const form = this.formRef.current;
 
     form!.validateFields().then(async (values: any) => {
       if (this.state.userId === 0) {
-        await this.props.userStore.create(values);
+        try {
+          await this.props.userStore.create(values);
+        } catch (e) {
+          console.log('dasdsa', e)
+        }
       } else {
         await this.props.userStore.update({ ...values, id: this.state.userId });
       }
@@ -114,7 +118,8 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       await this.getAll();
       this.setState({ modalVisible: false });
       form!.resetFields();
-    });
+
+    }).catch((err) => console.log('CreateError : ', err));
   };
 
   handleSearch = (value: string) => {
@@ -133,7 +138,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   public render() {
     const { users } = this.props.userStore;
 
-    const {filterTable, totalSizeTable} = this.state;
+    const { filterTable, totalSizeTable } = this.state;
 
     const tablePaginationTable = {
       pageSize: filterTable.limit,
@@ -142,7 +147,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       locale: { items_per_page: L('page') },
       pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
       showSizeChanger: true,
-  };
+    };
 
 
     const columns = [

@@ -259,6 +259,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
                                 });
                             });
                         })["catch"](function (err) {
+                            console.log('Norm Request Update Error : ', err);
                             return;
                         });
                     },
