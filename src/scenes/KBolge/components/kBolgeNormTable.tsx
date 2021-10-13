@@ -20,7 +20,7 @@ class KBolgeNormTable extends React.Component<Props> {
     state = {totalSizeTable: 0, filterTable: { offset: 0, limit: 5, current: 0, }};
 
     handlePaginationTable = pagination => {
-        console.log(pagination)
+   
         const { filterTable } = this.state;
         const { pageSize, current } = pagination;
         this.setState({

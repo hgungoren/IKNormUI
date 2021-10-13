@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 exports.__esModule = true;
 var react_1 = require("react");
 var antd_1 = require("antd");
@@ -21,10 +32,28 @@ var icons_1 = require("@ant-design/icons");
 var KBolgeNormTable = /** @class */ (function (_super) {
     __extends(KBolgeNormTable, _super);
     function KBolgeNormTable() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.state = { totalSizeTable: 0, filterTable: { offset: 0, limit: 5, current: 0 } };
+        _this.handlePaginationTable = function (pagination) {
+            var filterTable = _this.state.filterTable;
+            var pageSize = pagination.pageSize, current = pagination.current;
+            _this.setState({
+                filterTable: __assign(__assign({}, filterTable), { current: current, limit: pageSize })
+            });
+        };
+        return _this;
     }
     KBolgeNormTable.prototype.render = function () {
         var _a = this.props, kSubeNormDelete = _a.kSubeNormDelete, kSubeNormEdit = _a.kSubeNormEdit;
+        var _b = this.state, filterTable = _b.filterTable, totalSizeTable = _b.totalSizeTable;
+        var tablePaginationTable = {
+            pageSize: filterTable.limit,
+            current: filterTable.current || 1,
+            total: totalSizeTable,
+            locale: { items_per_page: abpUtility_1.L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true
+        };
         var columns = [
             { title: abpUtility_1.L('Position'), dataIndex: 'position', key: 'position', width: 150, render: function (text) { return react_1["default"].createElement("div", null, text); } },
             { title: abpUtility_1.L('NormCount'), dataIndex: 'normCount', key: 'normCount', width: 50, render: function (text) { return react_1["default"].createElement("div", null, text); } },
@@ -73,7 +102,7 @@ var KBolgeNormTable = /** @class */ (function (_super) {
         ];
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
             abpUtility_1.isGranted('kbolge.norm.view') &&
-                react_1["default"].createElement(antd_2.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, bordered: false, columns: columns, pagination: { pageSize: 5, total: this.props.normList === undefined ? 0 : this.props.normList.length, defaultCurrent: 1 }, loading: this.props.normList === undefined ? true : false, dataSource: this.props.normList === undefined ? [] : this.props.normList }),
+                react_1["default"].createElement(antd_2.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.id.toString(); }, bordered: false, columns: columns, loading: this.props.normList === undefined ? true : false, dataSource: this.props.normList === undefined ? [] : this.props.normList, onChange: this.handlePaginationTable, pagination: tablePaginationTable }),
             console.log(this.props.normList)));
     };
     return KBolgeNormTable;

@@ -101,6 +101,8 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
   }
 
   handleCreate = () => {
+
+
     const form = this.formRef.current;
     form!.validateFields().then(async (values: any) => {
       if (this.state.roleId === 0) {
@@ -130,7 +132,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     this.setState({ drawerVisible: false });
   }
 
-  handlePaginationTable = pagination => { 
+  handlePaginationTable = pagination => {
     const { filterTable } = this.state;
     const { pageSize, current } = pagination;
     this.setState({
@@ -142,7 +144,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
     const { drawerVisible } = this.state;
     const { allPermissions, roles } = this.props.roleStore;
 
-    const {filterTable, totalSizeTable} = this.state;
+    const { filterTable, totalSizeTable } = this.state;
 
     const tablePaginationTable = {
       pageSize: filterTable.limit,
@@ -151,7 +153,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
       locale: { items_per_page: L('page') },
       pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
       showSizeChanger: true,
-  };
+    };
 
     const columns =
       [
@@ -185,13 +187,13 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
                 overlay={
                   <Menu>
                     {
-                      isGranted('role.create') && <Menu.Item onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
+                      isGranted('subitems.role.view.table.create') && <Menu.Item key={0} onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
                     }
                     {
-                      isGranted('role.update') && <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
+                      isGranted('subitems.role.view.table.edit') && <Menu.Item   key={1} onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                     }
                     {
-                      isGranted('role.delete') && <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
+                      isGranted('subitems.role.view.table.delete') && <Menu.Item key={2} onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
                     }
                   </Menu>
                 }
@@ -227,7 +229,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               xl={{ span: 1, offset: 21 }}
               xxl={{ span: 1, offset: 21 }}
             >
-              {isGranted('role.create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
+              {isGranted('subitems.role.view.table.role_new_create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
             </Col>
           </Row>
           <Row>

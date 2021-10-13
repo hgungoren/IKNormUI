@@ -221,7 +221,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
         })
 
-        if (isGranted('kbolge.view')) {
+        if (isGranted('items.kareas.view')) {
 
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
@@ -242,16 +242,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     componentDidMount = async () => {
         await this.setPageState();
 
-        if (isGranted('ksubedetail.employee.list')) {
+        if (isGranted('items.kbranch_detail.employee_table')) {
             await this.getAllEmployees();
         }
 
-        if (isGranted('ksubedetail.norm.request.list')) {
+        if (isGranted('items.kbranch_detail.norm_table')) {
             await this.getNormRequests();
             await this.getAllEmployees();
         }
 
-        if (isGranted('ksubedetail.norm.employee.list')) {
+        if (isGranted('items.kbranch_detail.employee_norm_table')) {
             await this.getAllEmployeesForGroupBy();
             await this.getAllSubeNormForGroupBy();
             await this.setAllEmployeesGroupBy();
@@ -347,8 +347,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
     }
 
-    handlePaginationTable1 = pagination => {
-        console.log(pagination)
+    handlePaginationTable1 = pagination => { 
         const { filterTable1 } = this.state;
         const { pageSize, current } = pagination;
         this.setState({
@@ -356,8 +355,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
     };
 
-    handlePaginationTable2 = pagination => {
-        console.log(pagination)
+    handlePaginationTable2 = pagination => { 
         const { filterTable2 } = this.state;
         const { pageSize, current } = pagination;
         this.setState({
@@ -562,7 +560,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 </Card>
 
                 {
-                    isGranted('ksubedetail.norm.employee.list') && <Card style={{ marginBottom: 20 }} hoverable>
+                    isGranted('items.kbranch_detail.employee_norm_table') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
                             <Col
                                 xs={{ span: 24, offset: 0 }}
@@ -583,7 +581,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 }
 
                 {
-                    isGranted('ksubedetail.employee.list') && <Card hoverable>
+                    isGranted('items.kbranch_detail.employee_table') && <Card hoverable>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -620,7 +618,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Card>
                 }
                 {
-                    isGranted('ksubedetail.norm.request.list') && <Card hoverable style={{ marginTop: 15 }}>
+                    isGranted('items.kbranch_detail.norm_table') && <Card hoverable style={{ marginTop: 15 }}>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -634,7 +632,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 xl={{ span: 1, offset: 21 }}
                                 xxl={{ span: 1, offset: 21 }}  >
 
-                                {isGranted('knorm.create') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
+                                {isGranted('subitems.kbranch_detail.norm_table.button') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
 
                             </Col>
                         </Row>

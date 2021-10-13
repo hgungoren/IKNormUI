@@ -156,7 +156,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                 this.setState({
                     bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId
                 });
-                if (abpUtility_1.isGranted('kbolge.view')) {
+                if (abpUtility_1.isGranted('items.kareas.view')) {
                     this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
                     this.setState({
                         breadcrumbBolgeAdi: 'bölge adı',
@@ -181,13 +181,13 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.setPageState()];
                     case 1:
                         _a.sent();
-                        if (!abpUtility_1.isGranted('ksubedetail.employee.list')) return [3 /*break*/, 3];
+                        if (!abpUtility_1.isGranted('items.kbranch_detail.employee_table')) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.getAllEmployees()];
                     case 2:
                         _a.sent();
                         _a.label = 3;
                     case 3:
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.request.list')) return [3 /*break*/, 6];
+                        if (!abpUtility_1.isGranted('items.kbranch_detail.norm_table')) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.getNormRequests()];
                     case 4:
                         _a.sent();
@@ -196,7 +196,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                         _a.sent();
                         _a.label = 6;
                     case 6:
-                        if (!abpUtility_1.isGranted('ksubedetail.norm.employee.list')) return [3 /*break*/, 12];
+                        if (!abpUtility_1.isGranted('items.kbranch_detail.employee_norm_table')) return [3 /*break*/, 12];
                         return [4 /*yield*/, this.getAllEmployeesForGroupBy()];
                     case 7:
                         _a.sent();
@@ -316,7 +316,6 @@ var KSubeDetay = /** @class */ (function (_super) {
             });
         }); };
         _this.handlePaginationTable1 = function (pagination) {
-            console.log(pagination);
             var filterTable1 = _this.state.filterTable1;
             var pageSize = pagination.pageSize, current = pagination.current;
             _this.setState({
@@ -324,7 +323,6 @@ var KSubeDetay = /** @class */ (function (_super) {
             });
         };
         _this.handlePaginationTable2 = function (pagination) {
-            console.log(pagination);
             var filterTable2 = _this.state.filterTable2;
             var pageSize = pagination.pageSize, current = pagination.current;
             _this.setState({
@@ -667,11 +665,11 @@ var KSubeDetay = /** @class */ (function (_super) {
                             " ",
                             breadcrumbSubeAdi,
                             " ")) })),
-            abpUtility_1.isGranted('ksubedetail.norm.employee.list') && React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
+            abpUtility_1.isGranted('items.kbranch_detail.employee_norm_table') && React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, onChange: this.handlePaginationTable1, columns: normEmployeeCoumns, rowKey: function (record) { return record.id; }, locale: { emptyText: abpUtility_1.L('NoData') }, loading: groupData.length == 1 ? true : false, dataSource: groupData === undefined ? [] : groupData, pagination: tablePaginationTable1 })))),
-            abpUtility_1.isGranted('ksubedetail.employee.list') && React.createElement(antd_1.Card, { hoverable: true },
+            abpUtility_1.isGranted('items.kbranch_detail.employee_table') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
@@ -683,12 +681,12 @@ var KSubeDetay = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handlePaginationTable2, rowKey: function (record) { return record.objId.toString(); }, loading: kPersonels === undefined ? true : false, dataSource: kPersonels === undefined ? [] : kPersonels.items, pagination: tablePaginationTable2 })))),
-            abpUtility_1.isGranted('ksubedetail.norm.request.list') && React.createElement(antd_1.Card, { hoverable: true, style: { marginTop: 15 } },
+            abpUtility_1.isGranted('items.kbranch_detail.norm_table') && React.createElement(antd_1.Card, { hoverable: true, style: { marginTop: 15 } },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
                         React.createElement("h2", null, abpUtility_1.L('NormDetailPanel'))),
-                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('knorm.create') && React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } },
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.kbranch_detail.norm_table.button') && React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } },
                         " ",
                         abpUtility_1.L('NormOperations'),
                         " "))),

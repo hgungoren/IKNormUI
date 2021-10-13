@@ -19,12 +19,12 @@ var RoleDetailDrawer = function (_a) {
             .map(function (c, i) {
             var names = c.name.split('.');
             var name = names[names.length - 1];
-            console.log(c.displayName);
+            var _key = key + "-" + i;
             return {
                 title: abpUtility_1.L(c.displayName.replace('[', '').replace(']', '')),
-                key: key + "-0-0-" + i,
+                key: _key,
                 value: c.name,
-                children: getChildItems('subitems' + '.' + suffix, name, name)
+                children: getChildItems('subitems' + '.' + suffix, name, _key)
             };
         });
         return children;
@@ -32,11 +32,12 @@ var RoleDetailDrawer = function (_a) {
     var _b = react_1.useState(['']), grantedPermissions = _b[0], setGrantedPermissions = _b[1];
     var options = __spreadArrays(new Set(permissions.filter(function (x) { return x.name.startsWith('pages'); }).map(function (x, y) {
         var name = x.name.split('.')[1];
+        var key = "0-" + y;
         return {
             title: abpUtility_1.L(x.displayName),
-            key: y + "-0-0",
+            key: key,
             value: x.displayName,
-            children: getChildItems('items', name, name)
+            children: getChildItems('items', name, key)
         };
     })));
     var getSelectedItems = function () {
@@ -77,27 +78,28 @@ var RoleDetailDrawer = function (_a) {
     var onCheck = function (selected) {
         var permissions = [];
         permissions = getItems().filter(function (x) { return selected.includes(x.key); }).map(function (x) { return x.value; });
-        var norms = [
-            'subitems.dashboard.infobox.getpendingnormfillrequest',
-            'subitems.dashboard.infobox.gettotalnormupdaterequest',
-            'subitems.dashboard.infobox.getacceptednormfillrequest',
-            'subitems.dashboard.infobox.gettotalnormfillingrequest',
-            'subitems.dashboard.infobox.getcancelednormfillrequest',
-            'subitems.dashboard.infobox.getpendingnormupdaterequest',
-            'subitems.dashboard.infobox.getacceptednormupdaterequest',
-            'subitems.dashboard.infobox.getcancelednormupdaterequest',
-        ];
-        if (permissions.filter(function (x) { return norms.includes(x); }).length > 0) {
-            permissions = __spreadArrays(permissions, ['knorm.view']);
-        }
-        var bolgeDetail = ['kbolge.detail'];
-        if (permissions.filter(function (x) { return bolgeDetail.includes(x); }).length > 0) {
-            permissions = __spreadArrays(permissions, ['ksube.detail']);
-        }
-        var bolgeList = ['kbolge.branches'];
-        if (permissions.filter(function (x) { return bolgeList.includes(x); }).length > 0) {
-            permissions = __spreadArrays(permissions, ['ksube.view']);
-        }
+        // let norms = [
+        //     'subitems.dashboard.infobox.getpendingnormfillrequest',
+        //     'subitems.dashboard.infobox.gettotalnormupdaterequest',
+        //     'subitems.dashboard.infobox.getacceptednormfillrequest',
+        //     'subitems.dashboard.infobox.gettotalnormfillingrequest',
+        //     'subitems.dashboard.infobox.getcancelednormfillrequest',
+        //     'subitems.dashboard.infobox.getpendingnormupdaterequest',
+        //     'subitems.dashboard.infobox.getacceptednormupdaterequest',
+        //     'subitems.dashboard.infobox.getcancelednormupdaterequest',
+        // ];
+        // if (permissions.filter((x) => norms.includes(x)).length > 0) {
+        //     permissions = [...permissions, 'knorm.view']
+        // }
+        // let bolgeDetail = ['kbolge.detail'];
+        // if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) {
+        //     permissions = [...permissions, 'ksube.detail']
+        // }
+        // let bolgeList = ['kbolge.branches'];
+        // if (permissions.filter((x) => bolgeList.includes(x)).length > 0) {
+        //     permissions = [...permissions, 'ksube.view']
+        // }
+        console.log(permissions);
         setGrantedPermissions(permissions);
     };
     var handleSubmit = function () {

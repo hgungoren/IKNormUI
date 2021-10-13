@@ -511,14 +511,14 @@ class KBolge extends AppComponentBase<Props, State> {
                                 xl={{ span: 24, offset: 0 }}
                                 xxl={{ span: 24, offset: 0 }} >
                                 <Table
-                                    locale={{ emptyText: L('NoData') }}
                                     bordered={false}
                                     columns={columns}
+                                    pagination={tablePagination}
                                     onChange={this.handlePagination}
+                                    locale={{ emptyText: L('NoData') }}
                                     rowKey={(record) => record.objId.toString()}
                                     loading={kBolge === undefined ? true : false}
                                     dataSource={kBolge === undefined ? [] : kBolge.items}
-                                    pagination={tablePagination}
                                 />
                             </Col>
                         </Row>
@@ -529,6 +529,7 @@ class KBolge extends AppComponentBase<Props, State> {
                     modalType={'create'}
                     formRef={this.formRef}
                     positionSelect={positions}
+                    normList={this.state.normList}
                     subeObjId={this.state.subeObjId}
                     visible={this.state.modalVisible}
                     kSubeNormEdit={this.kSubeNormEdit}
@@ -538,7 +539,6 @@ class KBolge extends AppComponentBase<Props, State> {
                     kSubeNormStore={this.props.kSubeNormStore}
                     kSubeNorms={this.props.kSubeNormStore.norms}
                     onCancel={() => { this.setState({ modalVisible: false, }) }}
-                    normList={this.state.normList}
                 />
             </React.Fragment >
         )

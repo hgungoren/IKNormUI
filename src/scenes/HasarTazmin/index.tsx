@@ -30,8 +30,7 @@ const Demo = (props: Props) => {
 
   const [activeTabKey, setActiveTabKey] = React.useState('1');
 
-  const onChangeRadio = (e) => {
-    console.log('radio checked', e.target.value);
+  const onChangeRadio = (e) => { 
     setValue(e.target.value);
     if (e.target.value === 2) {
       setVisible(false);

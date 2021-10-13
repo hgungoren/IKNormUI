@@ -109,7 +109,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
         try {
           await this.props.userStore.create(values);
         } catch (e) {
-          console.log('dasdsa', e)
+          console.log('ERROR : ', e)
         }
       } else {
         await this.props.userStore.update({ ...values, id: this.state.userId });
@@ -126,8 +126,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     this.setState({ filter: value }, async () => await this.getAll());
   };
 
-  handlePaginationTable = pagination => {
-    console.log(pagination)
+  handlePaginationTable = pagination => { 
     const { filterTable } = this.state;
     const { pageSize, current } = pagination;
     this.setState({

@@ -121,7 +121,7 @@ var User = /** @class */ (function (_super) {
                                 return [3 /*break*/, 4];
                             case 3:
                                 e_1 = _a.sent();
-                                console.log('dasdsa', e_1);
+                                console.log('ERROR : ', e_1);
                                 return [3 /*break*/, 4];
                             case 4: return [3 /*break*/, 7];
                             case 5: return [4 /*yield*/, this.props.userStore.update(__assign(__assign({}, values), { id: this.state.userId }))];
@@ -149,7 +149,6 @@ var User = /** @class */ (function (_super) {
             }); }); });
         };
         _this.handlePaginationTable = function (pagination) {
-            console.log(pagination);
             var filterTable = _this.state.filterTable;
             var pageSize = pagination.pageSize, current = pagination.current;
             _this.setState({

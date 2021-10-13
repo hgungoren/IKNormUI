@@ -10,22 +10,19 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
     const getChildItems = (prefix: string, suffix: string, key: string) => {
 
-
         let children = permissions.filter(y => y.name
             .startsWith(prefix + '.' + suffix))
             .map((c: GetAllPermissionsOutput, i: number) => {
-
                 let names = c.name.split('.');
                 let name = names[names.length - 1];
-                console.log(c.displayName)
+                let _key = `${key}-${i}`; 
                 return {
                     title: L(c.displayName.replace('[', '').replace(']', '')),
-                    key: `${key}-0-0-${i}`,
+                    key: _key,
                     value: c.name,
-                    children: getChildItems('subitems' + '.' + suffix, name, name)
+                    children: getChildItems('subitems' + '.' + suffix, name, _key)
                 }
             });
-
 
         return children;
     }
@@ -34,11 +31,12 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
     const options = [...new Set(permissions.filter(x => x.name.startsWith('pages')).map((x: GetAllPermissionsOutput, y: number) => {
         let name = x.name.split('.')[1];
+        let key = `0-${y}`; 
         return {
             title: L(x.displayName),
-            key: `${y}-0-0`,
+            key: key,
             value: x.displayName,
-            children: getChildItems('items', name, name)
+            children: getChildItems('items', name, key)
         };
     }))] as DataNode[];
 
@@ -82,34 +80,34 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
 
 
-        let norms = [
-            'subitems.dashboard.infobox.getpendingnormfillrequest',
-            'subitems.dashboard.infobox.gettotalnormupdaterequest',
-            'subitems.dashboard.infobox.getacceptednormfillrequest',
-            'subitems.dashboard.infobox.gettotalnormfillingrequest',
-            'subitems.dashboard.infobox.getcancelednormfillrequest',
-            'subitems.dashboard.infobox.getpendingnormupdaterequest',
-            'subitems.dashboard.infobox.getacceptednormupdaterequest',
-            'subitems.dashboard.infobox.getcancelednormupdaterequest',
-        ];
+        // let norms = [
+        //     'subitems.dashboard.infobox.getpendingnormfillrequest',
+        //     'subitems.dashboard.infobox.gettotalnormupdaterequest',
+        //     'subitems.dashboard.infobox.getacceptednormfillrequest',
+        //     'subitems.dashboard.infobox.gettotalnormfillingrequest',
+        //     'subitems.dashboard.infobox.getcancelednormfillrequest',
+        //     'subitems.dashboard.infobox.getpendingnormupdaterequest',
+        //     'subitems.dashboard.infobox.getacceptednormupdaterequest',
+        //     'subitems.dashboard.infobox.getcancelednormupdaterequest',
+        // ];
 
-        if (permissions.filter((x) => norms.includes(x)).length > 0) {
+        // if (permissions.filter((x) => norms.includes(x)).length > 0) {
 
-            permissions = [...permissions, 'knorm.view']
-        }
+        //     permissions = [...permissions, 'knorm.view']
+        // }
 
-        let bolgeDetail = ['kbolge.detail'];
+        // let bolgeDetail = ['kbolge.detail'];
 
-        if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) {
-            permissions = [...permissions, 'ksube.detail']
-        }
+        // if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) {
+        //     permissions = [...permissions, 'ksube.detail']
+        // }
 
-        let bolgeList = ['kbolge.branches'];
+        // let bolgeList = ['kbolge.branches'];
 
-        if (permissions.filter((x) => bolgeList.includes(x)).length > 0) {
-            permissions = [...permissions, 'ksube.view']
-        }
-
+        // if (permissions.filter((x) => bolgeList.includes(x)).length > 0) {
+        //     permissions = [...permissions, 'ksube.view']
+        // }
+        console.log(permissions)
         setGrantedPermissions(permissions)
     }
 

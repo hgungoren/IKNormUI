@@ -89,16 +89,13 @@ var Role = /** @class */ (function (_super) {
             skipCount: 0,
             roleId: 0,
             filter: '',
-            drawerVisible: false
+            drawerVisible: false,
+            totalSizeTable: 0,
+            filterTable: { offset: 0, limit: 5, current: 0 }
         };
-        _this.handleTableChange = function (pagination) {
-            _this.setState({ skipCount: (pagination.current - 1) * _this.state.maxResultCount }, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getAll()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            }); }); });
-        };
+        // handleTableChange = (pagination: any) => {
+        //   this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
+        // };
         _this.Modal = function () {
             _this.setState({
                 modalVisible: !_this.state.modalVisible
@@ -157,6 +154,13 @@ var Role = /** @class */ (function (_super) {
                 return [2 /*return*/];
             });
         }); };
+        _this.handlePaginationTable = function (pagination) {
+            var filterTable = _this.state.filterTable;
+            var pageSize = pagination.pageSize, current = pagination.current;
+            _this.setState({
+                filterTable: __assign(__assign({}, filterTable), { current: current, limit: pageSize })
+            });
+        };
         return _this;
     }
     Role.prototype.componentDidMount = function () {
@@ -230,22 +234,54 @@ var Role = /** @class */ (function (_super) {
         var _this = this;
         var drawerVisible = this.state.drawerVisible;
         var _a = this.props.roleStore, allPermissions = _a.allPermissions, roles = _a.roles;
+        var _b = this.state, filterTable = _b.filterTable, totalSizeTable = _b.totalSizeTable;
+        var tablePaginationTable = {
+            pageSize: filterTable.limit,
+            current: filterTable.current || 1,
+            total: totalSizeTable,
+            locale: { items_per_page: abpUtility_1.L('page') },
+            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            showSizeChanger: true
+        };
         var columns = [
-            { title: abpUtility_1.L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: function (text) { return React.createElement("div", null, text); } },
-            { title: abpUtility_1.L('table.role.description'), dataIndex: 'description', key: 'description', width: 150, render: function (text) { return React.createElement("div", null, text); } },
+            {
+                title: abpUtility_1.L('UserInformations xs'),
+                render: function (record) { return (React.createElement(React.Fragment, null,
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.role.rolename')),
+                    " : ",
+                    record.name,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.role.displayname')),
+                    "  : ",
+                    record.displayName,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' },
+                        abpUtility_1.L('table.role.description'),
+                        " "),
+                    " : ",
+                    record.description,
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.role.transactions')),
+                    "  : ",
+                    record.transactions)); },
+                responsive: ['xs']
+            },
+            { title: abpUtility_1.L('table.role.rolename'), dataIndex: 'name', key: 'name', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.role.displayname'), dataIndex: 'displayName', key: 'displayName', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
+            { title: abpUtility_1.L('table.role.description'), dataIndex: 'description', key: 'description', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
             {
                 title: abpUtility_1.L('table.role.transactions'),
                 width: 150,
                 render: function (text, item) { return (React.createElement("div", null,
                     React.createElement(antd_1.Dropdown, { trigger: ['click'], overlay: React.createElement(antd_1.Menu, null,
-                            abpUtility_1.isGranted('role.create') && React.createElement(antd_1.Menu.Item, { onClick: function () { return _this.showDrawer({ id: item.id }); } }, abpUtility_1.L('AddRole')),
-                            abpUtility_1.isGranted('role.update') && React.createElement(antd_1.Menu.Item, { onClick: function () { return _this.createOrUpdateModalOpen({ id: item.id }); } }, abpUtility_1.L('Edit')),
-                            abpUtility_1.isGranted('role.delete') && React.createElement(antd_1.Menu.Item, { onClick: function () { return _this["delete"]({ id: item.id }); } }, abpUtility_1.L('Delete'))), placement: "bottomLeft" },
+                            abpUtility_1.isGranted('subitems.role.view.table.create') && React.createElement(antd_1.Menu.Item, { key: 0, onClick: function () { return _this.showDrawer({ id: item.id }); } }, abpUtility_1.L('AddRole')),
+                            abpUtility_1.isGranted('subitems.role.view.table.edit') && React.createElement(antd_1.Menu.Item, { key: 1, onClick: function () { return _this.createOrUpdateModalOpen({ id: item.id }); } }, abpUtility_1.L('Edit')),
+                            abpUtility_1.isGranted('subitems.role.view.table.delete') && React.createElement(antd_1.Menu.Item, { key: 2, onClick: function () { return _this["delete"]({ id: item.id }); } }, abpUtility_1.L('Delete'))), placement: "bottomLeft" },
                         React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.SettingOutlined, null) },
                             " ",
                             abpUtility_1.L('Actions'),
-                            " ")))); }
+                            " ")))); },
+                responsive: ['sm']
             },
         ];
         return (React.createElement(React.Fragment, null,
@@ -253,13 +289,13 @@ var Role = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },
                         React.createElement("h2", null, abpUtility_1.L('Roles'))),
-                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('role.create') && React.createElement(antd_1.Button, { type: "primary", shape: "circle", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } }))),
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.role.view.table.role_new_create') && React.createElement(antd_1.Button, { type: "primary", shape: "circle", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } }))),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
                         React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
-                        React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: "id", pagination: { pageSize: this.state.maxResultCount, total: roles === undefined ? 0 : roles.totalCount, defaultCurrent: 1 }, columns: columns, loading: roles === undefined ? true : false, dataSource: roles === undefined ? [] : roles.items, onChange: this.handleTableChange }))),
+                        React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: "id", pagination: tablePaginationTable, columns: columns, loading: roles === undefined ? true : false, dataSource: roles === undefined ? [] : roles.items, onChange: this.handlePaginationTable }))),
                 React.createElement(createOrUpdateRole_1["default"], { visible: this.state.modalVisible, onCancel: function () {
                         return _this.setState({
                             modalVisible: false

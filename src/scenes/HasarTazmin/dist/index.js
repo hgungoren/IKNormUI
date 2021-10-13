@@ -30,7 +30,6 @@ var Demo = function (props) {
     var _g = react_1.useState(false), visibleSms = _g[0], SetVisibleSms = _g[1];
     var _h = react_1["default"].useState('1'), activeTabKey = _h[0], setActiveTabKey = _h[1];
     var onChangeRadio = function (e) {
-        console.log('radio checked', e.target.value);
         setValue(e.target.value);
         if (e.target.value === 2) {
             setVisible(false);
