@@ -187,13 +187,13 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
                 overlay={
                   <Menu>
                     {
-                      isGranted('subitems.role.view.table.create') && <Menu.Item key={0} onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
+                      isGranted('subitems.role.table.create') && <Menu.Item key={0} onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
                     }
                     {
-                      isGranted('subitems.role.view.table.edit') && <Menu.Item   key={1} onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
+                      isGranted('subitems.role.table.edit') && <Menu.Item   key={1} onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                     }
                     {
-                      isGranted('subitems.role.view.table.delete') && <Menu.Item key={2} onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
+                      isGranted('subitems.role.table.delete') && <Menu.Item key={2} onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
                     }
                   </Menu>
                 }
@@ -229,7 +229,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               xl={{ span: 1, offset: 21 }}
               xxl={{ span: 1, offset: 21 }}
             >
-              {isGranted('subitems.role.view.table.role_new_create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
+              {isGranted('subitems.role.table.role_new_create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
             </Col>
           </Row>
           <Row>

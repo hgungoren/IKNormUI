@@ -44,7 +44,7 @@ const Demo = (props: Props) => {
 
   function onChangeTC(e) {
     console.log(`checked = ${e.target.checked}`);
-    if (e.target.checked == true) { SetVisibleTc(true) } else { SetVisibleTc(false) }
+    if (e.target.checked === true) { SetVisibleTc(true) } else { SetVisibleTc(false) }
   }
 
   function onChangeVk(e) {

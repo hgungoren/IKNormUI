@@ -121,20 +121,20 @@ export class Dashboard extends React.Component<Props, State> {
   componentDidMount = async () => {
 
 
-    setTimeout(() => this.setState({ cardLoading: false }), 1000);
+    setTimeout(() => this.setState({ cardLoading: false }), 2000);
     setTimeout(() => this.setState({ barChartLoading: false }), 2000);
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
     let currentDate = dateHelper.getTodayDate('tr');
     let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
     if (
-      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
-      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')  ||
+      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')   ||
+      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')  ||
+      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')  ||
+      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')   ||
       isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
-      isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
+      isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')||
       isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')) {
       this.setState({ dateFilter: true })
       await this.getNormRequests(startOfMonth, currentDate);

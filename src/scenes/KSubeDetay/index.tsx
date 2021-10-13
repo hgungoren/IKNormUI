@@ -221,7 +221,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
         })
 
-        if (isGranted('items.kareas.view')) {
+        if (isGranted('items_kareas_menu_view')) {
 
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
@@ -242,16 +242,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     componentDidMount = async () => {
         await this.setPageState();
 
-        if (isGranted('items.kbranch_detail.employee_table')) {
+        if (isGranted('subitems.branch.detail.total.table.view')) {
             await this.getAllEmployees();
         }
 
-        if (isGranted('items.kbranch_detail.norm_table')) {
+        if (isGranted('subitems.branch.detail.employee.table.view')) {
             await this.getNormRequests();
             await this.getAllEmployees();
         }
 
-        if (isGranted('items.kbranch_detail.employee_norm_table')) {
+        if (isGranted('subitems.branch.detail.norm.request.table.view')) {
             await this.getAllEmployeesForGroupBy();
             await this.getAllSubeNormForGroupBy();
             await this.setAllEmployeesGroupBy();
@@ -540,12 +540,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 <Breadcrumb.Item>
 
                                     {
-                                        isGranted('dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Home')}</Link>
+                                        isGranted('items_dashboard_menu_view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Home')}</Link>
                                     }
 
                                 </Breadcrumb.Item>
                                 {
-                                    isGranted('kbolge.view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
+                                    isGranted('items_branch_menu_view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
                                 }
 
                                 {
@@ -560,7 +560,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 </Card>
 
                 {
-                    isGranted('items.kbranch_detail.employee_norm_table') && <Card style={{ marginBottom: 20 }} hoverable>
+                    isGranted('subitems.branch.detail.total.table.view') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
                             <Col
                                 xs={{ span: 24, offset: 0 }}
@@ -581,7 +581,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                 }
 
                 {
-                    isGranted('items.kbranch_detail.employee_table') && <Card hoverable>
+                    isGranted('subitems.branch.detail.employee.table.view') && <Card hoverable>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -618,7 +618,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Card>
                 }
                 {
-                    isGranted('items.kbranch_detail.norm_table') && <Card hoverable style={{ marginTop: 15 }}>
+                    isGranted('subitems.branch.detail.norm.request.table.view') && <Card hoverable style={{ marginTop: 15 }}>
                         <Row>
                             <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
                                 {' '}
@@ -632,7 +632,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                                 xl={{ span: 1, offset: 21 }}
                                 xxl={{ span: 1, offset: 21 }}  >
 
-                                {isGranted('subitems.kbranch_detail.norm_table.button') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
+                                {isGranted('subitems.branch.detail.norm.request.table.view') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
 
                             </Col>
                         </Row>
