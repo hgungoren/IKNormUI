@@ -41,21 +41,32 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }))] as DataNode[];
 
     const getSelectedItems = () => {
-        let items = [] as DataNode[];
-        let d = options.map(x => x.children);
-        if (d.length > 0) {
-            let dd = d.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value })))
-            let dfs = dd.filter(x => x.length > 0).map(x => x)
+        let permissions = [] as DataNode[];
+
+        let childItems = options.map(x => x.children);
+        if (childItems.length > 0) {
+            let selectedChildItems = childItems.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value, children: f.children })))
             let permission = roleStore.roleEdit.grantedPermissionNames;
-            for (let i of dfs) {
-                for (let k of i) {
-                    if (permission.includes(k.value)) {
-                        items.push(k)
-                    }
+
+            for (let item of selectedChildItems) {
+                for (let property of item) {
+
+                    if (permission.includes(property.value)) {
+
+                        for (let subItem of property.children) {
+                            if (permission.includes(subItem.value)) {
+                                permissions.push(property)
+                            }
+                        }
+
+                        permissions.push(property)
+                    } 
+                    
                 }
             }
         }
-        return items;
+
+        return permissions;
     }
 
     const getItems = () => {
@@ -77,10 +88,6 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
                 }
             }
         }
-
-        console.log('sadsad')
-        console.log(permissions)
-        console.log('sadsad')
         return permissions;
     }
 

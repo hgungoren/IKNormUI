@@ -41,23 +41,28 @@ var RoleDetailDrawer = function (_a) {
         };
     })));
     var getSelectedItems = function () {
-        var items = [];
-        var d = options.map(function (x) { return x.children; });
-        if (d.length > 0) {
-            var dd = d.map(function (x) { return x.map(function (f) { return ({ key: f.key, title: f.title, value: f.value }); }); });
-            var dfs = dd.filter(function (x) { return x.length > 0; }).map(function (x) { return x; });
+        var permissions = [];
+        var childItems = options.map(function (x) { return x.children; });
+        if (childItems.length > 0) {
+            var selectedChildItems = childItems.map(function (x) { return x.map(function (f) { return ({ key: f.key, title: f.title, value: f.value, children: f.children }); }); });
             var permission = roleStore.roleEdit.grantedPermissionNames;
-            for (var _i = 0, dfs_1 = dfs; _i < dfs_1.length; _i++) {
-                var i = dfs_1[_i];
-                for (var _a = 0, i_1 = i; _a < i_1.length; _a++) {
-                    var k = i_1[_a];
-                    if (permission.includes(k.value)) {
-                        items.push(k);
+            for (var _i = 0, selectedChildItems_1 = selectedChildItems; _i < selectedChildItems_1.length; _i++) {
+                var item = selectedChildItems_1[_i];
+                for (var _a = 0, item_1 = item; _a < item_1.length; _a++) {
+                    var property = item_1[_a];
+                    if (permission.includes(property.value)) {
+                        for (var _b = 0, _c = property.children; _b < _c.length; _b++) {
+                            var subItem = _c[_b];
+                            if (permission.includes(subItem.value)) {
+                                permissions.push(property);
+                            }
+                        }
+                        permissions.push(property);
                     }
                 }
             }
         }
-        return items;
+        return permissions;
     };
     var getItems = function () {
         var permissions = [];
@@ -67,8 +72,8 @@ var RoleDetailDrawer = function (_a) {
             var currentItems = selectedChildItems.filter(function (x) { return x.length > 0; }).map(function (x) { return x; });
             for (var _i = 0, currentItems_1 = currentItems; _i < currentItems_1.length; _i++) {
                 var item = currentItems_1[_i];
-                for (var _a = 0, item_1 = item; _a < item_1.length; _a++) {
-                    var property = item_1[_a];
+                for (var _a = 0, item_2 = item; _a < item_2.length; _a++) {
+                    var property = item_2[_a];
                     for (var _b = 0, _c = property.children; _b < _c.length; _b++) {
                         var subItem = _c[_b];
                         permissions.push(subItem);
@@ -77,9 +82,6 @@ var RoleDetailDrawer = function (_a) {
                 }
             }
         }
-        console.log('sadsad');
-        console.log(permissions);
-        console.log('sadsad');
         return permissions;
     };
     var onCheck = function (selected) {
