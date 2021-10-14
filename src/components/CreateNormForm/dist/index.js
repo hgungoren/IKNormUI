@@ -111,10 +111,10 @@ var CreateNormForm = /** @class */ (function (_super) {
         };
         _this.visibleEmployee = function (param) {
             if (param === "Ayrilma") {
-                _this.setState({ employeeVisible: !_this.state.employeeVisible });
+                _this.setState({ employeeVisible: _this.state.employeeVisible });
             }
             else
-                _this.setState({ employeeVisible: true });
+                _this.setState({ employeeVisible: false });
         };
         _this.CreateNorm = function () {
             _this.setState({

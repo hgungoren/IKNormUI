@@ -85,10 +85,10 @@ class CreateNormForm extends React.Component<Props, State> {
 
   visibleEmployee = (param) => {
     if (param === "Ayrilma") {
-      this.setState({ employeeVisible: !this.state.employeeVisible })
+      this.setState({ employeeVisible: this.state.employeeVisible })
     }
     else
-      this.setState({ employeeVisible: true })
+      this.setState({ employeeVisible: false })
   }
 
   CreateNorm = () => {
@@ -239,7 +239,7 @@ class CreateNormForm extends React.Component<Props, State> {
         >
           <Modal
             footer={
-              [ 
+              [
                 !this.state.buttonVisible && (<Button key="next" onClick={() => { this.changeActiveTab(), getHierarchy(subeId, bagliOlduguSubeId, tip, pozisyon) }} >
                   {L(this.state.defaultActiveKey.name)}
                 </Button>),
@@ -289,9 +289,9 @@ class CreateNormForm extends React.Component<Props, State> {
                   {
                     this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
                       <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')}
-                        onSelect={(x:any) => this.setState({ pozisyon: x.toString() })} >
+                        onSelect={(x: any) => this.setState({ pozisyon: x.toString() })} >
                         {
-                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option> )
+                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>)
                         }
                       </Select>
                     </Form.Item>)

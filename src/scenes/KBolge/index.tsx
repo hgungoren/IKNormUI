@@ -310,14 +310,14 @@ class KBolge extends AppComponentBase<Props, State> {
         let currentDate = dateHelper.getTodayDate('tr');
         let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
-        if (isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') ||
-            isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
-            isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
-            isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
-            isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
-            isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
-            isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
-            isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')
+        if (isGranted('subitems.kareas.infobox.getcancelednormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.getacceptednormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.getpendingnormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.gettotalnormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.getcancelednormfillrequest') ||
+            isGranted('subitems.kareas.infobox.getacceptednormfillrequest') ||
+            isGranted('subitems.kareas.infobox.getpendingnormfillrequest') ||
+            isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')
         ) {
 
             this.setState({ dateFilter: true })

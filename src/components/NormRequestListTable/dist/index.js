@@ -454,13 +454,13 @@ var NormRequestListTable = /** @class */ (function (_super) {
                 dataIndex: 'id',
                 width: 50,
                 render: function (text, norm) { return React.createElement(antd_1.Space, { size: 'small' },
-                    kNormDetails !== undefined && (abpUtility_1.isGranted('knorm.detail')) && (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Detail') },
+                    kNormDetails !== undefined && (abpUtility_1.isGranted('items.knorm.detail.btn')) && (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Detail') },
                         React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(norm.id, norm.subeAdi); }, icon: React.createElement(icons_1.FileSearchOutlined, null), type: "primary" }))),
                     (kNormDetails !== undefined && _this.props.isConfirmOrCancel && (!tableTitle.search('Pending') || !tableTitle.search('Total')) && normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede &&
                         kNormDetails.items.filter(function (x) { var _a; return x.status == status_1["default"].Waiting && x.kNormId === norm.id && ((_a = _this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.id) === x.userId && x.visible; }).length > 0) && React.createElement(React.Fragment, null,
-                        abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approve') },
+                        abpUtility_1.isGranted('items.knorm.approve.btn') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approve') },
                             React.createElement(antd_1.Button, { onClick: function () { return _this.approveRequestClick(norm.id); }, icon: React.createElement(icons_1.CheckCircleOutlined, null), type: "primary" })),
-                        abpUtility_1.isGranted('knorm.reject') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
+                        abpUtility_1.isGranted('items.knorm.reject.btn') && React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
                             React.createElement(antd_1.Button, { danger: true, onClick: function () { return _this.normRejectDescriptionModalOpen(norm.id); }, icon: React.createElement(icons_1.StopOutlined, null), type: "primary" })))); }
             }
         ];

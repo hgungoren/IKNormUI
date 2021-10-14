@@ -31,28 +31,28 @@ function KCartList(_a) {
     };
     react_1.useEffect(function () { setKey(key + 1); }, [visible]);
     setTimeout(function () {
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')) {
             setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')) {
             setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')) {
             setPendingNormUpdateRequest(getPendingNormUpdateRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')) {
             setTotalNormUpdateRequest(getTotalNormUpdateRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormfillrequest')) {
             setCanceledNormFillRequest(getCanceledNormFillRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormfillrequest')) {
             setAcceptedNormFillRequest(getAcceptedNormFillRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormfillrequest')) {
             setPendingNormFillRequest(getPendingNormFillRequestCount);
         }
-        if (abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')) {
+        if (abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')) {
             setTotalNormFillingRequest(getTotalNormFillingRequestCount);
         }
     }, 500);
@@ -63,15 +63,15 @@ function KCartList(_a) {
         dateFilter && react_1["default"].createElement(antd_1.Row, { gutter: 16 },
             react_1["default"].createElement(KNormDateFilter_1["default"], { cursor: 'context-menu', onChange: onDateFilter, cardLoading: cardLoading })),
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
-            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getTotalNormFillingRequest'); }, cardLoading: cardLoading, color: 'rgb(83, 29, 171)', title: abpUtility_1.L('TotalNormFillingRequest'), icon: 'FileDoneOutlined', number: totalNormFillingRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getPendingNormFillRequest'); }, cardLoading: cardLoading, color: 'rgb(250, 173, 20)', title: abpUtility_1.L('PendingNormFillRequest'), icon: 'ClockCircleOutlined', number: pendingNormFillRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getAcceptedNormFillRequest'); }, cardLoading: cardLoading, color: '#1DA57A', title: abpUtility_1.L('AcceptedNormFillRequest'), icon: 'CheckCircleOutlined', number: acceptedNormFillRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getCanceledNormFillRequest'); }, cardLoading: cardLoading, color: '#fa541c', title: abpUtility_1.L('CanceledNormFillRequest'), icon: 'StopOutlined', number: canceledNormFillRequest })),
+            (abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')) && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getTotalNormFillingRequest'); }, cardLoading: cardLoading, color: 'rgb(83, 29, 171)', title: abpUtility_1.L('TotalNormFillingRequest'), icon: 'FileDoneOutlined', number: totalNormFillingRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getPendingNormFillRequest'); }, cardLoading: cardLoading, color: 'rgb(250, 173, 20)', title: abpUtility_1.L('PendingNormFillRequest'), icon: 'ClockCircleOutlined', number: pendingNormFillRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getAcceptedNormFillRequest'); }, cardLoading: cardLoading, color: '#1DA57A', title: abpUtility_1.L('AcceptedNormFillRequest'), icon: 'CheckCircleOutlined', number: acceptedNormFillRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormfillrequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getCanceledNormFillRequest'); }, cardLoading: cardLoading, color: '#fa541c', title: abpUtility_1.L('CanceledNormFillRequest'), icon: 'StopOutlined', number: canceledNormFillRequest })),
         react_1["default"].createElement(antd_1.Row, { gutter: 16 },
-            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getTotalNormUpdateRequest'); }, cardLoading: cardLoading, color: 'rgb(83, 29, 171)', title: abpUtility_1.L('TotalNormUpdateRequest'), icon: 'FileDoneOutlined', number: totalNormUpdateRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getPendingNormUpdateRequest'); }, cardLoading: cardLoading, color: 'rgb(250, 173, 20)', title: abpUtility_1.L('PendingNormUpdateRequest'), icon: 'ClockCircleOutlined', number: pendingNormUpdateRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getAcceptedNormUpdateRequest'); }, cardLoading: cardLoading, color: '#1DA57A', title: abpUtility_1.L('AcceptedNormUpdateRequest'), icon: 'CheckCircleOutlined', number: acceptedNormUpdateRequest }),
-            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getCanceledNormUpdateRequest'); }, cardLoading: cardLoading, color: '#fa541c', title: abpUtility_1.L('CanceledNormUpdateRequest'), icon: 'StopOutlined', number: canceledNormUpdateRequest })),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getTotalNormUpdateRequest'); }, cardLoading: cardLoading, color: 'rgb(83, 29, 171)', title: abpUtility_1.L('TotalNormUpdateRequest'), icon: 'FileDoneOutlined', number: totalNormUpdateRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getPendingNormUpdateRequest'); }, cardLoading: cardLoading, color: 'rgb(250, 173, 20)', title: abpUtility_1.L('PendingNormUpdateRequest'), icon: 'ClockCircleOutlined', number: pendingNormUpdateRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getAcceptedNormUpdateRequest'); }, cardLoading: cardLoading, color: '#1DA57A', title: abpUtility_1.L('AcceptedNormUpdateRequest'), icon: 'CheckCircleOutlined', number: acceptedNormUpdateRequest }),
+            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') || abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormupdaterequest') && react_1["default"].createElement(KCart_1["default"], { onClick: function () { return onOpenModal('getCanceledNormUpdateRequest'); }, cardLoading: cardLoading, color: '#fa541c', title: abpUtility_1.L('CanceledNormUpdateRequest'), icon: 'StopOutlined', number: canceledNormUpdateRequest })),
         react_1["default"].createElement(NormRequestListTableModal_1["default"], { key: key, type: type, table: table, moment: moment, bolgeId: bolgeId, visible: visible, subeObjId: subeObjId, kNormStore: kNormStore, onCancel: onCancelModal, title: table.replace('get', ''), kNormDetailStore: kNormDetailStore })));
 }
 KCartList.propTypes = {

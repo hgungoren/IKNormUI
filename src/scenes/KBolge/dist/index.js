@@ -467,14 +467,14 @@ var KBolge = /** @class */ (function (_super) {
                         _a.sent();
                         currentDate = date_1.dateHelper.getTodayDate('tr');
                         startOfMonth = date_1.dateHelper.getMonthFirstDate('tr');
-                        if (!(abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
-                            abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest'))) return [3 /*break*/, 7];
+                        if (!(abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormupdaterequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.getcancelednormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.getacceptednormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.getpendingnormfillrequest') ||
+                            abpUtility_1.isGranted('subitems.kareas.infobox.gettotalnormfillingrequest'))) return [3 /*break*/, 7];
                         this.setState({ dateFilter: true });
                         return [4 /*yield*/, this.getNormRequests(startOfMonth, currentDate)];
                     case 5:

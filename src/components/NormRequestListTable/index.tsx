@@ -374,7 +374,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 render: (text, norm: GetAllKNormOutput) => <Space size={'small'}>
 
                     {
-                        kNormDetails !== undefined && (isGranted('knorm.detail')) && (
+                        kNormDetails !== undefined && (isGranted('items.knorm.detail.btn')) && (
                             <Tooltip placement="topLeft" title={L('Detail')}>
                                 <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
                             </Tooltip>)
@@ -385,13 +385,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                             kNormDetails.items.filter(x => x.status == Status.Waiting && x.kNormId === norm.id && this.props.sessionStore?.currentLogin.user.id === x.userId && x.visible).length > 0) && <>
 
                             {
-                                isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Approve')}>
+                                isGranted('items.knorm.approve.btn') && <Tooltip placement="topLeft" title={L('Approve')}>
                                     <Button onClick={() => this.approveRequestClick(norm.id)} icon={<CheckCircleOutlined />} type="primary" />
                                 </Tooltip>
                             }
 
                             {
-                                isGranted('knorm.reject') && <Tooltip placement="topLeft" title={L('Reject')}>
+                                isGranted('items.knorm.reject.btn') && <Tooltip placement="topLeft" title={L('Reject')}>
                                     <Button danger onClick={() => this.normRejectDescriptionModalOpen(norm.id)} icon={<StopOutlined />} type="primary" />
                                 </Tooltip>
                             }
