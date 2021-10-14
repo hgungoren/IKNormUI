@@ -90,7 +90,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     state = {
         detaillModalVisible: false,
-        maxNormResultCount: 5,
+        maxNormResultCount: 15,
         modalVisible: false,
         cardLoading: true,
         groupEmployee: {},
@@ -131,7 +131,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.props.kInkaLookUpTableStore
             .getAll(
                 {
-                    maxResultCount: 1000,
+                    maxResultCount: 2000,
                     keyword: key,
                     skipCount: 0
                 }
@@ -140,6 +140,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     async getNormRequests() {
         this.props.kNormStore.getAll({
+            
             id: this.state.id,
             keyword: this.state.normFilter,
             maxResultCount: this.state.maxNormResultCount,
@@ -152,7 +153,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     async getAllSubeNormForGroupBy() {
         await this.props.kSubeNormStore.getAllNorms({
-            maxResultCount: 10000,
+            maxResultCount: 20000,
             skipCount: 0,
             keyword: '',
             id: this.state.id

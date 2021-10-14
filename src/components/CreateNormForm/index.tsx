@@ -84,8 +84,10 @@ class CreateNormForm extends React.Component<Props, State> {
   }
 
   visibleEmployee = (param) => {
+
+    
     if (param === "Ayrilma") {
-      this.setState({ employeeVisible: this.state.employeeVisible })
+      this.setState({ employeeVisible: true })
     }
     else
       this.setState({ employeeVisible: false })

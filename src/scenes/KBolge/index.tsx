@@ -94,7 +94,7 @@ class KBolge extends AppComponentBase<Props, State> {
             keyword: '',
             skipCount: 0,
             id: this.state.subeObjId,
-            maxResultCount: 5,
+            maxResultCount: 100000,
         });
     }
 
@@ -103,7 +103,7 @@ class KBolge extends AppComponentBase<Props, State> {
             keyword: '',
             skipCount: 0,
             id: this.state.subeObjId,
-            maxResultCount: 5,
+            maxResultCount: 100000,
         });
     }
 
@@ -312,11 +312,11 @@ class KBolge extends AppComponentBase<Props, State> {
 
         if (isGranted('subitems.kareas.infobox.getcancelednormupdaterequest') ||
             isGranted('subitems.kareas.infobox.getacceptednormupdaterequest') ||
-            isGranted('subitems.kareas.infobox.getpendingnormupdaterequest') ||
-            isGranted('subitems.kareas.infobox.gettotalnormupdaterequest') ||
-            isGranted('subitems.kareas.infobox.getcancelednormfillrequest') ||
-            isGranted('subitems.kareas.infobox.getacceptednormfillrequest') ||
-            isGranted('subitems.kareas.infobox.getpendingnormfillrequest') ||
+            isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')  ||
+            isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')    ||
+            isGranted('subitems.kareas.infobox.getcancelednormfillrequest')   ||
+            isGranted('subitems.kareas.infobox.getacceptednormfillrequest')   ||
+            isGranted('subitems.kareas.infobox.getpendingnormfillrequest')    ||
             isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')
         ) {
 
@@ -483,7 +483,7 @@ class KBolge extends AppComponentBase<Props, State> {
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} />
                 {
-                    this.isGranted('items.kareas.table') && <Card hoverable>
+                    this.isGranted('subitems.kareas.table.view') && <Card hoverable>
 
                         <Row>
                             <Col
