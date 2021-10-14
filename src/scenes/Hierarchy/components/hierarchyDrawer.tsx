@@ -16,13 +16,15 @@ export interface Props {
 
 export function HierarchyDrawer(props: Props) {
 
-  const [defaultVisibleMail, setDefaultVisibleMail] = useState(false);
-  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(false);
-  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(false);
-  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(false);
-  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(false);
-  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(false);
+  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.PushNotificationPhoneStatusChange);
+  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.PushNotificationWebStatusChange);
+  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.PushNotificationPhone);
+  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.PushNotificationWeb);
   const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.pushNotificationWebStatusChange);
+  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.MailStatusChange);
+  const [defaultVisibleMail, setDefaultVisibleMail] = useState(props.node.mail);
+
+
  
   return (
     <>
@@ -54,13 +56,8 @@ export function HierarchyDrawer(props: Props) {
                       defaultChecked={props.node.mail}
                       disabled={false}
                       //    onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'Mail' })}
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'Mail',
-                        })
-                      }
+                      onChange={(e) => setDefaultVisibleMail(!defaultVisibleMail)}
+
                     >
                       Bildirim
                     </Checkbox>
@@ -98,13 +95,8 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'MailStatusChange',
-                        })
-                      }
+                      onChange={(e) => setDefaultVisibleMailStatusChange(!defaultVisibleMailStatusChange)}
+
                     >
                       Bildirim
                     </Checkbox>
@@ -143,14 +135,8 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
+                      onChange={(e) => setDefaultVisiblePushNotificationPhone(!defaultVisiblePushNotificationPhone)}
 
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'PushNotificationPhone',
-                        })
-                      }
                     >
                       Bildirim
                     </Checkbox>
@@ -186,13 +172,8 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'PushNotificationPhoneStatusChange',
-                        })
-                      }
+                      onChange={(e) => setDefaultVisiblePushNotificationPhoneStatusChange(!defaultVisiblePushNotificationPhoneStatusChange)}
+
                     >
                       Bildirim
                     </Checkbox>
@@ -231,13 +212,8 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'PushNotificationWeb',
-                        })
-                      }
+                      onChange={(e) => setDefaultVisiblePushNotificationWeb(!defaultVisiblePushNotificationWeb)}
+                   
                     >
                       Bildirim
                     </Checkbox>
@@ -272,14 +248,8 @@ export function HierarchyDrawer(props: Props) {
                       //       type: 'PushNotificationWebStatusChange',
                       //     })
                       //   }
+                      onChange={(e) => setDefaultVisiblePushNotificationWebStatusChange(!defaultVisiblePushNotificationWebStatusChange)}
 
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'PushNotificationWebStatusChange',
-                        })
-                      }
                     >
                       Bildirim
                     </Checkbox>
