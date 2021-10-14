@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 //import React  from 'react';
 import { Alert, Checkbox, Col, Drawer, Row, Space } from 'antd';
 import './index.less';
@@ -15,50 +15,15 @@ export interface Props {
 }
 
 export function HierarchyDrawer(props: Props) {
-  
-   const [defaultVisibleMail, setDefaultVisibleMail] = useState(false);
-   const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(false);
-   const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(false);
-   const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(false);
-   const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(false);
-   const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(false);
-   const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(false);
 
-  const onClickCheckbox = (data: any) => {
-    if(data.type === "Mail"){
-        data.status ? setDefaultVisibleMail(false) : setDefaultVisibleMail(true);            
-    }
-    if(data.type === "MailStatusChange"){
-        data.status ? setDefaultVisibleMailStatusChange(false) : setDefaultVisibleMailStatusChange(true);  
-           
-    }
-    if(data.type === "PushNotificationPhone"){
-        data.status ? setDefaultVisiblePushNotificationPhone(false) : setDefaultVisiblePushNotificationPhone(true);  
-           
-    }
-    if(data.type === "PushNotificationPhoneStatusChange"){
-        data.status ? setDefaultVisiblePushNotificationPhoneStatusChange(false) : setDefaultVisiblePushNotificationPhoneStatusChange(true);  
-           
-    }
-    if(data.type === "PushNotificationWeb"){
-        data.status ? setDefaultVisiblePushNotificationWeb(false) : setDefaultVisiblePushNotificationWeb(true);  
-           
-    }
-    if(data.type === "PushNotificationWebStatusChange"){
-        data.status ? setDefaultVisiblePushNotificationWebStatusChange(false) : setDefaultVisiblePushNotificationWebStatusChange(true);  
-           
-    }
-    if(data.type === "CanTerminate"){
-        data.status ? setDefaultVisibleCanTerminate(false) : setDefaultVisibleCanTerminate(true);  
-           
-    }
-    props.kHierarchyStore.update(data);    
-  
-  };
-
-  
-
-
+  const [defaultVisibleMail, setDefaultVisibleMail] = useState(false);
+  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(false);
+  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(false);
+  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(false);
+  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(false);
+  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(false);
+  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.pushNotificationWebStatusChange);
+ 
   return (
     <>
       <Drawer
@@ -125,13 +90,13 @@ export function HierarchyDrawer(props: Props) {
                     <Checkbox
                       defaultChecked={props.node.mailStatusChange}
                       disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'MailStatusChange',
-                    //     })
-                    //   }
+                      //   onChange={(x) =>
+                      //     props.onSwitchChange({
+                      //       id: props.node.id,
+                      //       status: x.target.checked,
+                      //       type: 'MailStatusChange',
+                      //     })
+                      //   }
 
                       onChange={(e) =>
                         onClickCheckbox({
@@ -170,13 +135,13 @@ export function HierarchyDrawer(props: Props) {
                     <Checkbox
                       defaultChecked={props.node.pushNotificationPhone}
                       disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'PushNotificationPhone',
-                    //     })
-                    //   }
+                      //   onChange={(x) =>
+                      //     props.onSwitchChange({
+                      //       id: props.node.id,
+                      //       status: x.target.checked,
+                      //       type: 'PushNotificationPhone',
+                      //     })
+                      //   }
 
 
                       onChange={(e) =>
@@ -213,14 +178,14 @@ export function HierarchyDrawer(props: Props) {
                     <Checkbox
                       defaultChecked={props.node.pushNotificationPhoneStatusChange}
                       disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'PushNotificationPhoneStatusChange',
-                    //     })
-                    //   }
-                      
+                      //   onChange={(x) =>
+                      //     props.onSwitchChange({
+                      //       id: props.node.id,
+                      //       status: x.target.checked,
+                      //       type: 'PushNotificationPhoneStatusChange',
+                      //     })
+                      //   }
+
                       onChange={(e) =>
                         onClickCheckbox({
                           id: props.node.id,
@@ -258,13 +223,13 @@ export function HierarchyDrawer(props: Props) {
                     <Checkbox
                       defaultChecked={props.node.pushNotificationWeb}
                       disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'PushNotificationWeb',
-                    //     })
-                    //   }
+                      //   onChange={(x) =>
+                      //     props.onSwitchChange({
+                      //       id: props.node.id,
+                      //       status: x.target.checked,
+                      //       type: 'PushNotificationWeb',
+                      //     })
+                      //   }
 
                       onChange={(e) =>
                         onClickCheckbox({
@@ -300,13 +265,13 @@ export function HierarchyDrawer(props: Props) {
                     <Checkbox
                       defaultChecked={props.node.pushNotificationWebStatusChange}
                       disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'PushNotificationWebStatusChange',
-                    //     })
-                    //   }
+                      //   onChange={(x) =>
+                      //     props.onSwitchChange({
+                      //       id: props.node.id,
+                      //       status: x.target.checked,
+                      //       type: 'PushNotificationWebStatusChange',
+                      //     })
+                      //   }
 
                       onChange={(e) =>
                         onClickCheckbox({
@@ -337,28 +302,14 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Sonlandır"
                 description="Yeni Bir Norm Talebi Geldiğinde veya Var Olan Norm Üzerinde Bir Değişiklik Olduğunda Onay Akışını Sonlardırma"
-                type={defaultVisibleCanTerminate ? 'error' : 'info'}
+                type={defaultVisibleCanTerminate ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.pushNotificationWebStatusChange}
-                      disabled={false}
-                    //   onChange={(x) =>
-                    //     props.onSwitchChange({
-                    //       id: props.node.id,
-                    //       status: x.target.checked,
-                    //       type: 'CanTerminate',
-                    //     })
-                    //   }
-
-                      onChange={(e) =>
-                        onClickCheckbox({
-                          id: props.node.id,
-                          status: e.target.checked,
-                          type: 'CanTerminate',
-                        })
-                      }
+                      disabled={false} 
+                      onChange={(e) => setDefaultVisibleCanTerminate(!defaultVisibleCanTerminate)}
                     >
                       Bildirim
                     </Checkbox>
