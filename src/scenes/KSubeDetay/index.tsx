@@ -209,7 +209,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     pageSettings = async () => {
 
+
+
+        console.log('this.props.kSubeStore.editKSube', this.props.kSubeStore.editKSube)
         let tur = this.props.kSubeStore.editKSube.tur;
+
         if (tur === 'Acente') {
             this.setState({ tip: tur })
         }
@@ -237,9 +241,12 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     setPageState = async () => {
         this.setState({ id: this.props["match"].params["id"] });
         this.props.kSubeStore.get({ id: this.state.id })
+
+        setTimeout(() => this.pageSettings(), 500);
     }
 
     componentDidMount = async () => {
+
         await this.setPageState();
 
         if (isGranted('subitems.branch.detail.total.table.view')) {
@@ -259,7 +266,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             await this.mergeArray();
         }
 
-        await this.pageSettings();
     }
 
     handleSearch = (value: string) => {
@@ -271,7 +277,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     };
 
     async createOrUpdateModalOpen(entityDto: EntityDto) {
-        this.setState({ modalVisible: !this.state.modalVisible }); 
+        this.setState({ modalVisible: !this.state.modalVisible });
         this.getPosition(this.state.tip);
     }
 
@@ -347,7 +353,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         })
     }
 
-    handlePaginationTable1 = pagination => { 
+    handlePaginationTable1 = pagination => {
         const { filterTable1 } = this.state;
         const { pageSize, current } = pagination;
         this.setState({
@@ -355,7 +361,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         });
     };
 
-    handlePaginationTable2 = pagination => { 
+    handlePaginationTable2 = pagination => {
         const { filterTable2 } = this.state;
         const { pageSize, current } = pagination;
         this.setState({

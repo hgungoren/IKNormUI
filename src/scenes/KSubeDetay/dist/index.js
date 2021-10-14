@@ -146,6 +146,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.pageSettings = function () { return __awaiter(_this, void 0, void 0, function () {
             var tur;
             return __generator(this, function (_a) {
+                console.log('this.props.kSubeStore.editKSube', this.props.kSubeStore.editKSube);
                 tur = this.props.kSubeStore.editKSube.tur;
                 if (tur === 'Acente') {
                     this.setState({ tip: tur });
@@ -156,7 +157,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                 this.setState({
                     bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId
                 });
-                if (abpUtility_1.isGranted('items.kareas.view')) {
+                if (abpUtility_1.isGranted('items_kareas_menu_view')) {
                     this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
                     this.setState({
                         breadcrumbBolgeAdi: 'bölge adı',
@@ -169,9 +170,11 @@ var KSubeDetay = /** @class */ (function (_super) {
             });
         }); };
         _this.setPageState = function () { return __awaiter(_this, void 0, void 0, function () {
+            var _this = this;
             return __generator(this, function (_a) {
                 this.setState({ id: this.props["match"].params["id"] });
                 this.props.kSubeStore.get({ id: this.state.id });
+                setTimeout(function () { return _this.pageSettings(); }, 500);
                 return [2 /*return*/];
             });
         }); };
@@ -181,13 +184,13 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.setPageState()];
                     case 1:
                         _a.sent();
-                        if (!abpUtility_1.isGranted('items.kbranch_detail.employee_table')) return [3 /*break*/, 3];
+                        if (!abpUtility_1.isGranted('subitems.branch.detail.total.table.view')) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.getAllEmployees()];
                     case 2:
                         _a.sent();
                         _a.label = 3;
                     case 3:
-                        if (!abpUtility_1.isGranted('items.kbranch_detail.norm_table')) return [3 /*break*/, 6];
+                        if (!abpUtility_1.isGranted('subitems.branch.detail.employee.table.view')) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.getNormRequests()];
                     case 4:
                         _a.sent();
@@ -196,7 +199,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                         _a.sent();
                         _a.label = 6;
                     case 6:
-                        if (!abpUtility_1.isGranted('items.kbranch_detail.employee_norm_table')) return [3 /*break*/, 12];
+                        if (!abpUtility_1.isGranted('subitems.branch.detail.norm.request.table.view')) return [3 /*break*/, 12];
                         return [4 /*yield*/, this.getAllEmployeesForGroupBy()];
                     case 7:
                         _a.sent();
@@ -213,10 +216,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 11:
                         _a.sent();
                         _a.label = 12;
-                    case 12: return [4 /*yield*/, this.pageSettings()];
-                    case 13:
-                        _a.sent();
-                        return [2 /*return*/];
+                    case 12: return [2 /*return*/];
                 }
             });
         }); };
@@ -652,8 +652,8 @@ var KSubeDetay = /** @class */ (function (_super) {
         return (React.createElement(React.Fragment, null,
             React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
                 React.createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: React.createElement(antd_1.Breadcrumb, null,
-                        React.createElement(antd_1.Breadcrumb.Item, null, abpUtility_1.isGranted('dashboard.view') ? React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : React.createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Home'))),
-                        abpUtility_1.isGranted('kbolge.view') && React.createElement(antd_1.Breadcrumb.Item, null,
+                        React.createElement(antd_1.Breadcrumb.Item, null, abpUtility_1.isGranted('items_dashboard_menu_view') ? React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : React.createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Home'))),
+                        abpUtility_1.isGranted('items_branch_menu_view') && React.createElement(antd_1.Breadcrumb.Item, null,
                             " ",
                             React.createElement(react_router_dom_1.Link, { to: "/bolgemudurluk" }, abpUtility_1.L('RegionalOffices')),
                             " "),
@@ -665,11 +665,11 @@ var KSubeDetay = /** @class */ (function (_super) {
                             " ",
                             breadcrumbSubeAdi,
                             " ")) })),
-            abpUtility_1.isGranted('items.kbranch_detail.employee_norm_table') && React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
+            abpUtility_1.isGranted('subitems.branch.detail.total.table.view') && React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, onChange: this.handlePaginationTable1, columns: normEmployeeCoumns, rowKey: function (record) { return record.id; }, locale: { emptyText: abpUtility_1.L('NoData') }, loading: groupData.length == 1 ? true : false, dataSource: groupData === undefined ? [] : groupData, pagination: tablePaginationTable1 })))),
-            abpUtility_1.isGranted('items.kbranch_detail.employee_table') && React.createElement(antd_1.Card, { hoverable: true },
+            abpUtility_1.isGranted('subitems.branch.detail.employee.table.view') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
@@ -681,12 +681,12 @@ var KSubeDetay = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handlePaginationTable2, rowKey: function (record) { return record.objId.toString(); }, loading: kPersonels === undefined ? true : false, dataSource: kPersonels === undefined ? [] : kPersonels.items, pagination: tablePaginationTable2 })))),
-            abpUtility_1.isGranted('items.kbranch_detail.norm_table') && React.createElement(antd_1.Card, { hoverable: true, style: { marginTop: 15 } },
+            abpUtility_1.isGranted('subitems.branch.detail.norm.request.table.view') && React.createElement(antd_1.Card, { hoverable: true, style: { marginTop: 15 } },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
                         ' ',
                         React.createElement("h2", null, abpUtility_1.L('NormDetailPanel'))),
-                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.kbranch_detail.norm_table.button') && React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } },
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.branch.detail.norm.request.table.view') && React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } },
                         " ",
                         abpUtility_1.L('NormOperations'),
                         " "))),

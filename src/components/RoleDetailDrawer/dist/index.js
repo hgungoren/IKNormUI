@@ -60,46 +60,31 @@ var RoleDetailDrawer = function (_a) {
         return items;
     };
     var getItems = function () {
-        var items = [];
-        var d = options.map(function (x) { return x.children; });
-        if (d.length > 0) {
-            var dd = d.map(function (x) { return x.map(function (f) { return ({ key: f.key, title: f.title, value: f.value }); }); });
-            var dfs = dd.filter(function (x) { return x.length > 0; }).map(function (x) { return x; });
-            for (var _i = 0, dfs_2 = dfs; _i < dfs_2.length; _i++) {
-                var i = dfs_2[_i];
-                for (var _a = 0, i_2 = i; _a < i_2.length; _a++) {
-                    var k = i_2[_a];
-                    items.push(k);
+        var permissions = [];
+        var childItems = options.map(function (x) { return x.children; });
+        if (childItems.length > 0) {
+            var selectedChildItems = childItems.map(function (x) { return x.map(function (f) { return ({ key: f.key, title: f.title, value: f.value, children: f.children }); }); });
+            var currentItems = selectedChildItems.filter(function (x) { return x.length > 0; }).map(function (x) { return x; });
+            for (var _i = 0, currentItems_1 = currentItems; _i < currentItems_1.length; _i++) {
+                var item = currentItems_1[_i];
+                for (var _a = 0, item_1 = item; _a < item_1.length; _a++) {
+                    var property = item_1[_a];
+                    for (var _b = 0, _c = property.children; _b < _c.length; _b++) {
+                        var subItem = _c[_b];
+                        permissions.push(subItem);
+                    }
+                    permissions.push(property);
                 }
             }
         }
-        return items;
+        console.log('sadsad');
+        console.log(permissions);
+        console.log('sadsad');
+        return permissions;
     };
     var onCheck = function (selected) {
         var permissions = [];
         permissions = getItems().filter(function (x) { return selected.includes(x.key); }).map(function (x) { return x.value; });
-        // let norms = [
-        //     'subitems.dashboard.infobox.getpendingnormfillrequest',
-        //     'subitems.dashboard.infobox.gettotalnormupdaterequest',
-        //     'subitems.dashboard.infobox.getacceptednormfillrequest',
-        //     'subitems.dashboard.infobox.gettotalnormfillingrequest',
-        //     'subitems.dashboard.infobox.getcancelednormfillrequest',
-        //     'subitems.dashboard.infobox.getpendingnormupdaterequest',
-        //     'subitems.dashboard.infobox.getacceptednormupdaterequest',
-        //     'subitems.dashboard.infobox.getcancelednormupdaterequest',
-        // ];
-        // if (permissions.filter((x) => norms.includes(x)).length > 0) {
-        //     permissions = [...permissions, 'knorm.view']
-        // }
-        // let bolgeDetail = ['kbolge.detail'];
-        // if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) {
-        //     permissions = [...permissions, 'ksube.detail']
-        // }
-        // let bolgeList = ['kbolge.branches'];
-        // if (permissions.filter((x) => bolgeList.includes(x)).length > 0) {
-        //     permissions = [...permissions, 'ksube.view']
-        // }
-        console.log(permissions);
         setGrantedPermissions(permissions);
     };
     var handleSubmit = function () {
@@ -109,6 +94,7 @@ var RoleDetailDrawer = function (_a) {
         setTimeout(function () { showOrHideDrawer(); }, 500);
     };
     var onSelect = function (x) {
+        console.log(x);
     };
     var content = function () {
         return react_1["default"].createElement(antd_1.Tree, { checkable: true, defaultExpandedKeys: getSelectedItems().map(function (x) { return x.key; }), defaultSelectedKeys: getSelectedItems().map(function (x) { return x.key; }), defaultCheckedKeys: getSelectedItems().map(function (x) { return x.key; }), onCheck: function (x) { return onCheck(x); }, onSelect: onSelect, treeData: options });

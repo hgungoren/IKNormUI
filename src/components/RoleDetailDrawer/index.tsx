@@ -15,7 +15,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
             .map((c: GetAllPermissionsOutput, i: number) => {
                 let names = c.name.split('.');
                 let name = names[names.length - 1];
-                let _key = `${key}-${i}`; 
+                let _key = `${key}-${i}`;
                 return {
                     title: L(c.displayName.replace('[', '').replace(']', '')),
                     key: _key,
@@ -31,7 +31,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
     const options = [...new Set(permissions.filter(x => x.name.startsWith('pages')).map((x: GetAllPermissionsOutput, y: number) => {
         let name = x.name.split('.')[1];
-        let key = `0-${y}`; 
+        let key = `0-${y}`;
         return {
             title: L(x.displayName),
             key: key,
@@ -59,55 +59,34 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }
 
     const getItems = () => {
-        let items = [] as DataNode[];
-        let d = options.map(x => x.children);
-        if (d.length > 0) {
-            let dd = d.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value })))
-            let dfs = dd.filter(x => x.length > 0).map(x => x)
-            for (let i of dfs) {
-                for (let k of i) {
-                    items.push(k)
+        let permissions = [] as DataNode[];
+
+        let childItems = options.map(x => x.children);
+        if (childItems.length > 0) {
+            let selectedChildItems = childItems.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value, children: f.children })))
+            let currentItems = selectedChildItems.filter(x => x.length > 0).map(x => x)
+            for (let item of currentItems) {
+
+                for (let property of item) {
+
+                    for (let subItem of property.children) {
+                        permissions.push(subItem)
+                    }
+
+                    permissions.push(property)
                 }
             }
         }
-        return items;
+
+        console.log('sadsad')
+        console.log(permissions)
+        console.log('sadsad')
+        return permissions;
     }
 
     const onCheck = (selected) => {
-
         let permissions = [] as string[];
         permissions = getItems().filter(x => selected.includes(x.key)).map((x: any) => x.value);
-
-
-
-        // let norms = [
-        //     'subitems.dashboard.infobox.getpendingnormfillrequest',
-        //     'subitems.dashboard.infobox.gettotalnormupdaterequest',
-        //     'subitems.dashboard.infobox.getacceptednormfillrequest',
-        //     'subitems.dashboard.infobox.gettotalnormfillingrequest',
-        //     'subitems.dashboard.infobox.getcancelednormfillrequest',
-        //     'subitems.dashboard.infobox.getpendingnormupdaterequest',
-        //     'subitems.dashboard.infobox.getacceptednormupdaterequest',
-        //     'subitems.dashboard.infobox.getcancelednormupdaterequest',
-        // ];
-
-        // if (permissions.filter((x) => norms.includes(x)).length > 0) {
-
-        //     permissions = [...permissions, 'knorm.view']
-        // }
-
-        // let bolgeDetail = ['kbolge.detail'];
-
-        // if (permissions.filter((x) => bolgeDetail.includes(x)).length > 0) {
-        //     permissions = [...permissions, 'ksube.detail']
-        // }
-
-        // let bolgeList = ['kbolge.branches'];
-
-        // if (permissions.filter((x) => bolgeList.includes(x)).length > 0) {
-        //     permissions = [...permissions, 'ksube.view']
-        // }
-        console.log(permissions)
         setGrantedPermissions(permissions)
     }
 
@@ -119,9 +98,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }
 
     const onSelect = (x) => {
-
-
-
+        console.log(x)
     }
 
     const content = () => {
