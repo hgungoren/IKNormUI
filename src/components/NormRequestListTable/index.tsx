@@ -454,8 +454,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         </Col>
                     </Row>
                 </Card>
-                <NormDetailTimeLine
-
+                <NormDetailTimeLine 
                     data={kNormAllDetails}
                     title={subeOrBolgeAdi}
                     norm={getAllKNormOutput}

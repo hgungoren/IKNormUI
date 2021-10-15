@@ -126,8 +126,8 @@ export class Dashboard extends React.Component<Props, State> {
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
     let currentDate = dateHelper.getTodayDate('tr');
     let startOfMonth = dateHelper.getMonthFirstDate('tr');
-    
 
+<<<<<<< HEAD
      
     if(
       isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')  ||
@@ -135,10 +135,20 @@ export class Dashboard extends React.Component<Props, State> {
       isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')  ||
       isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')  ||
       isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')   ||
+=======
+
+
+    if (
+      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
+      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+>>>>>>> a13ae3f98eb351208f21c13613c2a4616de4581f
       isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
-      isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')||
+      isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
       isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')
-      ) {
+    ) {
       this.setState({ dateFilter: true })
       await this.getNormRequests(startOfMonth, currentDate);
       await this.getNormRequestCounts(startOfMonth, currentDate);
@@ -172,8 +182,13 @@ export class Dashboard extends React.Component<Props, State> {
 
     const startDateOfWeek = moment().startOf('isoWeek').toDate();
     const endDateOfWeek = moment().endOf('isoWeek').toDate();
+<<<<<<< HEAD
  
  
+=======
+
+
+>>>>>>> a13ae3f98eb351208f21c13613c2a4616de4581f
     // Bu Alanı Düzenledim
     if (data === undefined) data = [];
 
