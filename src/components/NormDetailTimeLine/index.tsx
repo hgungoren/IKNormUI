@@ -1,6 +1,6 @@
 import './index.less';
 import React from 'react';
-import uuid from 'react-uuid';
+//import uuid from 'react-uuid';
 import DateCart from '../DateCart';
 import PropTypes from 'prop-types';
 import { L } from '../../lib/abpUtility';
@@ -14,25 +14,27 @@ import { CheckCircleOutlined, ClockCircleOutlined, StopOutlined } from '@ant-des
 const { Step } = Steps;
 
 const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
+
+    
     return (
         <>
             <Modal title={title} centered visible={visible} onCancel={onCancel} width={'70%'} footer={[]}>
                 <>
                     <Row gutter={16}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset: 0 }}>
-                            <Descriptions column={1} key={uuid()} size={'small'} title={L("RequestDetail")} bordered={true}>
+                            <Descriptions column={1} size={'small'} title={L("RequestDetail")} bordered={true}>
                                 {norm !== undefined && <>
                                     <Descriptions.Item key={'area_name' + norm.id} label={L("table.norm.area.name")}>{norm.bolgeAdi}</Descriptions.Item>
                                     <Descriptions.Item key={'branch_name' + norm.id} label={L("table.norm.branch.name")}>{norm.subeAdi}</Descriptions.Item>
                                     {/* <Descriptions.Item key={uuid()} label={L("table.norm.creator.user.name")}> {norm.user.firstName} {norm.user.lastName}  </Descriptions.Item> */}
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.position")}>{norm.pozisyon}</Descriptions.Item>
-                                    {norm.yeniPozisyon !== null && <Descriptions.Item key={uuid()} label={L("table.norm.newposition")}>{norm.yeniPozisyon}</Descriptions.Item>}
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.description")}>{norm.aciklama}</Descriptions.Item>
-                                    {norm.personelId > 0 && <Descriptions.Item key={uuid()} label={L("table.norm.leaving.staff")}>{norm.personelAdi}</Descriptions.Item>}
-                                    {norm.nedeni !== '' && <Descriptions.Item key={uuid()} label={L("table.norm.requestreason")}> {L(norm.nedeni)} </Descriptions.Item>}
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.requesttype")}>{L(norm.turu)}</Descriptions.Item>
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.requestdate")}>{<DateCart date={norm.creationTime} />}</Descriptions.Item>
-                                    <Descriptions.Item key={uuid()} label={L('table.norm.requeststatus')}>{(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
+                                    <Descriptions.Item key={'norm_position'+norm.id} label={L("table.norm.position")}>{norm.pozisyon}</Descriptions.Item>
+                                    {norm.yeniPozisyon !== null && <Descriptions.Item key={'norm_newpositon'+norm.id} label={L("table.norm.newposition")}>{norm.yeniPozisyon}</Descriptions.Item>}
+                                    <Descriptions.Item key={'norm_description' + norm.id} label={L("table.norm.description")}>{norm.aciklama}</Descriptions.Item>
+                                    {norm.personelId > 0 && <Descriptions.Item key={'leavin_staff'+norm.id} label={L("table.norm.leaving.staff")}>{norm.personelAdi}</Descriptions.Item>}
+                                    {norm.nedeni !== '' && <Descriptions.Item key={'norm_requestreason'+norm.id} label={L("table.norm.requestreason")}> {L(norm.nedeni)} </Descriptions.Item>}
+                                    <Descriptions.Item key={'norm_requesttyp'+norm.id} label={L("table.norm.requesttype")}>{L(norm.turu)}</Descriptions.Item>
+                                    <Descriptions.Item key={'norm_requsestdate'+norm.id} label={L("table.norm.requestdate")}>{<DateCart date={norm.creationTime} />}</Descriptions.Item>
+                                    <Descriptions.Item key={'norm_requeststatus'+norm.id} label={L('table.norm.requeststatus')}>{(NormStatus[norm.normStatusValue] === NormStatus.Beklemede) ?
 
                                         <Tooltip placement="topLeft" title={L('Waiting')}> <Tag color={'rgb(250, 173, 20)'} icon={<ClockCircleOutlined />} className={'requeststatus'}> {TalepDurumu[norm.durumu]} </Tag ></Tooltip> :
 

@@ -188,7 +188,7 @@ class CreateNormForm extends React.Component<Props, State> {
     //   talepTuru: ''
     // });
 
-    console.log(this.state)
+
   }
 
 
@@ -283,7 +283,7 @@ class CreateNormForm extends React.Component<Props, State> {
                   <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
                     <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                       {
-                        Object.keys(TalepTuru).map((value, index) => <Option value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
+                        Object.keys(TalepTuru).map((value, index) => <Option key={'a'+value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
                       }
                     </Select>
                   </Form.Item>

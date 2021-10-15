@@ -129,7 +129,7 @@ export class Dashboard extends React.Component<Props, State> {
     
 
      
-    if (
+    if(
       isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')  ||
       isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')   ||
       isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')  ||
@@ -172,8 +172,10 @@ export class Dashboard extends React.Component<Props, State> {
 
     const startDateOfWeek = moment().startOf('isoWeek').toDate();
     const endDateOfWeek = moment().endOf('isoWeek').toDate();
-
-    if (data === undefined) [];
+ 
+ 
+    // Bu Alanı Düzenledim
+    if (data === undefined) data = [];
 
 
     let result = data.filter((item: GetAllKNormOutput) =>
@@ -364,15 +366,26 @@ export class Dashboard extends React.Component<Props, State> {
 
         <Row gutter={16}>
           <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
-            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
+             {
+               isGranted('items.dashboard.view.total.norm.fill.requests.weekly.statistics') &&
+
+              <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
               <KLineChart data={this.state.totalFill} />
-            </Card>
-          </Col>
-          <Col  {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
-            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
-              <KLineChart data={this.state.totalUpdate} />
-            </Card>
-          </Col>
+              </Card>
+             }
+          </Col> 
+           
+             <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
+             {
+             isGranted('items.dashboard.view.total.norm.update.requests.weekly.statistics') &&
+              <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
+                  <KLineChart data={this.state.totalUpdate} />
+              </Card>            
+            }
+            
+           </Col>
+           
+        
         </Row>
       </React.Fragment>
     );

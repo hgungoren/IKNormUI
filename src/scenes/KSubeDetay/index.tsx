@@ -212,15 +212,15 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
 
 
-        console.log('this.props.kSubeStore.editKSube', this.props.kSubeStore.editKSube)
+      
         let tur = this.props.kSubeStore.editKSube.tur;
-         console.log("tur",tur)
+     
         if (tur === 'Acente') {
-            console.log("tur:acentataa")
+           
             this.setState({ tip: tur })
         }
         else {
-            console.log("else girdi")
+           
             this.setState({ tip: this.props.kSubeStore.editKSube.tip })
         }
 
@@ -231,7 +231,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
         if (isGranted('items_kareas_menu_view')) {
 
-            console.log("burda girdi")
+           
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
             this.setState({
@@ -569,8 +569,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         }  >
                     </PageHeader>
                 </Card>
-
-                {
+                    
+                {  
+                  
                     isGranted('subitems.branch.detail.total.table.view') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
                             <Col
