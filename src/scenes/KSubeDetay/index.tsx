@@ -214,20 +214,24 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
         console.log('this.props.kSubeStore.editKSube', this.props.kSubeStore.editKSube)
         let tur = this.props.kSubeStore.editKSube.tur;
-
+         console.log("tur",tur)
         if (tur === 'Acente') {
+            console.log("tur:acentataa")
             this.setState({ tip: tur })
         }
         else {
+            console.log("else girdi")
             this.setState({ tip: this.props.kSubeStore.editKSube.tip })
         }
 
         this.setState({
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
+            
         })
 
         if (isGranted('items_kareas_menu_view')) {
 
+            console.log("burda girdi")
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
             this.setState({
@@ -243,7 +247,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         this.setState({ id: this.props["match"].params["id"] });
         this.props.kSubeStore.get({ id: this.state.id })
 
-        setTimeout(() => this.pageSettings(), 500);
+        setTimeout(() => this.pageSettings(), 1000);
     }
 
     componentDidMount = async () => {

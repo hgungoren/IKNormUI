@@ -83,12 +83,12 @@ function KCartList({
 
         if (isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') || isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')) { setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount) }
         if (isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') || isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')) { setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') || isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')) { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') || isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')) { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') || isGranted('subitems.kareas.infobox.getcancelednormfillrequest')) { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') || isGranted('subitems.kareas.infobox.getacceptednormfillrequest')) { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') || isGranted('subitems.kareas.infobox.getpendingnormfillrequest')) { setPendingNormFillRequest(getPendingNormFillRequestCount) }
-        if (isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') || isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')  || isGranted('subitems.kareas.infobox.getpendingnormupdaterequest'))  { setPendingNormUpdateRequest(getPendingNormUpdateRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')    || isGranted('subitems.kareas.infobox.gettotalnormupdaterequest'))    { setTotalNormUpdateRequest(getTotalNormUpdateRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')   || isGranted('subitems.kareas.infobox.getcancelednormfillrequest'))   { setCanceledNormFillRequest(getCanceledNormFillRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')   || isGranted('subitems.kareas.infobox.getacceptednormfillrequest'))   { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')    || isGranted('subitems.kareas.infobox.getpendingnormfillrequest'))    { setPendingNormFillRequest(getPendingNormFillRequestCount) }
+        if (isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')   || isGranted('subitems.kareas.infobox.gettotalnormfillingrequest'))   { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
     }, 500)
 
 
