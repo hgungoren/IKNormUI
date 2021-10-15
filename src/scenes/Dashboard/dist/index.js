@@ -175,7 +175,7 @@ var Dashboard = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        setTimeout(function () { return _this.setState({ cardLoading: false }); }, 1000);
+                        setTimeout(function () { return _this.setState({ cardLoading: false }); }, 2000);
                         setTimeout(function () { return _this.setState({ barChartLoading: false }); }, 2000);
                         setTimeout(function () { return _this.setState({ pieChartLoading: false }); }, 1000);
                         currentDate = date_1.dateHelper.getTodayDate('tr');
@@ -231,7 +231,7 @@ var Dashboard = /** @class */ (function (_super) {
                 startDateOfWeek = moment_1["default"]().startOf('isoWeek').toDate();
                 endDateOfWeek = moment_1["default"]().endOf('isoWeek').toDate();
                 if (data === undefined)
-                    [];
+                    data = [];
                 result = data.filter(function (item) {
                     return moment_1["default"](item.creationTime).toDate().getTime() >= startDateOfWeek.getTime() &&
                         moment_1["default"](item.creationTime).toDate().getTime() <= endDateOfWeek.getTime();

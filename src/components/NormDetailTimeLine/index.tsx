@@ -17,6 +17,12 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
     return (
         <>
             <Modal title={title} centered visible={visible} onCancel={onCancel} width={'70%'} footer={[]}>
+
+                {console.log('visible', visible)}
+                {console.log('onCancel', onCancel)}
+                {console.log('title', title)}
+                {console.log('data', data)}
+                {console.log('norm', norm)}
                 <>
                     <Row gutter={16}>
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset: 0 }}>
