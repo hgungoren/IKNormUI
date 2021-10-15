@@ -173,6 +173,8 @@ export class Dashboard extends React.Component<Props, State> {
     const startDateOfWeek = moment().startOf('isoWeek').toDate();
     const endDateOfWeek = moment().endOf('isoWeek').toDate();
 
+
+    // Bu Alanı Düzenledim
     if (data === undefined) data = [];
 
 
