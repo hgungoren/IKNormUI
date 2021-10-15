@@ -22,8 +22,8 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 12, offset: 0 }}>
                             <Descriptions column={1} key={uuid()} size={'small'} title={L("RequestDetail")} bordered={true}>
                                 {norm !== undefined && <>
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.area.name")}>{norm.bolgeAdi}</Descriptions.Item>
-                                    <Descriptions.Item key={uuid()} label={L("table.norm.branch.name")}>{norm.subeAdi}</Descriptions.Item>
+                                    <Descriptions.Item key={'area_name' + norm.id} label={L("table.norm.area.name")}>{norm.bolgeAdi}</Descriptions.Item>
+                                    <Descriptions.Item key={'branch_name' + norm.id} label={L("table.norm.branch.name")}>{norm.subeAdi}</Descriptions.Item>
                                     {/* <Descriptions.Item key={uuid()} label={L("table.norm.creator.user.name")}> {norm.user.firstName} {norm.user.lastName}  </Descriptions.Item> */}
                                     <Descriptions.Item key={uuid()} label={L("table.norm.position")}>{norm.pozisyon}</Descriptions.Item>
                                     {norm.yeniPozisyon !== null && <Descriptions.Item key={uuid()} label={L("table.norm.newposition")}>{norm.yeniPozisyon}</Descriptions.Item>}
@@ -54,11 +54,11 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                             </Steps>
                             <Steps direction="vertical" >
                                 {
-                                    data !== undefined && data.map((record) => <>
-                                        <Step key={uuid()} status={(record.status === Status.Apporved) ? "finish" : (record.status === Status.Waiting ? "wait" : "error")}
+                                    data !== undefined && data.map((record, index) => <>
+                                        <Step key={index} status={(record.status === Status.Apporved) ? "finish" : (record.status === Status.Waiting ? "wait" : "error")}
                                             title={TalepDurumu[record.talepDurumuStr]}
-                                            description={<> 
-                                                {((record.lastModificationTime !== null && record.status !== Status.Waiting) && <DateCart date={record.lastModificationTime} />)} 
+                                            description={<>
+                                                {((record.lastModificationTime !== null && record.status !== Status.Waiting) && <DateCart date={record.lastModificationTime} />)}
                                                 <p className='step-description'> {(record.description !== null ? record.description : '')} </p></>} />
                                     </>)
                                 }

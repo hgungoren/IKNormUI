@@ -89,18 +89,7 @@ function KCartList({
         if ( isGranted('subitems.kareas.infobox.getacceptednormfillrequest')   || isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')) { setAcceptedNormFillRequest(getAcceptedNormFillRequestCount) }
         if ( isGranted('subitems.kareas.infobox.getpendingnormfillrequest')    || isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')) { setPendingNormFillRequest(getPendingNormFillRequestCount) }
         if ( isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')   || isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')) { setTotalNormFillingRequest(getTotalNormFillingRequestCount) }
-
-
-          
-          
-          
-          
-         
-          
-          
-          
-
-
+ 
     }, 500)
 
 
