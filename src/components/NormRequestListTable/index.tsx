@@ -382,7 +382,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
                     {
                         (kNormDetails !== undefined && this.props.isConfirmOrCancel && (!tableTitle.search('Pending') || !tableTitle.search('Total')) && NormStatus[norm.normStatusValue] === NormStatus.Beklemede &&
-                            kNormDetails.items.filter(x => x.status == Status.Waiting && x.kNormId === norm.id && this.props.sessionStore?.currentLogin.user.id === x.userId && x.visible).length > 0) && <>
+                            kNormDetails.items.filter(x => x.status === Status.Waiting && x.kNormId === norm.id && this.props.sessionStore?.currentLogin.user.id === x.userId && x.visible).length > 0) && <>
 
                             {
                                 isGranted('items.knorm.approve.btn') && <Tooltip placement="topLeft" title={L('Approve')}>
@@ -428,10 +428,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             {
                                 isModal ? (
-                                    <Table
-
-                                        locale={{ emptyText: L('NoData') }}
-
+                                    <Table 
+                                        locale={{ emptyText: L('NoData') }} 
                                         bordered={false}
                                         columns={columnsNorm}
                                         pagination={tablePagination}
@@ -440,10 +438,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                         onChange={this.handlePagination}
                                     />
                                 ) : (
-                                    <Table
-
-                                        locale={{ emptyText: L('NoData') }}
-
+                                    <Table 
+                                        locale={{ emptyText: L('NoData') }} 
                                         bordered={false}
                                         pagination={tablePagination}
                                         columns={columnsNorm}
