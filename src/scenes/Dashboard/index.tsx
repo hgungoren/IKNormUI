@@ -126,7 +126,9 @@ export class Dashboard extends React.Component<Props, State> {
     setTimeout(() => this.setState({ pieChartLoading: false }), 1000);
     let currentDate = dateHelper.getTodayDate('tr');
     let startOfMonth = dateHelper.getMonthFirstDate('tr');
+    
 
+     
     if (
       isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')  ||
       isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')   ||
@@ -135,7 +137,8 @@ export class Dashboard extends React.Component<Props, State> {
       isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')   ||
       isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
       isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')||
-      isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')) {
+      isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')
+      ) {
       this.setState({ dateFilter: true })
       await this.getNormRequests(startOfMonth, currentDate);
       await this.getNormRequestCounts(startOfMonth, currentDate);
