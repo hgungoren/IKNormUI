@@ -13,7 +13,6 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var antd_1 = require("antd");
 var RoleDetailDrawer = function (_a) {
     var visible = _a.visible, showOrHideDrawer = _a.showOrHideDrawer, permissions = _a.permissions, roleStore = _a.roleStore;
-    console.log(permissions);
     var getChildItems = function (prefix, suffix, key) {
         var children = permissions.filter(function (y) { return y.name
             .startsWith(prefix + '.' + suffix); })
@@ -52,19 +51,18 @@ var RoleDetailDrawer = function (_a) {
                 children: f.children
             }); }); });
             var permission = roleStore.roleEdit.grantedPermissionNames;
-            console.log(permission);
             for (var _i = 0, selectedChildItems_1 = selectedChildItems; _i < selectedChildItems_1.length; _i++) {
                 var item = selectedChildItems_1[_i];
                 for (var _a = 0, item_1 = item; _a < item_1.length; _a++) {
                     var property = item_1[_a];
                     if (permission.includes(property.value)) {
-                        for (var _b = 0, _c = property.children; _b < _c.length; _b++) {
-                            var subItem = _c[_b];
-                            if (permission.includes(subItem.value)) {
-                                permissions.push(property);
-                            }
-                        }
                         permissions.push(property);
+                    }
+                    for (var _b = 0, _c = property.children; _b < _c.length; _b++) {
+                        var subProperty = _c[_b];
+                        if (permission.includes(subProperty.value)) {
+                            permissions.push(subProperty);
+                        }
                     }
                 }
             }
@@ -102,9 +100,7 @@ var RoleDetailDrawer = function (_a) {
         roleStore.update(role);
         setTimeout(function () { showOrHideDrawer(); }, 500);
     };
-    var onSelect = function (x) {
-        console.log(x);
-    };
+    var onSelect = function (x) { };
     var content = function () {
         return react_1["default"].createElement(antd_1.Tree, { checkable: true, defaultExpandedKeys: getSelectedItems().map(function (x) { return x.key; }), defaultSelectedKeys: getSelectedItems().map(function (x) { return x.key; }), defaultCheckedKeys: getSelectedItems().map(function (x) { return x.key; }), onCheck: function (x) { return onCheck(x); }, onSelect: onSelect, treeData: options });
     };

@@ -123,6 +123,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
 
 
   showDrawer = async (entityDto: EntityDto) => {
+ 
     await this.props.roleStore.getRoleForEdit(entityDto);
     await this.props.roleStore.getAllPermissions();
     this.setState({ drawerVisible: true, roleId: entityDto.id });
@@ -190,7 +191,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
                       isGranted('subitems.role.table.create') && <Menu.Item key={0} onClick={() => this.showDrawer({ id: item.id })}>{L('AddRole')}</Menu.Item>
                     }
                     {
-                      isGranted('subitems.role.table.edit') && <Menu.Item   key={1} onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
+                      isGranted('subitems.role.table.edit') && <Menu.Item key={1} onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                     }
                     {
                       isGranted('subitems.role.table.delete') && <Menu.Item key={2} onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item>
