@@ -5,13 +5,8 @@ import { DataNode } from 'antd/lib/tree';
 import { Drawer, Button, Col, Row, Tree } from 'antd';
 import { GetAllPermissionsOutput } from '../../services/role/dto/getAllPermissionsOutput';
 
-const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore }) => {
-
-    console.log(permissions)
-
-
-    const getChildItems = (prefix: string, suffix: string, key: string) => {
-
+const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore }) => { 
+    const getChildItems = (prefix: string, suffix: string, key: string) => { 
         let children = permissions.filter(y => y.name
             .startsWith(prefix + '.' + suffix))
             .map((c: GetAllPermissionsOutput, i: number) => {
@@ -25,7 +20,6 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
                     children: getChildItems('subitems' + '.' + suffix, name, _key)
                 }
             });
-
         return children;
     }
 
@@ -44,19 +38,6 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     const getSelectedItems = () => {
         let permissions = [] as DataNode[];
         let childItems = options.map(x => x.children);
@@ -71,25 +52,25 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
             })))
 
             let permission = roleStore.roleEdit.grantedPermissionNames;
-            console.log(permission)
-            for (let item of selectedChildItems) {
 
+            for (let item of selectedChildItems) {
                 for (let property of item) {
 
                     if (permission.includes(property.value)) {
-                        for (let subItem of property.children) {
-                            if (permission.includes(subItem.value)) {
-                                permissions.push(property)
-                            }
-                        }
                         permissions.push(property)
+                    }
+
+                    for (let subProperty of property.children) {
+                        if (permission.includes(subProperty.value)) {
+                            permissions.push(subProperty)
+                        }
                     }
                 }
             }
         }
-
         return permissions;
     }
+
 
     const getItems = () => {
         let permissions = [] as DataNode[];
@@ -99,13 +80,10 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
             let selectedChildItems = childItems.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value, children: f.children })))
             let currentItems = selectedChildItems.filter(x => x.length > 0).map(x => x)
             for (let item of currentItems) {
-
                 for (let property of item) {
-
                     for (let subItem of property.children) {
                         permissions.push(subItem)
                     }
-
                     permissions.push(property)
                 }
             }
@@ -115,7 +93,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
 
     const onCheck = (selected) => {
         let permissions = [] as string[];
-        permissions = getItems().filter(x => selected.includes(x.key)).map((x: any) => x.value);
+        permissions = getItems().filter(x => selected.includes(x.key)).map((x: any) => x.value); 
         setGrantedPermissions(permissions)
     }
 
@@ -126,9 +104,7 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
         setTimeout(() => { showOrHideDrawer() }, 500)
     }
 
-    const onSelect = (x) => {
-        console.log(x)
-    }
+    const onSelect = (x) => { }
 
     const content = () => {
         return <Tree
