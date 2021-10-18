@@ -130,12 +130,12 @@ export class Dashboard extends React.Component<Props, State> {
 
 
     if (
-      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
-      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
-      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
-      isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
+      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')   ||
+      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')    ||
+      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')   ||
+      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')   ||
+      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')    ||
+      isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')  ||
       isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
       isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')
     ) {

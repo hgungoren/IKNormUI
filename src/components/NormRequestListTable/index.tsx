@@ -221,8 +221,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             onOk: () => {
                 const form = this.formRef.current;
                 form!.validateFields()
-                    .then(async (values: any) => {
-
+                    .then(async (values: any) => { 
                         values.status = Status.Reject;
                         await this.props.kNormDetailStore.update(values)
                             .then(() => {
@@ -231,8 +230,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                     normStatus: NormStatus.Iptal
                                 }).then(() => {
                                     this.notification('error', {
-                                        title: 'NormRejectNotificationMessageTitle',
-                                        description: 'NormRejectNotificationMessageDescription'
+                                        title: L('NormRejectNotificationMessageTitle'),
+                                        description: L('NormRejectNotificationMessageDescription')
                                     });
                                     this.getAllNormDetails();
                                     this.getNormRequestsAll(this.state.dateStart, this.state.dateEnd);
@@ -428,8 +427,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                             {
                                 isModal ? (
-                                    <Table 
-                                        locale={{ emptyText: L('NoData') }} 
+                                    <Table
+                                        locale={{ emptyText: L('NoData') }}
                                         bordered={false}
                                         columns={columnsNorm}
                                         pagination={tablePagination}
@@ -438,8 +437,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                                         onChange={this.handlePagination}
                                     />
                                 ) : (
-                                    <Table 
-                                        locale={{ emptyText: L('NoData') }} 
+                                    <Table
+                                        locale={{ emptyText: L('NoData') }}
                                         bordered={false}
                                         pagination={tablePagination}
                                         columns={columnsNorm}
@@ -454,7 +453,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         </Col>
                     </Row>
                 </Card>
-                <NormDetailTimeLine 
+                <NormDetailTimeLine
                     data={kNormAllDetails}
                     title={subeOrBolgeAdi}
                     norm={getAllKNormOutput}

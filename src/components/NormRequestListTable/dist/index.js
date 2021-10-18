@@ -209,8 +209,8 @@ var NormRequestListTable = /** @class */ (function (_super) {
                                                     normStatus: normStatus_1["default"].Iptal
                                                 }).then(function () {
                                                     _this.notification('error', {
-                                                        title: 'NormRejectNotificationMessageTitle',
-                                                        description: 'NormRejectNotificationMessageDescription'
+                                                        title: abpUtility_1.L('NormRejectNotificationMessageTitle'),
+                                                        description: abpUtility_1.L('NormRejectNotificationMessageDescription')
                                                     });
                                                     _this.getAllNormDetails();
                                                     _this.getNormRequestsAll(_this.state.dateStart, _this.state.dateEnd);

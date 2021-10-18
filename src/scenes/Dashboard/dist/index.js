@@ -230,6 +230,7 @@ var Dashboard = /** @class */ (function (_super) {
                 }
                 startDateOfWeek = moment_1["default"]().startOf('isoWeek').toDate();
                 endDateOfWeek = moment_1["default"]().endOf('isoWeek').toDate();
+                // Bu Alanı Düzenledim
                 if (data === undefined)
                     data = [];
                 result = data.filter(function (item) {
