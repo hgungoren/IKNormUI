@@ -230,7 +230,10 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
               xl={{ span: 1, offset: 21 }}
               xxl={{ span: 1, offset: 21 }}
             >
-              {isGranted('subitems.role.table.role_new_create') && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />}
+              {
+               isGranted('items.role.table.role.new.create') &&
+               <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })} />
+               }
             </Col>
           </Row>
           <Row>
