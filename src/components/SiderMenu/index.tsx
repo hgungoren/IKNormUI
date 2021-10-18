@@ -41,7 +41,7 @@ const SiderMenu = (props: ISiderMenuProps) => {
             return (
               <Menu.Item key={route.path} onClick={() => history.push(route.path)}>
                 <route.icon />
-                <span>{L(route.title)}</span>
+                <span> {' '+ L(route.title) }</span>
               </Menu.Item>
             );
           })}

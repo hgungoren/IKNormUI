@@ -98,7 +98,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.formRef = React.createRef();
         _this.state = {
             detaillModalVisible: false,
-            maxNormResultCount: 5,
+            maxNormResultCount: 15,
             modalVisible: false,
             cardLoading: true,
             groupEmployee: {},
@@ -146,7 +146,6 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.pageSettings = function () { return __awaiter(_this, void 0, void 0, function () {
             var tur;
             return __generator(this, function (_a) {
-                console.log('this.props.kSubeStore.editKSube', this.props.kSubeStore.editKSube);
                 tur = this.props.kSubeStore.editKSube.tur;
                 if (tur === 'Acente') {
                     this.setState({ tip: tur });
@@ -173,8 +172,9 @@ var KSubeDetay = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 this.setState({ id: this.props["match"].params["id"] });
-                this.props.kSubeStore.get({ id: this.state.id });
-                setTimeout(function () { return _this.pageSettings(); }, 500);
+                this.props.kSubeStore.get({ id: this.state.id }).then(function () {
+                    _this.pageSettings();
+                });
                 return [2 /*return*/];
             });
         }); };
@@ -344,7 +344,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.props.kInkaLookUpTableStore
                             .getAll({
-                            maxResultCount: 1000,
+                            maxResultCount: 2000,
                             keyword: key,
                             skipCount: 0
                         })];
@@ -375,7 +375,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.props.kSubeNormStore.getAllNorms({
-                            maxResultCount: 10000,
+                            maxResultCount: 20000,
                             skipCount: 0,
                             keyword: '',
                             id: this.state.id

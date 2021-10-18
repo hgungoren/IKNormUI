@@ -85,7 +85,7 @@ class CreateNormForm extends React.Component<Props, State> {
 
   visibleEmployee = (param) => {
 
-    
+
     if (param === "Ayrilma") {
       this.setState({ employeeVisible: true })
     }
@@ -283,15 +283,17 @@ class CreateNormForm extends React.Component<Props, State> {
                   <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
                     <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                       {
-                        Object.keys(TalepTuru).map((value, index) => <Option key={'a'+value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
+                        Object.keys(TalepTuru).map((value, index) => <Option key={'a' + value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
                       }
                     </Select>
                   </Form.Item>
 
                   {
                     this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
-                      <Select notFoundContent={{ emptyText: L('NoSelectData') }} placeholder={L('PleaseSelect')}
-                        onSelect={(x: any) => this.setState({ pozisyon: x.toString() })} >
+                      <Select
+                        notFoundContent={{ emptyText: L('NoSelectData') }}
+                        placeholder={L('PleaseSelect')}
+                        onSelect={(x: any) => position !== undefined && this.setState({ pozisyon: x.toString() })} >
                         {
                           position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>)
                         }

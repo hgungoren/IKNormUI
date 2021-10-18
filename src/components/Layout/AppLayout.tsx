@@ -51,8 +51,7 @@ class AppLayout extends React.Component<any> {
         <SiderMenu path={path} onCollapse={this.onCollapse} history={history} collapsed={collapsed} />
         <Layout>
           <Layout.Header style={{ background: '#fff', minHeight: 52, padding: 0 }}>
-            <Header 
-            
+            <Header  
             // notificationStore={this.props.notificationStore}
               sessionStore={this.props.sessionStore}
               accountStore={this.props.accountStore}

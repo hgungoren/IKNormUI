@@ -7,6 +7,8 @@ import { GetAllPermissionsOutput } from '../../services/role/dto/getAllPermissio
 
 const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore }) => {
 
+    console.log(permissions)
+
 
     const getChildItems = (prefix: string, suffix: string, key: string) => {
 
@@ -40,28 +42,48 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
         };
     }))] as DataNode[];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const getSelectedItems = () => {
         let permissions = [] as DataNode[];
-
         let childItems = options.map(x => x.children);
-        if (childItems.length > 0) {
-            let selectedChildItems = childItems.map((x: any) => x.map(f => ({ key: f.key, title: f.title, value: f.value, children: f.children })))
-            let permission = roleStore.roleEdit.grantedPermissionNames;
 
+        if (childItems.length > 0) {
+
+            let selectedChildItems = childItems.map((x: any) => x.map(f => ({
+                key: f.key,
+                title: f.title,
+                value: f.value,
+                children: f.children
+            })))
+
+            let permission = roleStore.roleEdit.grantedPermissionNames;
+            console.log(permission)
             for (let item of selectedChildItems) {
+
                 for (let property of item) {
 
                     if (permission.includes(property.value)) {
-
                         for (let subItem of property.children) {
                             if (permission.includes(subItem.value)) {
                                 permissions.push(property)
                             }
                         }
-
                         permissions.push(property)
-                    } 
-                    
+                    }
                 }
             }
         }

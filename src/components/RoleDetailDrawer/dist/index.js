@@ -13,6 +13,7 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var antd_1 = require("antd");
 var RoleDetailDrawer = function (_a) {
     var visible = _a.visible, showOrHideDrawer = _a.showOrHideDrawer, permissions = _a.permissions, roleStore = _a.roleStore;
+    console.log(permissions);
     var getChildItems = function (prefix, suffix, key) {
         var children = permissions.filter(function (y) { return y.name
             .startsWith(prefix + '.' + suffix); })
@@ -44,8 +45,14 @@ var RoleDetailDrawer = function (_a) {
         var permissions = [];
         var childItems = options.map(function (x) { return x.children; });
         if (childItems.length > 0) {
-            var selectedChildItems = childItems.map(function (x) { return x.map(function (f) { return ({ key: f.key, title: f.title, value: f.value, children: f.children }); }); });
+            var selectedChildItems = childItems.map(function (x) { return x.map(function (f) { return ({
+                key: f.key,
+                title: f.title,
+                value: f.value,
+                children: f.children
+            }); }); });
             var permission = roleStore.roleEdit.grantedPermissionNames;
+            console.log(permission);
             for (var _i = 0, selectedChildItems_1 = selectedChildItems; _i < selectedChildItems_1.length; _i++) {
                 var item = selectedChildItems_1[_i];
                 for (var _a = 0, item_1 = item; _a < item_1.length; _a++) {

@@ -140,7 +140,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     async getNormRequests() {
         this.props.kNormStore.getAll({
-            
+
             id: this.state.id,
             keyword: this.state.normFilter,
             maxResultCount: this.state.maxNormResultCount,
@@ -210,28 +210,25 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     pageSettings = async () => {
 
-
-
-      
         let tur = this.props.kSubeStore.editKSube.tur;
-     
+
         if (tur === 'Acente') {
-           
+
             this.setState({ tip: tur })
         }
         else {
-           
+
             this.setState({ tip: this.props.kSubeStore.editKSube.tip })
         }
 
         this.setState({
             bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
-            
+
         })
 
         if (isGranted('items_kareas_menu_view')) {
 
-           
+
             this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
 
             this.setState({
@@ -245,9 +242,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     setPageState = async () => {
         this.setState({ id: this.props["match"].params["id"] });
-        this.props.kSubeStore.get({ id: this.state.id })
-
-        setTimeout(() => this.pageSettings(), 1000);
+        this.props.kSubeStore.get({ id: this.state.id }).then(() => {
+            this.pageSettings()
+        })
     }
 
     componentDidMount = async () => {
@@ -569,9 +566,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         }  >
                     </PageHeader>
                 </Card>
-                    
-                {  
-                  
+
+                {
+
                     isGranted('subitems.branch.detail.total.table.view') && <Card style={{ marginBottom: 20 }} hoverable>
                         <Row style={{ marginTop: 20 }}>
                             <Col
