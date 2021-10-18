@@ -499,6 +499,7 @@ class KSube extends AppComponentBase<Props, State>{
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+<<<<<<< HEAD
                     getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')}
                     getPendingNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')}
                     getTotalNormFillingRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
@@ -508,6 +509,16 @@ class KSube extends AppComponentBase<Props, State>{
                     getAcceptedNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')}
                     getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')}
               
+=======
+                    getTotalNormUpdateRequestPermission={true}
+                    getPendingNormFillRequestPermission={true}
+                    getTotalNormFillingRequestPermission={true}
+                    getAcceptedNormFillRequestPermission={true}
+                    getCanceledNormFillRequestPermission={true}
+                    getPendingNormUpdateRequestPermission={true}
+                    getAcceptedNormUpdateRequestPermission={true}
+                    getCanceledNormUpdateRequestPermission={true}
+>>>>>>> c913981981605339ce8b61a81dea055254056298
                 />
 
                 <Card hoverable>
