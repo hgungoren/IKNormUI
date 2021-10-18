@@ -71,7 +71,8 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
             })))
 
             let permission = roleStore.roleEdit.grantedPermissionNames;
-            console.log(permission)
+            
+            
             for (let item of selectedChildItems) {
 
                 for (let property of item) {
