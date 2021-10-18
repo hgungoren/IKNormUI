@@ -128,17 +128,18 @@ export class Dashboard extends React.Component<Props, State> {
     let startOfMonth = dateHelper.getMonthFirstDate('tr');
 
 
-
     if (
-      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')   ||
-      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')    ||
-      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest')   ||
-      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')   ||
-      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')    ||
-      isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')  ||
+
+      isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') ||
+      isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') ||
+      isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') ||
+      isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') ||
       isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') ||
       isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')
     ) {
+
       this.setState({ dateFilter: true })
       await this.getNormRequests(startOfMonth, currentDate);
       await this.getNormRequestCounts(startOfMonth, currentDate);
@@ -169,14 +170,10 @@ export class Dashboard extends React.Component<Props, State> {
       week.push(moment(moment(weekStart).add(i, 'days')).toDate());
     }
 
-
     const startDateOfWeek = moment().startOf('isoWeek').toDate();
     const endDateOfWeek = moment().endOf('isoWeek').toDate();
 
-
-    // Bu Alanı Düzenledim
     if (data === undefined) data = [];
-
 
     let result = data.filter((item: GetAllKNormOutput) =>
       moment(item.creationTime).toDate().getTime() >= startDateOfWeek.getTime() &&
@@ -366,15 +363,26 @@ export class Dashboard extends React.Component<Props, State> {
 
         <Row gutter={16}>
           <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
-            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
-              <KLineChart data={this.state.totalFill} />
-            </Card>
+            {
+              isGranted('items.dashboard.view.total.norm.fill.requests.weekly.statistics') &&
+
+              <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormFillingRequestWeeklyStatistics')} loading={lineFillLoading} bordered={false}>
+                <KLineChart data={this.state.totalFill} />
+              </Card>
+            }
           </Col>
-          <Col  {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
-            <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
-              <KLineChart data={this.state.totalUpdate} />
-            </Card>
+
+          <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
+            {
+              isGranted('items.dashboard.view.total.norm.update.requests.weekly.statistics') &&
+              <Card extra={<Button onClick={this.changeLineViewHandler} icon={(lineChartView ? <FullscreenExitOutlined /> : <FullscreenOutlined />)} />} hoverable className={'dashboardBox'} title={L('TotalNormUpdateRequestWeeklyStatistics')} loading={lineUpdateLoading} bordered={false}>
+                <KLineChart data={this.state.totalUpdate} />
+              </Card>
+            }
+
           </Col>
+
+
         </Row>
       </React.Fragment>
     );

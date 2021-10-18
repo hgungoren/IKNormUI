@@ -230,7 +230,6 @@ var Dashboard = /** @class */ (function (_super) {
                 }
                 startDateOfWeek = moment_1["default"]().startOf('isoWeek').toDate();
                 endDateOfWeek = moment_1["default"]().endOf('isoWeek').toDate();
-                // Bu Alanı Düzenledim
                 if (data === undefined)
                     data = [];
                 result = data.filter(function (item) {
@@ -370,10 +369,10 @@ var Dashboard = /** @class */ (function (_super) {
         return (React.createElement(React.Fragment, null,
             React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "", bolgeId: 0, subeObjId: 0, normCount: normCount, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
             React.createElement(antd_1.Row, { gutter: 16 },
-                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)),
+                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)), abpUtility_1.isGranted('items.dashboard.view.total.norm.fill.requests.weekly.statistics') &&
                     React.createElement(antd_1.Card, { extra: React.createElement(antd_1.Button, { onClick: this.changeLineViewHandler, icon: (lineChartView ? React.createElement(icons_1.FullscreenExitOutlined, null) : React.createElement(icons_1.FullscreenOutlined, null)) }), hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormFillingRequestWeeklyStatistics'), loading: lineFillLoading, bordered: false },
                         React.createElement(KLineChart_1["default"], { data: this.state.totalFill }))),
-                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)),
+                React.createElement(antd_1.Col, __assign({}, (lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)), abpUtility_1.isGranted('items.dashboard.view.total.norm.update.requests.weekly.statistics') &&
                     React.createElement(antd_1.Card, { extra: React.createElement(antd_1.Button, { onClick: this.changeLineViewHandler, icon: (lineChartView ? React.createElement(icons_1.FullscreenExitOutlined, null) : React.createElement(icons_1.FullscreenOutlined, null)) }), hoverable: true, className: 'dashboardBox', title: abpUtility_1.L('TotalNormUpdateRequestWeeklyStatistics'), loading: lineUpdateLoading, bordered: false },
                         React.createElement(KLineChart_1["default"], { data: this.state.totalUpdate }))))));
     };

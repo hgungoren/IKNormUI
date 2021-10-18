@@ -100,7 +100,7 @@ class KBolgeNormTable extends React.Component<Props> {
         return (
             <>
                 {
-                    isGranted('kbolge.norm.view') &&
+                    //isGranted('kbolge.norm.view') &&
                     <Table
                         locale={{ emptyText: L('NoData') }}
                         rowKey={(record) => record.id.toString()}

@@ -163,9 +163,12 @@ class KBolge extends AppComponentBase<Props, State> {
     }
 
     kPosizyonKontrol = (key: string) => {
+    
         this.getKSubeNorms();
+  
         const form = this.formRef.current;
-        if (this.props.kSubeNormStore.norms.items.filter((x) => x.pozisyon === key).length > 0) {
+    
+        if ( this.props.kSubeNormStore.norms!==undefined  &&  this.props.kSubeNormStore.norms.items.filter((x) => x.pozisyon === key).length > 0) {
             message.error({
                 content: L('UniqSelect'),
                 style: {
@@ -174,6 +177,7 @@ class KBolge extends AppComponentBase<Props, State> {
             })
             form!.resetFields();
         }
+        
     }
 
     openNotificationWithIcon = type => {

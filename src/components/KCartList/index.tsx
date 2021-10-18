@@ -96,8 +96,14 @@ function KCartList({
     return (
         <>
             <Row gutter={16}>
-                <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
-                <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />
+                {isGranted('subitems.dashboard.infobox.norm.count') &&       
+                 <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('NormCount')} icon='UsergroupAddOutlined' number={normCount} />
+                }
+                {
+                   isGranted('subitems.dashboard.infobox.emplooye.count') &&
+                   <KCart cursor={'context-menu'} onClick={() => setDefault('')} cardLoading={cardLoading} color='rgb(64, 169, 255)' title={L('EmployeeCount')} icon='UserAddOutlined' number={kPersonelCount} />   
+                }
+                
             </Row>
 
             {
@@ -109,28 +115,32 @@ function KCartList({
 
             <Row gutter={16}>
                 {
-                    (isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') || isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')) && <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}
+                    (
+                        isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest') &&  isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')) &&
+                          <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}
                         cardLoading={cardLoading}
                         color='rgb(83, 29, 171)'
                         title={L('TotalNormFillingRequest')}
                         icon='FileDoneOutlined'
                         number={totalNormFillingRequest} />
+
+                        
                 }
                 {
 
-                    (isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') || isGranted('subitems.kareas.infobox.getpendingnormfillrequest')) && <KCart onClick={() => onOpenModal('getPendingNormFillRequest')}
+                    (isGranted('subitems.dashboard.infobox.getpendingnormfillrequest') && isGranted('subitems.kareas.infobox.getpendingnormfillrequest')) && <KCart onClick={() => onOpenModal('getPendingNormFillRequest')}
                         cardLoading={cardLoading} color='rgb(250, 173, 20)'
                         title={L('PendingNormFillRequest')} icon='ClockCircleOutlined'
                         number={pendingNormFillRequest} />
                 }
                 {
-                    (isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') || isGranted('subitems.kareas.infobox.getacceptednormfillrequest')) && <KCart onClick={() => onOpenModal('getAcceptedNormFillRequest')}
+                    (isGranted('subitems.dashboard.infobox.getacceptednormfillrequest') && isGranted('subitems.kareas.infobox.getacceptednormfillrequest')) && <KCart onClick={() => onOpenModal('getAcceptedNormFillRequest')}
                         cardLoading={cardLoading} color='#1DA57A'
                         title={L('AcceptedNormFillRequest')} icon='CheckCircleOutlined'
                         number={acceptedNormFillRequest} />
                 }
                 {
-                    (isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') || isGranted('subitems.kareas.infobox.getcancelednormfillrequest')) && <KCart onClick={() => onOpenModal('getCanceledNormFillRequest')}
+                    (isGranted('subitems.dashboard.infobox.getcancelednormfillrequest') && isGranted('subitems.kareas.infobox.getcancelednormfillrequest')) && <KCart onClick={() => onOpenModal('getCanceledNormFillRequest')}
                         cardLoading={cardLoading} color='#fa541c'
                         title={L('CanceledNormFillRequest')} icon='StopOutlined'
                         number={canceledNormFillRequest} />
@@ -139,25 +149,25 @@ function KCartList({
 
             <Row gutter={16}>
                 {
-                    (isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') || isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')) && <KCart onClick={() => onOpenModal('getTotalNormUpdateRequest')}
+                    (isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest') && isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')) && <KCart onClick={() => onOpenModal('getTotalNormUpdateRequest')}
                         cardLoading={cardLoading} color='rgb(83, 29, 171)'
                         title={L('TotalNormUpdateRequest')} icon='FileDoneOutlined'
                         number={totalNormUpdateRequest} />
                 }
                 {
-                    (isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') || isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')) && <KCart onClick={() => onOpenModal('getPendingNormUpdateRequest')}
+                    (isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest') && isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')) && <KCart onClick={() => onOpenModal('getPendingNormUpdateRequest')}
                         cardLoading={cardLoading} color='rgb(250, 173, 20)'
                         title={L('PendingNormUpdateRequest')} icon='ClockCircleOutlined'
                         number={pendingNormUpdateRequest} />
                 }
                 {
-                    (isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') || isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')) && <KCart onClick={() => onOpenModal('getAcceptedNormUpdateRequest')}
+                    (isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest') && isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')) && <KCart onClick={() => onOpenModal('getAcceptedNormUpdateRequest')}
                         cardLoading={cardLoading} color='#1DA57A'
                         title={L('AcceptedNormUpdateRequest')} icon='CheckCircleOutlined'
                         number={acceptedNormUpdateRequest} />
                 }
                 {
-                    (isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') || isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')) && <KCart onClick={() => onOpenModal('getCanceledNormUpdateRequest')}
+                    (isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') && isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')) && <KCart onClick={() => onOpenModal('getCanceledNormUpdateRequest')}
                         cardLoading={cardLoading} color='#fa541c'
                         title={L('CanceledNormUpdateRequest')} icon='StopOutlined'
                         number={canceledNormUpdateRequest} />
