@@ -31,13 +31,13 @@ var RoleDetailDrawer = function (_a) {
     };
     var _b = react_1.useState(['']), grantedPermissions = _b[0], setGrantedPermissions = _b[1];
     var options = __spreadArrays(new Set(permissions.filter(function (x) { return x.name.startsWith('pages'); }).map(function (x, y) {
-        var name = x.name.split('.')[1];
+        var name = x.name.split('.');
         var key = "0-" + y;
         return {
             title: abpUtility_1.L(x.displayName),
             key: key,
             value: x.displayName,
-            children: getChildItems('items', name, key)
+            children: getChildItems('items', name[1], key)
         };
     })));
     var getSelectedItems = function () {

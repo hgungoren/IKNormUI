@@ -358,6 +358,17 @@ export class Dashboard extends React.Component<Props, State> {
           getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
           getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+
+
+          getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
+          getPendingNormFillRequestPermission={true}
+          getTotalNormFillingRequestPermission={true}
+          getAcceptedNormFillRequestPermission={true}
+          getCanceledNormFillRequestPermission={true}
+          getPendingNormUpdateRequestPermission={true}
+          getAcceptedNormUpdateRequestPermission={true}
+          getCanceledNormUpdateRequestPermission={true}
+
         />
 
 

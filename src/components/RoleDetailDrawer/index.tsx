@@ -24,20 +24,21 @@ const RoleDetailDrawer = ({ visible, showOrHideDrawer, permissions, roleStore })
     }
 
     const [grantedPermissions, setGrantedPermissions] = useState([''])
-
+ 
     const options = [...new Set(permissions.filter(x => x.name.startsWith('pages')).map((x: GetAllPermissionsOutput, y: number) => {
-        let name = x.name.split('.')[1];
-        let key = `0-${y}`;
+ 
+        let name = x.name.split('.');
+        let key = `0-${y}`;  
         return {
             title: L(x.displayName),
             key: key,
             value: x.displayName,
-            children: getChildItems('items', name, key)
+            children: getChildItems('items', name[1], key)
         };
+
     }))] as DataNode[];
-
-
-
+ 
+ 
     const getSelectedItems = () => {
         let permissions = [] as DataNode[];
         let childItems = options.map(x => x.children);

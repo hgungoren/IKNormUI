@@ -499,6 +499,14 @@ class KSube extends AppComponentBase<Props, State>{
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+                    getTotalNormUpdateRequestPermission={true}
+                    getPendingNormFillRequestPermission={true}
+                    getTotalNormFillingRequestPermission={true}
+                    getAcceptedNormFillRequestPermission={true}
+                    getCanceledNormFillRequestPermission={true}
+                    getPendingNormUpdateRequestPermission={true}
+                    getAcceptedNormUpdateRequestPermission={true}
+                    getCanceledNormUpdateRequestPermission={true}
                 />
 
                 <Card hoverable>
