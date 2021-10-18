@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Card, Col, Row } from 'antd';
+import { Breadcrumb, Card, Col, PageHeader, Row } from 'antd';
 import Stores from '../../stores/storeIdentifier';
 import { inject, observer } from 'mobx-react';
 import AuthenticationStore from '../../stores/authenticationStore';
@@ -10,6 +10,8 @@ import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 // import NotificationStore from '../../stores/notificationStore';
 import InformationCart from '../../components/InformationCard';
+import { isGranted, L } from '../../lib/abpUtility';
+import { Link } from 'react-router-dom';
 
 
 
@@ -39,6 +41,21 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
       alert(userNotification)
      })
     return (
+      <>
+            <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {L('pages.home')} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
+ 
+
       <Row gutter={16} >
 
         <Col
@@ -65,6 +82,7 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
           </Card>
         </Col>
       </Row>
+      </>
     );
   }
 }

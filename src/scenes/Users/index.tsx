@@ -10,8 +10,9 @@ import { EntityDto } from '../../services/dto/entityDto';
 import AppComponentBase from '../../components/AppComponentBase';
 import CreateOrUpdateUser from './components/createOrUpdateUser';
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table, Tag } from 'antd';
+import { Breadcrumb, Button, Card, Col, Dropdown, Input, Menu, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { Link } from 'react-router-dom';
 
 
 
@@ -205,11 +206,27 @@ class User extends AppComponentBase<IUserProps, IUserState> {
             </Dropdown>
           </div>
         ), responsive: ['sm'] as Breakpoint[]
-      },
+      }, 
     ];
 
     return (
       <>
+
+               
+       <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {L('pages.user')} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
+
+
         <Card>
           <Row>
             <Col

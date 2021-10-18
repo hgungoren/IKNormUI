@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Card, Input, Row, DatePicker, Select, Radio, Form, Button, Checkbox, Upload } from 'antd';
+import { Tabs, Card, Input, Row, DatePicker, Select, Radio, Form, Button, Checkbox, Upload, PageHeader, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import './index.less';
 
@@ -7,6 +7,8 @@ import rules from './HasarTazmin.validation';
 import { FormInstance } from 'antd/lib/form';
 import FormItem from 'antd/lib/form/FormItem';
 import { UploadOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { isGranted, L } from '../../lib/abpUtility';
 
 export interface Props {
   formRef: React.RefObject<FormInstance>;
@@ -21,6 +23,8 @@ const Demo = (props: Props) => {
   const { TabPane } = Tabs;
   const { Option } = Select;
   const [value, setValue] = React.useState(1);
+  
+ const[visibleEvrakSeriSiraNo,setvisibleEvrakSeriSiraNo]=useState(true)
   const [visible, setVisible] = useState(true);
   const [visibleTc, SetVisibleTc] = useState(false);
   const [visibleVk, SetVisibleVk] = useState(false);
@@ -34,8 +38,10 @@ const Demo = (props: Props) => {
     setValue(e.target.value);
     if (e.target.value === 2) {
       setVisible(false);
+      setvisibleEvrakSeriSiraNo(false)
     } else {
       setVisible(true);
+      setvisibleEvrakSeriSiraNo(true)
     }
   };
 
@@ -129,6 +135,21 @@ const Demo = (props: Props) => {
 
   return (
     <div>
+
+                <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
+
+
       <Form ref={props.formRef} onFinish={onFinish}      {...formItemLayout} layout="horizontal">
         <Card title="Hasar Tazmin Formu Oluştur" className={'Genelcard'}>
           <Tabs defaultActiveKey="1" onChange={changeTab} activeKey={activeTabKey} tabBarGutter={50}  >
@@ -163,9 +184,15 @@ const Demo = (props: Props) => {
                 </Form.Item>
 
 
-                <Form.Item label="Evrak Seri Sıra No" name={'evrakSeriSiraNo'} rules={rules.takipNo}>
+            { visibleEvrakSeriSiraNo ? ( 
+            <Form.Item label="Evrak Seri Sıra No" name={'evrakSeriSiraNo'} rules={rules.takipNo}>
                   <Input type="number" placeholder="Evrak Seri Sıra No" />
-                </Form.Item>
+                </Form.Item>) :('')
+
+
+            }
+                
+                
 
                 <Form.Item label="Gönderici Kodu" name={'gondericiKodu'} rules={rules.takipNo}>
                   <Select
@@ -414,10 +441,11 @@ const Demo = (props: Props) => {
             </TabPane>
 
             <TabPane tab="Tazmin Belgeleri" key="3">
-              <Card size="small" type="inner" className={'SorgulamaCard'}>
+              <Card size="small" type="inner" title='Tazmin Belgeleri Ekranı' className={'SorgulamaCard'}>
 
                 <Form.Item label="Tazmin Dilekçesi">
 
+                  <Checkbox >  </Checkbox>
 
                   <Upload action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     listType="text"
@@ -429,11 +457,10 @@ const Demo = (props: Props) => {
                     <Button icon={<UploadOutlined />}>Yükle</Button>
                   </Upload>
 
-
-
                 </Form.Item>
 
                 <Form.Item label="Fatura">
+                <Checkbox >  </Checkbox>
                   <Upload
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     listType="text"
@@ -445,6 +472,7 @@ const Demo = (props: Props) => {
                 </Form.Item>
 
                 <Form.Item label="Sevk İrsaliyesi">
+                <Checkbox >  </Checkbox>
                   <Upload
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     listType="text"
@@ -456,6 +484,7 @@ const Demo = (props: Props) => {
                 </Form.Item>
 
                 <Form.Item label="TC No/Vergi No" >
+                <Checkbox >  </Checkbox>
                   <Upload
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     listType="text"

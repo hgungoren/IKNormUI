@@ -169,7 +169,7 @@ var KBolge = /** @class */ (function (_super) {
         _this.kPosizyonKontrol = function (key) {
             _this.getKSubeNorms();
             var form = _this.formRef.current;
-            if (_this.props.kSubeNormStore.norms.items.filter(function (x) { return x.pozisyon === key; }).length > 0) {
+            if (_this.props.kSubeNormStore.norms !== undefined && _this.props.kSubeNormStore.norms.items.filter(function (x) { return x.pozisyon === key; }).length > 0) {
                 antd_1.message.error({
                     content: abpUtility_1.L('UniqSelect'),
                     style: {
@@ -314,7 +314,7 @@ var KBolge = /** @class */ (function (_super) {
                             keyword: '',
                             skipCount: 0,
                             id: this.state.subeObjId,
-                            maxResultCount: 5
+                            maxResultCount: 100000
                         })];
                     case 1:
                         _a.sent();
@@ -331,7 +331,7 @@ var KBolge = /** @class */ (function (_super) {
                             keyword: '',
                             skipCount: 0,
                             id: this.state.subeObjId,
-                            maxResultCount: 5
+                            maxResultCount: 100000
                         })];
                     case 1:
                         _a.sent();
@@ -587,8 +587,8 @@ var KBolge = /** @class */ (function (_super) {
                             " ",
                             abpUtility_1.L('RegionalOffices'),
                             " ")) })),
-            React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount }),
-            this.isGranted('items.kareas.table') && React.createElement(antd_1.Card, { hoverable: true },
+            React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "bolge", subeObjId: 0, normCount: normCount, bolgeId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount, getTotalNormUpdateRequestPermission: true, getPendingNormFillRequestPermission: true, getTotalNormFillingRequestPermission: true, getAcceptedNormFillRequestPermission: true, getCanceledNormFillRequestPermission: true, getPendingNormUpdateRequestPermission: true, getAcceptedNormUpdateRequestPermission: true, getCanceledNormUpdateRequestPermission: true }),
+            this.isGranted('subitems.kareas.table.view') && React.createElement(antd_1.Card, { hoverable: true },
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 6, offset: 0 }, sm: { span: 6, offset: 0 }, md: { span: 6, offset: 0 }, lg: { span: 4, offset: 0 }, xl: { span: 4, offset: 0 }, xxl: { span: 4, offset: 0 } },
                         ' ',

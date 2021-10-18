@@ -163,12 +163,12 @@ class KBolge extends AppComponentBase<Props, State> {
     }
 
     kPosizyonKontrol = (key: string) => {
-    
+
         this.getKSubeNorms();
-  
+
         const form = this.formRef.current;
-    
-        if ( this.props.kSubeNormStore.norms!==undefined  &&  this.props.kSubeNormStore.norms.items.filter((x) => x.pozisyon === key).length > 0) {
+
+        if (this.props.kSubeNormStore.norms !== undefined && this.props.kSubeNormStore.norms.items.filter((x) => x.pozisyon === key).length > 0) {
             message.error({
                 content: L('UniqSelect'),
                 style: {
@@ -177,7 +177,7 @@ class KBolge extends AppComponentBase<Props, State> {
             })
             form!.resetFields();
         }
-        
+
     }
 
     openNotificationWithIcon = type => {
@@ -316,11 +316,11 @@ class KBolge extends AppComponentBase<Props, State> {
 
         if (isGranted('subitems.kareas.infobox.getcancelednormupdaterequest') ||
             isGranted('subitems.kareas.infobox.getacceptednormupdaterequest') ||
-            isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')  ||
-            isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')    ||
-            isGranted('subitems.kareas.infobox.getcancelednormfillrequest')   ||
-            isGranted('subitems.kareas.infobox.getacceptednormfillrequest')   ||
-            isGranted('subitems.kareas.infobox.getpendingnormfillrequest')    ||
+            isGranted('subitems.kareas.infobox.getpendingnormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.gettotalnormupdaterequest') ||
+            isGranted('subitems.kareas.infobox.getcancelednormfillrequest') ||
+            isGranted('subitems.kareas.infobox.getacceptednormfillrequest') ||
+            isGranted('subitems.kareas.infobox.getpendingnormfillrequest') ||
             isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')
         ) {
 
@@ -466,6 +466,11 @@ class KBolge extends AppComponentBase<Props, State> {
                         }  >
                     </PageHeader>
                 </Card>
+
+ 
+
+
+                     
                 <KCartList
                     dateFilter={dateFilter}
                     moment={moment}
@@ -485,7 +490,21 @@ class KBolge extends AppComponentBase<Props, State> {
                     getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
-                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} />
+                    getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
+                    
+                    getTotalNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')}
+                    getPendingNormFillRequestPermission={isGranted('subitems.kareas.infobox.getpendingnormfillrequest')}
+                    getTotalNormFillingRequestPermission={isGranted('subitems.kareas.infobox.gettotalnormfillingrequest')}
+                    getAcceptedNormFillRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormfillrequest')}
+                    getCanceledNormFillRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormfillrequest')}
+                    getPendingNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')}
+                    getAcceptedNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')}
+                    getCanceledNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')}
+    
+
+
+
+                />
                 {
                     this.isGranted('subitems.kareas.table.view') && <Card hoverable>
 

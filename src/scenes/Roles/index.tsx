@@ -1,7 +1,7 @@
 /*eslint-disable */
 import * as React from 'react';
 
-import { Button, Card, Col, Dropdown, Input, Menu, Modal, Row, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Dropdown, Input, Menu, Modal, PageHeader, Row, Table } from 'antd';
 import { inject, observer } from 'mobx-react';
 
 import AppComponentBase from '../../components/AppComponentBase';
@@ -14,6 +14,7 @@ import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import RoleDetailDrawer from '../../components/RoleDetailDrawer';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { Link } from 'react-router-dom';
 
 export interface IRoleProps {
   roleStore: RoleStore;
@@ -183,6 +184,8 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
           width: 150,
           render: (text: string, item: any) => (
             <div>
+              
+
               <Dropdown
                 trigger={['click']}
                 overlay={
@@ -210,6 +213,21 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
 
     return (
       <>
+
+                <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {L('pages.role.new')} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
+
+
         <Card>
           <Row>
             <Col

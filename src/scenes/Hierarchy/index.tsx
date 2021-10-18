@@ -2,7 +2,7 @@
 import './index.less';
 import React from 'react';
 import uuid from 'react-uuid';
-import { Button } from 'antd';
+import { Breadcrumb, Button, Card, PageHeader } from 'antd';
 import 'react-sortable-tree/style.css';
 import { L } from '../../lib/abpUtility';
 import { inject, observer } from 'mobx-react';
@@ -11,6 +11,8 @@ import Stores from '../../stores/storeIdentifier';
 import KHierarchyStore from '../../stores/kHierarchyStore';
 import { HierarchyDrawer } from './components/hierarchyDrawer';
 import AppComponentBase from '../../components/AppComponentBase';
+import { Link } from 'react-router-dom';
+
 
 
 export interface Node {
@@ -102,6 +104,22 @@ class Hierarchy extends AppComponentBase<Props, State> {
 
   render() {
     return (
+      <>
+       
+       <Card style={{ marginBottom: 20 }}>
+                    <PageHeader
+                        ghost={false}
+                        onBack={() => window.history.back()}
+                        title={
+                            <Breadcrumb>
+                                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                                <Breadcrumb.Item> {L('pages.hierarchy')} </Breadcrumb.Item>
+                            </Breadcrumb>
+                        }  >
+                    </PageHeader>
+                </Card>
+
+
       <div style={{ height: 700 }}>
         <SortableTree
           key={uuid()}
@@ -125,6 +143,8 @@ class Hierarchy extends AppComponentBase<Props, State> {
           kHierarchyStore={this.props.kHierarchyStore}
         />
       </div>
+      
+      </>
     );
   }
 }
