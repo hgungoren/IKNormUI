@@ -32,7 +32,7 @@ export function HierarchyDrawer(props: Props) {
         width={600}
         onClose={props.onClose}
         visible={props.visible}
-      >
+      > 
         <Row gutter={16} justify="start" align="middle">
           <Col
             xs={{ offset: 0, span: 24 }}
