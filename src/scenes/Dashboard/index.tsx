@@ -358,10 +358,14 @@ export class Dashboard extends React.Component<Props, State> {
           getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
           getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
+<<<<<<< HEAD
           getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
 
 
 
+=======
+          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} 
+>>>>>>> 0ae10280567259e509be6b403455be0d9b08b21b
           getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')}
           getPendingNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')}
           getTotalNormFillingRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
@@ -370,13 +374,15 @@ export class Dashboard extends React.Component<Props, State> {
           getPendingNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')}
           getAcceptedNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')}
           getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')}
+<<<<<<< HEAD
     
           
 
 
+=======
+>>>>>>> 0ae10280567259e509be6b403455be0d9b08b21b
         />
-
-
+ 
         <Row gutter={16}>
           <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
             {
