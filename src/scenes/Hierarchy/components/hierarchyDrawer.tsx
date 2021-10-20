@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState } from 'react';
-//import React  from 'react';
+//import React from 'react';
 import { Alert, Checkbox, Col, Drawer, Row, Space } from 'antd';
 import './index.less';
 import KHierarchyStore from '../../../stores/kHierarchyStore';
@@ -16,16 +16,14 @@ export interface Props {
 
 export function HierarchyDrawer(props: Props) {
 
-  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.PushNotificationPhoneStatusChange);
-  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.PushNotificationWebStatusChange);
-  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.PushNotificationPhone);
-  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.PushNotificationWeb);
-  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.pushNotificationWebStatusChange);
-  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.MailStatusChange);
+  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.pushNotificationPhoneStatusChange);
+  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.pushNotificationWebStatusChange);
+  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.pushNotificationPhone);
+  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.pushNotificationWeb);
+  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.canTerminate);
+  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.mailStatusChange);
   const [defaultVisibleMail, setDefaultVisibleMail] = useState(props.node.mail);
 
-
- 
   return (
     <>
       <Drawer
@@ -44,19 +42,22 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message=" Mail Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcıya Mail Olarak Bildirim Gider"
-                type={defaultVisibleMail ? 'error' : 'info'}
+                type={defaultVisibleMail ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.mail}
                       disabled={false}
-                      //    onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'Mail' })}
-                      onChange={(e) => setDefaultVisibleMail(!defaultVisibleMail)}
+                      // onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'Mail' })}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'Mail' })
+                        setDefaultVisibleMail(!defaultVisibleMail)
+                      }}
 
                     >
                       Bildirim
@@ -64,9 +65,11 @@ export function HierarchyDrawer(props: Props) {
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
         </Row>
+
+
         <Row gutter={16} justify="start" align="middle">
           <Col
             xs={{ offset: 0, span: 24 }}
@@ -76,26 +79,30 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Mail Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Bildirim Maili Gider"
-                type={defaultVisibleMailStatusChange ? 'error' : 'info'}
+
+                type={defaultVisibleMailStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.mailStatusChange}
                       disabled={false}
-                      //   onChange={(x) =>
-                      //     props.onSwitchChange({
-                      //       id: props.node.id,
-                      //       status: x.target.checked,
-                      //       type: 'MailStatusChange',
-                      //     })
-                      //   }
+                      // onChange={(x) =>
+                      // props.onSwitchChange({
+                      // id: props.node.id,
+                      // status: x.target.checked,
+                      // type: 'MailStatusChange',
+                      // })
+                      // }
 
-                      onChange={(e) => setDefaultVisibleMailStatusChange(!defaultVisibleMailStatusChange)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'MailStatusChange' })
+                        setDefaultVisibleMailStatusChange(!defaultVisibleMailStatusChange)
+                      }}
 
                     >
                       Bildirim
@@ -103,7 +110,7 @@ export function HierarchyDrawer(props: Props) {
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
         </Row>
 
@@ -116,26 +123,29 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Cep Telefonu Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcının Cep Telefonuna Bildirim Gider"
-                type={defaultVisiblePushNotificationPhone ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationPhone ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.pushNotificationPhone}
                       disabled={false}
-                      //   onChange={(x) =>
-                      //     props.onSwitchChange({
-                      //       id: props.node.id,
-                      //       status: x.target.checked,
-                      //       type: 'PushNotificationPhone',
-                      //     })
-                      //   }
+                      // onChange={(x) =>
+                      // props.onSwitchChange({
+                      // id: props.node.id,
+                      // status: x.target.checked,
+                      // type: 'PushNotificationPhone',
+                      // })
+                      // }
 
-                      onChange={(e) => setDefaultVisiblePushNotificationPhone(!defaultVisiblePushNotificationPhone)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationPhone' })
+                        setDefaultVisiblePushNotificationPhone(!defaultVisiblePushNotificationPhone)
+                      }}
 
                     >
                       Bildirim
@@ -143,7 +153,7 @@ export function HierarchyDrawer(props: Props) {
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
           <Col
             xs={{ offset: 0, span: 24 }}
@@ -153,34 +163,31 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Cep Telefonu Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcının Cep Telefonuna Bildirim Gider"
-                type={defaultVisiblePushNotificationPhoneStatusChange ? 'error' : 'info'}
+
+
+
+                type={defaultVisiblePushNotificationPhoneStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.pushNotificationPhoneStatusChange}
                       disabled={false}
-                      //   onChange={(x) =>
-                      //     props.onSwitchChange({
-                      //       id: props.node.id,
-                      //       status: x.target.checked,
-                      //       type: 'PushNotificationPhoneStatusChange',
-                      //     })
-                      //   }
-
-                      onChange={(e) => setDefaultVisiblePushNotificationPhoneStatusChange(!defaultVisiblePushNotificationPhoneStatusChange)}
-
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationPhoneStatusChange' })
+                        setDefaultVisiblePushNotificationPhoneStatusChange(!defaultVisiblePushNotificationPhoneStatusChange)
+                      }}
                     >
                       Bildirim
                     </Checkbox>
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
         </Row>
 
@@ -193,34 +200,28 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Browser Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcıya Browser Üzerinden Bildirim Gider"
-                type={defaultVisiblePushNotificationWeb ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationWeb ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.pushNotificationWeb}
                       disabled={false}
-                      //   onChange={(x) =>
-                      //     props.onSwitchChange({
-                      //       id: props.node.id,
-                      //       status: x.target.checked,
-                      //       type: 'PushNotificationWeb',
-                      //     })
-                      //   }
-
-                      onChange={(e) => setDefaultVisiblePushNotificationWeb(!defaultVisiblePushNotificationWeb)}
-                   
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationWeb' })
+                        setDefaultVisiblePushNotificationWeb(!defaultVisiblePushNotificationWeb)
+                      }}
                     >
                       Bildirim
                     </Checkbox>
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
           <Col
             xs={{ offset: 0, span: 24 }}
@@ -230,25 +231,30 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Browser Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Browser Üzerinden Bildirim Gider"
-                type={defaultVisiblePushNotificationWebStatusChange ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationWebStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
                     <Checkbox
                       defaultChecked={props.node.pushNotificationWebStatusChange}
                       disabled={false}
-                      //   onChange={(x) =>
-                      //     props.onSwitchChange({
-                      //       id: props.node.id,
-                      //       status: x.target.checked,
-                      //       type: 'PushNotificationWebStatusChange',
-                      //     })
-                      //   }
-                      onChange={(e) => setDefaultVisiblePushNotificationWebStatusChange(!defaultVisiblePushNotificationWebStatusChange)}
+                      // onChange={(x) =>
+                      // props.onSwitchChange({
+                      // id: props.node.id,
+                      // status: x.target.checked,
+                      // type: 'PushNotificationWebStatusChange',
+                      // })
+                      // }
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationWebStatusChange' })
+
+                        setDefaultVisiblePushNotificationWebStatusChange(!defaultVisiblePushNotificationWebStatusChange)
+                      }
+                      }
 
                     >
                       Bildirim
@@ -256,7 +262,7 @@ export function HierarchyDrawer(props: Props) {
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
         </Row>
         <Row gutter={16} justify="start" align="middle">
@@ -268,7 +274,7 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
-            <p style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Alert
                 message="Sonlandır"
                 description="Yeni Bir Norm Talebi Geldiğinde veya Var Olan Norm Üzerinde Bir Değişiklik Olduğunda Onay Akışını Sonlardırma"
@@ -277,16 +283,21 @@ export function HierarchyDrawer(props: Props) {
                 action={
                   <Space direction="vertical">
                     <Checkbox
-                      defaultChecked={props.node.pushNotificationWebStatusChange}
-                      disabled={false} 
-                      onChange={(e) => setDefaultVisibleCanTerminate(!defaultVisibleCanTerminate)}
+                      defaultChecked={props.node.canTerminate}
+                      disabled={false}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'CanTerminate' })
+
+                        setDefaultVisibleCanTerminate(!defaultVisibleCanTerminate)
+                      }
+                      }
                     >
                       Bildirim
                     </Checkbox>
                   </Space>
                 }
               />
-            </p>
+            </div>
           </Col>
         </Row>
       </Drawer>
