@@ -108,11 +108,7 @@ function KCartList({
         if (getAcceptedNormUpdateRequestPermission) { setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount) }
         if (getCanceledNormUpdateRequestPermission) { setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount) }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 0ae10280567259e509be6b403455be0d9b08b21b
     }, 500)
 
 
@@ -139,15 +135,10 @@ function KCartList({
 
             <Row gutter={16}>
                 {
-<<<<<<< HEAD
 
 
                     getTotalNormFillingRequestPermission && <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}
 
-=======
-
-                    getTotalNormFillingRequestPermission && <KCart onClick={() => onOpenModal('getTotalNormFillingRequest')}
->>>>>>> 0ae10280567259e509be6b403455be0d9b08b21b
                         cardLoading={cardLoading}
                         color='rgb(83, 29, 171)'
                         title={L('TotalNormFillingRequest')}
