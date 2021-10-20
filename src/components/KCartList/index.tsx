@@ -108,8 +108,7 @@ function KCartList({
         if (getAcceptedNormUpdateRequestPermission) { setAcceptedNormUpdateRequest(getAcceptedNormUpdateRequestCount) }
         if (getCanceledNormUpdateRequestPermission) { setCanceledNormUpdateRequest(getCanceledNormUpdateRequestCount) }
 
-
-
+ 
     }, 500)
 
 

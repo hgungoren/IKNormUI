@@ -358,10 +358,7 @@ export class Dashboard extends React.Component<Props, State> {
           getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
           getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
-          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-
-
-
+          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}  
           getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')}
           getPendingNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')}
           getTotalNormFillingRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
@@ -369,10 +366,7 @@ export class Dashboard extends React.Component<Props, State> {
           getCanceledNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormfillrequest')}
           getPendingNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')}
           getAcceptedNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')}
-          getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')}
-    
-          
-
+          getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')} 
 
         />
  

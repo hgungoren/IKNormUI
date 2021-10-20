@@ -497,8 +497,8 @@ class KBolge extends AppComponentBase<Props, State> {
                     getAcceptedNormFillRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormfillrequest')}
                     getCanceledNormFillRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormfillrequest')}
                     getPendingNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')}
-                    getAcceptedNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')}
-                    getCanceledNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')}  
+                    getAcceptedNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')} 
+                    getCanceledNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')}   
                 />
                 {
                     this.isGranted('subitems.kareas.table.view') && <Card hoverable>
