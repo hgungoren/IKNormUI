@@ -491,7 +491,6 @@ class KBolge extends AppComponentBase<Props, State> {
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-<<<<<<< HEAD
                     
                     getTotalNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.gettotalnormupdaterequest')}
                     getPendingNormFillRequestPermission={isGranted('subitems.kareas.infobox.getpendingnormfillrequest')}
@@ -500,21 +499,7 @@ class KBolge extends AppComponentBase<Props, State> {
                     getCanceledNormFillRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormfillrequest')}
                     getPendingNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getpendingnormupdaterequest')}
                     getAcceptedNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getacceptednormupdaterequest')}
-                    getCanceledNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')}
-    
-=======
-
-                    getTotalNormUpdateRequestPermission={true}
-                    getPendingNormFillRequestPermission={true}
-                    getTotalNormFillingRequestPermission={true}
-                    getAcceptedNormFillRequestPermission={true}
-                    getCanceledNormFillRequestPermission={true}
-                    getPendingNormUpdateRequestPermission={true}
-                    getAcceptedNormUpdateRequestPermission={true}
-                    getCanceledNormUpdateRequestPermission={true}
->>>>>>> c913981981605339ce8b61a81dea055254056298
-
-
+                    getCanceledNormUpdateRequestPermission={isGranted('subitems.kareas.infobox.getcancelednormupdaterequest')} 
 
                 />
                 {

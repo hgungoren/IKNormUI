@@ -358,10 +358,7 @@ export class Dashboard extends React.Component<Props, State> {
           getCanceledNormFillRequestCount={getCanceledNormFillRequestCount}
           getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
           getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
-          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-
-
-<<<<<<< HEAD
+          getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount} 
           getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')}
           getPendingNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')}
           getTotalNormFillingRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
@@ -370,22 +367,8 @@ export class Dashboard extends React.Component<Props, State> {
           getPendingNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest')}
           getAcceptedNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')}
           getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')}
-    
-          
-=======
-          getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
-          getPendingNormFillRequestPermission={true}
-          getTotalNormFillingRequestPermission={true}
-          getAcceptedNormFillRequestPermission={true}
-          getCanceledNormFillRequestPermission={true}
-          getPendingNormUpdateRequestPermission={true}
-          getAcceptedNormUpdateRequestPermission={true}
-          getCanceledNormUpdateRequestPermission={true}
->>>>>>> c913981981605339ce8b61a81dea055254056298
-
         />
-
-
+ 
         <Row gutter={16}>
           <Col {...(lineChartView ? lineChartLayout.onePiece : lineChartLayout.twoPiece)}>
             {
