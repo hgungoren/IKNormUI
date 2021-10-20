@@ -16,12 +16,14 @@ export interface Props {
 
 export function HierarchyDrawer(props: Props) {
 
-  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.PushNotificationPhoneStatusChange);
-  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.PushNotificationWebStatusChange);
-  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.PushNotificationPhone);
-  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.PushNotificationWeb);
-  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.pushNotificationWebStatusChange);
-  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.MailStatusChange);
+
+
+  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.pushNotificationPhoneStatusChange);
+  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.pushNotificationWebStatusChange);
+  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.pushNotificationPhone);
+  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.pushNotificationWeb);
+  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.canTerminate);
+  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.mailStatusChange);
   const [defaultVisibleMail, setDefaultVisibleMail] = useState(props.node.mail);
 
 
@@ -48,7 +50,7 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message=" Mail Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcıya Mail Olarak Bildirim Gider"
-                type={defaultVisibleMail ? 'error' : 'info'}
+                type={defaultVisibleMail ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -56,7 +58,9 @@ export function HierarchyDrawer(props: Props) {
                       defaultChecked={props.node.mail}
                       disabled={false}
                       //    onChange={(x) => props.onSwitchChange({ id: props.node.id, status: x.target.checked, type: 'Mail' })}
-                      onChange={(e) => setDefaultVisibleMail(!defaultVisibleMail)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'Mail' })
+                      setDefaultVisibleMail(!defaultVisibleMail)}}
 
                     >
                       Bildirim
@@ -67,6 +71,8 @@ export function HierarchyDrawer(props: Props) {
             </p>
           </Col>
         </Row>
+
+
         <Row gutter={16} justify="start" align="middle">
           <Col
             xs={{ offset: 0, span: 24 }}
@@ -80,7 +86,8 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Mail Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Bildirim Maili Gider"
-                type={defaultVisibleMailStatusChange ? 'error' : 'info'}
+           
+                type={defaultVisibleMailStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -95,7 +102,9 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) => setDefaultVisibleMailStatusChange(!defaultVisibleMailStatusChange)}
+                      onChange={(e) =>{
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'MailStatusChange' })
+                        setDefaultVisibleMailStatusChange(!defaultVisibleMailStatusChange)}}
 
                     >
                       Bildirim
@@ -120,7 +129,7 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Cep Telefonu Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcının Cep Telefonuna Bildirim Gider"
-                type={defaultVisiblePushNotificationPhone ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationPhone ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -135,7 +144,9 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) => setDefaultVisiblePushNotificationPhone(!defaultVisiblePushNotificationPhone)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationPhone' })
+                        setDefaultVisiblePushNotificationPhone(!defaultVisiblePushNotificationPhone)}}
 
                     >
                       Bildirim
@@ -157,7 +168,7 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Cep Telefonu Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcının Cep Telefonuna Bildirim Gider"
-                type={defaultVisiblePushNotificationPhoneStatusChange ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationPhoneStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -172,7 +183,11 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) => setDefaultVisiblePushNotificationPhoneStatusChange(!defaultVisiblePushNotificationPhoneStatusChange)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationPhoneStatusChange' })
+
+                        setDefaultVisiblePushNotificationPhoneStatusChange(!defaultVisiblePushNotificationPhoneStatusChange)}
+                      }
 
                     >
                       Bildirim
@@ -197,7 +212,7 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Browser Bildirimi"
                 description="Yeni Bir Norm Talebi Geldiğinde, Kullanıcıya Browser Üzerinden Bildirim Gider"
-                type={defaultVisiblePushNotificationWeb ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationWeb ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -212,7 +227,11 @@ export function HierarchyDrawer(props: Props) {
                       //     })
                       //   }
 
-                      onChange={(e) => setDefaultVisiblePushNotificationWeb(!defaultVisiblePushNotificationWeb)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationWeb' })
+
+                        setDefaultVisiblePushNotificationWeb(!defaultVisiblePushNotificationWeb)}
+                      }
                    
                     >
                       Bildirim
@@ -234,7 +253,7 @@ export function HierarchyDrawer(props: Props) {
               <Alert
                 message="Browser Bildirimi - Durum Değişikliği"
                 description="Var Olan Norm Üzerinde Bir Değişiklik Olduğunda, Kullanıcıya Browser Üzerinden Bildirim Gider"
-                type={defaultVisiblePushNotificationWebStatusChange ? 'error' : 'info'}
+                type={defaultVisiblePushNotificationWebStatusChange ? 'info' : 'error'}
                 closable={false}
                 action={
                   <Space direction="vertical">
@@ -248,7 +267,11 @@ export function HierarchyDrawer(props: Props) {
                       //       type: 'PushNotificationWebStatusChange',
                       //     })
                       //   }
-                      onChange={(e) => setDefaultVisiblePushNotificationWebStatusChange(!defaultVisiblePushNotificationWebStatusChange)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'PushNotificationWebStatusChange' })
+
+                        setDefaultVisiblePushNotificationWebStatusChange(!defaultVisiblePushNotificationWebStatusChange)}
+                      }
 
                     >
                       Bildirim
@@ -277,9 +300,13 @@ export function HierarchyDrawer(props: Props) {
                 action={
                   <Space direction="vertical">
                     <Checkbox
-                      defaultChecked={props.node.pushNotificationWebStatusChange}
+                      defaultChecked={props.node.canTerminate}
                       disabled={false} 
-                      onChange={(e) => setDefaultVisibleCanTerminate(!defaultVisibleCanTerminate)}
+                      onChange={(e) => {
+                        props.onSwitchChange({ id: props.node.id, status: e.target.checked, type: 'CanTerminate' })
+
+                        setDefaultVisibleCanTerminate(!defaultVisibleCanTerminate)}
+                      }
                     >
                       Bildirim
                     </Checkbox>

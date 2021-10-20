@@ -439,7 +439,10 @@ class KSube extends AppComponentBase<Props, State>{
                             trigger={['click']}
                             overlay={
                                 <Menu>
+                                       {  isGranted('items.branch.list.view.detail.btn') &&
                                     <Menu.Item >
+                         
+                                   
                                         <Link to={
 
                                             {
@@ -448,6 +451,7 @@ class KSube extends AppComponentBase<Props, State>{
 
                                         }> {L('Detail')} </Link>
                                     </Menu.Item>
+                                    }
                                     {
                                         this.isGranted('ksubenorm.operation') && <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
                                     }
@@ -499,7 +503,6 @@ class KSube extends AppComponentBase<Props, State>{
                     getPendingNormUpdateRequestCount={getPendingNormUpdateRequestCount}
                     getAcceptedNormUpdateRequestCount={getAcceptedNormUpdateRequestCount}
                     getCanceledNormUpdateRequestCount={getCanceledNormUpdateRequestCount}
-<<<<<<< HEAD
                     getTotalNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest')}
                     getPendingNormFillRequestPermission={isGranted('subitems.dashboard.infobox.getpendingnormfillrequest')}
                     getTotalNormFillingRequestPermission={isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest')}
@@ -509,18 +512,8 @@ class KSube extends AppComponentBase<Props, State>{
                     getAcceptedNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest')}
                     getCanceledNormUpdateRequestPermission={isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest')}
               
-=======
-                    getTotalNormUpdateRequestPermission={true}
-                    getPendingNormFillRequestPermission={true}
-                    getTotalNormFillingRequestPermission={true}
-                    getAcceptedNormFillRequestPermission={true}
-                    getCanceledNormFillRequestPermission={true}
-                    getPendingNormUpdateRequestPermission={true}
-                    getAcceptedNormUpdateRequestPermission={true}
-                    getCanceledNormUpdateRequestPermission={true}
->>>>>>> c913981981605339ce8b61a81dea055254056298
                 />
-
+             { isGranted('items.branch.list.view') &&
                 <Card hoverable>
                     <Row>
                         <Col
@@ -539,6 +532,7 @@ class KSube extends AppComponentBase<Props, State>{
                             <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
                         </Col>
                     </Row>
+                   
                     <Row style={{ marginTop: 20 }}>
                         <Col
                             xs={{ span: 24, offset: 0 }}
@@ -560,7 +554,11 @@ class KSube extends AppComponentBase<Props, State>{
                             />
                         </Col>
                     </Row>
+                    
+
                 </Card>
+
+                }
                 <CreateKSubeNorm
                     modalType={'create'}
                     normList={this.state.normList}

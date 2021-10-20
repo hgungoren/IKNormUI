@@ -10,6 +10,9 @@ import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined, BellOutlined } fr
 import SessionStore from '../../stores/sessionStore';
 import AccountStore from '../../stores/accountStore';
 import AuthenticationStore from '../../stores/authenticationStore';
+import Title from 'antd/lib/typography/Title';
+
+
 // import NotificationStore from '../../stores/notificationStore';
 
 export interface IHeaderProps {
@@ -47,12 +50,29 @@ export class Header extends React.Component<IHeaderProps> {
   hideDrawer = async () => {
     this.setState({ visible: false });
   }
+
+
+
   render() {
+
+
     const { 
       // visible,
        notificationCount } = this.state;
+    
+
+     
+      // const name=this.props.sessionStore === undefined ?
+      //  '' :this.props.sessionStore?.currentLogin.user.name
+
+      //  const surname=this.props.sessionStore === undefined ? 
+      //  '':this.props.sessionStore?.currentLogin.user.surname 
+
+       
+
     return (
       <Row className={'header-container'}>
+    
         <Col style={{ textAlign: 'left' }} span={12}>
           {this.props.collapsed ? (
             <MenuUnfoldOutlined className="trigger" onClick={this.props.toggle} />
@@ -63,12 +83,16 @@ export class Header extends React.Component<IHeaderProps> {
 
         <Col style={{ padding: '0px 15px 0px 15px', textAlign: 'right' }} span={12}>
 
+          <Space>           
+          <Title level={5} style={{ marginRight:'15px'}}></Title>
+          </Space>
           <Space> 
+        
             <Badge count={notificationCount} >
               <Avatar size="small" shape="circle" alt={'profile'} icon={<BellOutlined onClick={this.onNotificationHandler} />} />
             </Badge> 
             <LanguageSelect /> 
-            <Dropdown className={'header-drop'} overlay={userDropdownMenu} trigger={['click']}>
+            <Dropdown className={'header-drop'} overlay={userDropdownMenu} trigger={['click']}>             
               <Avatar size="small" shape="circle" alt={'profile'} src={profilePicture} />
             </Dropdown>
 
