@@ -228,7 +228,12 @@ class CreateNormForm extends React.Component<Props, State> {
       // normCount,
 
       hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
+
+
     const { pozisyon } = this.state;
+
+
+    console.log('position => ', position)
     return (
       <Row >
         <Col
@@ -281,7 +286,7 @@ class CreateNormForm extends React.Component<Props, State> {
                   </Form.Item>
 
                   <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
-                    <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
+                    <Select key={'TalepTuru'} placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                       {
                         Object.keys(TalepTuru).map((value, index) => <Option key={'a' + value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
                       }
@@ -291,11 +296,12 @@ class CreateNormForm extends React.Component<Props, State> {
                   {
                     this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
                       <Select
+                        key={'Pozisyon'}
                         notFoundContent={{ emptyText: L('NoSelectData') }}
                         placeholder={L('PleaseSelect')}
                         onSelect={(x: any) => position !== undefined && this.setState({ pozisyon: x.toString() })} >
                         {
-                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>)
+                          position !== undefined && position.items.map((value, index) => <Option key={'pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
                         }
                       </Select>
                     </Form.Item>)
@@ -313,9 +319,12 @@ class CreateNormForm extends React.Component<Props, State> {
                         }
                       ]
                     }>
-                      <Select placeholder={L('PleaseSelect')} >
+                      <Select key={'YeniPozisyon'} placeholder={L('PleaseSelect')} >
                         {
-                          position !== undefined && position.items.map((value, index) => <Option value={value.adi}> {value.adi} </Option>)
+                          console.log('position', position)
+                        }
+                        {
+                          position !== undefined && position.items.map((value, index) => <Option key={'yeni_pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
                         }
                       </Select>
                     </Form.Item>)
@@ -325,17 +334,13 @@ class CreateNormForm extends React.Component<Props, State> {
                       <Select placeholder={L('PleaseSelect')} onChange={this.visibleEmployee}>
                         {
                           Object.keys(TalepNedeni).map((value, index) => <>
-                            {/* {
-                              employees != undefined && normCount <= employees.items.length && value !== 'Ayrilma' ? '' : < Option value={value}> {TalepNedeni[value]} </Option>
-                            } */}
-
                             {
                               (
                                 employees !== undefined &&
                                 TalepTuru[this.state.talepTuru] === TalepTuru.Norm_Doldurma &&
                                 TalepNedeni[value] !== TalepNedeni.Kadro_Genisleme) ?
-                                < Option value={value}> {TalepNedeni[value]} </Option> :
-                                (TalepTuru[this.state.talepTuru] === TalepTuru.Norm_Arttir && TalepNedeni[value] === TalepNedeni.Kadro_Genisleme) && < Option value={value}> {TalepNedeni[value]} </Option>
+                                < Option key={'talep_nedeni_' + value} value={value}> {TalepNedeni[value]} </Option> :
+                                (TalepTuru[this.state.talepTuru] === TalepTuru.Norm_Arttir && TalepNedeni[value] === TalepNedeni.Kadro_Genisleme) && < Option key={'talep_nedeni_' + value} value={value}> {TalepNedeni[value]} </Option>
                             }
                           </>)
                         }
@@ -346,7 +351,7 @@ class CreateNormForm extends React.Component<Props, State> {
                     this.state.employeeVisible && (<Form.Item label={L('Employee')} {...formItemLayout} name={'PersonelId'} rules={rules.employeeId}>
                       <Select placeholder={L('PleaseSelect')} >
                         {
-                          employees != undefined && employees.items.map((value, index) => <Option value={value.objId}> {value.ad} {value.soyad} </Option>)
+                          employees != undefined && employees.items.map((value, index) => <Option key={'personel_id_' + value.objId} value={value.objId}> {value.ad} {value.soyad} </Option>)
                         }
                       </Select>
                     </Form.Item>)
@@ -360,14 +365,14 @@ class CreateNormForm extends React.Component<Props, State> {
                 <TabPane className={'form-tabPane'} tab={L('AuthoritiesHierarchy')} key={'AuthoritiesHierarchy'} forceRender={true}>
                   <Steps direction="vertical" >
                     {
-                      hierarchy !== undefined && hierarchy.map((data) => <Step icon={<MailOutlined />} status={"finish"}
+                      hierarchy !== undefined && hierarchy.map((data) => <Step key={'step_' + data.mail} icon={<MailOutlined />} status={"finish"}
                         title={''}
                         description={
                           <Row >
                             <Col xs={{ span: 8, offset: 0 }} sm={{ span: 8, offset: 0 }} md={{ span: 8, offset: 0 }} lg={{ span: 8, offset: 0 }} xl={{ span: 8, offset: 0 }} xxl={{ span: 8, offset: 0 }} > {data.title} </Col>
                             <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} > {data.firstName} </Col>
                             <Col xs={{ span: 3, offset: 0 }} sm={{ span: 3, offset: 0 }} md={{ span: 3, offset: 0 }} lg={{ span: 3, offset: 0 }} xl={{ span: 3, offset: 0 }} xxl={{ span: 3, offset: 0 }} > {data.lastName} </Col>
-                            <Col xs={{ span: 10, offset: 0 }} sm={{ span: 10, offset: 0 }} md={{ span: 10, offset: 0 }} lg={{ span: 10, offset: 0 }} xl={{ span: 10, offset: 0 }} xxl={{ span: 10, offset: 0 }} >   <strong> {data.mail} </strong>   </Col>
+                            <Col xs={{ span: 10, offset: 0 }} sm={{ span: 10, offset: 0 }} md={{ span: 10, offset: 0 }} lg={{ span: 10, offset: 0 }} xl={{ span: 10, offset: 0 }} xxl={{ span: 10, offset: 0 }} > <strong> {data.mail} </strong> </Col>
                           </Row>
                         } />)
                     }

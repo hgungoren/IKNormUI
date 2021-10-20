@@ -563,13 +563,14 @@ var KSube = /** @class */ (function (_super) {
                 width: 150,
                 render: function (text, item) { return (React.createElement("div", null,
                     React.createElement(antd_1.Dropdown, { trigger: ['click'], overlay: React.createElement(antd_1.Menu, null,
-                            React.createElement(antd_1.Menu.Item, null,
-                                React.createElement(react_router_dom_1.Link, { to: {
-                                        pathname: "/ksubedetay/" + item.objId
-                                    } },
-                                    " ",
-                                    abpUtility_1.L('Detail'),
-                                    " ")),
+                            abpUtility_1.isGranted('items.branch.list.view.detail.btn') &&
+                                React.createElement(antd_1.Menu.Item, null,
+                                    React.createElement(react_router_dom_1.Link, { to: {
+                                            pathname: "/ksubedetay/" + item.objId
+                                        } },
+                                        " ",
+                                        abpUtility_1.L('Detail'),
+                                        " ")),
                             _this.isGranted('ksubenorm.operation') && React.createElement(antd_1.Menu.Item, null,
                                 " ",
                                 React.createElement(react_router_dom_1.Link, { to: '#', onClick: function () { return _this.createOrUpdateModalOpen(item.tip, item.objId, item.adi); } },
@@ -598,16 +599,17 @@ var KSube = /** @class */ (function (_super) {
                                 editKSube === undefined ? '' : editKSube.adi,
                                 " ")) })),
                 React.createElement(KCartList_1["default"], { dateFilter: dateFilter, moment: moment, type: "sube", bolgeId: this.state.id, normCount: normCount, subeObjId: this.state.id, cardLoading: cardLoading, kPersonelCount: kPersonelCount, onDateFilter: this.onDateFilter, kNormStore: this.props.kNormStore, kNormDetailStore: this.props.kNormDetailStore, getTotalNormUpdateRequestCount: getTotalNormUpdateRequestCount, getPendingNormFillRequestCount: getPendingNormFillRequestCount, getTotalNormFillingRequestCount: getTotalNormFillingRequestCount, getAcceptedNormFillRequestCount: getAcceptedNormFillRequestCount, getCanceledNormFillRequestCount: getCanceledNormFillRequestCount, getPendingNormUpdateRequestCount: getPendingNormUpdateRequestCount, getAcceptedNormUpdateRequestCount: getAcceptedNormUpdateRequestCount, getCanceledNormUpdateRequestCount: getCanceledNormUpdateRequestCount, getTotalNormUpdateRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormupdaterequest'), getPendingNormFillRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormfillrequest'), getTotalNormFillingRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.gettotalnormfillingrequest'), getAcceptedNormFillRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormfillrequest'), getCanceledNormFillRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormfillrequest'), getPendingNormUpdateRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getpendingnormupdaterequest'), getAcceptedNormUpdateRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getacceptednormupdaterequest'), getCanceledNormUpdateRequestPermission: abpUtility_1.isGranted('subitems.dashboard.infobox.getcancelednormupdaterequest') }),
-                React.createElement(antd_1.Card, { hoverable: true },
-                    React.createElement(antd_1.Row, null,
-                        React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },
-                            React.createElement("h2", null, abpUtility_1.L('KSube')))),
-                    React.createElement(antd_1.Row, null,
-                        React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
-                            React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
-                    React.createElement(antd_1.Row, { style: { marginTop: 20 } },
-                        React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
-                            React.createElement(antd_1.Table, { bordered: false, columns: columns, pagination: tablePagination, onChange: this.handlePagination, locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.objId.toString(); }, loading: kSubes === undefined ? true : false, dataSource: kSubes === undefined ? [] : kSubes.items })))),
+                abpUtility_1.isGranted('items.branch.list.view') &&
+                    React.createElement(antd_1.Card, { hoverable: true },
+                        React.createElement(antd_1.Row, null,
+                            React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },
+                                React.createElement("h2", null, abpUtility_1.L('KSube')))),
+                        React.createElement(antd_1.Row, null,
+                            React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
+                                React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
+                        React.createElement(antd_1.Row, { style: { marginTop: 20 } },
+                            React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
+                                React.createElement(antd_1.Table, { bordered: false, columns: columns, pagination: tablePagination, onChange: this.handlePagination, locale: { emptyText: abpUtility_1.L('NoData') }, rowKey: function (record) { return record.objId.toString(); }, loading: kSubes === undefined ? true : false, dataSource: kSubes === undefined ? [] : kSubes.items })))),
                 React.createElement(createKSubeNorm_1["default"], { modalType: 'create', normList: this.state.normList, formRef: this.formRef, positionSelect: positions, subeAdi: this.state.subeAdi, subeObjId: this.state.subeObjId, visible: this.state.modalVisible, kSubeNormEdit: this.kSubeNormEdit, kSubeNormCreate: this.kSubeNormCreate, kSubeNormDelete: this.kSubeNormDelete, kPosizyonKontrol: this.kPosizyonKontrol, kSubeNormStore: this.props.kSubeNormStore, kSubeNorms: this.props.kSubeNormStore.norms, onCancel: function () { _this.setState({ modalVisible: false }); }, bolgeAdi: this.props.kSubeStore.editKSube !== undefined ? this.props.kSubeStore.editKSube.adi : '' }))));
     };
     KSube = __decorate([
