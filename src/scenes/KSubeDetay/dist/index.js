@@ -98,7 +98,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.formRef = React.createRef();
         _this.state = {
             detaillModalVisible: false,
-            maxNormResultCount: 15,
+            maxNormResultCount: 2000000,
             modalVisible: false,
             cardLoading: true,
             groupEmployee: {},
@@ -216,7 +216,9 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 11:
                         _a.sent();
                         _a.label = 12;
-                    case 12: return [2 /*return*/];
+                    case 12:
+                        console.log(this.props.kNormStore);
+                        return [2 /*return*/];
                 }
             });
         }); };
@@ -509,7 +511,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         };
         var normEmployeeCoumns = [
             {
-                title: abpUtility_1.L('NormEmployeeInformations xs'),
+                title: abpUtility_1.L('NormEmployeeInformations'),
                 render: function (record) { return (React.createElement(React.Fragment, null,
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.branch.duty')),
                     " : ",
@@ -538,7 +540,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         ];
         var columns = [
             {
-                title: abpUtility_1.L('NormEmployeeInformations xs'),
+                title: abpUtility_1.L('NormDetailPanel'),
                 render: function (record) { return (React.createElement(React.Fragment, null,
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.employee.name')),
                     " : ",
@@ -567,9 +569,9 @@ var KSubeDetay = /** @class */ (function (_super) {
         ];
         var columnsNorm = [
             {
-                title: abpUtility_1.L('NormInformations xs'),
+                title: abpUtility_1.L('NormDetailPanel'),
                 render: function (record) { return (React.createElement(React.Fragment, null,
-                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requestdatee')),
+                    React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requestdate')),
                     " : ",
                     record.creationTime,
                     React.createElement("br", null),

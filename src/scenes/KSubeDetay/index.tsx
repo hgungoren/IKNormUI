@@ -29,6 +29,7 @@ import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, Card, Col, Row, Table, Input, Button, Breadcrumb, PageHeader, Tooltip, Tag } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, FileSearchOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
+ 
 
 export interface IKsubeDatayProps {
     kSubeStore: KSubeStore;
@@ -90,7 +91,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     state = {
         detaillModalVisible: false,
-        maxNormResultCount: 15,
+        maxNormResultCount: 2000000,
         modalVisible: false,
         cardLoading: true,
         groupEmployee: {},
@@ -266,8 +267,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             await this.setAllEmployeesGroupBy();
             await this.setAllSubeNormGroupBy();
             await this.mergeArray();
-        }
+        } 
 
+        console.log(this.props.kNormStore)
     }
 
     handleSearch = (value: string) => {
@@ -419,7 +421,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const normEmployeeCoumns = [
 
             {
-                title: L('NormEmployeeInformations xs'),
+                title: L('NormEmployeeInformations'),
                 render: (record) => (
                     <React.Fragment>
                         <span className={'responsive-title'}>{L('table.branch.duty')}</span> : {record.gorev}
@@ -444,7 +446,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const columns = [
 
             {
-                title: L('NormEmployeeInformations xs'),
+                title: L('NormDetailPanel'),
                 render: (record) => (
                     <React.Fragment>
                         <span className={'responsive-title'}>{L('table.employee.name')}</span> : {record.ad}
@@ -469,10 +471,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         const columnsNorm = [
 
             {
-                title: L('NormInformations xs'),
+                title: L('NormDetailPanel'),
                 render: (record) => (
                     <React.Fragment>
-                        <span className={'responsive-title'}>{L('table.norm.requestdatee')}</span> : {record.creationTime}
+                        <span className={'responsive-title'}>{L('table.norm.requestdate')}</span> : {record.creationTime}
                         <br />
                         <span className={'responsive-title'}>{L('table.norm.requeststatus')}</span>  : {record.durumu}
                         <br />
