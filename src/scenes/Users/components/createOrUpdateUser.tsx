@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import * as React from 'react'; 
 import { Checkbox, Input, Modal, Tabs, Form, Row, Col } from 'antd';
 import { GetRoles } from '../../../services/user/dto/getRolesOuput';
 import { L } from '../../../lib/abpUtility';
@@ -128,7 +127,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                   <Form.Item label={L('UserName')} {...formItemLayout} name={'userName'} rules={rules.userName}>
                     <Input />
                   </Form.Item>
-                </Col> 
+                </Col>
                 <Col
                   xs={{ span: 24, offset: 0 }}
                   sm={{ span: 24, offset: 0 }}
@@ -136,7 +135,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                   lg={{ span: 10, offset: 0 }}
                   xl={{ span: 10, offset: 0 }}
                   xxl={{ span: 10, offset: 0 }}
-                > 
+                >
                   <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
                     <Input />
                   </Form.Item>
@@ -172,7 +171,7 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     </Form.Item>
                   ) : null}
                   <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
-                    <Checkbox  defaultChecked>{L('Active')}</Checkbox>
+                    <Checkbox defaultChecked>{L('Active')}</Checkbox>
                   </Form.Item>
                 </Col>
               </Row>

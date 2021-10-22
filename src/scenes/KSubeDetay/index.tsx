@@ -443,8 +443,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             { title: L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: (key, value) => <div key={'norm-' + key}>{value.norm}</div>, responsive: ['sm'] as Breakpoint[] }
         ]
 
-        const columns = [
-
+        const columns = [ 
             {
                 title: L('NormDetailPanel'),
                 render: (record) => (

@@ -215,7 +215,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     rejectRequestClick = async () => {
         confirm({
             icon: <ExclamationCircleOutlined />,
-            content: L('DoYouWantToConfirm'),
+            content: L('CancelDoYouWantToConfirm'),
             okText: L('Approve'),
             cancelText: L('Cancel'),
             onOk: () => {
