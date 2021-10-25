@@ -91,11 +91,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     state = {
         detaillModalVisible: false,
-<<<<<<< HEAD
         maxNormResultCount: 20000,
-=======
-        maxNormResultCount: 2000000,
->>>>>>> 9670145456d3d12230a04f9f6d5c0117f275ecea
         modalVisible: false,
         cardLoading: true,
         groupEmployee: {},
