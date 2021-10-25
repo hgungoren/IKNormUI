@@ -98,11 +98,11 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.formRef = React.createRef();
         _this.state = {
             detaillModalVisible: false,
-            maxNormResultCount: 2000000,
+            maxNormResultCount: 20000,
             modalVisible: false,
             cardLoading: true,
             groupEmployee: {},
-            maxResultCount: 5,
+            maxResultCount: 20000,
             skipNormCount: 0,
             normFilter: '',
             groupNorm: {},
@@ -346,7 +346,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.props.kInkaLookUpTableStore
                             .getAll({
-                            maxResultCount: 2000,
+                            maxResultCount: 20000,
                             keyword: key,
                             skipCount: 0
                         })];
@@ -441,7 +441,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.props.kPersonelStore.getAll({
                             maxResultCount: this.state.maxResultCount,
                             skipCount: this.state.skipCount,
-                            keyword: '',
+                            keyword: this.state.searchFilter,
                             id: this.state.id
                         })];
                     case 1:
@@ -489,7 +489,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             pageSize: filterTable1.limit,
             current: filterTable1.current || 1,
             total: totalSizeTable1,
-            locale: { items_per_page: abpUtility_1.L('page') },
+            locale: { items_per_page: abpUtility_1.L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true
         };
@@ -497,7 +497,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             pageSize: filterTable2.limit,
             current: filterTable2.current || 1,
             total: totalSizeTable2,
-            locale: { items_per_page: abpUtility_1.L('page') },
+            locale: { items_per_page: abpUtility_1.L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true
         };
@@ -505,7 +505,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             pageSize: filterTable3.limit,
             current: filterTable3.current || 1,
             total: totalSizeTable3,
-            locale: { items_per_page: abpUtility_1.L('page') },
+            locale: { items_per_page: abpUtility_1.L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true
         };
