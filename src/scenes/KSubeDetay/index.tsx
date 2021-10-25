@@ -90,11 +90,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     state = {
         detaillModalVisible: false,
-        maxNormResultCount: 15,
+        maxNormResultCount: 20000,
         modalVisible: false,
         cardLoading: true,
         groupEmployee: {},
-        maxResultCount: 5,
+        maxResultCount: 20000,
         skipNormCount: 0,
         normFilter: '',
         groupNorm: {},
@@ -128,14 +128,16 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     };
 
     async getPosition(key: string) {
+
         await this.props.kInkaLookUpTableStore
             .getAll(
                 {
-                    maxResultCount: 2000,
+                    maxResultCount: 20000,
                     keyword: key,
                     skipCount: 0
                 }
             );
+
     }
 
     async getNormRequests() {
@@ -147,6 +149,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             skipCount: this.state.skipNormCount,
             bolgeId: '0',
             type: 'subedetail'
+            
         })
     }
 
@@ -197,7 +200,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
         await this.props.kPersonelStore.getAll({
             maxResultCount: this.state.maxResultCount,
             skipCount: this.state.skipCount,
-            keyword: '',
+            keyword: this.state.searchFilter,
             id: this.state.id
         });
     }
@@ -246,13 +249,17 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             this.pageSettings()
         })
     }
+       
 
+  
     componentDidMount = async () => {
 
         await this.setPageState();
-
-        if (isGranted('subitems.branch.detail.total.table.view')) {
+             
+    
+        if (isGranted('subitems.branch.detail.total.table.view')) {        
             await this.getAllEmployees();
+         
         }
 
         if (isGranted('subitems.branch.detail.employee.table.view')) {
@@ -271,7 +278,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
     }
 
     handleSearch = (value: string) => {
-        this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
+
+        this.setState({ searchFilter: value }, async () => await this.getAllEmployees())
+
     };
 
     handleNormSearch = (value: string) => {
@@ -381,6 +390,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
 
     public render() {
 
+
+
+
         const { kNorms, editKNorm } = this.props.kNormStore;
         const { norms } = this.props.kSubeNormStore;
         const { kPersonels } = this.props.kPersonelStore!;
@@ -394,7 +406,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             pageSize: filterTable1.limit,
             current: filterTable1.current || 1,
             total: totalSizeTable1,
-            locale: { items_per_page: L('page') },
+            locale: { items_per_page: L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true,
         };
@@ -403,7 +415,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             pageSize: filterTable2.limit,
             current: filterTable2.current || 1,
             total: totalSizeTable2,
-            locale: { items_per_page: L('page') },
+            locale: { items_per_page: L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true,
         };
@@ -412,7 +424,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
             pageSize: filterTable3.limit,
             current: filterTable3.current || 1,
             total: totalSizeTable3,
-            locale: { items_per_page: L('page') },
+            locale: { items_per_page: L('TableRecord') },
             pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
             showSizeChanger: true,
         };
@@ -666,8 +678,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                         </Row>
                     </Card>
                 }
-
+         
                 <CreateNormForm
+                
                     tip={tip}
                     subeId={id}
                     modalWidth={'60%'}
@@ -680,7 +693,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     getHierarchy={this.getHierarchy}
                     createFormState={createFormState}
                     bagliOlduguSubeId={bagliOlduguSubeId}
-                    position={this.props.kInkaLookUpTableStore.positions}
+                    position={
+                        this.props.kInkaLookUpTableStore.positions
+                    }
                     normCount={norms !== undefined ? norms.items.length : 0}
                     onCancel={() => {
                         const form = this.formRef.current;

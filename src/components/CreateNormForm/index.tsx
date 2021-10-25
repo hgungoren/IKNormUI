@@ -13,6 +13,7 @@ import { GetKPersonelOutput } from '../../services/kPersonel/dto/getKPersonelOut
 import { GetAllHierarchyOutput } from '../../services/kHierarchy/dto/getAllHierarchyOutput';
 import { GetKInkaLookUpTableOutput } from '../../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
 
+
 const { Step } = Steps;
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -69,6 +70,9 @@ class CreateNormForm extends React.Component<Props, State> {
     descriptionVisible: false,
     normRequestReasonVisible: false,
   };
+
+
+   
 
   changeActiveTab = () => {
     const form = this.props.formRef.current;
@@ -130,7 +134,8 @@ class CreateNormForm extends React.Component<Props, State> {
 
 
   visibleChangeFormItems = (param) => {
-
+  
+  
     const form = this.props.formRef.current;
     form!.resetFields(['Pozisyon', 'Aciklama', 'TalepNedeni', 'PersonelId', 'YeniPozisyon'])
 
@@ -188,6 +193,7 @@ class CreateNormForm extends React.Component<Props, State> {
     //   talepTuru: ''
     // });
 
+  
 
   }
 
@@ -204,6 +210,7 @@ class CreateNormForm extends React.Component<Props, State> {
 
   render() {
 
+ 
     const formItemLayout = {
       labelCol: {
         xs: { span: 6 },
@@ -222,7 +229,7 @@ class CreateNormForm extends React.Component<Props, State> {
         xxl: { span: 18 },
       },
     };
-
+    
     const { tip, visible, onCancel, employees, position, onCreateNorm, subeId,
 
       // normCount,
@@ -230,10 +237,15 @@ class CreateNormForm extends React.Component<Props, State> {
       hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
 
 
+
     const { pozisyon } = this.state;
 
 
-    console.log('position => ', position)
+
+     //  console.log('position => ', position)
+
+
+
     return (
       <Row >
         <Col
@@ -301,6 +313,7 @@ class CreateNormForm extends React.Component<Props, State> {
                         placeholder={L('PleaseSelect')}
                         onSelect={(x: any) => position !== undefined && this.setState({ pozisyon: x.toString() })} >
                         {
+                        
                           position !== undefined && position.items.map((value, index) => <Option key={'pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
                         }
                       </Select>
@@ -319,10 +332,7 @@ class CreateNormForm extends React.Component<Props, State> {
                         }
                       ]
                     }>
-                      <Select key={'YeniPozisyon'} placeholder={L('PleaseSelect')} >
-                        {
-                          console.log('position', position)
-                        }
+                      <Select key={'YeniPozisyon'} placeholder={L('PleaseSelect')} >                      
                         {
                           position !== undefined && position.items.map((value, index) => <Option key={'yeni_pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
                         }

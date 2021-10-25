@@ -25,6 +25,7 @@ http.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 http.interceptors.response.use(function (response) {
+
     return response;
 }, function (error) {
     if (!!error.response && !!error.response.data.error && !!error.response.data.error.message && error.response.data.error.details) {
@@ -39,7 +40,10 @@ http.interceptors.response.use(function (response) {
             content: abpUtility_1.L(error.response.data.error.message)
         });
     }
-    else if (!error.response) {
+
+
+    else if (!error.response) { 
+   
         antd_1.Modal.error({ content: abpUtility_1.L('UnknownError') });
     }
     setTimeout(function () { }, 1000);

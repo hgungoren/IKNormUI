@@ -55,7 +55,11 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   }
 
   async getAll() {
-    await this.props.userStore.getAll({ maxResultCount: this.state.maxResultCount, skipCount: this.state.skipCount, keyword: this.state.filter });
+    await this.props.userStore.getAll({
+       maxResultCount: this.state.maxResultCount,
+        skipCount: this.state.skipCount, 
+        keyword: this.state.filter 
+      });
   }
 
   // handleTableChange = (pagination: any) => {

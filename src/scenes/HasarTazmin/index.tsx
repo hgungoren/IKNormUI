@@ -392,7 +392,7 @@ const Demo = (props: Props) => {
 
 
 
-              <Form.Item label="Müşteri Bilgilendirmesi"   >
+              <Form.Item label="Müşteri Bilgilendirmesi" >
                 <Checkbox onChange={onChangMail}>Email</Checkbox>
                 {visibleEmail ?
                   (

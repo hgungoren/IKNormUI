@@ -11,7 +11,7 @@ class KInkaLookUpTableStore {
     async getAll(pagedFilterAndSortedRequest: PagedKInkaLookUpTableResultRequestDto) {
         let result = await kInkaLookUpTableService.getAll(pagedFilterAndSortedRequest);
 
-        console.log('result', result)
+        //console.log('result', result)
         this.positions = result
     } 
 }
