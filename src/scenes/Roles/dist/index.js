@@ -76,6 +76,7 @@ var abpUtility_1 = require("../../lib/abpUtility");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var icons_1 = require("@ant-design/icons");
 var RoleDetailDrawer_1 = require("../../components/RoleDetailDrawer");
+var react_router_dom_1 = require("react-router-dom");
 var confirm = antd_1.Modal.confirm;
 var Search = antd_1.Input.Search;
 var Role = /** @class */ (function (_super) {
@@ -85,7 +86,7 @@ var Role = /** @class */ (function (_super) {
         _this.formRef = React.createRef();
         _this.state = {
             modalVisible: false,
-            maxResultCount: 10,
+            maxResultCount: 100000,
             skipCount: 0,
             roleId: 0,
             filter: '',
@@ -285,11 +286,21 @@ var Role = /** @class */ (function (_super) {
             },
         ];
         return (React.createElement(React.Fragment, null,
+            React.createElement(antd_1.Card, { style: { marginBottom: 20 } },
+                React.createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: React.createElement(antd_1.Breadcrumb, null,
+                        React.createElement(antd_1.Breadcrumb.Item, null,
+                            abpUtility_1.isGranted('items.dashboard.view') ? React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : React.createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Dashboard')),
+                            "  "),
+                        React.createElement(antd_1.Breadcrumb.Item, null,
+                            " ",
+                            abpUtility_1.L('pages.role.new'),
+                            " ")) })),
             React.createElement(antd_1.Card, null,
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { xs: { span: 4, offset: 0 }, sm: { span: 4, offset: 0 }, md: { span: 4, offset: 0 }, lg: { span: 2, offset: 0 }, xl: { span: 2, offset: 0 }, xxl: { span: 2, offset: 0 } },
                         React.createElement("h2", null, abpUtility_1.L('Roles'))),
-                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.role.table.role_new_create') && React.createElement(antd_1.Button, { type: "primary", shape: "circle", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } }))),
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('items.role.table.role.new.create') &&
+                        React.createElement(antd_1.Button, { type: "primary", shape: "circle", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } }))),
                 React.createElement(antd_1.Row, null,
                     React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
                         React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),

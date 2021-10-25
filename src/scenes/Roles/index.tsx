@@ -41,7 +41,7 @@ class Role extends AppComponentBase<IRoleProps, IRoleState> {
 
   state = {
     modalVisible: false,
-    maxResultCount: 10,
+    maxResultCount: 100000,
     skipCount: 0,
     roleId: 0,
     filter: '',

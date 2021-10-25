@@ -190,7 +190,7 @@ var NormRequestListTable = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 confirm({
                     icon: React.createElement(icons_1.ExclamationCircleOutlined, null),
-                    content: abpUtility_1.L('DoYouWantToConfirm'),
+                    content: abpUtility_1.L('CancelDoYouWantToConfirm'),
                     okText: abpUtility_1.L('Approve'),
                     cancelText: abpUtility_1.L('Cancel'),
                     onOk: function () {
