@@ -67,6 +67,7 @@ var react_sortable_tree_1 = require("react-sortable-tree");
 var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var hierarchyDrawer_1 = require("./components/hierarchyDrawer");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
+var react_router_dom_1 = require("react-router-dom");
 var Hierarchy = /** @class */ (function (_super) {
     __extends(Hierarchy, _super);
     function Hierarchy() {
@@ -75,8 +76,25 @@ var Hierarchy = /** @class */ (function (_super) {
             nodeKey: 0,
             visible: false,
             node: {},
-            treeData: []
+            treeData: [],
+            alertTyp: 'warning'
         };
+        _this.onDragStateChanged = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
+        }); };
+        _this.onMoveNode = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var ids;
+            return __generator(this, function (_a) {
+                //  if(data.nextParentNode === null || )
+                if (data.nextParentNode !== null) {
+                    ids = data.nextParentNode.children.map(function (x) { return x.id; });
+                    this.props.kHierarchyStore.updateOrderNodes(ids);
+                }
+                return [2 /*return*/];
+            });
+        }); };
         _this.componentDidMount = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -119,6 +137,7 @@ var Hierarchy = /** @class */ (function (_super) {
         }); };
         _this.onSwitchChange = function (data) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                this.setState({ alertTyp: 'warning' });
                 this.props.kHierarchyStore.update(data);
                 return [2 /*return*/];
             });
@@ -143,17 +162,27 @@ var Hierarchy = /** @class */ (function (_super) {
     }
     Hierarchy.prototype.render = function () {
         var _this = this;
-        return (react_1["default"].createElement("div", { style: { height: 700 } },
-            react_1["default"].createElement(react_sortable_tree_1["default"], { key: react_uuid_1["default"](), onChange: function (treeData) { return _this.setState({ treeData: treeData }); }, treeData: this.state.treeData, generateNodeProps: function (_a) {
-                    var node = _a.node, path = _a.path;
-                    return ({
-                        canDrag: node.subtitle === "unit" ? false : node.subtitle === "position" ? false : true,
-                        buttons: node.subtitle === "title" ? [
-                            react_1["default"].createElement(antd_1.Button, { onClick: function () { return _this.drawerOnOpen(node); } }, abpUtility_1.L('Operations'))
-                        ] : []
-                    });
-                } }),
-            react_1["default"].createElement(hierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange })));
+        return (react_1["default"].createElement(react_1["default"].Fragment, null,
+            react_1["default"].createElement(antd_1.Card, { style: { marginBottom: 20 } },
+                react_1["default"].createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: react_1["default"].createElement(antd_1.Breadcrumb, null,
+                        react_1["default"].createElement(antd_1.Breadcrumb.Item, null,
+                            this.isGranted('items.dashboard.view') ? react_1["default"].createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : react_1["default"].createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Dashboard')),
+                            "  "),
+                        react_1["default"].createElement(antd_1.Breadcrumb.Item, null,
+                            " ",
+                            abpUtility_1.L('pages.hierarchy'),
+                            " ")) })),
+            react_1["default"].createElement("div", { style: { height: 700 } },
+                react_1["default"].createElement(react_sortable_tree_1["default"], { onMoveNode: this.onMoveNode, onDragStateChanged: this.onDragStateChanged, key: react_uuid_1["default"](), onChange: function (treeData) { return _this.setState({ treeData: treeData }); }, treeData: this.state.treeData, generateNodeProps: function (_a) {
+                        var node = _a.node, path = _a.path;
+                        return ({
+                            canDrag: node.subtitle === 'unit' ? false : node.subtitle === 'position' ? false : true,
+                            buttons: node.subtitle === 'title'
+                                ? [react_1["default"].createElement(antd_1.Button, { onClick: function () { return _this.drawerOnOpen(node); } }, abpUtility_1.L('Operations'))]
+                                : []
+                        });
+                    } }),
+                react_1["default"].createElement(hierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange, alertTyp: "info", kHierarchyStore: this.props.kHierarchyStore }))));
     };
     Hierarchy = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),

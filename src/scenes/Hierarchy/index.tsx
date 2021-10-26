@@ -46,6 +46,19 @@ class Hierarchy extends AppComponentBase<Props, State> {
     alertTyp: 'warning',
   };
 
+  onDragStateChanged = async (data) => {
+    // console.log('onDragStateChanged => ', data)
+  }
+
+  onMoveNode = async (data) => {
+    //  if(data.nextParentNode === null || )
+    if (data.nextParentNode !== null) {
+      let ids = data.nextParentNode.children.map((x) => x.id);
+      this.props.kHierarchyStore.updateOrderNodes(ids);
+    }
+  }
+
+
   componentDidMount = async () => {
     await this.props.kHierarchyStore.getUnit();
 
@@ -82,7 +95,6 @@ class Hierarchy extends AppComponentBase<Props, State> {
 
   onSwitchChange = async (data: any) => {
     this.setState({ alertTyp: 'warning' });
-
     this.props.kHierarchyStore.update(data);
   };
 
@@ -102,48 +114,51 @@ class Hierarchy extends AppComponentBase<Props, State> {
     });
   };
 
+
   render() {
     return (
       <>
-       
-       <Card style={{ marginBottom: 20 }}>
-                    <PageHeader
-                        ghost={false}
-                        onBack={() => window.history.back()}
-                        title={
-                            <Breadcrumb>
-                                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
-                                <Breadcrumb.Item> {L('pages.hierarchy')} </Breadcrumb.Item>
-                            </Breadcrumb>
-                        }  >
-                    </PageHeader>
-                </Card>
+
+        <Card style={{ marginBottom: 20 }}>
+          <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title={
+              <Breadcrumb>
+                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                <Breadcrumb.Item> {L('pages.hierarchy')} </Breadcrumb.Item>
+              </Breadcrumb>
+            }  >
+          </PageHeader>
+        </Card>
 
 
-      <div style={{ height: 700 }}>
-        <SortableTree
-          key={uuid()}
-          onChange={(treeData) => this.setState({ treeData })}
-          treeData={this.state.treeData}
-          generateNodeProps={({ node, path }) => ({
-            canDrag: node.subtitle === 'unit' ? false : node.subtitle === 'position' ? false : true,
-            buttons:
-              node.subtitle === 'title'
-                ? [<Button onClick={() => this.drawerOnOpen(node)}>{L('Operations')}</Button>]
-                : [],
-          })}
-        />
-        <HierarchyDrawer
-          node={this.state.node}
-          key={this.state.nodeKey}
-          visible={this.state.visible}
-          onClose={this.drawerOnClose}
-          onSwitchChange={this.onSwitchChange}
-          alertTyp="info"
-          kHierarchyStore={this.props.kHierarchyStore}
-        />
-      </div>
-      
+        <div style={{ height: 700 }}>
+          <SortableTree
+            onMoveNode={this.onMoveNode}
+            onDragStateChanged={this.onDragStateChanged}
+            key={uuid()}
+            onChange={(treeData) => this.setState({ treeData })}
+            treeData={this.state.treeData}
+            generateNodeProps={({ node, path }) => ({
+              canDrag: node.subtitle === 'unit' ? false : node.subtitle === 'position' ? false : true, 
+              buttons:
+                node.subtitle === 'title'
+                  ? [<Button onClick={() => this.drawerOnOpen(node)}>{L('Operations')}</Button>]
+                  : [],
+            })}
+          />
+          <HierarchyDrawer
+            node={this.state.node}
+            key={this.state.nodeKey}
+            visible={this.state.visible}
+            onClose={this.drawerOnClose}
+            onSwitchChange={this.onSwitchChange}
+            alertTyp="info"
+            kHierarchyStore={this.props.kHierarchyStore}
+          />
+        </div>
+
       </>
     );
   }

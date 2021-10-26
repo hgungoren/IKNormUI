@@ -24,7 +24,7 @@ class KHierarchyStore {
 
 
     @action
-    async update(changeStatus: ChangeStatus) { 
+    async update(changeStatus: ChangeStatus) {
         let result = await kHierarchyService.update(changeStatus);
         this.status = result;
     }
@@ -42,6 +42,13 @@ class KHierarchyStore {
 
         let result = await kHierarchyService.generateHierarchy(generateHierarchyDto);
         this.kHierarchies = result;
+    }
+
+
+    @action
+    async updateOrderNodes(ids: any) {
+        let result = await kHierarchyService.updateOrderNodes(ids);
+        this.status = result;
     }
 }
 

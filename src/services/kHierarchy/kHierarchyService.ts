@@ -30,6 +30,12 @@ class KHierarchyService {
         });
         return result.data.result;
     }
+ 
+    public async updateOrderNodes(ids: any): Promise<boolean> {
+        let result = await http.put('/api/services/app/Node/UpdateOrderNodes', ids);
+        return result.data.result;
+    }
+
 }
 
 export default new KHierarchyService();

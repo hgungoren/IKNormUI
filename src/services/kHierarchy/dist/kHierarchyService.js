@@ -107,6 +107,19 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
+    KHierarchyService.prototype.updateOrderNodes = function (ids) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('/api/services/app/Node/UpdateOrderNodes', ids)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
     return KHierarchyService;
 }());
 exports["default"] = new KHierarchyService();
