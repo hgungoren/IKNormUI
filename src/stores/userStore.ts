@@ -15,11 +15,9 @@ class UserStore {
   @observable roles: GetRoles[] = [];
 
   @action
-  async create(createUserInput: CreateOrUpdateUserInput) {
-
+  async create(createUserInput: CreateOrUpdateUserInput) { 
     let result = await userService.create(createUserInput);
-    this.users.items.push(result);
-
+    this.users.items.push(result); 
   }
 
   @action
@@ -52,20 +50,20 @@ class UserStore {
   @action
   async createUser() {
     this.editUser = {
+      id: 0,
+      name: '',
+      title: '',
+      sicilNo: 0,
+      surname: '',
+      password: '',
+      userName: '',
+      roleNames: [],
+      userObjId: '0',
+      isActive: false,
+      emailAddress: '',
       companyCode: '0',
       companyObjId: '0',
       companyRelationObjId: '0',
-      sicilNo: 0,
-      title: '',
-      userObjId: '0',
-      userName: '',
-      name: '',
-      surname: '',
-      emailAddress: '',
-      isActive: false,
-      roleNames: [],
-      password: '',
-      id: 0,
     };
     this.roles = [];
   }

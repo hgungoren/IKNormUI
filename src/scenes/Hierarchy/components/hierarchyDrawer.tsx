@@ -10,19 +10,24 @@ export interface Props {
   onSwitchChange: (node) => void;
   visible: boolean;
   node: any;
-  alertTyp: any;
   kHierarchyStore: KHierarchyStore;
 }
 
 export function HierarchyDrawer(props: Props) {
  
-  const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.pushNotificationPhoneStatusChange);
-  const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.pushNotificationWebStatusChange);
-  const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.pushNotificationPhone);
-  const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.pushNotificationWeb);
-  const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.canTerminate);
-  const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.mailStatusChange);
+ 
+  console.log('props.node.mail=>',props.node.mail)
+  console.log('props.node=>',props.node)
+  // const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.pushNotificationPhoneStatusChange);
+  // const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.pushNotificationWebStatusChange);
+  // const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.pushNotificationPhone);
+  // const [defaultVisiblePushNotificationWeb, setDefaultVisiblePushNotificationWeb] = useState(props.node.pushNotificationWeb);
+  // const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.canTerminate);
+  // const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.mailStatusChange);
   const [defaultVisibleMail, setDefaultVisibleMail] = useState(props.node.mail);
+        
+
+ 
 
   return (
     <>
@@ -42,6 +47,7 @@ export function HierarchyDrawer(props: Props) {
             xl={{ offset: 0, span: 24 }}
             xxl={{ offset: 0, span: 24 }}
           >
+            
             <div style={{ marginBottom: '10px' }}>
               <Alert
                 message=" Mail Bildirimi"
@@ -67,7 +73,9 @@ export function HierarchyDrawer(props: Props) {
           </Col>
         </Row>
 
+   
 
+{/* 
         <Row gutter={16} justify="start" align="middle">
           <Col
             xs={{ offset: 0, span: 24 }}
@@ -310,7 +318,7 @@ export function HierarchyDrawer(props: Props) {
               />
             </div>
           </Col>
-        </Row>
+        </Row> */}
       </Drawer>
     </>
   );

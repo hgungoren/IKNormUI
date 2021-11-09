@@ -1,14 +1,13 @@
-import * as React from 'react'; 
+import * as React from 'react';
 import { Checkbox, Input, Modal, Tabs, Form, Row, Col } from 'antd';
 import { GetRoles } from '../../../services/user/dto/getRolesOuput';
 import { L } from '../../../lib/abpUtility';
 import rules from './createOrUpdateUser.validation';
 import { FormInstance } from 'antd/lib/form';
 
-
 const TabPane = Tabs.TabPane;
 
-export interface ICreateOrUpdateUserProps {
+export interface IProps {
   visible: boolean;
   onCancel: () => void;
   modalType: string;
@@ -17,7 +16,7 @@ export interface ICreateOrUpdateUserProps {
   formRef: React.RefObject<FormInstance>;
 }
 
-class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
+class CreateOrUpdateUser extends React.Component<IProps> {
   state = {
     confirmDirty: false,
   };
@@ -100,11 +99,12 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
         onCancel={onCancel}
         onOk={onCreate}
         title={L('UserDetail')}
-        destroyOnClose={true}>
+        destroyOnClose={true}
+      >
         <Form ref={this.props.formRef}>
           <Tabs defaultActiveKey={'userInfo'} size={'small'} tabBarGutter={64}>
             <TabPane tab={L('User')} key={'userInfo'}>
-              <Row >
+              <Row>
                 <Col
                   xs={{ span: 24, offset: 0 }}
                   sm={{ span: 24, offset: 0 }}
@@ -117,14 +117,29 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('Surname')} {...formItemLayout} name={'surname'} rules={rules.surname}>
+                  <Form.Item
+                    label={L('Surname')}
+                    {...formItemLayout}
+                    name={'surname'}
+                    rules={rules.surname}
+                  >
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'} rules={rules.title}>
+                  <Form.Item
+                    label={L('Title')}
+                    {...formItemLayout}
+                    name={'title'}
+                    rules={rules.title}
+                  >
                     <Input />
                   </Form.Item>
-                  <Form.Item label={L('UserName')} {...formItemLayout} name={'userName'} rules={rules.userName}>
+                  <Form.Item
+                    label={L('UserName')}
+                    {...formItemLayout}
+                    name={'userName'}
+                    rules={rules.userName}
+                  >
                     <Input />
                   </Form.Item>
                 </Col>
@@ -136,12 +151,20 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                   xl={{ span: 10, offset: 0 }}
                   xxl={{ span: 10, offset: 0 }}
                 >
-                  <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
+                  <Form.Item
+                    label={L('Email')}
+                    {...formItemLayout}
+                    name={'emailAddress'}
+                    rules={rules.emailAddress as []}
+                  >
                     <Input />
                   </Form.Item>
 
                   {this.props.modalType === 'edit' ? (
-                    <Form.Item label={L('Password')} {...formItemLayout} name={'password'}
+                    <Form.Item
+                      label={L('Password')}
+                      {...formItemLayout}
+                      name={'password'}
                       rules={[
                         {
                           required: true,
@@ -156,7 +179,10 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                     </Form.Item>
                   ) : null}
                   {this.props.modalType === 'edit' ? (
-                    <Form.Item label={L('ConfirmPassword')} {...formItemLayout} name={'confirm'}
+                    <Form.Item
+                      label={L('ConfirmPassword')}
+                      {...formItemLayout}
+                      name={'confirm'}
                       rules={[
                         {
                           required: true,
@@ -170,7 +196,12 @@ class CreateOrUpdateUser extends React.Component<ICreateOrUpdateUserProps> {
                       <Input type="password" />
                     </Form.Item>
                   ) : null}
-                  <Form.Item label={L('IsActiveStatus')} {...tailFormItemLayout} name={'isActive'} valuePropName={'checked'}>
+                  <Form.Item
+                    label={L('IsActiveStatus')}
+                    {...tailFormItemLayout}
+                    name={'isActive'}
+                    valuePropName={'checked'}
+                  >
                     <Checkbox defaultChecked>{L('Active')}</Checkbox>
                   </Form.Item>
                 </Col>

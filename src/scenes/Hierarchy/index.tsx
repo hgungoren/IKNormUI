@@ -32,7 +32,6 @@ export interface State {
   treeData: any;
   nodeKey: number;
   visible: boolean;
-  alertTyp: any;
 }
 
 @inject(Stores.KHierarchyStore)
@@ -43,7 +42,7 @@ class Hierarchy extends AppComponentBase<Props, State> {
     visible: false,
     node: {} as Node,
     treeData: [] as Node[],
-    alertTyp: 'warning',
+
   };
 
   onDragStateChanged = async (data) => {
@@ -60,6 +59,7 @@ class Hierarchy extends AppComponentBase<Props, State> {
 
 
   componentDidMount = async () => {
+
     await this.props.kHierarchyStore.getUnit();
 
     setTimeout(() => {
@@ -93,9 +93,9 @@ class Hierarchy extends AppComponentBase<Props, State> {
     }, 500);
   };
 
-  onSwitchChange = async (data: any) => {
-    this.setState({ alertTyp: 'warning' });
+  onSwitchChange = async (data: any) => {  
     this.props.kHierarchyStore.update(data);
+
   };
 
   onPassive = async (position: string) => {
@@ -112,6 +112,9 @@ class Hierarchy extends AppComponentBase<Props, State> {
       node: node,
       nodeKey: node.id,
     });
+
+     console.log('node=>',node)
+
   };
 
 
@@ -154,7 +157,7 @@ class Hierarchy extends AppComponentBase<Props, State> {
             visible={this.state.visible}
             onClose={this.drawerOnClose}
             onSwitchChange={this.onSwitchChange}
-            alertTyp="info"
+          
             kHierarchyStore={this.props.kHierarchyStore}
           />
         </div>
