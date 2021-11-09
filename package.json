@@ -42,7 +42,7 @@
     "extends": "react-app"
   },
   "scripts": {
-    "start": "craco start NODE_ENV=production",
+    "start": "craco start NODE_ENV=production ",
     "build": "craco build",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "craco test",

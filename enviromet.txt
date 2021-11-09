@@ -2,6 +2,9 @@ GENERATE_SOURCEMAP=false
 REACT_APP_APP_BASE_URL="http://10.27.1.74/"
 REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.74:1904"   test
 REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.72:1904/"  canlı
+REACT_APP_REMOTE_SERVICE_BASE_URL="https://koordinat.suratkargo.com.tr/iknorm/"  
+
+
  
 GENERATE_SOURCEMAP=false
 REACT_APP_APP_BASE_URL="http://localhost:3000"
