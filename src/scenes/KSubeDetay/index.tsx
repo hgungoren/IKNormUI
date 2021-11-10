@@ -680,8 +680,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, IKSubeDatayState>{
                     </Card>
                 }
          
-                <CreateNormForm
-                
+                <CreateNormForm 
                     tip={tip}
                     subeId={id}
                     modalWidth={'60%'}

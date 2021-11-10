@@ -72,7 +72,7 @@ class CreateNormForm extends React.Component<Props, State> {
   };
 
 
-   
+
 
   changeActiveTab = () => {
     const form = this.props.formRef.current;
@@ -134,8 +134,8 @@ class CreateNormForm extends React.Component<Props, State> {
 
 
   visibleChangeFormItems = (param) => {
-  
-  
+
+
     const form = this.props.formRef.current;
     form!.resetFields(['Pozisyon', 'Aciklama', 'TalepNedeni', 'PersonelId', 'YeniPozisyon'])
 
@@ -193,7 +193,7 @@ class CreateNormForm extends React.Component<Props, State> {
     //   talepTuru: ''
     // });
 
-  
+
 
   }
 
@@ -210,7 +210,7 @@ class CreateNormForm extends React.Component<Props, State> {
 
   render() {
 
- 
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 6 },
@@ -229,22 +229,9 @@ class CreateNormForm extends React.Component<Props, State> {
         xxl: { span: 18 },
       },
     };
-    
-    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId,
 
-      // normCount,
-
-      hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
-
-
-
+    const { tip, visible, onCancel, employees, position, onCreateNorm, subeId, hierarchy, bagliOlduguSubeId, getHierarchy, modalWidth } = this.props;
     const { pozisyon } = this.state;
-
-
-
-     //  console.log('position => ', position)
-
-
 
     return (
       <Row >
@@ -270,12 +257,13 @@ class CreateNormForm extends React.Component<Props, State> {
               ]
             }
             onCancel={() => { onCancel(); this.resetForm(); }}
-            width={modalWidth}
-            visible={visible}
-            cancelText={L('Cancel')}
             okText={L('OK')}
+            visible={visible}
+            width={modalWidth}
+            destroyOnClose={true}
             title={L('Position')}
-            destroyOnClose={true} >
+            cancelText={L('Cancel')}
+          >
 
             <Form ref={this.props.formRef}   >
               <Tabs
@@ -298,26 +286,27 @@ class CreateNormForm extends React.Component<Props, State> {
                   </Form.Item>
 
                   <Form.Item className={'mt-5'} label={L('RequestType')} {...formItemLayout} name={'TalepTuru'} rules={rules.requestType}>
-                    <Select key={'TalepTuru'} placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
+                    <Select placeholder={L('PleaseSelect')} onChange={this.visibleChangeFormItems}>
                       {
-                        Object.keys(TalepTuru).map((value, index) => <Option key={'a' + value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
+                        Object.keys(TalepTuru).map((value, index) => <Option key={'talep_turu_' + value} value={value}> {L(TalepTuru[value].replace(' ', ''))}  </Option>)
                       }
                     </Select>
                   </Form.Item>
 
                   {
-                    this.state.positionVisible && (<Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
-                      <Select
-                        key={'Pozisyon'}
-                        notFoundContent={{ emptyText: L('NoSelectData') }}
-                        placeholder={L('PleaseSelect')}
-                        onSelect={(x: any) => position !== undefined && this.setState({ pozisyon: x.toString() })} >
-                        {
-                        
-                          position !== undefined && position.items.map((value, index) => <Option key={'pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
-                        }
-                      </Select>
-                    </Form.Item>)
+                    this.state.positionVisible && (
+                      <Form.Item label={L('Position')} {...formItemLayout} name={'Pozisyon'} rules={rules.position}>
+                        <Select
+                          notFoundContent={{ emptyText: L('NoSelectData') }}
+                          placeholder={L('PleaseSelect')}
+                          onSelect={(x: any) => position !== undefined && this.setState({ pozisyon: x.toString() })} >
+                          {
+
+                            position !== undefined && position.items.map((value, index) => <Option key={'pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
+                          }
+                        </Select>
+                      </Form.Item>
+                    )
                   }
 
                   {
@@ -332,7 +321,7 @@ class CreateNormForm extends React.Component<Props, State> {
                         }
                       ]
                     }>
-                      <Select key={'YeniPozisyon'} placeholder={L('PleaseSelect')} >                      
+                      <Select key={'YeniPozisyon'} placeholder={L('PleaseSelect')} >
                         {
                           position !== undefined && position.items.map((value, index) => <Option key={'yeni_pozisyon_' + value.adi} value={value.adi}> {value.adi} </Option>)
                         }

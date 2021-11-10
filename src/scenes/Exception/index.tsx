@@ -81,7 +81,7 @@ class Exception extends React.Component<any, any> {
             <Button type={'primary'}>
               <Link
                 to={{
-                  pathname: '/',
+                  pathname: '/home',
                 }}
               >
                 {L('error.page.button')}

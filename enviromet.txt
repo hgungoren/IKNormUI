@@ -1,7 +1,8 @@
 GENERATE_SOURCEMAP=false
+REACT_APP_APP_BASE_URL="http://10.27.1.131/"
 REACT_APP_APP_BASE_URL="http://10.27.1.74/"
-REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.74:1904"   test
-REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.72:1904/"  canlı
+REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.74:1904"    
+REACT_APP_REMOTE_SERVICE_BASE_URL="http://10.27.1.72:1904/"  
 REACT_APP_REMOTE_SERVICE_BASE_URL="https://koordinat.suratkargo.com.tr/iknorm/"  
 
 
@@ -9,4 +10,12 @@ REACT_APP_REMOTE_SERVICE_BASE_URL="https://koordinat.suratkargo.com.tr/iknorm/"
 GENERATE_SOURCEMAP=false
 REACT_APP_APP_BASE_URL="http://localhost:3000"
 REACT_APP_REMOTE_SERVICE_BASE_URL="http://localhost:21021"
+
+
+
+Güncel
+
+GENERATE_SOURCEMAP=false
+REACT_APP_APP_BASE_URL="https://10.27.1.131/"    
+REACT_APP_REMOTE_SERVICE_BASE_URL="https://koordinat.suratkargo.com.tr/"
  

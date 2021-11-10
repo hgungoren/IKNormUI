@@ -22,8 +22,7 @@ interface IHomeProps {
   authenticationStore?: AuthenticationStore;
 }
 
-interface IHomeState { }
-
+interface IHomeState { } 
 
 declare var abp: any;
 
@@ -33,44 +32,42 @@ declare var abp: any;
 export class Home extends React.Component<IHomeProps, IHomeState> {
 
 
- 
-  render() {  
+
+  render() {
     abp.event.on('knorm_added', function (userNotification) {
 
       alert('saf')
       alert(userNotification)
-     })
+    })
     return (
       <>
-            <Card style={{ marginBottom: 20 }}>
-                    <PageHeader
-                        ghost={false}
-                        onBack={() => window.history.back()}
-                        title={
-                            <Breadcrumb>
-                                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
-                                <Breadcrumb.Item> {L('pages.home')} </Breadcrumb.Item>
-                            </Breadcrumb>
-                        }  >
-                    </PageHeader>
-                </Card>
- 
+        <Card style={{ marginBottom: 20 }}>
+          <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title={
+              <Breadcrumb>
+                <Breadcrumb.Item>{isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                <Breadcrumb.Item> {L('pages.home')} </Breadcrumb.Item>
+              </Breadcrumb>
+            }  >
+          </PageHeader>
+        </Card>
+        <Row gutter={16} >
 
-      <Row gutter={16} >
+          <Col
+            xs={{ span: 10, offset: 0 }}
+            sm={{ span: 10, offset: 0 }}
+            md={{ span: 10, offset: 0 }}
+            lg={{ span: 10, offset: 0 }}
+            xl={{ span: 10, offset: 0 }}
+            xxl={{ span: 10, offset: 0 }}>
+            <Card hoverable>
+              <InformationCart />
+            </Card>
+          </Col>
 
-        <Col
-          xs={{ span: 10, offset: 0 }}
-          sm={{ span: 10, offset: 0 }}
-          md={{ span: 10, offset: 0 }}
-          lg={{ span: 10, offset: 0 }}
-          xl={{ span: 10, offset: 0 }}
-          xxl={{ span: 10, offset: 0 }}>
-          <Card hoverable>
-            <InformationCart />
-          </Card>
-        </Col>
-
-        <Col
+          {/* <Col
           xs={{ span: 14, offset: 0 }}
           sm={{ span: 14, offset: 0 }}
           md={{ span: 14, offset: 0 }}
@@ -80,8 +77,8 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
           <Card hoverable>
 
           </Card>
-        </Col>
-      </Row>
+        </Col> */}
+        </Row>
       </>
     );
   }

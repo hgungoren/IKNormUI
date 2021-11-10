@@ -1,64 +1,77 @@
 /*eslint-disable */
 import './index.less'
+import { Avatar } from 'antd';
 import *  as React from 'react';
+import Meta from 'antd/lib/card/Meta';
 import { inject, observer } from 'mobx-react';
+import Loading from '../../components/Loading';
 import Stores from '../../stores/storeIdentifier';
 import AccountStore from '../../stores/accountStore';
 import SessionStore from '../../stores/sessionStore';
+import { AntDesignOutlined } from '@ant-design/icons';
 import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
-import { Avatar } from 'antd';
-import { AntDesignOutlined } from '@ant-design/icons';
-import Meta from 'antd/lib/card/Meta';
 
-
-export interface IInformationProps {
-    authenticationStore?: AuthenticationStore;
+export interface IProps {
     sessionStore?: SessionStore;
     accountStore?: AccountStore;
+    authenticationStore?: AuthenticationStore;
 
 }
-export interface IInformationState {
-
+export interface IState {
+    title: string;
+    userName: string;
+    isLoading: boolean;
+    userSurname: string;
+    emailAddress: string;
 }
 
+@inject(
+    Stores.SessionStore,
+    Stores.AccountStore,
+    Stores.AuthenticationStore,
+)
 
-@inject(Stores.AuthenticationStore, Stores.SessionStore, Stores.AccountStore)
 @observer
-class InformationCart extends AppComponentBase<IInformationProps, IInformationState> {
+class InformationCart extends AppComponentBase<IProps, IState> {
 
-
-
-    componentDidMount() {
-        let store = this.props.sessionStore?.currentLogin.user;
-        this.setState({
-
-            title: store?.title !== undefined ? store?.title : '',
-            emailAddress: store?.emailAddress !== undefined ? store?.emailAddress : ''
-
-        })
+    state = {
+        title: '',
+        userSurname: '',
+        emailAddress: '',
+        userName: '',
+        isLoading: true
     }
 
+    componentDidMount() {
+        let store = this.props.sessionStore?.currentLogin.user; 
+        setTimeout(() => {
+            this.setState({
+                title: store?.title ?? '',
+                userName: store?.userName ?? '',
+                userSurname: store?.surname ?? '',
+                emailAddress: store?.emailAddress ?? '',
+            });
+            this.setState({ isLoading: false })
+        }, 500) 
+    }
 
     render() {
-
-
         return (
             <>
-                <Meta
-                    avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
-                    title={<p className={'metaUserName'}>{this.props.sessionStore?.currentLogin.user.name || ''} {this.props.sessionStore?.currentLogin.user.surname || ''}</p>}
-                    description={
-                        <>
-                            {
+                {
+                    this.state.isLoading ? <Loading /> :
+                        <Meta
+                            avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
+                            title={<p className={'metaUserName'}>{this.state.userName} {this.state.userSurname}</p>}
+                            description={
                                 <>
-                                    <p>{this.props.sessionStore?.currentLogin.user.title || ''}</p>
-                                    <p>{this.props.sessionStore?.currentLogin.user.emailAddress || ''}</p>
+                                    <p>{this.state.title}</p>
+                                    <p>{this.state.emailAddress}</p>
                                 </>
-
                             }
-                        </>}
-                />
+                        />
+                }
             </>
         );
     }

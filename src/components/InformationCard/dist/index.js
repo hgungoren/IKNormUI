@@ -21,38 +21,53 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 /*eslint-disable */
 require("./index.less");
-var React = require("react");
-var mobx_react_1 = require("mobx-react");
-var storeIdentifier_1 = require("../../stores/storeIdentifier");
-var AppComponentBase_1 = require("../../components/AppComponentBase");
 var antd_1 = require("antd");
-var icons_1 = require("@ant-design/icons");
+var React = require("react");
 var Meta_1 = require("antd/lib/card/Meta");
+var mobx_react_1 = require("mobx-react");
+var Loading_1 = require("../../components/Loading");
+var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var icons_1 = require("@ant-design/icons");
+var AppComponentBase_1 = require("../../components/AppComponentBase");
 var InformationCart = /** @class */ (function (_super) {
     __extends(InformationCart, _super);
     function InformationCart() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.state = {
+            title: '',
+            userSurname: '',
+            emailAddress: '',
+            userName: '',
+            isLoading: true
+        };
+        return _this;
     }
     InformationCart.prototype.componentDidMount = function () {
+        var _this = this;
         var _a;
         var store = (_a = this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user;
-        this.setState({
-            title: (store === null || store === void 0 ? void 0 : store.title) !== undefined ? store === null || store === void 0 ? void 0 : store.title : '',
-            emailAddress: (store === null || store === void 0 ? void 0 : store.emailAddress) !== undefined ? store === null || store === void 0 ? void 0 : store.emailAddress : ''
-        });
+        setTimeout(function () {
+            var _a, _b, _c, _d;
+            _this.setState({
+                title: (_a = store === null || store === void 0 ? void 0 : store.title) !== null && _a !== void 0 ? _a : '',
+                userName: (_b = store === null || store === void 0 ? void 0 : store.userName) !== null && _b !== void 0 ? _b : '',
+                userSurname: (_c = store === null || store === void 0 ? void 0 : store.surname) !== null && _c !== void 0 ? _c : '',
+                emailAddress: (_d = store === null || store === void 0 ? void 0 : store.emailAddress) !== null && _d !== void 0 ? _d : ''
+            });
+            _this.setState({ isLoading: false });
+        }, 500);
     };
     InformationCart.prototype.render = function () {
-        var _a, _b, _c, _d;
-        return (React.createElement(React.Fragment, null,
+        return (React.createElement(React.Fragment, null, this.state.isLoading ? React.createElement(Loading_1["default"], null) :
             React.createElement(Meta_1["default"], { avatar: React.createElement(antd_1.Avatar, { size: 100, icon: React.createElement(icons_1.AntDesignOutlined, null) }), title: React.createElement("p", { className: 'metaUserName' },
-                    ((_a = this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.name) || '',
+                    this.state.userName,
                     " ",
-                    ((_b = this.props.sessionStore) === null || _b === void 0 ? void 0 : _b.currentLogin.user.surname) || ''), description: React.createElement(React.Fragment, null, React.createElement(React.Fragment, null,
-                    React.createElement("p", null, ((_c = this.props.sessionStore) === null || _c === void 0 ? void 0 : _c.currentLogin.user.title) || ''),
-                    React.createElement("p", null, ((_d = this.props.sessionStore) === null || _d === void 0 ? void 0 : _d.currentLogin.user.emailAddress) || ''))) })));
+                    this.state.userSurname), description: React.createElement(React.Fragment, null,
+                    React.createElement("p", null, this.state.title),
+                    React.createElement("p", null, this.state.emailAddress)) })));
     };
     InformationCart = __decorate([
-        mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),
+        mobx_react_1.inject(storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore, storeIdentifier_1["default"].AuthenticationStore),
         mobx_react_1.observer
     ], InformationCart);
     return InformationCart;
