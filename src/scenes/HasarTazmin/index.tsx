@@ -7,7 +7,7 @@ import {
   Button,
   Card,
   Col,
-  
+
   Divider,
   Form,
   Input,
@@ -29,7 +29,7 @@ import GonderenCariSelect from './components/GonderenCariSelect';
 import AliciCariSelect from './components/AliciCariSelect';
 import FarkliCari from './components/FarkliCari';
 import Stores from '../../stores/storeIdentifier';
-import { AlertOutlined, FileAddTwoTone, SendOutlined } from '@ant-design/icons';
+import { AlertOutlined, FileAddTwoTone, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 
 export interface IProps {
@@ -65,22 +65,22 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     setradioValueTazminMusteri: 4,
     settazminmusteriGonderici: false,
     Ktno: 0,
-    
-  
+
+
   };
 
   getdamage = async (id: number) => {
-    try {    
+    try {
       await this.props.kDamageCompensationStore
         .getDamageComppensation({ id: id })
         .then((response) => {
-          
-          setTimeout(()=>{
+
+          setTimeout(() => {
             this.formRef.current?.setFieldsValue({
               ...this.props.kDamageCompensationStore.getCreateDamageInput,
-            });    
-          },500)
-                          
+            });
+          }, 500)
+
         }).catch((err) => console.log(err));
     } catch (e) {
       console.log(e);
@@ -97,7 +97,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   public render() {
     const { Option } = Select;
-    const { TabPane } = Tabs    
+    const { TabPane } = Tabs
     //bugunün tarihi
     const today = Date.now();
     const test = new Intl.DateTimeFormat('tr-TR', {
@@ -108,9 +108,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
     const onChangeRadio = (e) => {
-      let changeRadio=e.target.value;
-      this.setState({setradioValue:changeRadio})     
-      if(changeRadio===1){
+      let changeRadio = e.target.value;
+      this.setState({ setradioValue: changeRadio })
+      if (changeRadio === 1) {
         this.setState({ setformreadonly: true });
         this.setState({ setformselectdisable: true });
         this.setState({ setsorgulama: true });
@@ -118,15 +118,15 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         this.setState({ settazminmusteriAlici: false });
         this.setState({ settazminmusteriFarkli: false });
         this.formRef?.current?.resetFields();
-      }else{
-        this.setState({ setformreadonly: false });  
+      } else {
+        this.setState({ setformreadonly: false });
         this.setState({ setformselectdisable: false });
-        this.setState({ setsorgulama: false });       
+        this.setState({ setsorgulama: false });
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: false });
         this.setState({ settazminmusteriFarkli: false });
         this.formRef?.current?.resetFields();
-      }   
+      }
     };
 
     const onChangeRadioTazminMusteri = (e) => {
@@ -180,7 +180,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const handleClick = (e) => {
       this.getdamage(this.state.Ktno);
-    
+
     };
 
 
@@ -213,11 +213,19 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
               defaultActiveKey="1"
               onChange={callback}
               tabBarGutter={50}
-              type="card"
+              // type="card"
               tabPosition="top"
               size="large"
             >
-              <TabPane tab="Tanzim Bilgileri" key="1">
+              <TabPane
+                tab={
+                  <span>
+                    <SwitcherOutlined />
+                    Tanzim Bilgileri
+                  </span>
+                }
+                key="1"
+              >
                 <Row>
                   <Col span={24}>
                     <Form layout="inline">
@@ -248,7 +256,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   <Col span={12}>
                     <Form layout="inline">
                       <Form.Item label="Kargo Takip No">
-                        
+
                         <Radio.Group onChange={onChangeRadio} value={this.state.setradioValue}>
                           <Radio value={1}>Biliniyor</Radio>
                           <Radio value={2}>Bilinmiyor</Radio>
@@ -308,7 +316,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Input
-                           //readOnly={this.state.setformreadonly}
+                          //readOnly={this.state.setformreadonly}
                           className="formInput"
                           type="date"
                         />
@@ -317,7 +325,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item 
+                      <Form.Item
                         rules={rules.evrakSeriNo}
                         name="evrakSeriNo"
                         label={
