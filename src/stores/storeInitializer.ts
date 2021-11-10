@@ -12,7 +12,8 @@ import KHierarchyStore          from './kHierarchyStore';
 import KNormDetailStore         from './kNormDetailStore';
 import NotificationStore        from './notificationStore';
 import AuthenticationStore      from './authenticationStore';
-import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
+import KInkaLookUpTableStore    from './kInkaLookUpTableStore'; 
+import KDamageCompensationStore from './kDamageCompensationStore';
 
 export default function initializeStores() {
   return {
@@ -31,5 +32,6 @@ export default function initializeStores() {
     notificationStore:          new NotificationStore(),
     authenticationStore:        new AuthenticationStore(),
     kInkaLookUpTableStore:      new KInkaLookUpTableStore(),
+    kDamageCompensationStore:   new KDamageCompensationStore(),
   };
 }

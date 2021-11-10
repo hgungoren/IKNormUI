@@ -39,20 +39,20 @@ export interface Props {
 
 export interface State {
     id: string;
+    moment: any;
+    normList: any;
     normId: string;
     userId: string;
     subeAdi: string;
     skipCount: number;
     subeObjId: string;
     totalSize: number;
+    dateFilter: boolean;
     cardLoading: boolean;
     searchFilter: string;
     modalVisible: boolean;
     maxResultCount: number;
-    filter: { offset: number, limit: number, current: number }
-    moment: any;
-    normList: any;
-    dateFilter: boolean;
+    filter: { offset: number, limit: number, current: number };
 }
 
 const Search = Input.Search;
