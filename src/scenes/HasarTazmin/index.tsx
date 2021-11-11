@@ -7,7 +7,6 @@ import {
   Button,
   Card,
   Col,
-  
   Divider,
   Form,
   Input,
@@ -18,7 +17,7 @@ import {
   Select,
   Space,
   Tabs,
-  Upload,
+  Upload
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
@@ -31,9 +30,15 @@ import FarkliCari from './components/FarkliCari';
 import Stores from '../../stores/storeIdentifier';
 import { AlertOutlined, FileAddTwoTone, SendOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
+//import { GetCariListDamage } from '../../services/kDamageCompensations/dto/getCariListDamage';
+import { Label } from 'recharts';
+//import { getSubeList } from '../../services/kDamageCompensations/dto/getSubeList';
+//import uuid from 'react-uuid';
+
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
+
 }
 
 export interface IState {
@@ -46,8 +51,12 @@ export interface IState {
   setradioValueTazminMusteri: number;
   settazminmusteriGonderici: boolean;
   Ktno: number;
-
-
+  cariList: any;
+  gonderiUnvanInput: string;
+  aliciUnvanInput: string;
+  subeList: any;
+  birimList: any;
+  bolgeList:any;
 }
 
 @inject(Stores.KDamageCompensationStore)
@@ -64,31 +73,73 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     settazminmusteriFarkli: false,
     setradioValueTazminMusteri: 4,
     settazminmusteriGonderici: false,
-    Ktno: 0,
-    
-  
+    Ktno: 999,
+    cariList: [],
+    gonderiUnvanInput: '',
+    aliciUnvanInput: '',
+    subeList: [],
+    birimList: [],
+    bolgeList:[]
   };
 
   getdamage = async (id: number) => {
-    try {    
+    try {
       await this.props.kDamageCompensationStore
         .getDamageComppensation({ id: id })
         .then((response) => {
-          
-          setTimeout(()=>{
-            this.formRef.current?.setFieldsValue({
-              ...this.props.kDamageCompensationStore.getCreateDamageInput,
-            });    
-          },500)
-                          
+
+
         }).catch((err) => console.log(err));
     } catch (e) {
       console.log(e);
     }
   };
 
+
+  getcarilistdamageCompensation = async (id: number) => {
+    try {
+      await this.props.kDamageCompensationStore
+        .getCariListDamageComppensation({ id: id })
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
+  //sube listesi
+  getsubelistdamageCompensation = async () => {
+    try {
+      await this.props.kDamageCompensationStore.getSubeListDamageComppensation();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+    //Bolge listesi
+    getbolgelistdamageCompensation = async () => {
+      try {
+        await this.props.kDamageCompensationStore.getBolgeListDamageComppensation();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+
+  //Birim listesi
+  getbirimlistdamageCompensation = async () => {
+    try {
+      await this.props.kDamageCompensationStore.getBirimListDamageComppensation();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
+
   async componentDidMount() {
-    //console.log('Respon=>',  await this.getdamage(12153892013889));
+    await this.getsubelistdamageCompensation();
+    await this.getbirimlistdamageCompensation();
+    await this.getbolgelistdamageCompensation();
   }
 
 
@@ -97,20 +148,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   public render() {
     const { Option } = Select;
-    const { TabPane } = Tabs    
-    //bugunün tarihi
-    const today = Date.now();
-    const test = new Intl.DateTimeFormat('tr-TR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }).format(today);
+    const { TabPane } = Tabs
 
 
     const onChangeRadio = (e) => {
-      let changeRadio=e.target.value;
-      this.setState({setradioValue:changeRadio})     
-      if(changeRadio===1){
+      let changeRadio = e.target.value;
+      this.setState({ setradioValue: changeRadio })
+      if (changeRadio === 1) {
         this.setState({ setformreadonly: true });
         this.setState({ setformselectdisable: true });
         this.setState({ setsorgulama: true });
@@ -118,15 +162,15 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         this.setState({ settazminmusteriAlici: false });
         this.setState({ settazminmusteriFarkli: false });
         this.formRef?.current?.resetFields();
-      }else{
-        this.setState({ setformreadonly: false });  
+      } else {
+        this.setState({ setformreadonly: false });
         this.setState({ setformselectdisable: false });
-        this.setState({ setsorgulama: false });       
+        this.setState({ setsorgulama: false });
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: false });
         this.setState({ settazminmusteriFarkli: false });
         this.formRef?.current?.resetFields();
-      }   
+      }
     };
 
     const onChangeRadioTazminMusteri = (e) => {
@@ -180,8 +224,93 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const handleClick = (e) => {
       this.getdamage(this.state.Ktno);
-    
     };
+
+
+    const onSearch = (val) => {
+      if (val.length > 3) {
+        this.getcarilistdamageCompensation(val)
+        this.setState({
+          cariList: this.props.kDamageCompensationStore.getCariListDamage !== undefined && this.props.kDamageCompensationStore.getCariListDamage.map((value, index) =>
+            <Option key={'cari' + value.kodu} value={value.kodu}> {value.unvan} </Option>
+          )
+        })
+      }
+    }
+
+
+
+    const onChangeGondericiSelect = (res) => {
+
+      this.setState({ gonderiUnvanInput: res })
+      setTimeout(() => { console.log(this.state.gonderiUnvanInput) }, 100)
+
+    }
+    
+    const onChangeAliciSelect = (res) => {
+
+      this.setState({ aliciUnvanInput: res })
+      setTimeout(() => { console.log(this.state.aliciUnvanInput) }, 100)
+    }
+
+
+
+
+
+
+
+
+    //onDropdownVisibleChangeCikis cikis selectin tıklandıgında
+    const onDropdownVisibleChangeCikis = () => {
+
+      this.setState({
+        subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
+          <Option key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
+        )
+      })
+
+    }
+
+
+    //onDropdownVisibleChangeVaris varis selectin tıklandıgında
+const onDropdownVisibleChangeVaris=()=>{
+  this.setState({
+   subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
+      <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
+      )
+   })
+  }
+
+
+    //onDropdownVisibleChangeBrim birim selectin tıklandıgında
+     const onDropdownVisibleChangeBirim=()=>{
+      this.setState({
+        birimList: this.props.kDamageCompensationStore.getBirimListDamage !== undefined && this.props.kDamageCompensationStore.getBirimListDamage.map((value, index) =>
+          <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
+         )
+      })
+      }
+
+
+      
+    //onDropdownVisibleChangeBolge ödeme bolge selectin tıklandıgında
+     const onDropdownVisibleChangeBolge=()=>{
+      this.setState({
+        bolgeList: this.props.kDamageCompensationStore.getBolgeListDamage !== undefined && this.props.kDamageCompensationStore.getBolgeListDamage.map((value, index) =>
+          <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
+         )
+      })
+      }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -247,8 +376,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                 <Row>
                   <Col span={12}>
                     <Form layout="inline">
-                      <Form.Item label="Kargo Takip No">
-                        
+                      <Form.Item label="Kargo Takip No" name='kargotakipNoRadio'>
+
                         <Radio.Group onChange={onChangeRadio} value={this.state.setradioValue}>
                           <Radio value={1}>Biliniyor</Radio>
                           <Radio value={2}>Bilinmiyor</Radio>
@@ -308,7 +437,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Input
-                           //readOnly={this.state.setformreadonly}
+                          //readOnly={this.state.setformreadonly}
                           className="formInput"
                           type="date"
                         />
@@ -317,7 +446,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item 
+                      <Form.Item
                         rules={rules.evrakSeriNo}
                         name="evrakSeriNo"
                         label={
@@ -348,11 +477,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
+                          onSearch={onSearch}
+                          onChange={onChangeGondericiSelect}
                         >
-                          <Option value="1000011">1000011</Option>
-                          <Option value="1000012">1000012</Option>
-                          <Option value="1000013">1000013</Option>
-                          <Option value="1000014">1000014</Option>
+                          {
+                            this.state.cariList
+                          }
                         </Select>
                       </Form.Item>
                     </Col>
@@ -362,10 +492,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="gonderenUnvan"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>}
                       >
+                        <Label>
+                          {this.state.gonderiUnvanInput}
+                        </Label>
                         <Input
-                          readOnly={this.state.setformreadonly}
                           className="formInput"
                           placeholder="Gönderici"
+                          value={this.state.gonderiUnvanInput}
                         />
                       </Form.Item>
                     </Col>
@@ -379,16 +512,19 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı Kodu</label>}
                       >
                         <Select
+
                           className="formInput"
-                          showSearch
                           placeholder="Seçiniz"
                           allowClear
+                          showSearch
                           disabled={this.state.setformselectdisable}
+                          // options={options}
+                          onSearch={onSearch}
+                          onChange={onChangeAliciSelect}
                         >
-                          <Option value="1000011">1000011</Option>
-                          <Option value="1000012">1000012</Option>
-                          <Option value="1000013">1000013</Option>
-                          <Option value="1000014">1000014</Option>
+
+                          {this.state.cariList}
+
                         </Select>
                       </Form.Item>
                     </Col>
@@ -398,10 +534,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="aliciUnvan"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı</label>}
                       >
+                        <Label>{this.state.aliciUnvanInput}</Label>
                         <Input
-                          readOnly={this.state.setformreadonly}
+                          readOnly
                           className="formInput"
                           placeholder="Alıcı"
+                          value={this.state.aliciUnvanInput}
                         />
                       </Form.Item>
                     </Col>
@@ -417,16 +555,17 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Select
-                          className="formInput"
-                          showSearch
-                          placeholder="Seçiniz"
-                          allowClear
-                          disabled={this.state.setformselectdisable}
+                        className="formInput"
+                        disabled={this.state.setformselectdisable}
+                        onDropdownVisibleChange={onDropdownVisibleChangeCikis}
+                        placeholder="Seçiniz"
+                        allowClear
+                        showSearch
                         >
-                          <Option value="incirli">incirli</Option>
-                          <Option value="ikitelli aktarma">ikitelli aktarma</Option>
-                          <Option value="mikro bağcılar">mikro bağcılar</Option>
-                          <Option value="ataşehir">ataşehir</Option>
+                          {
+                            this.state.subeList
+
+                          }
                         </Select>
                       </Form.Item>
                     </Col>
@@ -438,17 +577,21 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Varış Şube Adı</label>
                         }
                       >
-                        <Select
+                        <Select                      
                           className="formInput"
                           showSearch
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
+                          onDropdownVisibleChange={onDropdownVisibleChangeVaris}
+
                         >
-                          <Option value="incirli">incirli</Option>
-                          <Option value="ikitelli aktarma">ikitelli aktarma</Option>
-                          <Option value="mikro bağcılar">mikro bağcılar</Option>
-                          <Option value="ataşehir">ataşehir</Option>
+
+                          {
+                            this.state.subeList
+
+                          }
+
                         </Select>
                       </Form.Item>
                     </Col>
@@ -467,10 +610,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
+                          onDropdownVisibleChange={onDropdownVisibleChangeBirim}
+
                         >
-                          <Option value="Mi">Mi</Option>
-                          <Option value="Paket">Paket</Option>
-                          <Option value="Koli">Koli</Option>
+                          {this.state.birimList}
+
+
+
                         </Select>
                       </Form.Item>
                     </Col>
@@ -505,7 +651,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </label>
                         }
                       >
-                        <Input className="formInput" readOnly defaultValue={test} />
+                        <Input className="formInput" readOnly />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -541,8 +687,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         </Radio.Group>
                       </Form.Item>
 
-                      {this.state.settazminmusteriGonderici ? <GonderenCariSelect /> : ''}
-                      {this.state.settazminmusteriAlici ? <AliciCariSelect /> : ''}
+                      {this.state.settazminmusteriGonderici ? <GonderenCariSelect  kDamageCompensationStore={this.props.kDamageCompensationStore}/> : ''}
+                      {this.state.settazminmusteriAlici ? <AliciCariSelect  kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
                       {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''}
                     </Col>
                     <Col span={12}>
@@ -595,9 +741,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Ödeme Birimi/Bölge</label>
                         }
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
-                          <Option value="İkitelli Bölge">İkitelli Bölge</Option>
-                          <Option value="Genel Müdürlük">Genel Müdürlük</Option>
+                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear
+                        onDropdownVisibleChange={onDropdownVisibleChangeBolge}>
+                          {this.state.bolgeList}
                         </Select>
                       </Form.Item>
                     </Col>
