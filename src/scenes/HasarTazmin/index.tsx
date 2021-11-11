@@ -7,6 +7,10 @@ import {
   Button,
   Card,
   Col,
+<<<<<<< HEAD
+=======
+
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
   Divider,
   Form,
   Input,
@@ -28,7 +32,7 @@ import GonderenCariSelect from './components/GonderenCariSelect';
 import AliciCariSelect from './components/AliciCariSelect';
 import FarkliCari from './components/FarkliCari';
 import Stores from '../../stores/storeIdentifier';
-import { AlertOutlined, FileAddTwoTone, SendOutlined } from '@ant-design/icons';
+import { AlertOutlined, FileAddTwoTone, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 //import { GetCariListDamage } from '../../services/kDamageCompensations/dto/getCariListDamage';
 import { Label } from 'recharts';
@@ -73,6 +77,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     settazminmusteriFarkli: false,
     setradioValueTazminMusteri: 4,
     settazminmusteriGonderici: false,
+<<<<<<< HEAD
     Ktno: 999,
     cariList: [],
     gonderiUnvanInput: '',
@@ -80,6 +85,11 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     subeList: [],
     birimList: [],
     bolgeList:[]
+=======
+    Ktno: 0,
+
+
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
   };
 
   getdamage = async (id: number) => {
@@ -88,6 +98,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         .getDamageComppensation({ id: id })
         .then((response) => {
 
+<<<<<<< HEAD
+=======
+          setTimeout(() => {
+            this.formRef.current?.setFieldsValue({
+              ...this.props.kDamageCompensationStore.getCreateDamageInput,
+            });
+          }, 500)
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
 
         }).catch((err) => console.log(err));
     } catch (e) {
@@ -149,6 +167,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   public render() {
     const { Option } = Select;
     const { TabPane } = Tabs
+<<<<<<< HEAD
+=======
+    //bugunün tarihi
+    const today = Date.now();
+    const test = new Intl.DateTimeFormat('tr-TR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(today);
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
 
 
     const onChangeRadio = (e) => {
@@ -224,6 +252,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const handleClick = (e) => {
       this.getdamage(this.state.Ktno);
+<<<<<<< HEAD
+=======
+
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
     };
 
 
@@ -342,11 +374,19 @@ const onDropdownVisibleChangeVaris=()=>{
               defaultActiveKey="1"
               onChange={callback}
               tabBarGutter={50}
-              type="card"
+              // type="card"
               tabPosition="top"
               size="large"
             >
-              <TabPane tab="Tanzim Bilgileri" key="1">
+              <TabPane
+                tab={
+                  <span>
+                    <SwitcherOutlined />
+                    Tanzim Bilgileri
+                  </span>
+                }
+                key="1"
+              >
                 <Row>
                   <Col span={24}>
                     <Form layout="inline">
@@ -376,7 +416,11 @@ const onDropdownVisibleChangeVaris=()=>{
                 <Row>
                   <Col span={12}>
                     <Form layout="inline">
+<<<<<<< HEAD
                       <Form.Item label="Kargo Takip No" name='kargotakipNoRadio'>
+=======
+                      <Form.Item label="Kargo Takip No">
+>>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
 
                         <Radio.Group onChange={onChangeRadio} value={this.state.setradioValue}>
                           <Radio value={1}>Biliniyor</Radio>

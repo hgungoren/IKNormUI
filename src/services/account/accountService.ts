@@ -6,12 +6,12 @@ import http from '../httpService';
 
 class AccountService {
   public async isTenantAvailable(isTenantAvaibleInput: IsTenantAvaibleInput): Promise<IsTenantAvaibleOutput> {
-    let result = await http.post('api/services/app/Account/IsTenantAvailable', isTenantAvaibleInput);
+    let result = await http.post('iknorm/Account/IsTenantAvailable', isTenantAvaibleInput);
     return result.data.result;
   }
 
   public async register(registerInput: RegisterInput): Promise<RegisterOutput> {
-    let result = await http.post('api/services/app/Account/Register', registerInput);
+    let result = await http.post('iknorm/Account/Register', registerInput);
     return result.data.result;
   }
 }

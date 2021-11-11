@@ -696,7 +696,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
         responsive: ['sm'] as Breakpoint[],
       },
     ];
-
     return (
       <React.Fragment>
         <Card style={{ marginBottom: 20 }} hoverable>
@@ -706,41 +705,34 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             title={
               <Breadcrumb>
                 <Breadcrumb.Item>
-                  {isGranted('items_dashboard_menu_view') ? (
-                    <Link to="/dashboard">{L('Dashboard')}</Link>
-                  ) : (
-                    <Link to="/home">{L('Home')}</Link>
-                  )}
-                </Breadcrumb.Item>
-                {isGranted('items_branch_menu_view') && (
-                  <Breadcrumb.Item>
-                    {' '}
-                    <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link>{' '}
-                  </Breadcrumb.Item>
-                )}
 
-                {breadcrumbBolgeAdi !== '' && (
-                  <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
-                )}
-                {breadcrumbSubeAdi !== '' && (
-                  <Breadcrumb.Item> {breadcrumbSubeAdi} </Breadcrumb.Item>
-                )}
+                  {
+                    isGranted('items_dashboard_menu_view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Home')}</Link>
+                  }
+
+                </Breadcrumb.Item>
+                {
+                  isGranted('items_branch_menu_view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
+                }
+
+                {
+                  breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
+                }
+                {
+                  breadcrumbSubeAdi !== '' && <Breadcrumb.Item> {breadcrumbSubeAdi} </Breadcrumb.Item>
+                }
               </Breadcrumb>
-            }
-          ></PageHeader>
+            }  >
+          </PageHeader>
         </Card>
 
-        {isGranted('subitems.branch.detail.total.table.view') && (
-          <Card style={{ marginBottom: 20 }} hoverable>
+        {
+
+          isGranted('subitems.branch.detail.total.table.view') && <Card style={{ marginBottom: 20 }} hoverable>
             <Row style={{ marginTop: 20 }}>
               <Col
                 xs={{ span: 24, offset: 0 }}
-                sm={{ span: 24, offset: 0 }}
-                md={{ span: 24, offset: 0 }}
-                lg={{ span: 24, offset: 0 }}
-                xl={{ span: 24, offset: 0 }}
-                xxl={{ span: 24, offset: 0 }}
-              >
+                sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
                 <Table
                   bordered={false}
                   onChange={this.handlePaginationTable1}
@@ -754,7 +746,114 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
               </Col>
             </Row>
           </Card>
-        )}
+        }
+
+        {
+          isGranted('subitems.branch.detail.employee.table.view') && <Card hoverable>
+            <Row>
+              <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
+                {' '}
+                <h2>{L('EmployeesList')}</h2>
+              </Col>
+              <Col
+                xs={{ span: 14, offset: 0 }}
+                sm={{ span: 15, offset: 0 }}
+                md={{ span: 15, offset: 0 }}
+                lg={{ span: 1, offset: 21 }}
+                xl={{ span: 1, offset: 21 }}
+                xxl={{ span: 1, offset: 21 }} >
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ span: 10, offset: 0 }}>
+                <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
+              </Col>
+            </Row>
+            <Row style={{ marginTop: 20 }}>
+              <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}   >
+                <Table
+                  locale={{ emptyText: L('NoData') }}
+                  bordered={false}
+                  columns={columns}
+                  onChange={this.handlePaginationTable2}
+                  rowKey={(record) => record.objId.toString()}
+                  loading={kPersonels === undefined ? true : false}
+                  dataSource={kPersonels === undefined ? [] : kPersonels.items}
+                  pagination={tablePaginationTable2}
+                />
+              </Col>
+            </Row>
+          </Card>
+        }
+        {
+          isGranted('subitems.branch.detail.norm.request.table.view') && <Card hoverable style={{ marginTop: 15 }}>
+            <Row>
+              <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
+                {' '}
+                <h2>{L('NormDetailPanel')}</h2>
+              </Col>
+              <Col
+                xs={{ span: 14, offset: 0 }}
+                sm={{ span: 15, offset: 0 }}
+                md={{ span: 15, offset: 0 }}
+                lg={{ span: 1, offset: 21 }}
+                xl={{ span: 1, offset: 21 }}
+                xxl={{ span: 1, offset: 21 }}  >
+
+                {isGranted('subitems.branch.detail.norm.request.table.view') && <Button type="primary" icon={<PlusOutlined />} onClick={() => this.createOrUpdateModalOpen({ id: 0 })}  > {L('NormOperations')} </Button>}
+
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ span: 10, offset: 0 }}>
+                <Search placeholder={L('Filter')} onSearch={this.handleNormSearch} />
+              </Col>
+            </Row>
+            <Row style={{ marginTop: 20 }}>
+              <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} xxl={{ span: 24, offset: 0 }}>
+                <Table
+                  bordered={false}
+                  columns={columnsNorm}
+                  locale={{ emptyText: L('NoData') }}
+                  onChange={this.handlePaginationTable3}
+                  rowKey={(record) => record.id}
+                  loading={kNorms === undefined ? true : false}
+                  dataSource={kNorms === undefined ? [] : kNorms.items}
+                  pagination={tablePaginationTable3}
+                />
+              </Col>
+            </Row>
+          </Card>
+        }
+
+        {
+          isGranted('subitems.branch.detail.total.table.view') && (
+            <Card style={{ marginBottom: 20 }} hoverable>
+              <Row style={{ marginTop: 20 }}>
+                <Col
+                  xs={{ span: 24, offset: 0 }}
+                  sm={{ span: 24, offset: 0 }}
+                  md={{ span: 24, offset: 0 }}
+                  lg={{ span: 24, offset: 0 }}
+                  xl={{ span: 24, offset: 0 }}
+                  xxl={{ span: 24, offset: 0 }}
+                >
+                  <Table
+                    bordered={false}
+                    onChange={this.handlePaginationTable1}
+                    columns={normEmployeeCoumns}
+                    rowKey={(record) => record.id}
+                    locale={{ emptyText: L('NoData') }}
+                    loading={groupData.length == 1 ? true : false}
+                    dataSource={groupData === undefined ? [] : groupData}
+                    pagination={tablePaginationTable1}
+
+                  />
+                </Col>
+              </Row>
+            </Card>
+          )
+        }
 
         {isGranted('subitems.branch.detail.employee.table.view') && (
           <Card hoverable>
@@ -807,6 +906,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             </Row>
           </Card>
         )}
+
         {isGranted('subitems.branch.detail.norm.request.table.view') && (
           <Card hoverable style={{ marginTop: 15 }}>
             <Row>
@@ -869,7 +969,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             </Row>
           </Card>
         )}
-
         <CreateNormForm
           tip={tip}
           subeId={id}
@@ -883,7 +982,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
           getHierarchy={this.getHierarchy}
           createFormState={createFormState}
           bagliOlduguSubeId={bagliOlduguSubeId}
-          position={this.props.kInkaLookUpTableStore.positions}
+          position={
+            this.props.kInkaLookUpTableStore.positions
+          }
           normCount={norms !== undefined ? norms.items.length : 0}
           onCancel={() => {
             const form = this.formRef.current;
@@ -891,9 +992,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
               modalVisible: false,
             });
             form!.resetFields();
-          }}
-        />
-
+          }} />
         <NormDetailTimeLine
           norm={editKNorm}
           data={kNormAllDetails}

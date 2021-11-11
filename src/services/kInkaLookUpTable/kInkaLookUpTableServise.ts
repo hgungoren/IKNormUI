@@ -8,7 +8,7 @@ class KInkaLookUpTableService {
  
     public async getAll(pagedFilterAndSortedRequest: PagedKInkaLookUpTableResultRequestDto): Promise<PagedResultDto<GetAllKInkaLookUpTableOutput>> {
 
-        let result = await http.get('api/services/app/KInkaLookUpTable/GetAll', {
+        let result = await http.get('iknorm/KInkaLookUpTable/GetAll', {
             params: pagedFilterAndSortedRequest
         }); 
         return result.data.result;

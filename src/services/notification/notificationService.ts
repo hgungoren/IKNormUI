@@ -7,7 +7,7 @@ class NotificationService {
 
     public async getAll(id: string)
         : Promise<PagedResultDto<RootObject>> {
-        let result = await http.get('api/services/app/NotificationService/GetNotification',
+        let result = await http.get('iknorm/NotificationService/GetNotification',
             {
                 params: id
             });

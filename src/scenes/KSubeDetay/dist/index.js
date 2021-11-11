@@ -110,18 +110,20 @@ var KSubeDetay = /** @class */ (function (_super) {
             userId: 0,
             tip: '',
             id: '0',
-            groupData: [{
+            groupData: [
+                {
                     id: 0,
                     norm: 0,
                     gorev: '',
                     normCount: 0,
                     employeeCount: 0
-                }],
+                },
+            ],
             bagliOlduguSubeId: '',
             createFormState: {
-                "name": "Next",
-                "visible": false,
-                "pane": "PositionSelect"
+                name: 'Next',
+                visible: false,
+                pane: 'PositionSelect'
             },
             breadcrumbSubeAdi: '',
             breadcrumbBolgeAdi: '',
@@ -131,7 +133,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             totalSizeTable1: 0,
             totalSizeTable2: 0,
             totalSizeTable3: 0,
-            searchFilter: ""
+            searchFilter: ''
         };
         _this.getKHierarchy = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -171,7 +173,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         _this.setPageState = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                this.setState({ id: this.props["match"].params["id"] });
+                this.setState({ id: this.props['match'].params['id'] });
                 this.props.kSubeStore.get({ id: this.state.id }).then(function () {
                     _this.pageSettings();
                 });
@@ -240,8 +242,12 @@ var KSubeDetay = /** @class */ (function (_super) {
         };
         _this.openNotificationWithIcon = function (type) {
             antd_1.notification[type]({
-                message: type === "success" ? abpUtility_1.L('NormCreateNotificationMessageTitle') : abpUtility_1.L('NormRejectNotificationMessageTitle'),
-                description: type === "success" ? abpUtility_1.L('NormCreateNotificationMessageDescription') : abpUtility_1.L('NormCreateNotificationMessageDescription'),
+                message: type === 'success'
+                    ? abpUtility_1.L('NormCreateNotificationMessageTitle')
+                    : abpUtility_1.L('NormRejectNotificationMessageTitle'),
+                description: type === 'success'
+                    ? abpUtility_1.L('NormCreateNotificationMessageDescription')
+                    : abpUtility_1.L('NormCreateNotificationMessageDescription'),
                 duration: 3
             });
         };
@@ -270,18 +276,18 @@ var KSubeDetay = /** @class */ (function (_super) {
             var employees, norms, result, names, set, groupData;
             var _this = this;
             return __generator(this, function (_a) {
-                employees = (Object.keys(this.state.groupEmployee).map(function (y, i) { return ({
+                employees = Object.keys(this.state.groupEmployee).map(function (y, i) { return ({
                     id: i,
                     gorev: y,
                     employeeCount: __spreadArrays(_this.state.groupEmployee[y]).length,
                     normCount: 0
-                }); }));
-                norms = (Object.keys(this.state.groupNorm).map(function (y, i) { return ({
+                }); });
+                norms = Object.keys(this.state.groupNorm).map(function (y, i) { return ({
                     id: i,
                     gorev: y,
                     employeeCount: 0,
                     normCount: __spreadArrays(_this.state.groupNorm[y]).length
-                }); }));
+                }); });
                 result = __spreadArrays(employees, norms);
                 names = result.map(function (x) { return x.gorev; });
                 set = new Set(names);
@@ -295,7 +301,7 @@ var KSubeDetay = /** @class */ (function (_super) {
                         gorev: x,
                         employeeCount: employee !== undefined ? employee : 0,
                         nomrCount: norm !== undefined ? norm : 0,
-                        norm: ((norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0))
+                        norm: (norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0)
                     });
                 });
                 this.setState({ groupData: groupData });
@@ -344,8 +350,7 @@ var KSubeDetay = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kInkaLookUpTableStore
-                            .getAll({
+                    case 0: return [4 /*yield*/, this.props.kInkaLookUpTableStore.getAll({
                             maxResultCount: 20000,
                             keyword: key,
                             skipCount: 0
@@ -394,8 +399,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             var groupNorm;
             return __generator(this, function (_a) {
                 groupNorm = this.props.kSubeNormStore.norms.items.reduce(function (result, currentValue) {
-                    (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || [])
-                        .push(currentValue);
+                    (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || []).push(currentValue);
                     return result;
                 }, {});
                 this.setState({ groupNorm: groupNorm, cardLoading: false });
@@ -425,8 +429,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             var groupEmployee;
             return __generator(this, function (_a) {
                 groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce(function (result, currentValue) {
-                    (result[currentValue['gorevi']] = result[currentValue['gorevi']] || [])
-                        .push(currentValue);
+                    (result[currentValue['gorevi']] = result[currentValue['gorevi']] || []).push(currentValue);
                     return result;
                 }, {});
                 this.setState({ groupEmployee: groupEmployee, cardLoading: false });
@@ -490,7 +493,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             current: filterTable1.current || 1,
             total: totalSizeTable1,
             locale: { items_per_page: abpUtility_1.L('TableRecord') },
-            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            pageSizeOptions: ['5', '10', '20', '30', '50', '100'],
             showSizeChanger: true
         };
         var tablePaginationTable2 = {
@@ -498,7 +501,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             current: filterTable2.current || 1,
             total: totalSizeTable2,
             locale: { items_per_page: abpUtility_1.L('TableRecord') },
-            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            pageSizeOptions: ['5', '10', '20', '30', '50', '100'],
             showSizeChanger: true
         };
         var tablePaginationTable3 = {
@@ -506,7 +509,7 @@ var KSubeDetay = /** @class */ (function (_super) {
             current: filterTable3.current || 1,
             total: totalSizeTable3,
             locale: { items_per_page: abpUtility_1.L('TableRecord') },
-            pageSizeOptions: ["5", "10", "20", "30", "50", "100"],
+            pageSizeOptions: ['5', '10', '20', '30', '50', '100'],
             showSizeChanger: true
         };
         var normEmployeeCoumns = [
@@ -518,25 +521,55 @@ var KSubeDetay = /** @class */ (function (_super) {
                     record.gorev,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.branch.employeecount')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.employeeCount,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' },
                         abpUtility_1.L('table.branch.normcount'),
                         " "),
-                    " : ",
+                    " :",
+                    ' ',
                     record.nomrCount,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.branch.normgap')),
-                    "  : ",
+                    " : ",
                     record.norm,
                     React.createElement("br", null))); },
                 responsive: ['xs']
             },
-            { title: abpUtility_1.L('table.branch.duty'), dataIndex: 'gorev', key: 'gorev', width: 150, render: function (key, value) { return React.createElement("div", { key: 'gorev-' + key }, value.gorev); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.branch.employeecount'), dataIndex: 'employeeCount', key: 'employeeCount', width: 150, render: function (key, value) { return React.createElement("div", { key: 'employeeCount-' + key }, value.employeeCount); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.branch.normcount'), dataIndex: 'nomrCount', key: 'nomrCount', width: 150, render: function (key, value) { return React.createElement("div", { key: 'nomrCount-' + key }, value.nomrCount); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.branch.normgap'), dataIndex: 'norm', key: 'norm', width: 150, render: function (key, value) { return React.createElement("div", { key: 'norm-' + key }, value.norm); }, responsive: ['sm'] }
+            {
+                title: abpUtility_1.L('table.branch.duty'),
+                dataIndex: 'gorev',
+                key: 'gorev',
+                width: 150,
+                render: function (key, value) { return React.createElement("div", { key: 'gorev-' + key }, value.gorev); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.branch.employeecount'),
+                dataIndex: 'employeeCount',
+                key: 'employeeCount',
+                width: 150,
+                render: function (key, value) { return React.createElement("div", { key: 'employeeCount-' + key }, value.employeeCount); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.branch.normcount'),
+                dataIndex: 'nomrCount',
+                key: 'nomrCount',
+                width: 150,
+                render: function (key, value) { return React.createElement("div", { key: 'nomrCount-' + key }, value.nomrCount); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.branch.normgap'),
+                dataIndex: 'norm',
+                key: 'norm',
+                width: 150,
+                render: function (key, value) { return React.createElement("div", { key: 'norm-' + key }, value.norm); },
+                responsive: ['sm']
+            },
         ];
         var columns = [
             {
@@ -547,109 +580,183 @@ var KSubeDetay = /** @class */ (function (_super) {
                     record.ad,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.employee.surname')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.soyad,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' },
                         abpUtility_1.L('table.employee.duty'),
                         " "),
-                    " : ",
+                    " :",
+                    ' ',
                     record.gorevi,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.employee.registrationnumber')),
-                    "  : ",
+                    " : ",
                     record.sicilNo,
                     React.createElement("br", null))); },
                 responsive: ['xs']
             },
-            { title: abpUtility_1.L('table.employee.name'), dataIndex: 'ad', key: 'ad', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.employee.surname'), dataIndex: 'soyad', key: 'soyad', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.employee.duty'), dataIndex: 'gorevi', key: 'gorevi', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L('table.employee.registrationnumber'), dataIndex: 'sicilNo', key: 'sicilNo', width: 150, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] }
+            {
+                title: abpUtility_1.L('table.employee.name'),
+                dataIndex: 'ad',
+                key: 'ad',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.employee.surname'),
+                dataIndex: 'soyad',
+                key: 'soyad',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.employee.duty'),
+                dataIndex: 'gorevi',
+                key: 'gorevi',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.employee.registrationnumber'),
+                dataIndex: 'sicilNo',
+                key: 'sicilNo',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
         ];
         var columnsNorm = [
             {
                 title: abpUtility_1.L('NormDetailPanel'),
                 render: function (record) { return (React.createElement(React.Fragment, null,
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requestdate')),
-                    " : ",
+                    " :",
+                    ' ',
                     record.creationTime,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requeststatus')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.durumu,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' },
                         abpUtility_1.L('table.norm.area.name'),
                         " "),
-                    " : ",
+                    " :",
+                    ' ',
                     record.bolgeAdi,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.branch.name')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.subeAdi,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.position')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.pozisyon,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requestreason')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.nedeni,
                     React.createElement("br", null),
                     React.createElement("span", { className: 'responsive-title' }, abpUtility_1.L('table.norm.requesttype')),
-                    "  : ",
+                    " :",
+                    ' ',
                     record.turu)); },
                 responsive: ['xs']
             },
             {
-                title: abpUtility_1.L("table.norm.requestdate"), dataIndex: 'creationTime', key: 'creationTime', width: 100,
-                render: function (text) { return React.createElement("div", null, new Date(text).toLocaleDateString("tr-TR", {
-                    year: "numeric",
-                    month: "numeric",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })); },
+                title: abpUtility_1.L('table.norm.requestdate'),
+                dataIndex: 'creationTime',
+                key: 'creationTime',
+                width: 100,
+                render: function (text) { return (React.createElement("div", null, new Date(text).toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }))); },
                 responsive: ['sm']
             },
             {
-                title: abpUtility_1.L('table.norm.requeststatus'), dataIndex: 'durumu', key: react_uuid_1["default"](), width: 200,
-                render: function (text, norm) { return (React.createElement(React.Fragment, null, (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede) ?
-                    React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Waiting') },
-                        " ",
-                        React.createElement(antd_1.Tag, { color: 'rgb(250, 173, 20)', icon: React.createElement(icons_1.ClockCircleOutlined, null), className: 'requeststatus' },
-                            " ",
-                            talepDurumu_1["default"][norm.durumu],
-                            " ")) :
-                    (normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Iptal) ?
-                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
-                            "   ",
-                            React.createElement(antd_1.Tag, { color: 'rgb(250, 84, 28)', icon: React.createElement(icons_1.StopOutlined, null), className: 'requeststatus' },
-                                " ",
-                                talepDurumu_1["default"][norm.durumu],
-                                " ")) :
-                        React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approved') },
-                            " ",
-                            React.createElement(antd_1.Tag, { color: 'rgb(29, 165, 122)', icon: React.createElement(icons_1.CheckCircleOutlined, null), className: 'requeststatus' },
-                                " ",
-                                talepDurumu_1["default"][norm.durumu],
-                                " ")))); },
+                title: abpUtility_1.L('table.norm.requeststatus'),
+                dataIndex: 'durumu',
+                key: react_uuid_1["default"](),
+                width: 200,
+                render: function (text, norm) { return (React.createElement(React.Fragment, null, normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Beklemede ? (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Waiting') },
+                    ' ',
+                    React.createElement(antd_1.Tag, { color: 'rgb(250, 173, 20)', icon: React.createElement(icons_1.ClockCircleOutlined, null), className: 'requeststatus' },
+                        ' ',
+                        talepDurumu_1["default"][norm.durumu],
+                        ' '))) : normStatus_1["default"][norm.normStatusValue] === normStatus_1["default"].Iptal ? (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Reject') },
+                    ' ',
+                    React.createElement(antd_1.Tag, { color: 'rgb(250, 84, 28)', icon: React.createElement(icons_1.StopOutlined, null), className: 'requeststatus' },
+                        ' ',
+                        talepDurumu_1["default"][norm.durumu],
+                        ' '))) : (React.createElement(antd_1.Tooltip, { placement: "topLeft", title: abpUtility_1.L('Approved') },
+                    ' ',
+                    React.createElement(antd_1.Tag, { color: 'rgb(29, 165, 122)', icon: React.createElement(icons_1.CheckCircleOutlined, null), className: 'requeststatus' },
+                        ' ',
+                        talepDurumu_1["default"][norm.durumu],
+                        ' '))))); },
                 responsive: ['sm']
             },
-            { title: abpUtility_1.L("table.norm.area.name"), dataIndex: 'bolgeAdi', key: 'bolgeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.branch.name"), dataIndex: 'subeAdi', key: 'subeAdi', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.position"), dataIndex: 'pozisyon', key: 'pozisyon', width: 100, render: function (text) { return React.createElement("div", null, text); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.requestreason"), dataIndex: 'nedeni', key: 'nedeni', width: 150, render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); }, responsive: ['sm'] },
-            { title: abpUtility_1.L("table.norm.requesttype"), dataIndex: 'turu', key: 'turu', width: 150, render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); }, responsive: ['sm'] },
             {
-                title: abpUtility_1.L("table.norm.transactions"),
+                title: abpUtility_1.L('table.norm.area.name'),
+                dataIndex: 'bolgeAdi',
+                key: 'bolgeAdi',
+                width: 100,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.norm.branch.name'),
+                dataIndex: 'subeAdi',
+                key: 'subeAdi',
+                width: 100,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.norm.position'),
+                dataIndex: 'pozisyon',
+                key: 'pozisyon',
+                width: 100,
+                render: function (text) { return React.createElement("div", null, text); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.norm.requestreason'),
+                dataIndex: 'nedeni',
+                key: 'nedeni',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, talepNedeni_1["default"][text]); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.norm.requesttype'),
+                dataIndex: 'turu',
+                key: 'turu',
+                width: 150,
+                render: function (text) { return React.createElement("div", null, talepTuru_1["default"][text]); },
+                responsive: ['sm']
+            },
+            {
+                title: abpUtility_1.L('table.norm.transactions'),
                 dataIndex: 'id',
                 key: 'id',
                 width: 50,
                 render: function (text) { return (React.createElement(antd_1.Button, { className: 'info', onClick: function () { return _this.detailModalOpen(text); }, icon: React.createElement(icons_1.FileSearchOutlined, null), type: "primary" })); },
                 responsive: ['sm']
-            }
+            },
         ];
         return (React.createElement(React.Fragment, null,
             React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
@@ -698,6 +805,37 @@ var KSubeDetay = /** @class */ (function (_super) {
                 React.createElement(antd_1.Row, { style: { marginTop: 20 } },
                     React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
                         React.createElement(antd_1.Table, { bordered: false, columns: columnsNorm, locale: { emptyText: abpUtility_1.L('NoData') }, onChange: this.handlePaginationTable3, rowKey: function (record) { return record.id; }, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, pagination: tablePaginationTable3 })))),
+            abpUtility_1.isGranted('subitems.branch.detail.total.table.view') && (React.createElement(antd_1.Card, { style: { marginBottom: 20 }, hoverable: true },
+                React.createElement(antd_1.Row, { style: { marginTop: 20 } },
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
+                        React.createElement(antd_1.Table, { bordered: false, onChange: this.handlePaginationTable1, columns: normEmployeeCoumns, rowKey: function (record) { return record.id; }, locale: { emptyText: abpUtility_1.L('NoData') }, loading: groupData.length == 1 ? true : false, dataSource: groupData === undefined ? [] : groupData, pagination: tablePaginationTable1 }))))),
+            abpUtility_1.isGranted('subitems.branch.detail.employee.table.view') && (React.createElement(antd_1.Card, { hoverable: true },
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
+                        ' ',
+                        React.createElement("h2", null, abpUtility_1.L('EmployeesList'))),
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } })),
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleSearch }))),
+                React.createElement(antd_1.Row, { style: { marginTop: 20 } },
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
+                        React.createElement(antd_1.Table, { locale: { emptyText: abpUtility_1.L('NoData') }, bordered: false, columns: columns, onChange: this.handlePaginationTable2, rowKey: function (record) { return record.objId.toString(); }, loading: kPersonels === undefined ? true : false, dataSource: kPersonels === undefined ? [] : kPersonels.items, pagination: tablePaginationTable2 }))))),
+            abpUtility_1.isGranted('subitems.branch.detail.norm.request.table.view') && (React.createElement(antd_1.Card, { hoverable: true, style: { marginTop: 15 } },
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 23, offset: 0 }, md: { span: 23, offset: 0 }, lg: { span: 23, offset: 0 }, xl: { span: 23, offset: 0 }, xxl: { span: 23, offset: 0 } },
+                        ' ',
+                        React.createElement("h2", null, abpUtility_1.L('NormDetailPanel'))),
+                    React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 15, offset: 0 }, md: { span: 15, offset: 0 }, lg: { span: 1, offset: 21 }, xl: { span: 1, offset: 21 }, xxl: { span: 1, offset: 21 } }, abpUtility_1.isGranted('subitems.branch.detail.norm.request.table.view') && (React.createElement(antd_1.Button, { type: "primary", icon: React.createElement(icons_1.PlusOutlined, null), onClick: function () { return _this.createOrUpdateModalOpen({ id: 0 }); } },
+                        ' ',
+                        abpUtility_1.L('NormOperations'),
+                        ' ')))),
+                React.createElement(antd_1.Row, null,
+                    React.createElement(antd_1.Col, { sm: { span: 10, offset: 0 } },
+                        React.createElement(Search, { placeholder: abpUtility_1.L('Filter'), onSearch: this.handleNormSearch }))),
+                React.createElement(antd_1.Row, { style: { marginTop: 20 } },
+                    React.createElement(antd_1.Col, { xs: { span: 24, offset: 0 }, sm: { span: 24, offset: 0 }, md: { span: 24, offset: 0 }, lg: { span: 24, offset: 0 }, xl: { span: 24, offset: 0 }, xxl: { span: 24, offset: 0 } },
+                        React.createElement(antd_1.Table, { bordered: false, columns: columnsNorm, locale: { emptyText: abpUtility_1.L('NoData') }, onChange: this.handlePaginationTable3, rowKey: function (record) { return record.id; }, loading: kNorms === undefined ? true : false, dataSource: kNorms === undefined ? [] : kNorms.items, pagination: tablePaginationTable3 }))))),
             React.createElement(CreateNormForm_1["default"], { tip: tip, subeId: id, modalWidth: '60%', modalType: 'create', formRef: this.formRef, employees: kPersonels, visible: modalVisible, hierarchy: kHierarchies, onCreateNorm: this.createNorm, getHierarchy: this.getHierarchy, createFormState: createFormState, bagliOlduguSubeId: bagliOlduguSubeId, position: this.props.kInkaLookUpTableStore.positions, normCount: norms !== undefined ? norms.items.length : 0, onCancel: function () {
                     var form = _this.formRef.current;
                     _this.setState({

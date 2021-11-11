@@ -11,8 +11,7 @@ class UserService {
   public async create(createUserInput: CreateOrUpdateUserInput) {
 
     let result = await http.post('api/services/app/User/Create', createUserInput);
-    return result.data.result;
-
+    return result.data.result; 
   }
 
   public async update(updateUserInput: UpdateUserInput) {
