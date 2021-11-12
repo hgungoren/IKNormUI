@@ -27,6 +27,8 @@ var storeIdentifier_1 = require("../../stores/storeIdentifier");
 var mobx_react_1 = require("mobx-react");
 // import NotificationStore from '../../stores/notificationStore';
 var InformationCard_1 = require("../../components/InformationCard");
+var abpUtility_1 = require("../../lib/abpUtility");
+var react_router_dom_1 = require("react-router-dom");
 // @inject(Stores.NotificationStore)
 var Home = /** @class */ (function (_super) {
     __extends(Home, _super);
@@ -35,15 +37,22 @@ var Home = /** @class */ (function (_super) {
     }
     Home.prototype.render = function () {
         abp.event.on('knorm_added', function (userNotification) {
-            alert('saf');
             alert(userNotification);
         });
-        return (React.createElement(antd_1.Row, { gutter: 16 },
-            React.createElement(antd_1.Col, { xs: { span: 10, offset: 0 }, sm: { span: 10, offset: 0 }, md: { span: 10, offset: 0 }, lg: { span: 10, offset: 0 }, xl: { span: 10, offset: 0 }, xxl: { span: 10, offset: 0 } },
-                React.createElement(antd_1.Card, { hoverable: true },
-                    React.createElement(InformationCard_1["default"], null))),
-            React.createElement(antd_1.Col, { xs: { span: 14, offset: 0 }, sm: { span: 14, offset: 0 }, md: { span: 14, offset: 0 }, lg: { span: 14, offset: 0 }, xl: { span: 14, offset: 0 }, xxl: { span: 14, offset: 0 } },
-                React.createElement(antd_1.Card, { hoverable: true }))));
+        return (React.createElement(React.Fragment, null,
+            React.createElement(antd_1.Card, { style: { marginBottom: 20 } },
+                React.createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: React.createElement(antd_1.Breadcrumb, null,
+                        React.createElement(antd_1.Breadcrumb.Item, null,
+                            abpUtility_1.isGranted('items.dashboard.view') ? React.createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard')) : React.createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Dashboard')),
+                            "  "),
+                        React.createElement(antd_1.Breadcrumb.Item, null,
+                            " ",
+                            abpUtility_1.L('pages.home'),
+                            " ")) })),
+            React.createElement(antd_1.Row, { gutter: 16 },
+                React.createElement(antd_1.Col, { xs: { span: 10, offset: 0 }, sm: { span: 10, offset: 0 }, md: { span: 10, offset: 0 }, lg: { span: 10, offset: 0 }, xl: { span: 10, offset: 0 }, xxl: { span: 10, offset: 0 } },
+                    React.createElement(antd_1.Card, { hoverable: true },
+                        React.createElement(InformationCard_1["default"], null))))));
     };
     Home = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].AuthenticationStore, storeIdentifier_1["default"].SessionStore, storeIdentifier_1["default"].AccountStore),

@@ -615,7 +615,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="talepEdilenTutar"
                         tooltip="KDV TUTAR HARİÇ"
                         label={
-                          <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar</label>
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar </label>
                         }
                       >
                         <Input

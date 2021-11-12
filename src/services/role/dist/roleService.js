@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var httpService_1 = require("../httpService");
-var UserService = /** @class */ (function () {
-    function UserService() {
+var RoleService = /** @class */ (function () {
+    function RoleService() {
     }
-    UserService.prototype.create = function (createUserInput) {
-        return __awaiter(this, void 0, void 0, function () {
+    RoleService.prototype.create = function (createRoleInput) {
+        return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/User/Create', createUserInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/Role/Create', createRoleInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -53,12 +53,12 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.update = function (updateUserInput) {
-        return __awaiter(this, void 0, void 0, function () {
+    RoleService.prototype.getRolesAsync = function (getRoleAsyncInput) {
+        return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/User/Update', updateUserInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Role/GetRolesAsync', { params: getRoleAsyncInput })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -66,12 +66,25 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype["delete"] = function (entityDto) {
+    RoleService.prototype.update = function (updateRoleInput) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Role/Update', updateRoleInput)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    RoleService.prototype["delete"] = function (entityDto) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"]["delete"]('iknorm/User/Delete', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"]["delete"]('iknorm/Role/Delete', { params: entityDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data];
@@ -79,12 +92,12 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.getRoles = function () {
+    RoleService.prototype.getAllPermissions = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/User/GetRoles')];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Role/GetAllPermissions')];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result.items];
@@ -92,12 +105,25 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.changeLanguage = function (changeLanguageInput) {
+    RoleService.prototype.getRoleForEdit = function (entityDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Role/GetRoleForEdit', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    RoleService.prototype.get = function (entityDto) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/User/ChangeLanguage', changeLanguageInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Role/Get', { params: entityDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data];
@@ -105,12 +131,12 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.get = function (entityDto) {
+    RoleService.prototype.getAll = function (pagedFilterAndSortedRequest) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/User/Get', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Role/GetAll', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -118,19 +144,6 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.getAll = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/User/GetAll', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    return UserService;
+    return RoleService;
 }());
-exports["default"] = new UserService();
+exports["default"] = new RoleService();

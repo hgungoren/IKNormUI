@@ -353,7 +353,7 @@ var DamageCompensation = /** @class */ (function (_super) {
                                                 react_1["default"].createElement(Option, { value: "\u0130kitelli B\u00F6lge" }, "\u0130kitelli B\u00F6lge"),
                                                 react_1["default"].createElement(Option, { value: "Genel M\u00FCd\u00FCrl\u00FCk" }, "Genel M\u00FCd\u00FCrl\u00FCk")))),
                                     react_1["default"].createElement(antd_1.Col, { span: 12 },
-                                        react_1["default"].createElement(antd_1.Form.Item, { rules: HasarTazmin_validation_1["default"].talepEdilenTutar, name: "talepEdilenTutar", tooltip: "KDV TUTAR HAR\u0130\u00C7", label: react_1["default"].createElement("label", { style: { maxWidth: 150, minWidth: 150 } }, "Talep Edilen Tutar") },
+                                        react_1["default"].createElement(antd_1.Form.Item, { rules: HasarTazmin_validation_1["default"].talepEdilenTutar, name: "talepEdilenTutar", tooltip: "KDV TUTAR HAR\u0130\u00C7", label: react_1["default"].createElement("label", { style: { maxWidth: 150, minWidth: 150 } }, "Talep Edilen Tutar ") },
                                             react_1["default"].createElement(antd_1.Input, { className: "formInput", type: "number", placeholder: "Talep Edilen Tutar KDV Hari\u00E7" })))),
                                 react_1["default"].createElement(antd_1.Row, null,
                                     react_1["default"].createElement(antd_1.Col, { span: 12 },

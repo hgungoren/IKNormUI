@@ -13,42 +13,42 @@ import http from '../httpService';
 
 class RoleService {
   public async create(createRoleInput: CreateRoleInput): Promise<PagedResultDto<CreateRoleOutput>> {
-    let result = await http.post('api/services/app/Role/Create', createRoleInput);
+    let result = await http.post('iknorm/Role/Create', createRoleInput);
     return result.data.result;
   }
 
   public async getRolesAsync(getRoleAsyncInput: GetRoleAsyncInput): Promise<GetRoleAsyncOutput> {
-    let result = await http.get('api/services/app/Role/GetRolesAsync', { params: getRoleAsyncInput });
+    let result = await http.get('iknorm/Role/GetRolesAsync', { params: getRoleAsyncInput });
     return result.data.result;
   }
 
   public async update(updateRoleInput: UpdateRoleInput): Promise<UpdateRoleOutput> { 
-    let result = await http.put('api/services/app/Role/Update', updateRoleInput);
+    let result = await http.put('iknorm/Role/Update', updateRoleInput);
     return result.data.result as UpdateRoleOutput;
   }
 
   public async delete(entityDto: EntityDto) {
-    let result = await http.delete('api/services/app/Role/Delete', { params: entityDto });
+    let result = await http.delete('iknorm/Role/Delete', { params: entityDto });
     return result.data;
   }
 
   public async getAllPermissions() {
-    let result = await http.get('api/services/app/Role/GetAllPermissions');
+    let result = await http.get('iknorm/Role/GetAllPermissions');
     return result.data.result.items;
   }
 
   public async getRoleForEdit(entityDto: EntityDto): Promise<GetRoleForEditOutput> {
-    let result = await http.get('api/services/app/Role/GetRoleForEdit', { params: entityDto });
+    let result = await http.get('iknorm/Role/GetRoleForEdit', { params: entityDto });
     return result.data.result;
   }
 
   public async get(entityDto: EntityDto) {
-    let result = await http.get('api/services/app/Role/Get', { params: entityDto });
+    let result = await http.get('iknorm/Role/Get', { params: entityDto });
     return result.data;
   }
 
   public async getAll(pagedFilterAndSortedRequest: PagedRoleResultRequestDto): Promise<PagedResultDto<GetAllRoleOutput>> {
-    let result = await http.get('api/services/app/Role/GetAll', { params: pagedFilterAndSortedRequest });
+    let result = await http.get('iknorm/Role/GetAll', { params: pagedFilterAndSortedRequest });
     return result.data.result;
   }
 }

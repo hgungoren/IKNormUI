@@ -34,11 +34,10 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
 
 
   render() {
-    abp.event.on('knorm_added', function (userNotification) {
-
-      alert('saf')
+    abp.event.on('knorm_added', function (userNotification) { 
       alert(userNotification)
     })
+    
     return (
       <>
         <Card style={{ marginBottom: 20 }}>
