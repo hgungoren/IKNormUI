@@ -35,9 +35,9 @@ var InformationCart = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
             title: '',
-            userSurname: '',
+            name: '',
+            surname: '',
             emailAddress: '',
-            userName: '',
             isLoading: true
         };
         return _this;
@@ -45,24 +45,23 @@ var InformationCart = /** @class */ (function (_super) {
     InformationCart.prototype.componentDidMount = function () {
         var _this = this;
         var _a;
-        var store = (_a = this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user;
-        setTimeout(function () {
-            var _a, _b, _c, _d;
+        (_a = this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.getCurrentLoginInformations().then(function () {
+            var _a, _b, _c, _d, _e, _f, _g, _h;
             _this.setState({
-                title: (_a = store === null || store === void 0 ? void 0 : store.title) !== null && _a !== void 0 ? _a : '',
-                userName: (_b = store === null || store === void 0 ? void 0 : store.userName) !== null && _b !== void 0 ? _b : '',
-                userSurname: (_c = store === null || store === void 0 ? void 0 : store.surname) !== null && _c !== void 0 ? _c : '',
-                emailAddress: (_d = store === null || store === void 0 ? void 0 : store.emailAddress) !== null && _d !== void 0 ? _d : ''
+                name: (_b = (_a = _this.props.sessionStore) === null || _a === void 0 ? void 0 : _a.currentLogin.user.name) !== null && _b !== void 0 ? _b : '',
+                surname: (_d = (_c = _this.props.sessionStore) === null || _c === void 0 ? void 0 : _c.currentLogin.user.surname) !== null && _d !== void 0 ? _d : '',
+                emailAddress: (_f = (_e = _this.props.sessionStore) === null || _e === void 0 ? void 0 : _e.currentLogin.user.emailAddress) !== null && _f !== void 0 ? _f : '',
+                title: (_h = (_g = _this.props.sessionStore) === null || _g === void 0 ? void 0 : _g.currentLogin.user.title) !== null && _h !== void 0 ? _h : ''
             });
             _this.setState({ isLoading: false });
-        }, 500);
+        })["catch"](function (err) { });
     };
     InformationCart.prototype.render = function () {
         return (React.createElement(React.Fragment, null, this.state.isLoading ? React.createElement(Loading_1["default"], null) :
             React.createElement(Meta_1["default"], { avatar: React.createElement(antd_1.Avatar, { size: 100, icon: React.createElement(icons_1.AntDesignOutlined, null) }), title: React.createElement("p", { className: 'metaUserName' },
-                    this.state.userName,
+                    this.state.name,
                     " ",
-                    this.state.userSurname), description: React.createElement(React.Fragment, null,
+                    this.state.surname), description: React.createElement(React.Fragment, null,
                     React.createElement("p", null, this.state.title),
                     React.createElement("p", null, this.state.emailAddress)) })));
     };

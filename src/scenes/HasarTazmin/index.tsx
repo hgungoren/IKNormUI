@@ -866,7 +866,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         rules={rules.Talep_Edilen_Tutar}
                         name="Talep_Edilen_Tutar"
                         label={
-                          <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar</label>
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar </label>
                         }
                       >
                         <Input

@@ -19,10 +19,10 @@ export interface IProps {
 
 }
 export interface IState {
+    name: string;
     title: string;
-    userName: string;
+    surname: string;
     isLoading: boolean;
-    userSurname: string;
     emailAddress: string;
 }
 
@@ -34,26 +34,27 @@ export interface IState {
 
 @observer
 class InformationCart extends AppComponentBase<IProps, IState> {
-
     state = {
         title: '',
-        userSurname: '',
+        name: '',
+        surname: '',
         emailAddress: '',
-        userName: '',
         isLoading: true
     }
 
     componentDidMount() {
-        let store = this.props.sessionStore?.currentLogin.user; 
-        setTimeout(() => {
-            this.setState({
-                title: store?.title ?? '',
-                userName: store?.userName ?? '',
-                userSurname: store?.surname ?? '',
-                emailAddress: store?.emailAddress ?? '',
-            });
-            this.setState({ isLoading: false })
-        }, 500) 
+        this.props.sessionStore?.getCurrentLoginInformations()
+            .then(() => {
+                this.setState({
+                    name: this.props.sessionStore?.currentLogin.user.name ?? '',
+                    surname: this.props.sessionStore?.currentLogin.user.surname ?? '',
+                    emailAddress : this.props.sessionStore?.currentLogin.user.emailAddress ?? '',
+                    title : this.props.sessionStore?.currentLogin.user.title ?? ''
+                });
+
+                this.setState({ isLoading: false })
+            })
+            .catch((err) => { });
     }
 
     render() {
@@ -63,7 +64,7 @@ class InformationCart extends AppComponentBase<IProps, IState> {
                     this.state.isLoading ? <Loading /> :
                         <Meta
                             avatar={<Avatar size={100} icon={<AntDesignOutlined />} />}
-                            title={<p className={'metaUserName'}>{this.state.userName} {this.state.userSurname}</p>}
+                            title={<p className={'metaUserName'}>{this.state.name} {this.state.surname}</p>}
                             description={
                                 <>
                                     <p>{this.state.title}</p>
