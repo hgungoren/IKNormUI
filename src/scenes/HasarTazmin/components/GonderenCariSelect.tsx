@@ -5,6 +5,7 @@ import {
     Select,
   } from 'antd';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
+import rules from '../HasarTazmin.validation';
 
   export interface ICProps {
     kDamageCompensationStore: KDamageCompensationStore;
@@ -66,6 +67,8 @@ class GonderenCariSelect extends React.Component<ICProps,IState>  {
         <>
 
                        <Form.Item
+                        name='Tazmin_Musteri_Kodu'
+                        rules={rules.Tazmin_Musteri_Kodu}
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici Kodu</label>
                           }
@@ -87,6 +90,8 @@ class GonderenCariSelect extends React.Component<ICProps,IState>  {
 
 
                         <Form.Item
+                        name='Tazmin_Musteri_Unvan'
+                        rules={rules.Tazmin_Musteri_Unvan}
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>
                           }

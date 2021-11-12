@@ -17,7 +17,8 @@ class KDamageCompensationService {
 
     public async getDamageComppensation(entityDto: EntityDto): Promise<GetCreateDamageInput> {
        
-        let result = await http.get('api/services/app/DamageCompensation/GetById', { params: entityDto });      
+        let result = await http.get('api/services/app/DamageCompensation/GetById', { params: entityDto }); 
+        //console.log('result=>',result)     
         return result.data.result
     }
 
@@ -46,14 +47,21 @@ class KDamageCompensationService {
     }
 
 
-
-
     //birim listesi
     public async getBirimListDamageComppensation(){
         let result = await http.get('api/services/app/DamageCompensation/GetBirimListAsynDamage');  
      //  console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
     }
+
+
+      // Son id cekme 
+      public async getDamageComppensationLastId(){
+          let result= await http.get('api/services/app/DamageCompensation/GetDamageLastId');
+         //  console.log('service',result)
+           return result;
+      }
+
 
 
    

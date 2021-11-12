@@ -8,6 +8,7 @@ import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariL
 import { getSubeList } from '../services/kDamageCompensations/dto/getSubeList';
 import { getBirimList } from '../services/kDamageCompensations/dto/getBirimList';
 import { getBolgeList } from '../services/kDamageCompensations/dto/getBolgeList';
+//import { lastIdDamage } from '../services/kDamageCompensations/dto/lastIdDamage';
 
 
 
@@ -22,13 +23,14 @@ class KDamageCompensationStore {
     @observable getSubeListDamage!:getSubeList[];
     @observable getBolgeListDamage!:getBolgeList[];
     @observable getBirimListDamage!:getBirimList[];
+    @observable lastIdDamage!:number;
 
 
 
     @action
     async create(createDamage: CreateDamageInput) {
-        let result = await KDamageCompensationService.create(createDamage);
-        this.kdamage.items.push(result);
+       await KDamageCompensationService.create(createDamage);  
+       // this.kdamage.items.push(result);  
     }
 
     @action
@@ -61,14 +63,21 @@ class KDamageCompensationStore {
 
   }
 
-
-
-
        //birim listesi
        @action
        async getBirimListDamageComppensation(){
           let result = await KDamageCompensationService.getBirimListDamageComppensation();
           this.getBirimListDamage = result;
+      }
+
+
+     //son id cekme
+      @action
+      async GetDamageComppensationLastId() {
+         let result= await KDamageCompensationService.getDamageComppensationLastId(); 
+        //   console.log('STORE=>',result.data) 
+          this.lastIdDamage=result.data.result; 
+          return result.data;
       }
   
 

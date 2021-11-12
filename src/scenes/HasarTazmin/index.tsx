@@ -7,10 +7,6 @@ import {
   Button,
   Card,
   Col,
-<<<<<<< HEAD
-=======
-
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
   Divider,
   Form,
   Input,
@@ -28,16 +24,14 @@ import { inject, observer } from 'mobx-react';
 import rules from './HasarTazmin.validation';
 import { Link } from 'react-router-dom';
 import { isGranted, L } from '../../lib/abpUtility';
-import GonderenCariSelect from './components/GonderenCariSelect';
-import AliciCariSelect from './components/AliciCariSelect';
-import FarkliCari from './components/FarkliCari';
+// import GonderenCariSelect from './components/GonderenCariSelect';
+// import AliciCariSelect from './components/AliciCariSelect';
+// import FarkliCari from './components/FarkliCari';
+import EditableTagGroup from './components/LinkTag';
 import Stores from '../../stores/storeIdentifier';
-import { AlertOutlined, FileAddTwoTone, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
+import { AlertOutlined, SendOutlined, SwitcherOutlined, UploadOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
-//import { GetCariListDamage } from '../../services/kDamageCompensations/dto/getCariListDamage';
-import { Label } from 'recharts';
-//import { getSubeList } from '../../services/kDamageCompensations/dto/getSubeList';
-//import uuid from 'react-uuid';
+
 
 
 export interface IProps {
@@ -60,7 +54,10 @@ export interface IState {
   aliciUnvanInput: string;
   subeList: any;
   birimList: any;
-  bolgeList:any;
+  bolgeList: any;
+  lastId: number;
+  SurecSahibibolgeList:any;
+  tagLink:string;
 }
 
 @inject(Stores.KDamageCompensationStore)
@@ -77,19 +74,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     settazminmusteriFarkli: false,
     setradioValueTazminMusteri: 4,
     settazminmusteriGonderici: false,
-<<<<<<< HEAD
-    Ktno: 999,
+    Ktno: 0,
     cariList: [],
     gonderiUnvanInput: '',
     aliciUnvanInput: '',
     subeList: [],
     birimList: [],
-    bolgeList:[]
-=======
-    Ktno: 0,
-
-
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
+    bolgeList: [],
+    lastId: 0,
+    SurecSahibibolgeList:[],
+    tagLink:'cengiz'
   };
 
   getdamage = async (id: number) => {
@@ -97,21 +91,25 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       await this.props.kDamageCompensationStore
         .getDamageComppensation({ id: id })
         .then((response) => {
-
-<<<<<<< HEAD
-=======
           setTimeout(() => {
             this.formRef.current?.setFieldsValue({
               ...this.props.kDamageCompensationStore.getCreateDamageInput,
             });
           }, 500)
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
-
-        }).catch((err) => console.log(err));
+          // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
+        }).catch(() => notification.open({
+          icon: <AlertOutlined style={{ color: 'red' }} />,
+          message: 'Uyarı',
+          description:'Kayıt Bulunamadı.Takip Numarası Hatalı',
+        }));
     } catch (e) {
-      console.log(e);
+      alert(e)
     }
   };
+
+
+
+    
 
 
   getcarilistdamageCompensation = async (id: number) => {
@@ -133,14 +131,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     }
   };
 
-    //Bolge listesi
-    getbolgelistdamageCompensation = async () => {
-      try {
-        await this.props.kDamageCompensationStore.getBolgeListDamageComppensation();
-      } catch (e) {
-        console.log(e);
-      }
-    };
+  //Bolge listesi
+  getbolgelistdamageCompensation = async () => {
+    try {
+      await this.props.kDamageCompensationStore.getBolgeListDamageComppensation();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
 
   //Birim listesi
@@ -153,30 +151,56 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   };
 
 
+  //sonıd cekme 
+  getlastiddamageCompensation = async () => {
+    await this.props.kDamageCompensationStore.GetDamageComppensationLastId();
+    this.setState({ lastId: this.props.kDamageCompensationStore.lastIdDamage })
+  }
+
+
 
   async componentDidMount() {
     await this.getsubelistdamageCompensation();
     await this.getbirimlistdamageCompensation();
     await this.getbolgelistdamageCompensation();
+    await this.getlastiddamageCompensation();
+
   }
 
 
 
 
+  // Tanzim  için  Oluşturma Metodu
+  kDamageCompensationCreate = () => {
+    const form = this.formRef.current;
+    form!.validateFields().then(async (values: any) => {
+
+      await this.props.kDamageCompensationStore.create(values)
+      this.openNotificationWithIcon('success')
+      form!.resetFields();
+      await this.getlastiddamageCompensation();
+
+
+    });
+  };
+
+  openNotificationWithIcon = type => {
+    notification[type]({
+      message: type === "success" ? 'Tazmin Başarıyla Kaydedildi' : L('NormRejectNotificationMessageTitle'),
+      description: type === "success" ? '' : L('NormCreateNotificationMessageDescription'),
+      duration: 3
+    });
+  };
+
+
+
+  
+
 
   public render() {
     const { Option } = Select;
     const { TabPane } = Tabs
-<<<<<<< HEAD
-=======
-    //bugunün tarihi
-    const today = Date.now();
-    const test = new Intl.DateTimeFormat('tr-TR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }).format(today);
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
+
 
 
     const onChangeRadio = (e) => {
@@ -251,11 +275,20 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
     const handleClick = (e) => {
-      this.getdamage(this.state.Ktno);
-<<<<<<< HEAD
-=======
+     
+       if(this.state.Ktno !=0 ){
+        this.getdamage(this.state.Ktno);
+       }else {
+        notification.open({
+          icon: <AlertOutlined style={{ color: 'red' }} />,
+          message: 'Uyarı',
+          description:
+            'Takip No Numarası Giriniz.',
+        });
+       }
 
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
+
+
     };
 
 
@@ -264,7 +297,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         this.getcarilistdamageCompensation(val)
         this.setState({
           cariList: this.props.kDamageCompensationStore.getCariListDamage !== undefined && this.props.kDamageCompensationStore.getCariListDamage.map((value, index) =>
-            <Option key={'cari' + value.kodu} value={value.kodu}> {value.unvan} </Option>
+            <Option key={'cari' + value.kodu} value={value.unvan}> {value.kodu} </Option>
           )
         })
       }
@@ -278,7 +311,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       setTimeout(() => { console.log(this.state.gonderiUnvanInput) }, 100)
 
     }
-    
+
     const onChangeAliciSelect = (res) => {
 
       this.setState({ aliciUnvanInput: res })
@@ -297,7 +330,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
       this.setState({
         subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
-          <Option key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
+          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
         )
       })
 
@@ -305,43 +338,58 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
     //onDropdownVisibleChangeVaris varis selectin tıklandıgında
-const onDropdownVisibleChangeVaris=()=>{
-  this.setState({
-   subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
-      <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
-      )
-   })
-  }
+    const onDropdownVisibleChangeVaris = () => {
+      this.setState({
+        subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
+          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
+        )
+      })
+    }
 
 
     //onDropdownVisibleChangeBrim birim selectin tıklandıgında
-     const onDropdownVisibleChangeBirim=()=>{
+    const onDropdownVisibleChangeBirim = () => {
       this.setState({
         birimList: this.props.kDamageCompensationStore.getBirimListDamage !== undefined && this.props.kDamageCompensationStore.getBirimListDamage.map((value, index) =>
-          <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
-         )
+          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
+        )
       })
-      }
+    }
 
 
-      
+
     //onDropdownVisibleChangeBolge ödeme bolge selectin tıklandıgında
-     const onDropdownVisibleChangeBolge=()=>{
+    const onDropdownVisibleChangeBolge = () => {
       this.setState({
         bolgeList: this.props.kDamageCompensationStore.getBolgeListDamage !== undefined && this.props.kDamageCompensationStore.getBolgeListDamage.map((value, index) =>
-          <Option  key={value.objId+'-'+index} value={value.objId+'-'+index}> {value.adi} </Option>
-         )
+          <Option key={value.objId + '-' + index} value={value.objId+ '-'+index}> {value.adi} </Option>
+        )
       })
-      }
+    }
+
+
+    
+    //onDropdownVisibleChange SurecSahibiBolge ödeme bolge selectin tıklandıgında
+    const onDropdownVisibleChangeSurecSahibiBolge = () => {
+      this.setState({
+        SurecSahibibolgeList: this.props.kDamageCompensationStore.getBolgeListDamage !== undefined && this.props.kDamageCompensationStore.getBolgeListDamage.map((value, index) =>
+          <Option key={value.objId + '-' + index} value={value.objId+ '-' + index}> {value.adi} </Option>
+        )
+      })
+    }
 
 
 
-
-
-
-
-
-
+    const normFile = (e: any) => {
+      console.log('Upload event:', e);
+    
+      if (Array.isArray(e)) {
+        
+        return e;
+      }  
+      
+      return e && e.fileList;
+    };
 
 
 
@@ -349,6 +397,7 @@ const onDropdownVisibleChangeVaris=()=>{
     return (
       <>
         <React.Fragment>
+
           <Card style={{ marginBottom: 20 }}>
             <PageHeader
               ghost={false}
@@ -396,7 +445,8 @@ const onDropdownVisibleChangeVaris=()=>{
                         labelCol={{ span: 10 }}
                         wrapperCol={{ span: 16 }}
                       >
-                        <Input readOnly defaultValue="001"></Input>
+                         {console.log(this.state.lastId)}
+                        <Input readOnly value={this.state.lastId}></Input>
                       </Form.Item>
 
                       <Form.Item
@@ -405,7 +455,7 @@ const onDropdownVisibleChangeVaris=()=>{
                         labelCol={{ span: 10 }}
                         wrapperCol={{ span: 16 }}
                       >
-                        <Input readOnly defaultValue="Yeni Tazmin"></Input>
+                        <Input readOnly defaultValue="Taslak"></Input>
                       </Form.Item>
                     </Form>
                   </Col>
@@ -416,33 +466,31 @@ const onDropdownVisibleChangeVaris=()=>{
                 <Row>
                   <Col span={12}>
                     <Form layout="inline">
-<<<<<<< HEAD
-                      <Form.Item label="Kargo Takip No" name='kargotakipNoRadio'>
-=======
-                      <Form.Item label="Kargo Takip No">
->>>>>>> a19dbbfed692d03985988ba38ef1101b61455d1d
 
-                        <Radio.Group onChange={onChangeRadio} value={this.state.setradioValue}>
-                          <Radio value={1}>Biliniyor</Radio>
-                          <Radio value={2}>Bilinmiyor</Radio>
+                      <Form.Item label="Kargo Takip No" name='kargotakipNoRadio'>
+                        <Radio.Group onChange={onChangeRadio}   defaultValue={this.state.setradioValue}>
+                          <Radio  value={1}>Biliniyor</Radio>
+                          {/* <Radio value={2}>Bilinmiyor</Radio> */}
                         </Radio.Group>
                       </Form.Item>
 
                       {this.state.setsorgulama ? (
                         <>
-                          <Form.Item
+                          <Form.Item                         
                             label="Takip No"
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
+                            
                           >
-                            <Input
+                            <Input type='number'
+                              id='test'
                               placeholder="Kargo Takip Numarası"
                               name="ktno"
                               onChange={handleChange}
                             />
                           </Form.Item>
                           <Form.Item label="" labelCol={{ span: 10 }} wrapperCol={{ span: 16 }}>
-                            <Button type="primary" onClick={handleClick}>
+                            <Button type="primary" onClick={handleClick}      >
                               Getir
                             </Button>
                           </Form.Item>
@@ -469,6 +517,7 @@ const onDropdownVisibleChangeVaris=()=>{
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
                 >
+
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -489,6 +538,8 @@ const onDropdownVisibleChangeVaris=()=>{
 
                       </Form.Item>
                     </Col>
+                    {this.state.setsorgulama ? 
+                    
                     <Col span={12}>
                       <Form.Item
                         rules={rules.evrakSeriNo}
@@ -504,6 +555,11 @@ const onDropdownVisibleChangeVaris=()=>{
                         />
                       </Form.Item>
                     </Col>
+                    
+                    :''}
+                    
+
+
                   </Row>
 
                   <Row>
@@ -531,20 +587,13 @@ const onDropdownVisibleChangeVaris=()=>{
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item
+                      <Form.Item name="gonderenUnvan"
                         rules={rules.gonderenUnvan}
-                        name="gonderenUnvan"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>}
                       >
-                        <Label>
-                          {this.state.gonderiUnvanInput}
-                        </Label>
-                        <Input
-                          className="formInput"
-                          placeholder="Gönderici"
-                          value={this.state.gonderiUnvanInput}
-                        />
+                        <Input readOnly className="formInput" placeholder="Gönderici" value={this.state.gonderiUnvanInput} />
                       </Form.Item>
+
                     </Col>
                   </Row>
 
@@ -573,18 +622,11 @@ const onDropdownVisibleChangeVaris=()=>{
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item
+                      <Form.Item name="aliciUnvan"
                         rules={rules.aliciUnvan}
-                        name="aliciUnvan"
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı</label>}
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>}
                       >
-                        <Label>{this.state.aliciUnvanInput}</Label>
-                        <Input
-                          readOnly
-                          className="formInput"
-                          placeholder="Alıcı"
-                          value={this.state.aliciUnvanInput}
-                        />
+                        <Input readOnly className="formInput" placeholder="Alici" value={this.state.gonderiUnvanInput} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -599,21 +641,34 @@ const onDropdownVisibleChangeVaris=()=>{
                         }
                       >
                         <Select
-                        className="formInput"
-                        disabled={this.state.setformselectdisable}
-                        onDropdownVisibleChange={onDropdownVisibleChangeCikis}
-                        placeholder="Seçiniz"
-                        allowClear
-                        showSearch
+                          className="formInput"
+                          disabled={this.state.setformselectdisable}
+                          onDropdownVisibleChange={onDropdownVisibleChangeCikis}
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
                         >
                           {
                             this.state.subeList
 
                           }
                         </Select>
+
+
                       </Form.Item>
+
+                    
+
+
+                      <Form.Item  hidden  name="ilkGondericiSube_ObjId"> </Form.Item>
+
+
+  
+
+
                     </Col>
                     <Col span={12}>
+                    <Form.Item  hidden  name="varisSube_ObjId"> </Form.Item>
                       <Form.Item
                         rules={rules.varis_Sube_Unvan}
                         name="varis_Sube_Unvan"
@@ -621,7 +676,7 @@ const onDropdownVisibleChangeVaris=()=>{
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Varış Şube Adı</label>
                         }
                       >
-                        <Select                      
+                        <Select
                           className="formInput"
                           showSearch
                           placeholder="Seçiniz"
@@ -643,6 +698,7 @@ const onDropdownVisibleChangeVaris=()=>{
 
                   <Row>
                     <Col span={12}>
+                    <Form.Item  hidden  name="birimi_ObjId"> </Form.Item>
                       <Form.Item
                         rules={rules.birimi}
                         name="birimi"
@@ -687,28 +743,28 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.tazminTalepTarihi}
-                        name="tazminTalepTarihi"
+                        rules={rules.Tazmin_Talep_Tarihi}
+                        name="Tazmin_Talep_Tarihi"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>
                             Tazmin Talep Tarihi
                           </label>
                         }
                       >
-                        <Input className="formInput" readOnly />
+                        <Input className="formInput"  type='date'  />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.tazminTipi}
-                        name="tazminTipi"
+                        rules={rules.Tazmin_Tipi}
+                        name="Tazmin_Tipi"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Tipi</label>}
                       >
                         <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
-                          <Option value="Hasar">Hasar</Option>
-                          <Option value="Kayıp">Kayıp</Option>
-                          <Option value="Geç Teslimat">Geç Teslimat</Option>
-                          <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
+                          <Option value="1">Hasar</Option>
+                          <Option value="2">Kayıp</Option>
+                          <Option value="3" >Geç Teslimat</Option>
+                          <Option value="4">Müşteri Memnuniyeti</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -717,6 +773,8 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
+                            rules={rules.Tazmin_Musteri_Tipi}
+                            name="Tazmin_Musteri_Tipi"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Müşterisi</label>
                         }
@@ -727,18 +785,18 @@ const onDropdownVisibleChangeVaris=()=>{
                         >
                           <Radio value={0}>Gönderen Cari</Radio>
                           <Radio value={1}>Alıcı Cari</Radio>
-                          <Radio value={2}>Farklı Cari</Radio>
+                          {/* <Radio value={2}>Farklı Cari</Radio> */}
                         </Radio.Group>
                       </Form.Item>
 
-                      {this.state.settazminmusteriGonderici ? <GonderenCariSelect  kDamageCompensationStore={this.props.kDamageCompensationStore}/> : ''}
-                      {this.state.settazminmusteriAlici ? <AliciCariSelect  kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
-                      {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''}
+                      {/* {this.state.settazminmusteriGonderici ? <GonderenCariSelect kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
+                      {this.state.settazminmusteriAlici ? <AliciCariSelect kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
+                      {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''} */}
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.odemeSekli}
-                        name="odemeSekli"
+                        rules={rules.Odeme_Musteri_Tipi}
+                        name="Odeme_Musteri_Tipi"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>
                             Ödenecek Müşteri Tipi
@@ -746,8 +804,8 @@ const onDropdownVisibleChangeVaris=()=>{
                         }
                       >
                         <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
-                          <Option value="Bireysel">Bireysel</Option>
-                          <Option value="Kurumsal">Kurumsal</Option>
+                          <Option value="1">Bireysel</Option>
+                          <Option value="2">Kurumsal</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -756,8 +814,14 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.tckno}
-                        name="tckno"
+                        rules={
+                                  [
+                                    { required: true,            message:'Lütfen Boş Bırakmayınız!' },
+                                    { pattern: /^[\d]{11,11}$/ , message:'TC no 11 karakterden az ve fazla olamaz'},
+                                    { pattern: /^(?:\d*)$/ ,     message:'Sadece sayısal değerler girilebilir'}
+                                  ]
+                               }
+                        name="TCK_NO"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>TC Kimlik No</label>}
                       >
                         <Input className="formInput" placeholder="TC Kimlik No" />
@@ -765,8 +829,14 @@ const onDropdownVisibleChangeVaris=()=>{
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.vergiKimlik}
-                        name="vergiKimlik"
+                        rules={
+                          [
+                            { required: true,            message:'Lütfen Boş Bırakmayınız!' },
+                            { pattern: /^[\d]{11,11}$/ , message:'Vkno no 11 karakterden az ve fazla olamaz'},
+                            { pattern: /^(?:\d*)$/ ,     message:'Sadece sayısal değerler girilebilir'}
+                          ]
+                         }
+                        name="VK_NO"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Vergi Kimlik No</label>
                         }
@@ -779,23 +849,22 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.odemeBirimiBolge}
-                        name="odemeBirimiBolge"
+                        rules={rules.Odeme_Birimi_Bolge}
+                        name="Odeme_Birimi_Bolge"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Ödeme Birimi/Bölge</label>
                         }
                       >
                         <Select className="formInput" showSearch placeholder="Seçiniz" allowClear
-                        onDropdownVisibleChange={onDropdownVisibleChangeBolge}>
+                          onDropdownVisibleChange={onDropdownVisibleChangeBolge}>
                           {this.state.bolgeList}
                         </Select>
                       </Form.Item>
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.talepEdilenTutar}
-                        name="talepEdilenTutar"
-                        tooltip="KDV TUTAR HARİÇ"
+                        rules={rules.Talep_Edilen_Tutar}
+                        name="Talep_Edilen_Tutar"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar</label>
                         }
@@ -812,17 +881,17 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.surecSahibiniBolgeyeAta}
-                        name="surecSahibiniBolgeyeAta"
+                        rules={rules.Surec_Sahibi_Birim_Bolge}
+                        name="Surec_Sahibi_Birim_Bolge"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>
                             Süreç Sahibi Birim/Bölge
                           </label>
                         }
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
-                          <Option value="İkitelli Bölge">İkitelli Bölge</Option>
-                          <Option value="Genel Müdürlük">Genel Müdürlük</Option>
+                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear 
+                        onDropdownVisibleChange={onDropdownVisibleChangeSurecSahibiBolge}>
+                          {this.state.SurecSahibibolgeList}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -831,8 +900,14 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        name="SMS"
-                        rules={rules.SMS}
+                        name="Telefon"
+                        rules={
+                          [
+                            { required: true,            message:'Lütfen Boş Bırakmayınız!' },
+                            { pattern: /^[\d]{10,11}$/ ,  message:'Lütfen geçerli bir telefon numarası giriniz'},
+                            { pattern: /^(?:\d*)$/ ,     message:'Sadece sayısal değerler girilebilir'}
+                          ]
+                         }
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Bilgilendirme(SMS)</label>
                         }
@@ -844,8 +919,14 @@ const onDropdownVisibleChangeVaris=()=>{
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        name="email"
-                        rules={rules.email}
+                        name="Email"
+                        rules={
+                          [
+                            { required: true, message:'Lütfen Boş Bırakmayınız!' },
+                            {  type: "email", message:'Lütfen geçerli bir Email  giriniz'}
+                        
+                          ]
+                         }
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>
                             Bilgilendirme(Email)
@@ -861,32 +942,39 @@ const onDropdownVisibleChangeVaris=()=>{
 
                   <Row>
                     <Col span={12}>
-                      <Form.Item
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
-                      >
-                        <Upload maxCount={4} multiple listType="picture">
-                          <Button icon={<FileAddTwoTone />}>Max(4)</Button>
-                        </Upload>
-                      </Form.Item>
+                    <Form.Item
+                      label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
+                      valuePropName="fileList"
+                      getValueFromEvent={normFile}
+                      extra=""
+                      name="SomeFile"
+                      
+                    >
+                      <Upload name="logo" multiple maxCount={1} action="/upload.do"  listType="text">
+                        <Button icon={<UploadOutlined />}>Click to upload</Button>
+                      </Upload>
+                    </Form.Item>
+
+
+                     
                     </Col>
                   </Row>
 
                   <Row>
                     <Col span={12}>
                       <Form.Item
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
-                      >
-                        <Upload maxCount={4} multiple listType="picture">
-                          <Button icon={<FileAddTwoTone />}>Max(4)</Button>
-                        </Upload>
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Link</label>}
+                      > 
+                        <EditableTagGroup/>
                       </Form.Item>
+                      <Input  hidden defaultValue={this.state.tagLink} name='linktags'></Input>
                     </Col>
                   </Row>
 
                   <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary" icon={<SendOutlined />} htmlType="submit">
+                        <Button type="primary" onClick={this.kDamageCompensationCreate} icon={<SendOutlined />} htmlType="submit">
                           Onaya Gönder
                         </Button>
                       </Space>
@@ -894,10 +982,22 @@ const onDropdownVisibleChangeVaris=()=>{
                   </Row>
                 </Form>
               </TabPane>
-              <TabPane tab="Değerlendirme" key="2">
+              <TabPane
+                tab={
+                  <span>
+                    <SwitcherOutlined />
+                    Değerlendirme
+                  </span>
+                }
+                key="2">
                 Content of Tab Pane 2
               </TabPane>
-              <TabPane tab="Tarihçe" key="3">
+              <TabPane tab={
+                <span>
+                  <SwitcherOutlined />
+                  Tarihçe
+                </span>
+              } key="3">
                 Content of Tab Pane 3
               </TabPane>
             </Tabs>

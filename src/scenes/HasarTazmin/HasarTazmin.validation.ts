@@ -16,19 +16,19 @@ const rules = {
   adet: [{ required: true, message: 'Lütfen Parça Adedi Giriniz' }],
   kargoKabulFisNo: [{ required: true, message: 'Lütfen Kargo Kabul Fiş No Giriniz' }],
   //tanzim bilgileri
-  tazminTalepTarihi: [{ required: true, message: 'Lütfen Takip No Giriniz' }],
-  tazminTipi: [{ required: true, message: 'Lütfen Tazmin Tipi Seçiniz' }],
-  odemeSekli: [{ required: true, message: 'Lütfen Ödeme Şeklini Seçiniz' }],
-  tckno: [{ required: true, message: 'Lütfen TCKNO Giriniz' } || { type: 'number', maxLength: 11, message: 'Lütfen Geçerli Bir TCKNO Giriniz' }],
-  vergiKimlik: [{ required: true, message: 'Lütfen Vergi Kimlik No Giriniz' } || { type: 'number', maxLength: 10, message: 'Lütfen Geçerli Bir Vergi Kimlik Numarası Giriniz' }],
-  odemeBirimiBolge: [{ required: true, message: 'Lütfen Ödeme Birim/Bölge Şeklini Seçiniz' }],
-  talepEdilenTutar: [{ required: true, message: 'Lütfen Talep Edilen Tutar Giriniz' }],
-  surecSahibiniBolgeyeAta: [{ required: true, message: 'Lütfen Süreç Sahibi Bölgeye Ata Giriniz' }],
-  email: [{ 
-     required: true,
-     message: 'Lütfen Email Alanını Giriniz', 
-    } || { type: 'email', message: 'Lütfen geçerli bir email formatı giriniz.' }],
-  SMS: [{ required: true, message: 'Lütfen SMS Alanını Giriniz' } || { type: 'tel', message: 'Lütfen geçerli bir email formatı giriniz.' }],
+  Tazmin_Talep_Tarihi:       [{ required: false, message:  'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Tipi:               [{ required: true, message: 'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Musteri_Tipi:       [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Musteri_Kodu:       [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Musteri_Unvan:      [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Odeme_Musteri_Tipi:        [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  TCK_NO:                    [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  VK_NO:                     [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Odeme_Birimi_Bolge:        [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Talep_Edilen_Tutar:        [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Surec_Sahibi_Birim_Bolge:  [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Telefon:                   [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Email:                     [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
 
 
 };
