@@ -14,4 +14,7 @@ export interface GetCreateDamageInput {
     takipNo                : string;
     birimi                 : string;
     adet                   : number; 
+
+    
+  
 }

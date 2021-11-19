@@ -16,8 +16,8 @@ const rules = {
   adet: [{ required: true, message: 'Lütfen Parça Adedi Giriniz' }],
   kargoKabulFisNo: [{ required: true, message: 'Lütfen Kargo Kabul Fiş No Giriniz' }],
   //tanzim bilgileri
-  Tazmin_Talep_Tarihi:       [{ required: false, message:  'Lütfen Boş Bırakmayınız' }],
-  Tazmin_Tipi:               [{ required: true, message: 'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Talep_Tarihi:       [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
+  Tazmin_Tipi:               [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
   Tazmin_Musteri_Tipi:       [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
   Tazmin_Musteri_Kodu:       [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
   Tazmin_Musteri_Unvan:      [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
@@ -29,8 +29,6 @@ const rules = {
   Surec_Sahibi_Birim_Bolge:  [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
   Telefon:                   [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
   Email:                     [{ required: false, message: 'Lütfen Boş Bırakmayınız' }],
-
-
 };
 
 export default rules;

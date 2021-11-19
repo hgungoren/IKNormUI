@@ -9,7 +9,7 @@ export interface CreateDamageInput {
       Birimi_ObjId :number;
       AliciUnvan :string;
       AliciKodu :string;
-      TakipNo :string;
+      TakipNo :number;
       Birimi :string;
       Adet :number;
       id?: number;
@@ -26,5 +26,7 @@ export interface CreateDamageInput {
        Telefon :string;
        TCK_NO :string;
        Email :string;
+      //belgeler
+       FileInfo:string;
     
 }

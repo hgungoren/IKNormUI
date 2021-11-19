@@ -9,6 +9,14 @@ import { getSubeList } from '../services/kDamageCompensations/dto/getSubeList';
 import { getBirimList } from '../services/kDamageCompensations/dto/getBirimList';
 import { getBolgeList } from '../services/kDamageCompensations/dto/getBolgeList';
 //import { lastIdDamage } from '../services/kDamageCompensations/dto/lastIdDamage';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
+
+
+import { updateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
+
+
+
+
 
 
 
@@ -24,6 +32,12 @@ class KDamageCompensationStore {
     @observable getBolgeListDamage!:getBolgeList[];
     @observable getBirimListDamage!:getBirimList[];
     @observable lastIdDamage!:number;
+    @observable getAllDamageCompensationStoreClass!:GetAllDamageCompensation[];
+
+    @observable updateDamageCompensationClass!:updateDamageCompensationClass;
+
+
+
 
 
 
@@ -33,11 +47,13 @@ class KDamageCompensationStore {
        // this.kdamage.items.push(result);  
     }
 
+  
+
     @action
     async getDamageComppensation(entityDto: EntityDto) {    
         let result = await KDamageCompensationService.getDamageComppensation(entityDto);
         this.getCreateDamageInput = result;
-        //console.log('test=>',result)
+     
     }
 
     @action 
@@ -52,7 +68,7 @@ class KDamageCompensationStore {
      async getSubeListDamageComppensation(){
         let result = await KDamageCompensationService.getSubeListDamageComppensation();
         this.getSubeListDamage = result;
-
+        // console.log('store.result.Sube=>',result)
     }
 
    //bolge listesi
@@ -80,7 +96,33 @@ class KDamageCompensationStore {
           return result.data;
       }
   
+     
 
+      //tazmin listesi cekme 
+      @action
+      async  StoregetAllDamageCompansation(){
+         let result = await KDamageCompensationService.getAllDamageCompensationService();
+         this.getAllDamageCompensationStoreClass = result;
+          //console.log('STORE=>',result)
+         return result
+     }
+
+
+
+     //get compensation ById
+     @action
+     async StoregetDamageComppensationById(entityDto: EntityDto) {    
+        let result = await KDamageCompensationService.getDamageComppensationByIdService(entityDto);
+        this.updateDamageCompensationClass = result;
+     
+    }
+
+
+
+     /// damage compensaiton update 
+     async StoreDamageCompensationUpdate(updateDamage: updateDamageCompensationClass){
+        await KDamageCompensationService.updateDamage(updateDamage); 
+     }
 
     
 }

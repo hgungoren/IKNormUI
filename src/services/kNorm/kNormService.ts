@@ -9,55 +9,55 @@ import { GetKNormOutput } from './dto/getKNormOutput';
 class KNormService {
 
     public async create(createKNormInput: CreateKNormInput) {
-        let result = await http.post('iknorm/KNorm/Create', createKNormInput);
+        let result = await http.post('api/services/app/KNorm/Create', createKNormInput);
         return result.data.result;
     }
 
     public async get(entityDto: EntityDto): Promise<GetKNormOutput> {
-        let result = await http.get('iknorm/KNorm/Get', { params: entityDto });
+        let result = await http.get('api/services/app/KNorm/Get', { params: entityDto });
         return result.data.result;
     }
 
     public async getById(entityDto: EntityDto): Promise<GetKNormOutput> {
-        let result = await http.get('iknorm/KNorm/GetById', { params: entityDto });
+        let result = await http.get('api/services/app/KNorm/GetById', { params: entityDto });
         return result.data.result;
     }
 
 
     public async getAllBolge(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('iknorm/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
 
     public async getAllBolgeCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<GetAllKNormOutput[]> {
-        let result = await http.get('iknorm/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
 
     public async getAllSube(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('iknorm/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
     public async getAllSubeCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<GetAllKNormOutput[]> {
-        let result = await http.get('iknorm/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
     public async getAllSubeDetail(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<PagedResultDto<GetAllKNormOutput>> {
-        let result = await http.get('iknorm/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
     public async getAllSubeDetailCount(pagedFilterAndSortedRequest: PagedKNormResultRequestDto): Promise<GetAllKNormOutput[]> {
-        let result = await http.get('iknorm/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest });
+        let result = await http.get('api/services/app/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest });
         return result.data.result;
     }
 
     public async setStatusAsync(createKNormInput: CreateKNormInput) {
-        let result = await http.post('iknorm/KNorm/SetStatus', createKNormInput);
+        let result = await http.post('api/services/app/KNorm/SetStatus', createKNormInput);
         return result.data.result;
     }
 

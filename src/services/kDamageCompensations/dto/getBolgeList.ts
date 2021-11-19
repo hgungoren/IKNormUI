@@ -1,4 +1,4 @@
 export interface getBolgeList{
-    objId:number;
+    objId:string;
     adi:string
 }

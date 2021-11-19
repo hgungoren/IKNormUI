@@ -3,17 +3,18 @@ import { EntityDto } from '../dto/entityDto';
 import { CreateDamageInput } from './dto/createDamageInput';
 import { GetCreateDamageInput} from './dto/GetCreateDamageInput'
 import { GetCariListDamage} from './dto/getCariListDamage'
-//import { getSubeList} from './dto/getSubeList'
-//import { getBirimList} from './dto/getBirimList'
 
+import { updateDamageCompensationClass  } from './dto/updateDamageCompensation'
 
 
 class KDamageCompensationService {
 
     public async create(createDamageInput: CreateDamageInput) {
-        let result = await http.post('api/services/app/DamageCompensation/Create', createDamageInput);
+        let result = await http.post('api/services/app/DamageCompensation/create', createDamageInput);
         return result.data.result;
     }
+
+
 
     public async getDamageComppensation(entityDto: EntityDto): Promise<GetCreateDamageInput> {
        
@@ -42,7 +43,7 @@ class KDamageCompensationService {
     public async getBolgeListDamageComppensation(){
      
         let result = await http.get('api/services/app/DamageCompensation/GetAreaListDamage');  
-         //console.log('services.result.data.result=>',result.data.result) 
+        //console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
     }
 
@@ -62,6 +63,37 @@ class KDamageCompensationService {
            return result;
       }
 
+
+      // tazmin listesi çekme 
+      public async getAllDamageCompensationService(){
+        let result= await http.get('api/services/app/DamageCompensation/GetAllDamageCompensation'); 
+        return result.data.result;
+      }
+
+
+
+
+     //get damageCompensation ByID
+     public async getDamageComppensationByIdService(entityDto: EntityDto): Promise<updateDamageCompensationClass> {
+        let result = await http.get('api/services/app/DamageCompensation/GetDamageCompenSationById', { params: entityDto }); 
+        //console.log('result=>',result)     
+        return result.data.result
+    }
+
+    /// update damage conpensatioın 
+    public async updateDamage(updateDamage: updateDamageCompensationClass) {
+        let result = await http.put('api/services/app/DamageCompensation/Update', updateDamage);
+       // console.log('service=>',result)
+        return result
+    }
+
+
+    public async getFilterDamageCompensationService(id : string, res : boolean){
+      let result=await http.get('/api/services/app/DamageCompensation/GetDamageCompensationFilter?s='+id +"&sds=");
+
+     return result;
+    }
+      
 
 
    
