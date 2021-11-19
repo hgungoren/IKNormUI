@@ -17,7 +17,7 @@ import {
   Select,
   Space,
   Tabs,
-  Upload
+
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
@@ -27,9 +27,9 @@ import { isGranted, L } from '../../lib/abpUtility';
 // import GonderenCariSelect from './components/GonderenCariSelect';
 // import AliciCariSelect from './components/AliciCariSelect';
 // import FarkliCari from './components/FarkliCari';
-import EditableTagGroup from './components/LinkTag';
+// import EditableTagGroup from './components/LinkTag';
 import Stores from '../../stores/storeIdentifier';
-import { AlertOutlined, SendOutlined, SwitcherOutlined, UploadOutlined } from '@ant-design/icons';
+import { AlertOutlined, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
  
 
@@ -388,16 +388,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
 
-    const onChangeFile = (info) => {
+    // const onChangeFile = (info) => {
 
-      let len = info.fileList.length
-      this.setState({ fileInput: '' })
-      for (var i = 0; i < len; i++) {
-        let ttx = this.state.fileInput
-        this.setState({ fileInput: ttx + ',' + info.fileList[i].name })
-      }
+    //   let len = info.fileList.length
+    //   this.setState({ fileInput: '' })
+    //   for (var i = 0; i < len; i++) {
+    //     let ttx = this.state.fileInput
+    //     this.setState({ fileInput: ttx + ',' + info.fileList[i].name })
+    //   }
 
-    }
+    // }
 
 
 
@@ -950,7 +950,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                   <Divider orientation="left">Tazmin Belgeleri</Divider>
 
-                  <Row>
+                  {/* <Row>
                     <Col span={12}>
                       <Form.Item
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
@@ -963,12 +963,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                       <Form.Item name="FileInfo" hidden >
                         <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
-
-
                       </Form.Item>
-
-
-
                     </Col>
                   </Row>
 
@@ -981,7 +976,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                       <Input hidden defaultValue={this.state.tagLink} name='linktags'></Input>
                     </Col>
-                  </Row>
+                  </Row> */}
 
                   <Row style={{ float: 'right' }}>
                     <Col span={12}>

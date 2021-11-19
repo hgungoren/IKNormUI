@@ -88,10 +88,9 @@ class KDamageCompensationService {
     }
 
 
-    public async getFilterDamageCompensationService(id : string, res : boolean){
-      let result=await http.get('/api/services/app/DamageCompensation/GetDamageCompensationFilter?s='+id +"&sds=");
-
-     return result;
+    public async getFilterDamageCompensationService(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){
+      let result=await http.get('api/services/app/DamageCompensation/GetDamageCompensationFilter?checktakipNo='+checktakipNo+'&checktazminID='+checktazminID+'&search='+search+'&start='+start+'&finish='+finish+'');
+      return result.data.result;
     }
       
 

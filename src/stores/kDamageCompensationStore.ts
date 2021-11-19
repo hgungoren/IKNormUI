@@ -22,6 +22,7 @@ import { updateDamageCompensationClass } from '../services/kDamageCompensations/
 
 
 
+
 class KDamageCompensationStore {
 
     @observable kdamage!: PagedResultDto<CreateDamageInput>;
@@ -125,6 +126,24 @@ class KDamageCompensationStore {
      }
 
     
+
+
+        //tazmin listesi cekme  Filtreleme
+        @action
+        async  StoregetFilterDamageCompansation(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){
+            console.log('checktakipNo=>',checktakipNo)
+            console.log('checktazminID=>',checktazminID)
+            console.log('search=>',search)
+            console.log('start=>',start)
+            console.log('finish=>',finish)
+     
+        let result = await KDamageCompensationService.getFilterDamageCompensationService(checktakipNo,checktazminID,search,start,finish);
+        this.getAllDamageCompensationStoreClass = result;
+            //console.log('STORE=>',result)
+        return result
+}
+
+
 }
 
 export default KDamageCompensationStore;
