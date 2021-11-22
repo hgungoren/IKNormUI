@@ -23,9 +23,9 @@ export const appRouters: any = [
   { path: '/logout',                 permission: '',                                  title: 'Logout',                 name: 'Logout',                                           showInMenu: false, component: LoadableComponent(() => import('../../components/Logout')), },
   { path: '/exception?:type',        permission: '',                                  title: 'Exception',              name: 'Exception',                                        showInMenu: false, component: LoadableComponent(() => import('../../scenes/Exception')), },
   { path: '/knormrequestdetail/:id', permission: 'kNormRequestDetail',                title: 'KNormRequestDetail',     name: 'KNormRequestDetail',   icon: UserOutlined,         showInMenu: false, component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')), },
-  { path: '/hasartazmin',            permission: '',                                  title: 'Hasar Tazmin',           name: 'HasarTazmin',          icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), },
+  { path: '/hasartazmin',            permission: '',                                  title: 'Tazmin Formu Oluştur',           name: 'HasarTazmin',          icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), },
 
-  { path: '/hasartazminsorgulama',   permission: '',                                   title: 'Hasar Tazmin Sorgulama',name: 'HasarTazmin Listesi',  icon: UnorderedListOutlined ,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
+  { path: '/hasartazminsorgulama',   permission: '',                                   title: 'Tazmin Form Listesi',name: 'HasarTazmin Listesi',  icon: UnorderedListOutlined ,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
   { path: '/hasartazminguncelle/:id',   permission: '',                                   title: 'Hasar Tazmin Güncelle',  name: 'HasarTazminguncelle',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/updateDamageCompensation')), },
 ];
 

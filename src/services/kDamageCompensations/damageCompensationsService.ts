@@ -3,8 +3,12 @@ import { EntityDto } from '../dto/entityDto';
 import { CreateDamageInput } from './dto/createDamageInput';
 import { GetCreateDamageInput} from './dto/GetCreateDamageInput'
 import { GetCariListDamage} from './dto/getCariListDamage'
-
 import { updateDamageCompensationClass  } from './dto/updateDamageCompensation'
+
+
+import { DamageCompensationEvalutainon} from './dto/damageCompensationEvalutaion'
+
+
 
 
 class KDamageCompensationService {
@@ -87,15 +91,18 @@ class KDamageCompensationService {
         return result
     }
 
-
+    //sorgulama ekranı filter
     public async getFilterDamageCompensationService(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){
       let result=await http.get('api/services/app/DamageCompensation/GetDamageCompensationFilter?checktakipNo='+checktakipNo+'&checktazminID='+checktazminID+'&search='+search+'&start='+start+'&finish='+finish+'');
       return result.data.result;
     }
       
 
-
-   
+   //değerlendirme crate
+    public async createDamageCompensationEvalutaion(damageCompensationEvalutainon: DamageCompensationEvalutainon) {
+        let result = await http.post('/api/services/app/DamageCompensationEvalutaion/Create', damageCompensationEvalutainon);
+        return result.data.result;
+    }
 
     
 
