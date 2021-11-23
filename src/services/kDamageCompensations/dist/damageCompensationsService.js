@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var httpService_1 = require("../httpService");
-var KNormService = /** @class */ (function () {
-    function KNormService() {
+var KDamageCompensationService = /** @class */ (function () {
+    function KDamageCompensationService() {
     }
-    KNormService.prototype.create = function (createKNormInput) {
+    KDamageCompensationService.prototype.create = function (createDamageInput) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/Create', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/DamageCompensation/create', createDamageInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -53,116 +53,102 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    KNormService.prototype.get = function (entityDto) {
+    KDamageCompensationService.prototype.getDamageComppensation = function (entityDto) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/Get', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetById', { params: entityDto })];
                     case 1:
                         result = _a.sent();
+                        //console.log('result=>',result)     
                         return [2 /*return*/, result.data.result];
                 }
             });
         });
     };
-    KNormService.prototype.getById = function (entityDto) {
+    //cari listes
+    KDamageCompensationService.prototype.getCariListDamageCompensation = function (entityDto) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetById', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetCariListAsynDamage', { params: entityDto })];
                     case 1:
                         result = _a.sent();
+                        // console.log('services.result.data.result=>',result.data.result) 
                         return [2 /*return*/, result.data.result];
                 }
             });
         });
     };
-    KNormService.prototype.getAllBolge = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllBolgeCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSube = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeDetail = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeDetailCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.setStatusAsync = function (createKNormInput) {
+    ///sube listesi
+    KDamageCompensationService.prototype.getSubeListDamageComppensation = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/SetStatus', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetBranchsListDamage')];
+                    case 1:
+                        result = _a.sent();
+                        //console.log('services.result.data.result=>',result.data.result) 
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    ///sube listesi
+    KDamageCompensationService.prototype.getBolgeListDamageComppensation = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetAreaListDamage')];
+                    case 1:
+                        result = _a.sent();
+                        //console.log('services.result.data.result=>',result.data.result) 
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    //birim listesi
+    KDamageCompensationService.prototype.getBirimListDamageComppensation = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetBirimListAsynDamage')];
+                    case 1:
+                        result = _a.sent();
+                        //  console.log('services.result.data.result=>',result.data.result) 
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    // Son id cekme 
+    KDamageCompensationService.prototype.getDamageComppensationLastId = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetDamageLastId')];
+                    case 1:
+                        result = _a.sent();
+                        //  console.log('service',result)
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    // tazmin listesi çekme 
+    KDamageCompensationService.prototype.getAllDamageCompensationService = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetAllDamageCompensation')];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -170,6 +156,64 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    return KNormService;
+    //get damageCompensation ByID
+    KDamageCompensationService.prototype.getDamageComppensationByIdService = function (entityDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetDamageCompenSationById', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        //console.log('result=>',result)     
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    /// update damage conpensatioın 
+    KDamageCompensationService.prototype.updateDamage = function (updateDamage) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/DamageCompensation/Update', updateDamage)];
+                    case 1:
+                        result = _a.sent();
+                        // console.log('service=>',result)
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    //sorgulama ekranı filter
+    KDamageCompensationService.prototype.getFilterDamageCompensationService = function (checktakipNo, checktazminID, search, start, finish) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/DamageCompensation/GetDamageCompensationFilter?checktakipNo=' + checktakipNo + '&checktazminID=' + checktazminID + '&search=' + search + '&start=' + start + '&finish=' + finish + '')];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    //değerlendirme crate
+    KDamageCompensationService.prototype.createDamageCompensationEvalutaion = function (damageCompensationEvalutainon) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('/iknorm/DamageCompensationEvalutaion/Create', damageCompensationEvalutainon)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    return KDamageCompensationService;
 }());
-exports["default"] = new KNormService();
+exports["default"] = new KDamageCompensationService();

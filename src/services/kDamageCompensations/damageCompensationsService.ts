@@ -14,7 +14,7 @@ import { DamageCompensationEvalutainon} from './dto/damageCompensationEvalutaion
 class KDamageCompensationService {
 
     public async create(createDamageInput: CreateDamageInput) {
-        let result = await http.post('api/services/app/DamageCompensation/create', createDamageInput);
+        let result = await http.post('iknorm/DamageCompensation/create', createDamageInput);
         return result.data.result;
     }
 
@@ -22,14 +22,14 @@ class KDamageCompensationService {
 
     public async getDamageComppensation(entityDto: EntityDto): Promise<GetCreateDamageInput> {
        
-        let result = await http.get('api/services/app/DamageCompensation/GetById', { params: entityDto }); 
+        let result = await http.get('iknorm/DamageCompensation/GetById', { params: entityDto }); 
         //console.log('result=>',result)     
         return result.data.result
     }
 
     //cari listes
     public async getCariListDamageCompensation(entityDto:EntityDto):Promise<GetCariListDamage[]>{
-        let result = await http.get('api/services/app/DamageCompensation/GetCariListAsynDamage', { params: entityDto });  
+        let result = await http.get('iknorm/DamageCompensation/GetCariListAsynDamage', { params: entityDto });  
        // console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
 
@@ -38,7 +38,7 @@ class KDamageCompensationService {
    ///sube listesi
     public async getSubeListDamageComppensation(){
      
-        let result = await http.get('api/services/app/DamageCompensation/GetBranchsListDamage');  
+        let result = await http.get('iknorm/DamageCompensation/GetBranchsListDamage');  
          //console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
     }
@@ -46,7 +46,7 @@ class KDamageCompensationService {
            ///sube listesi
     public async getBolgeListDamageComppensation(){
      
-        let result = await http.get('api/services/app/DamageCompensation/GetAreaListDamage');  
+        let result = await http.get('iknorm/DamageCompensation/GetAreaListDamage');  
         //console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
     }
@@ -54,7 +54,7 @@ class KDamageCompensationService {
 
     //birim listesi
     public async getBirimListDamageComppensation(){
-        let result = await http.get('api/services/app/DamageCompensation/GetBirimListAsynDamage');  
+        let result = await http.get('iknorm/DamageCompensation/GetBirimListAsynDamage');  
      //  console.log('services.result.data.result=>',result.data.result) 
         return result.data.result
     }
@@ -62,7 +62,7 @@ class KDamageCompensationService {
 
       // Son id cekme 
       public async getDamageComppensationLastId(){
-          let result= await http.get('api/services/app/DamageCompensation/GetDamageLastId');
+          let result= await http.get('iknorm/DamageCompensation/GetDamageLastId');
          //  console.log('service',result)
            return result;
       }
@@ -70,7 +70,7 @@ class KDamageCompensationService {
 
       // tazmin listesi çekme 
       public async getAllDamageCompensationService(){
-        let result= await http.get('api/services/app/DamageCompensation/GetAllDamageCompensation'); 
+        let result= await http.get('iknorm/DamageCompensation/GetAllDamageCompensation'); 
         return result.data.result;
       }
 
@@ -79,28 +79,28 @@ class KDamageCompensationService {
 
      //get damageCompensation ByID
      public async getDamageComppensationByIdService(entityDto: EntityDto): Promise<updateDamageCompensationClass> {
-        let result = await http.get('api/services/app/DamageCompensation/GetDamageCompenSationById', { params: entityDto }); 
+        let result = await http.get('iknorm/DamageCompensation/GetDamageCompenSationById', { params: entityDto }); 
         //console.log('result=>',result)     
         return result.data.result
     }
 
     /// update damage conpensatioın 
     public async updateDamage(updateDamage: updateDamageCompensationClass) {
-        let result = await http.put('api/services/app/DamageCompensation/Update', updateDamage);
+        let result = await http.put('iknorm/DamageCompensation/Update', updateDamage);
        // console.log('service=>',result)
         return result
     }
 
     //sorgulama ekranı filter
     public async getFilterDamageCompensationService(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){
-      let result=await http.get('api/services/app/DamageCompensation/GetDamageCompensationFilter?checktakipNo='+checktakipNo+'&checktazminID='+checktazminID+'&search='+search+'&start='+start+'&finish='+finish+'');
+      let result=await http.get('iknorm/DamageCompensation/GetDamageCompensationFilter?checktakipNo='+checktakipNo+'&checktazminID='+checktazminID+'&search='+search+'&start='+start+'&finish='+finish+'');
       return result.data.result;
     }
       
 
    //değerlendirme crate
     public async createDamageCompensationEvalutaion(damageCompensationEvalutainon: DamageCompensationEvalutainon) {
-        let result = await http.post('/api/services/app/DamageCompensationEvalutaion/Create', damageCompensationEvalutainon);
+        let result = await http.post('/iknorm/DamageCompensationEvalutaion/Create', damageCompensationEvalutainon);
         return result.data.result;
     }
 

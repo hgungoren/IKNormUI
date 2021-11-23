@@ -10,17 +10,17 @@ class KHierarchyService {
     }
 
     public async getUnits(): Promise<PagedResultDto<UnitOutput>> {
-        let result = await http.get('/iknorm/Unit/GetAll');
+        let result = await http.get('iknorm/Unit/GetAll');
         return result.data.result;
     }
 
     public async update(changeStatus: ChangeStatus): Promise<boolean> {
-        let result = await http.put('/iknorm/Node/UpdateStatus', changeStatus);
+        let result = await http.put('iknorm/Node/UpdateStatus', changeStatus);
         return result.data.result;
     }
 
     public async updateToPassive(changeToPassiveStatus: ChangeToPassiveStatus): Promise<boolean> {
-        let result = await http.put('/iknorm/Node/UpdateStatuToPassive', changeToPassiveStatus);
+        let result = await http.put('iknorm/Node/UpdateStatuToPassive', changeToPassiveStatus);
         return result.data.result;
     }
 
@@ -32,7 +32,7 @@ class KHierarchyService {
     }
  
     public async updateOrderNodes(ids: any): Promise<boolean> {
-        let result = await http.put('/iknorm/Node/UpdateOrderNodes', ids);
+        let result = await http.put('iknorm/Node/UpdateOrderNodes', ids);
         return result.data.result;
     }
 

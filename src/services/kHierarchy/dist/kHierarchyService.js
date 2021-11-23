@@ -45,7 +45,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KHierarchy/GetKHierarcies?tip=' + tip + "&id=" + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetKHierarcies?tip=' + tip + "&id=" + id)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -58,7 +58,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('/api/services/app/Unit/GetAll')];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Unit/GetAll')];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -71,7 +71,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('/api/services/app/Node/UpdateStatus', changeStatus)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateStatus', changeStatus)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -84,7 +84,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('/api/services/app/Node/UpdateStatuToPassive', changeToPassiveStatus)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateStatuToPassive', changeToPassiveStatus)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -97,7 +97,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KHierarchy/GetHierarchy', {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetHierarchy', {
                             params: generateHierarchyDto
                         })];
                     case 1:
@@ -112,7 +112,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('/api/services/app/Node/UpdateOrderNodes', ids)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateOrderNodes', ids)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];

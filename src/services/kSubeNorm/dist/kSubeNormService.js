@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var httpService_1 = require("../httpService");
-var KNormService = /** @class */ (function () {
-    function KNormService() {
+var KSubeNormService = /** @class */ (function () {
+    function KSubeNormService() {
     }
-    KNormService.prototype.create = function (createKNormInput) {
+    KSubeNormService.prototype.create = function (createKSubeNormInput) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/Create', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KSubeNorm/Create', createKSubeNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -53,116 +53,12 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    KNormService.prototype.get = function (entityDto) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/Get', { params: entityDto })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getById = function (entityDto) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetById', { params: entityDto })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllBolge = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllBolgeCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSube = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeDetail = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.getAllSubeDetailCount = function (pagedFilterAndSortedRequest) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KNormService.prototype.setStatusAsync = function (createKNormInput) {
+    KSubeNormService.prototype.update = function (updateKSubeNormInput) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/SetStatus', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/KSubeNorm/Update', updateKSubeNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -170,6 +66,84 @@ var KNormService = /** @class */ (function () {
             });
         });
     };
-    return KNormService;
+    KSubeNormService.prototype["delete"] = function (entityDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"]["delete"]('iknorm/KSubeNorm/Delete', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.get = function (entityDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/Get', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.getAllNorms = function (pagedFilterAndSortedRequest) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetAll', { params: pagedFilterAndSortedRequest })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.getNormCount = function () {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormCount')];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.getNormsCount = function () {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormsCount')];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.getNormCountById = function (id) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormCountById?id=' + id)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    return KSubeNormService;
 }());
-exports["default"] = new KNormService();
+exports["default"] = new KSubeNormService();
