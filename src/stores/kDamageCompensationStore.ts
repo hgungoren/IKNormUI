@@ -14,6 +14,9 @@ import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/G
 
 import { updateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 
+import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
+
+
 
 
 
@@ -35,6 +38,7 @@ class KDamageCompensationStore {
     @observable getAllDamageCompensationStoreClass!:GetAllDamageCompensation[];
 
     @observable updateDamageCompensationClass!:updateDamageCompensationClass;
+    @observable damageCompensationEvalutaion!:DamageCompensationEvalutainon
 
 
 
@@ -125,6 +129,33 @@ class KDamageCompensationStore {
      }
 
     
+
+
+        //tazmin listesi cekme  Filtreleme
+        @action
+        async  StoregetFilterDamageCompansation(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){          
+            console.log('checktakipNo=>',checktakipNo)
+            console.log('checktazminID=>',checktazminID)
+            console.log('search=>',search)
+            console.log('start=>',start)
+            console.log('finish=>',finish)
+     
+        let result = await KDamageCompensationService.getFilterDamageCompensationService(checktakipNo,checktazminID,search,start,finish);
+        this.getAllDamageCompensationStoreClass = result;
+            //console.log('STORE=>',result)
+        return result
+        }
+
+ 
+         /// DEĞERLENDİRME CREATE    
+        @action
+        async createDamageCompensationEvalutaion(damageCompensationEvalutaion: DamageCompensationEvalutainon) {
+           await KDamageCompensationService.createDamageCompensationEvalutaion(damageCompensationEvalutaion);  
+           // this.kdamage.items.push(result);  
+        }
+    
+
+
 }
 
 export default KDamageCompensationStore;

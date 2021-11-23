@@ -5,12 +5,14 @@ import AppComponentBase from '../../components/AppComponentBase';
 import { inject, observer } from 'mobx-react';
 import Stores from '../../stores/storeIdentifier';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
-import { Breadcrumb, Button, Card, Col, DatePicker, Dropdown, Form, FormInstance, Input, Menu, PageHeader, Radio, Row, Space, Table, Tag } from 'antd';
+import { Breadcrumb, Button, Card, Col, Dropdown, Form, FormInstance, Input, Menu, PageHeader, Radio, Row, Space, Table, Tag } from 'antd';
 import { SendOutlined, SettingOutlined } from '@ant-design/icons';
 import { GetAllDamageCompensation } from '../../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
 import { EntityDto } from '../../services/dto/entityDto';
+
+import 'moment/locale/tr';
 
 
 export interface IProps {
@@ -26,10 +28,16 @@ export interface IState {
   tazminid: number;
 }
 
+
+
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensationList extends AppComponentBase<IProps, IState> {
+
   formRef = React.createRef<FormInstance>();
+  formReffilter = React.createRef<FormInstance>();
+
+
 
   state = {
     listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
@@ -46,6 +54,51 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
       console.log(e);
     }
   };
+
+
+
+ //tazmin listesi Filtre
+ getFilterdamagecompensaation = async () =>{
+  const form = this.formReffilter.current;
+  form!.validateFields().then(async (values: any) => {
+      
+    console.log('values=>',values)
+
+    if(values.start ===undefined)
+    {
+      values.start=''
+    }
+    if(values.finish ===undefined)
+    {
+      values.finish=''
+    }
+   
+    let tazminno=false
+    let tazminid=false
+    if(values.raidocheck ===2){
+      tazminno=true
+    }
+    if(values.raidocheck ===1){
+      tazminid=true
+    }
+
+
+    if (values.searchtxt == undefined){
+      values.searchtxt=''
+    }
+
+  
+    await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
+      tazminno,tazminid,values.searchtxt,values.start,values.finish
+    );
+    this.setState({ listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass })
+    form!.resetFields();
+  });
+};
+
+
+
+
 
   async componentDidMount() {
 
@@ -191,14 +244,14 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
           <Card title="Filtrele">
 
-
-
-            <Form>
+            <Form ref={this.formReffilter}
+                  initialValues={{ remember: false }}
+                  >
               <Row>
                 <Col span={6}  >                  
-                    <Form.Item>
+                    <Form.Item name='raidocheck'>
                         
-                              <Radio.Group >
+                              <Radio.Group  >
                                     <Space direction='vertical'>
                                       <Radio value={1}>Tazmin No</Radio>
                                       <Radio value={2}>Takip No</Radio>
@@ -210,35 +263,30 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                 </Col>
                 <Col span={4}  >
                   <Form.Item name='searchtxt'>
-                    <Input type='number' />
+                    <Input type='number'   />
                   </Form.Item>
                 </Col>
               </Row>
 
 
               <Row>
-                <Col span={5}>
-                <Form.Item name='' label='Başlangıç Tarihi'>
-             
-                        <DatePicker placeholder='Tarih Seçiniz' />
-         
-               </Form.Item>
-                </Col>
-
-
                 <Col span={4}>
-                <Form.Item name='' label='Bitiş Tarihi'>
-                 
-                        <DatePicker  placeholder='Tarih Seçiniz' />
-            
+                <Form.Item name='start' label='Başlangıç Tarihi'> 
+                <Input type='date' size='middle'   />        
                </Form.Item>
                 </Col>
 
-                <Col span={5}>
-                <Form.Item name=''>
-                 
+
+                <Col span={4} offset={1} >
+                <Form.Item name='finish' label='Bitiş Tarihi'>               
+                <Input type='date'   />
+               </Form.Item>
+                </Col>
+
+                <Col span={6} offset={1}>
+                <Form.Item name=''  >               
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />} htmlType="submit">
+                        <Button type="primary"  icon={<SendOutlined />}  onClick={this.getFilterdamagecompensaation} htmlType="submit">
                         Filtrele
                         </Button>
                       </Space>
