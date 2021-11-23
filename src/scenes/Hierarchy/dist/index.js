@@ -76,8 +76,7 @@ var Hierarchy = /** @class */ (function (_super) {
             nodeKey: 0,
             visible: false,
             node: {},
-            treeData: [],
-            alertTyp: 'warning'
+            treeData: []
         };
         _this.onDragStateChanged = function (data) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -137,7 +136,6 @@ var Hierarchy = /** @class */ (function (_super) {
         }); };
         _this.onSwitchChange = function (data) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.setState({ alertTyp: 'warning' });
                 this.props.kHierarchyStore.update(data);
                 return [2 /*return*/];
             });
@@ -157,6 +155,7 @@ var Hierarchy = /** @class */ (function (_super) {
                 node: node,
                 nodeKey: node.id
             });
+            console.log('node=>', node);
         };
         return _this;
     }
@@ -182,7 +181,7 @@ var Hierarchy = /** @class */ (function (_super) {
                                 : []
                         });
                     } }),
-                react_1["default"].createElement(hierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange, alertTyp: "info", kHierarchyStore: this.props.kHierarchyStore }))));
+                react_1["default"].createElement(hierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange, kHierarchyStore: this.props.kHierarchyStore }))));
     };
     Hierarchy = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),
