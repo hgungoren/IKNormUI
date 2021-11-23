@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { action, observable } from 'mobx';
 import { PagedResultDto } from '../services/dto/pagedResultDto';
 import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus } from '../services/kHierarchy/dto/getAllHierarchyOutput';
@@ -7,7 +8,7 @@ class KHierarchyStore {
     @observable kHierarchies!: GetAllHierarchyOutput[];
     @observable units!: PagedResultDto<UnitOutput>;
     @observable status!: boolean;
-
+    
     @action
     async getAll(tip: string, id: string) {
 
