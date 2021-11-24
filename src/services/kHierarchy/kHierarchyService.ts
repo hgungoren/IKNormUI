@@ -1,6 +1,7 @@
+/* eslint-disable */
 import { PagedResultDto } from '../dto/pagedResultDto';
 import http from '../httpService';
-import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus } from './dto/getAllHierarchyOutput';
+import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus, ChangeSelectedDto } from './dto/getAllHierarchyOutput';
 
 class KHierarchyService {
 
@@ -33,6 +34,11 @@ class KHierarchyService {
  
     public async updateOrderNodes(ids: any): Promise<boolean> {
         let result = await http.put('iknorm/Node/UpdateOrderNodes', ids);
+        return result.data.result;
+    }
+
+    public async updateSelected(changeSelected: ChangeSelectedDto): Promise<boolean> {
+        let result = await http.put('iknorm/Node/UpdateSelected', changeSelected);
         return result.data.result;
     }
 
