@@ -10,9 +10,8 @@
 }
 .ant-transfer-list {
   height: 350px;
-  width: 300px;
+  width: 400px;
   border: 1px solid #ebebeb;
-  border-radius: 5px;
 }
 .list-sort-demo-wrapper {
   position: relative;
@@ -66,4 +65,10 @@
     font-size: 14px;
     line-height: 28px;
   }
+}
+.ant-select-selector {
+  margin-left: 10px;
+}
+.ant-select-selection-search-input {
+  width: 200px;
 }

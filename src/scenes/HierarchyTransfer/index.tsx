@@ -55,6 +55,7 @@ class Transfer extends AppComponentBase<IProps, State> {
           >
             <Card hoverable>
               <HiearchyTransfer
+              
                 kHierarchyStore={this.props.kHierarchyStore}
                 sourceTitle={'Birim'}
                 targetTitle={'Pozisyon'}

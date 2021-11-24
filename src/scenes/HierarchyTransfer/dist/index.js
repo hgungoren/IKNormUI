@@ -12,6 +12,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 exports.__esModule = true;
 /* eslint-disable */
 var antd_1 = require("antd");
@@ -20,6 +26,10 @@ var react_1 = require("react");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
 var HiearchyTransfer_1 = require("./components/HiearchyTransfer");
 var HiearchySortable_1 = require("./components/HiearchySortable");
+var mobx_react_1 = require("mobx-react");
+var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var react_router_dom_1 = require("react-router-dom");
+var abpUtility_1 = require("../../lib/abpUtility");
 var Transfer = /** @class */ (function (_super) {
     __extends(Transfer, _super);
     function Transfer() {
@@ -27,14 +37,27 @@ var Transfer = /** @class */ (function (_super) {
     }
     Transfer.prototype.render = function () {
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
+            react_1["default"].createElement(antd_1.Card, { style: { marginBottom: 20 } },
+                react_1["default"].createElement(antd_1.PageHeader, { ghost: false, onBack: function () { return window.history.back(); }, title: react_1["default"].createElement(antd_1.Breadcrumb, null,
+                        react_1["default"].createElement(antd_1.Breadcrumb.Item, null,
+                            this.isGranted('items.dashboard.view') ? (react_1["default"].createElement(react_router_dom_1.Link, { to: "/dashboard" }, abpUtility_1.L('Dashboard'))) : (react_1["default"].createElement(react_router_dom_1.Link, { to: "/home" }, abpUtility_1.L('Dashboard'))),
+                            ' '),
+                        react_1["default"].createElement(antd_1.Breadcrumb.Item, null,
+                            " ",
+                            abpUtility_1.L('pages.hierarchy'),
+                            " ")) })),
             react_1["default"].createElement(row_1["default"], { gutter: [16, 16] },
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchyTransfer_1["default"], null))),
+                        react_1["default"].createElement(HiearchyTransfer_1["default"], { kHierarchyStore: this.props.kHierarchyStore, sourceTitle: 'Birim', targetTitle: 'Pozisyon' }))),
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Card, { hoverable: true },
                         react_1["default"].createElement(HiearchySortable_1["default"], null))))));
     };
+    Transfer = __decorate([
+        mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),
+        mobx_react_1.observer
+    ], Transfer);
     return Transfer;
 }(AppComponentBase_1["default"]));
 exports["default"] = Transfer;

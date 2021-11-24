@@ -1,9 +1,11 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
 import './index.less';
-import { Col, Row, Select, Transfer } from 'antd';
+import { L } from '../../../lib/abpUtility';
+import { TransferItem } from 'antd/lib/transfer';
+import { Col, Form, FormInstance, Row, Select, Transfer } from 'antd';
+import React, { useState, useEffect } from 'react';
 import KHierarchyStore from '../../../stores/kHierarchyStore';
-import { UnitOutput } from '../../../services/kHierarchy/dto/getAllHierarchyOutput';
+import { PositionOutput } from '../../../services/kHierarchy/dto/getAllHierarchyOutput';
 
 export interface IProps {
   kHierarchyStore: KHierarchyStore;
@@ -11,30 +13,47 @@ export interface IProps {
   targetTitle: string;
 }
 
-const mockData = [
-  { key: '0', title: 'Title 0', description: 'Sample Description 0' },
-  { key: '1', title: 'Title 1', description: 'Sample Description 1' },
-  { key: '2', title: 'Title 2', description: 'Sample Description 2' },
-  { key: '3', title: 'Title 3', description: 'Sample Description 3' },
-  { key: '4', title: 'Title 4', description: 'Sample Description 4' },
-  { key: '5', title: 'Title 5', description: 'Sample Description 5' },
-];
 export default function HiearchyTransfer(Props: IProps) {
+
+
+  const formRef = React.createRef<FormInstance>();
+
   const { kHierarchyStore, sourceTitle, targetTitle } = Props;
-  const [sourceItems, setSourceItems] = useState<UnitOutput[]>([]);
-  const [targetKeys, setTargetKeys] = useState([{ sourceItems }]) as any;
+  const [unitsItems, setUnitsItems] = useState([] as any);
+  const [positionsItems, setPositionsItems] = useState<PositionOutput[]>([]);
+  const [nodesItems, setNodesItems] = useState<TransferItem[]>([]);
+  const [targetKeys, setTargetKeys] = useState([{ unitsItems }]) as any;
   const [selectedKeys, setSelectedKeys] = useState([]) as any;
   const { Option } = Select;
+
+
   async function getUnits() {
     let result = await kHierarchyStore.getUnit();
-    console.log(result);
-    setSourceItems(result.items);
-    console.log(sourceItems);
+    let items = result.items.map((item) => <Option key={`unit_${item.id}`} value={item.id}>{item.name}</Option>);
+    setUnitsItems(items);
     return result;
   }
 
-  function onChange(value) {
-    console.log(`selected ${value}`);
+  function onUnitChange(value) {
+
+    setNodesItems([])
+    formRef.current?.resetFields(['position'])
+    let positions = kHierarchyStore.units.items.find(item => item.id === value)?.positions;
+    setPositionsItems(positions || []);
+
+  }
+
+  function onPositionChange(value) {
+    let nodes = positionsItems.find(item => item.id === value)?.nodes;
+    if (nodes !== undefined) {
+      let nodeList = nodes.map<TransferItem>((item) => (
+        {
+          key: `${item.id}`,
+          title: item.title,
+          description: 'Sample Description 5'
+        }));
+      setNodesItems(nodeList || [])
+    }
   }
 
   function onBlur() {
@@ -54,68 +73,92 @@ export default function HiearchyTransfer(Props: IProps) {
   }, []);
 
   return (
-    <div>
-      <Row gutter={[16, 16]}>
-        <Col
-          xs={{ span: 12, offset: 0 }}
-          sm={{ span: 12, offset: 0 }}
-          md={{ span: 12, offset: 0 }}
-          lg={{ span: 12, offset: 0 }}
-          xl={{ span: 12, offset: 0 }}
-          xxl={{ span: 12, offset: 0 }}
-        >
-          <Select
-            showSearch
-            style={{ width: '290px' }}
-            placeholder="Select a person"
-            optionFilterProp="children"
-            onChange={onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onSearch={onSearch}
+    < >
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        initialValues={{ remember: true }}
+        // onFinish={onFinish}
+        // onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        ref={formRef}
+
+
+      >
+        <Row gutter={[16, 16]}>
+          <Col
+            xs={{ span: 12, offset: 0 }}
+            sm={{ span: 12, offset: 0 }}
+            md={{ span: 12, offset: 0 }}
+            lg={{ span: 12, offset: 0 }}
+            xl={{ span: 12, offset: 0 }}
+            xxl={{ span: 12, offset: 0 }}
           >
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="tom">Tom</Option>
-          </Select>
-        </Col>
-        <Col
-          xs={{ span: 12, offset: 0 }}
-          sm={{ span: 12, offset: 0 }}
-          md={{ span: 12, offset: 0 }}
-          lg={{ span: 12, offset: 0 }}
-          xl={{ span: 12, offset: 0 }}
-          xxl={{ span: 12, offset: 0 }}
-        >
-          <Select
-            showSearch
-            style={{ width: '290px' }}
-            placeholder="Select a person"
-            optionFilterProp="children"
-            onChange={onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onSearch={onSearch}
-          >
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="tom">Tom</Option>
-          </Select>
-        </Col>
-      </Row>
-      <Transfer
-        dataSource={mockData}
-        titles={[sourceTitle, targetTitle]}
-        render={(item) => item.title}
-        selectedKeys={selectedKeys}
-        targetKeys={targetKeys}
-        onChange={(nextTargetKeys) => {
-          setTargetKeys(nextTargetKeys);
-        }}
-        onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
-          setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
-        }}
-      />
-    </div>
+
+            <Form.Item name="unit">
+              <Select
+                showSearch
+                style={{ width: '290px' }}
+                placeholder={L('PleaseSelect')}
+                optionFilterProp="children"
+                onChange={onUnitChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onSearch={onSearch}
+
+              >
+                {
+                  unitsItems
+                }
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col
+            xs={{ span: 12, offset: 0 }}
+            sm={{ span: 12, offset: 0 }}
+            md={{ span: 12, offset: 0 }}
+            lg={{ span: 12, offset: 0 }}
+            xl={{ span: 12, offset: 0 }}
+            xxl={{ span: 12, offset: 0 }}
+          > <Form.Item name="position">
+              <Select
+                showSearch
+                style={{ width: '290px' }}
+                placeholder={L('PleaseSelect')}
+                optionFilterProp="children"
+                onChange={onPositionChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onSearch={onSearch}>
+                {
+                  positionsItems !== undefined && positionsItems.map((item) => <Option key={`position_${item.id}`} value={item.id}>{item.name}</Option>)
+                }
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} >
+            <Form.Item name="title">
+              <Transfer
+                // locale={{  L('NoData') }}
+                dataSource={nodesItems}
+                titles={[sourceTitle, targetTitle]}
+                render={(item) => `${item.title}`}
+                selectedKeys={selectedKeys}
+                targetKeys={targetKeys}
+                onChange={(nextTargetKeys) => {
+                  setTargetKeys(nextTargetKeys);
+                }}
+                onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
+                  setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+                }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </ >
   );
 }

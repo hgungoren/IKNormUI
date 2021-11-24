@@ -33,7 +33,7 @@ import { AlertOutlined, SendOutlined, SwitcherOutlined } from '@ant-design/icons
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 import TextArea from 'rc-textarea';
 
- 
+
 
 
 
@@ -66,7 +66,7 @@ export interface IState {
   selectedItems: any;
 
 }
- 
+
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
@@ -100,7 +100,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     fileInput: '',
 
     //değerlendirme 
-    selectedItems:[]
+    selectedItems: []
   };
 
   getdamage = async (id: number) => {
@@ -211,7 +211,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values)
       this.openNotificationWithIcon('success')
       form!.resetFields();
-     
+
     });
   };
 
@@ -310,7 +310,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const handleClick = (e) => {
 
-      if (this.state.Ktno != 0) {
+      if (this.state.Ktno !== 0) {
         this.getdamage(this.state.Ktno);
 
         setTimeout(() => { console.log(this.props.kDamageCompensationStore.getCreateDamageInput) }, 1000)
@@ -426,50 +426,57 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     // }
 
-    const Deghasar = ['Taşımadan Kaynaklı', 'İstif Hatası', 'Kaza', 'Teslimat Esnasında Tespit-DTT Var','Teslimattan Sonra-DTT','Aracın Su Alması','Banttan Düşme',
-  'Farklı Kargonun Zarar Vermesi','Ambalaj Yetersizliği','Doğal Afet','Müşteri Memnuniyeti'];
+    const Deghasar = ['Taşımadan Kaynaklı', 'İstif Hatası', 'Kaza', 'Teslimat Esnasında Tespit-DTT Var', 'Teslimattan Sonra-DTT', 'Aracın Su Alması', 'Banttan Düşme',
+      'Farklı Kargonun Zarar Vermesi', 'Ambalaj Yetersizliği', 'Doğal Afet', 'Müşteri Memnuniyeti'];
 
-   const DegKayıp=['Adres Teslim Sırasında Kayıp','Aktarma-Aktarma Arasında','Faturası Düzenlenmeden Kayıp','Gasp','İçten Eksilme','Kaza','Şube Kayıp','Birim-Aktarma Arasında Kayıp','Teslim Belgesi Sunulamaması','Yanlış Kişiye Teslimat','Müşteri Memnuniyeti']
-   
-   const DegGecTeslimat=['Geç Teslim']
+    const DegKayıp = ['Adres Teslim Sırasında Kayıp', 'Aktarma-Aktarma Arasında', 'Faturası Düzenlenmeden Kayıp', 'Gasp', 'İçten Eksilme', 'Kaza', 'Şube Kayıp', 'Birim-Aktarma Arasında Kayıp', 'Teslim Belgesi Sunulamaması', 'Yanlış Kişiye Teslimat', 'Müşteri Memnuniyeti']
 
-   const DegMusteriMemnuniyeti=['Müşteri Memnuniyeti']
+    const DegGecTeslimat = ['Geç Teslim']
 
-   const DegOnchangeTazminTipi=(value)=>{
-    
-    if(value==="1"){    
-      this.setState({ selectedItems:Deghasar.map((value, index) =>
-        <Option key={index} value={index}> {value} </Option>
-      ) });
+    const DegMusteriMemnuniyeti = ['Müşteri Memnuniyeti']
+
+    const DegOnchangeTazminTipi = (value) => {
+
+      if (value === "1") {
+        this.setState({
+          selectedItems: Deghasar.map((value, index) =>
+            <Option key={index} value={index}> {value} </Option>
+          )
+        });
+      }
+      else if (value === "2") {
+        this.setState({
+          selectedItems: DegKayıp.map((value, index) =>
+            <Option key={index} value={index}> {value} </Option>
+          )
+        });
+
+      }
+      else if (value === "3") {
+        this.setState({
+          selectedItems: DegGecTeslimat.map((value, index) =>
+            <Option key={index} value={index}> {value} </Option>
+          )
+        });
+
+      }
+      else if (value === "4") {
+        this.setState({
+          selectedItems: DegMusteriMemnuniyeti.map((value, index) =>
+            <Option key={index} value={index}> {value} </Option>
+          )
+        });
+      }
+      else (
+        notification.open({
+          icon: <AlertOutlined style={{ color: 'red' }} />,
+          message: 'Uyarı',
+          description: 'Lütfen Tazmin Tipi Seçiniz.',
+        })
+      )
+
     }
-    else if(value ==="2")
-    {
-      this.setState({ selectedItems:DegKayıp.map((value, index) =>
-        <Option key={index} value={index}> {value} </Option>
-      ) });
-      
-    }
-    else if(value ==="3"){
-      this.setState({ selectedItems:DegGecTeslimat.map((value, index) =>
-        <Option key={index} value={index}> {value} </Option>
-      ) });
 
-    }
-    else if(value ==="4"){
-      this.setState({ selectedItems:DegMusteriMemnuniyeti.map((value, index) =>
-        <Option key={index} value={index}> {value} </Option>
-      ) });
-    }
-    else(
-      notification.open({
-        icon: <AlertOutlined style={{ color: 'red' }} />,
-        message: 'Uyarı',
-        description: 'Lütfen Tazmin Tipi Seçiniz.',
-      })
-    )
-
-   }
-       
 
     return (
       <>
@@ -518,33 +525,33 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Form>
 
                       <Row>
-                          <Col  style={{float:'right'}}>
-                                <Form.Item                                    
-                                      name=""
-                                      label={<label>Tanzim No</label>}
-                                      labelCol={{ span: 10 }}
-                                      wrapperCol={{ span: 16 }}
-                                    >
-                                      {console.log(this.state.lastId)}
-                                      <Input  disabled  className="formInput"  value={this.state.lastId}  />
-                               </Form.Item>
-                          </Col>     
+                        <Col style={{ float: 'right' }}>
+                          <Form.Item
+                            name=""
+                            label={<label>Tanzim No</label>}
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 16 }}
+                          >
+                            {console.log(this.state.lastId)}
+                            <Input disabled className="formInput" value={this.state.lastId} />
+                          </Form.Item>
+                        </Col>
 
-                          <Col >
-                                  <Form.Item
-                                          name=""
-                                          label={<label>Tanzim Statüsü</label>}
-                                          labelCol={{ span: 10 }}
-                                          wrapperCol={{ span: 16 }}
-                                        >
-                                  <Input readOnly className="formInput" defaultValue="Taslak"></Input>
-                                </Form.Item>
-                          </Col>  
+                        <Col >
+                          <Form.Item
+                            name=""
+                            label={<label>Tanzim Statüsü</label>}
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 16 }}
+                          >
+                            <Input readOnly className="formInput" defaultValue="Taslak"></Input>
+                          </Form.Item>
+                        </Col>
                       </Row>
 
-                  
 
-                    
+
+
                     </Form>
                   </Col>
                 </Row>
@@ -565,13 +572,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       {this.state.setsorgulama ? (
                         <>
                           <Form.Item
-                           
+
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
 
                           >
                             <Input type='number'
-                           
+
                               placeholder="Kargo Takip Numarası"
                               name="ktno"
                               onChange={handleChange}
@@ -620,7 +627,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         {/* <DatePicker
                         /> */}
                         <Input
-                         readOnly={this.state.setformreadonly}
+                          readOnly={this.state.setformreadonly}
                           className="formInput"
                           type="date"
                         />
@@ -1060,7 +1067,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
                         <Button type="primary" onClick={this.kDamageCompensationCreate} icon={<SendOutlined />} htmlType="submit">
-                         Kaydet                       
+                          Kaydet
                         </Button>
                       </Space>
                     </Col>
@@ -1077,236 +1084,236 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   </span>
                 }
                 key="2">
-                  
-              <Form 
-              ref={this.formRefDeg}
-               layout='horizontal'>
-                    <Row>
-                        <Col span={7}>
-                            <Form.Item  name='evaTazmin_Tipi'  label={
-                          <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
-                        }
-                        
+
+                <Form
+                  ref={this.formRefDeg}
+                  layout='horizontal'>
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaTazmin_Tipi' label={
+                        <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
+                      }
+
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
                         }
+                      >
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                          onChange={DegOnchangeTazminTipi}
                         >
-                                    <Select 
-                                     className="formInput"
-                                  placeholder="Seçiniz"
-                                  allowClear
-                                  showSearch  
-                                  onChange={DegOnchangeTazminTipi}
-                                >
-                                      <Option value="1">Hasar</Option>
-                                      <Option value="2">Kayıp</Option>
-                                      <Option value="3" >Geç Teslimat</Option>
-                                      <Option value="4">Müşteri Memnuniyeti</Option>
-                                </Select>
-                          </Form.Item>
-                        </Col>
+                          <Option value="1">Hasar</Option>
+                          <Option value="2">Kayıp</Option>
+                          <Option value="3" >Geç Teslimat</Option>
+                          <Option value="4">Müşteri Memnuniyeti</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
 
 
-                        <Col span={7}>
-                              <Form.Item name='evaTazmin_Nedeni' 
-                               rules={
-                                [
-                                  { required: true, message: 'Lütfen Boş Bırakmayınız!' }
-                                ]
-                              }
-                              label={
+                    <Col span={7}>
+                      <Form.Item name='evaTazmin_Nedeni'
+                        rules={
+                          [
+                            { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                          ]
+                        }
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Nedeni</label>
                         }>
-                                          <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                            {this.state.selectedItems}
-                                      </Select>
-                                </Form.Item>
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          {this.state.selectedItems}
+                        </Select>
+                      </Form.Item>
 
-                        </Col>
-                    
-                    </Row>
+                    </Col>
+
+                  </Row>
 
 
-                    <Row>
-                       <Col span={7}>
-                         <Form.Item name='evaKargo_Bulundugu_Yer' 
-                         rules={
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaKargo_Bulundugu_Yer'
+                        rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
                         }
-                         label={
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kargonun Bulunduğu Yer</label>
                         }>
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                               <Option value="1">Çıkış Birim</Option>
-                                               <Option value="2">Çıkış Aktarma</Option>
-                                               <Option value="3">Varış Aktarma</Option>
-                                               <Option value="4">Varış Birim</Option>
-                                               <Option value="5">Gönderici Müsteri</Option>
-                                               <Option value="6">Alıcı Müşteri</Option>
-                                               <Option value="7">Diğer</Option>
-                                               <Option value="8">İmha</Option>
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          <Option value="1">Çıkış Birim</Option>
+                          <Option value="2">Çıkış Aktarma</Option>
+                          <Option value="3">Varış Aktarma</Option>
+                          <Option value="4">Varış Birim</Option>
+                          <Option value="5">Gönderici Müsteri</Option>
+                          <Option value="6">Alıcı Müşteri</Option>
+                          <Option value="7">Diğer</Option>
+                          <Option value="8">İmha</Option>
 
-                                      </Select>
-                         </Form.Item>
-                       </Col>
+                        </Select>
+                      </Form.Item>
+                    </Col>
 
-                       <Col span={7}>
-                         <Form.Item name='evaKusurlu_Birim'
-                         rules={
+                    <Col span={7}>
+                      <Form.Item name='evaKusurlu_Birim'
+                        rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
-                        }   
-                         label={
+                        }
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kusurlu Birim Var mı?</label>
                         }>
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                               <Option value="1">Evet</Option>
-                                               <Option value="2">Hayır</Option>
-                                              
-                                      </Select>
-                         </Form.Item>
-                       </Col>
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          <Option value="1">Evet</Option>
+                          <Option value="2">Hayır</Option>
+
+                        </Select>
+                      </Form.Item>
+                    </Col>
 
 
 
 
-                    </Row>
+                  </Row>
 
 
 
-                    <Row>
-                       <Col span={7}>
-                         <Form.Item name='evaIcerik_Grubu'  
-                         rules={
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaIcerik_Grubu'
+                        rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
                         }
-                         label={
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>
                         }>
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                               <Option value="1">İçerik</Option>
-                                           
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          <Option value="1">İçerik</Option>
 
-                                      </Select>
-                         </Form.Item>
-                       </Col>
 
-                       <Col span={7}>
-                         <Form.Item  name='evaIcerik' 
-                         rules={
+                        </Select>
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={7}>
+                      <Form.Item name='evaIcerik'
+                        rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
                         }
-                         label={
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>
                         }>
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                               <Option value="1">Evet</Option>
-                                               <Option value="2">Hayır</Option>
-                                              
-                                      </Select>
-                         </Form.Item>
-                       </Col>
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          <Option value="1">Evet</Option>
+                          <Option value="2">Hayır</Option>
+
+                        </Select>
+                      </Form.Item>
+                    </Col>
 
 
 
 
-                    </Row>    
+                  </Row>
 
 
-                    <Row>
-                       <Col span={7}>
-                         <Form.Item
-                         name='evaUrun_Aciklama'  
-                          rules={
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item
+                        name='evaUrun_Aciklama'
+                        rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
-                        }  label={
+                        } label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Ürün Açıklaması</label>
                         }>
-                                <Input className="formInput"/>
-                         </Form.Item>
-                       </Col>
+                        <Input className="formInput" />
+                      </Form.Item>
+                    </Col>
 
-                       <Col span={7}>
-                         <Form.Item name='evaEkleyen_Kullanici' label={
-                          <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
-                        }>
-                                  <Input readOnly value={'Admin'}  className="formInput"/>
-                         </Form.Item>
-                       </Col>
-                    </Row>   
-                    <Row>
-                        <Col span={13}>
-                          <Form.Item name='evaBolge_Aciklama'  
-                          rules={
-                            [
-                              { required: false, message: 'Lütfen Boş Bırakmayınız!' }
-                            ]
-                          }
-                          label={
+                    <Col span={7}>
+                      <Form.Item name='evaEkleyen_Kullanici' label={
+                        <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
+                      }>
+                        <Input readOnly value={'Admin'} className="formInput" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={13}>
+                      <Form.Item name='evaBolge_Aciklama'
+                        rules={
+                          [
+                            { required: false, message: 'Lütfen Boş Bırakmayınız!' }
+                          ]
+                        }
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Bölge Açıklama</label>
                         }>
 
-                           <TextArea rows={4} style={{width:'100%'}} ></TextArea>
-                          </Form.Item>
-                        </Col>
-                    </Row> 
+                        <TextArea rows={4} style={{ width: '100%' }} ></TextArea>
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-                    <Row>
-                        <Col span={13}>
-                          <Form.Item name='evaGm_Aciklama' 
-                          rules={
-                            [
-                              { required: false, message: 'Lütfen Boş Bırakmayınız!' }
-                            ]
-                          }
-                          label={
+                  <Row>
+                    <Col span={13}>
+                      <Form.Item name='evaGm_Aciklama'
+                        rules={
+                          [
+                            { required: false, message: 'Lütfen Boş Bırakmayınız!' }
+                          ]
+                        }
+                        label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Gm Açıklama</label>
                         }>
 
-                           <TextArea rows={4} style={{width:'100%'}} ></TextArea>
-                          </Form.Item>
-                        </Col>
-                    </Row> 
+                        <TextArea rows={4} style={{ width: '100%' }} ></TextArea>
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-                    <Row>
-                        <Col span={7}>
-                        <Form.Item name='evaTalep_Edilen_Tutar' 
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaTalep_Edilen_Tutar'
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
@@ -1315,14 +1322,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
                         }>
-                          <Input type='number' className="formInput" defaultValue={500} ></Input>
-                        </Form.Item>
-                        </Col>
-                    </Row>
+                        <Input type='number' className="formInput" defaultValue={500} ></Input>
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-                    <Row>
-                        <Col span={7}>
-                        <Form.Item name='evaTazmin_Odeme_Durumu' 
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaTazmin_Odeme_Durumu'
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
@@ -1331,23 +1338,23 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Ödeme Durumu</label>
                         }>
-                         <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        showSearch  
-                                      >
-                                               <Option value="1">Ödenecek</Option>
-                                               <Option value="2">Ödenmicek</Option>
-                                               <Option value="2">Farklı Bir Tutar Ödenecek</Option>                                          
-                                      </Select>
-                        </Form.Item>
-                        </Col>
-                    </Row>
+                        <Select
+                          className="formInput"
+                          placeholder="Seçiniz"
+                          allowClear
+                          showSearch
+                        >
+                          <Option value="1">Ödenecek</Option>
+                          <Option value="2">Ödenmicek</Option>
+                          <Option value="2">Farklı Bir Tutar Ödenecek</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-                    <Row>
-                        <Col span={7}>
-                        <Form.Item name='evaOdenecek_Tutar' 
+                  <Row>
+                    <Col span={7}>
+                      <Form.Item name='evaOdenecek_Tutar'
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
@@ -1356,16 +1363,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
                         }>
-                          <Input type='number' className="formInput"  ></Input>
-                        </Form.Item>
-                        </Col>
-                    </Row>
+                        <Input type='number' className="formInput"  ></Input>
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
 
-                    <Row style={{ float: 'right' }}>
+                  <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />} onClick={this.kDamageCompensationEvalutaionCreate}   htmlType="submit">
+                        <Button type="primary" icon={<SendOutlined />} onClick={this.kDamageCompensationEvalutaionCreate} htmlType="submit">
                           Onaya Gönder
                         </Button>
                       </Space>
@@ -1376,8 +1383,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
 
-              </Form>
-                
+                </Form>
+
 
 
 
