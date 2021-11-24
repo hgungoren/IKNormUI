@@ -49,14 +49,17 @@ var abpUtility_1 = require("../../../lib/abpUtility");
 var antd_1 = require("antd");
 var react_1 = require("react");
 function HiearchyTransfer(Props) {
+    var _this = this;
     var formRef = react_1["default"].createRef();
     var kHierarchyStore = Props.kHierarchyStore, sourceTitle = Props.sourceTitle, targetTitle = Props.targetTitle;
     var _a = react_1.useState([]), unitsItems = _a[0], setUnitsItems = _a[1];
     var _b = react_1.useState([]), positionsItems = _b[0], setPositionsItems = _b[1];
     var _c = react_1.useState([]), nodesItems = _c[0], setNodesItems = _c[1];
-    var _d = react_1.useState([{ unitsItems: unitsItems }]), targetKeys = _d[0], setTargetKeys = _d[1];
+    var _d = react_1.useState([]), targetKeys = _d[0], setTargetKeys = _d[1];
     var _e = react_1.useState([]), selectedKeys = _e[0], setSelectedKeys = _e[1];
     var Option = antd_1.Select.Option;
+    var _f = react_1.useState(String), positionId = _f[0], setPositionId = _f[1];
+    react_1.useEffect(function () { getUnits(); }, []);
     function getUnits() {
         return __awaiter(this, void 0, void 0, function () {
             var result, items;
@@ -65,15 +68,27 @@ function HiearchyTransfer(Props) {
                     case 0: return [4 /*yield*/, kHierarchyStore.getUnit()];
                     case 1:
                         result = _a.sent();
-                        items = result.items.map(function (item) { return react_1["default"].createElement(Option, { key: "unit_" + item.id, value: item.id }, item.name); });
+                        items = result.items.map(function (item) { return (react_1["default"].createElement(Option, { key: "unit_" + item.id, value: item.id }, item.name)); });
                         setUnitsItems(items);
                         return [2 /*return*/, result];
                 }
             });
         });
     }
+    var setItemsSelected = function (keys) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            kHierarchyStore.updateSetFalse(positionId).then(function () {
+                console.log('targetKeys -> ', targetKeys);
+                kHierarchyStore.updateSetTrue({
+                    ids: keys
+                });
+            })["catch"](function (err) { return console.log(err); });
+            return [2 /*return*/];
+        });
+    }); };
     function onUnitChange(value) {
         var _a, _b;
+        setPositionId(value);
         setNodesItems([]);
         (_a = formRef.current) === null || _a === void 0 ? void 0 : _a.resetFields(['position']);
         var positions = (_b = kHierarchyStore.units.items.find(function (item) { return item.id === value; })) === null || _b === void 0 ? void 0 : _b.positions;
@@ -81,28 +96,21 @@ function HiearchyTransfer(Props) {
     }
     function onPositionChange(value) {
         var _a;
+        console.log('Position Value => ', value);
         var nodes = (_a = positionsItems.find(function (item) { return item.id === value; })) === null || _a === void 0 ? void 0 : _a.nodes;
         if (nodes !== undefined) {
             var nodeList = nodes.map(function (item) { return ({
                 key: "" + item.id,
                 title: item.title,
-                description: 'Sample Description 5'
+                description: 'Sample Description 5',
+                selected: item.selected
             }); });
             setNodesItems(nodeList || []);
         }
     }
-    function onBlur() {
-        console.log('blur');
-    }
-    function onFocus() {
-        console.log('focus');
-    }
-    function onSearch(val) {
-        console.log('search:', val);
-    }
-    react_1.useEffect(function () {
-        getUnits();
-    }, []);
+    function onBlur() { }
+    function onFocus() { }
+    function onSearch(val) { }
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(antd_1.Form, { name: "basic", labelCol: { span: 8 }, wrapperCol: { span: 16 }, initialValues: { remember: true }, 
             // onFinish={onFinish}
@@ -111,20 +119,22 @@ function HiearchyTransfer(Props) {
             react_1["default"].createElement(antd_1.Row, { gutter: [16, 16] },
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Form.Item, { name: "unit" },
-                        react_1["default"].createElement(antd_1.Select, { showSearch: true, style: { width: '290px' }, placeholder: abpUtility_1.L('PleaseSelect'), optionFilterProp: "children", onChange: onUnitChange, onFocus: onFocus, onBlur: onBlur, onSearch: onSearch }, unitsItems))),
+                        react_1["default"].createElement(antd_1.Select, { showSearch: true, style: { width: '100%' }, placeholder: abpUtility_1.L('PleaseSelect'), optionFilterProp: "children", onChange: onUnitChange, onFocus: onFocus, onBlur: onBlur, onSearch: onSearch }, unitsItems))),
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
-                    " ",
+                    ' ',
                     react_1["default"].createElement(antd_1.Form.Item, { name: "position" },
-                        react_1["default"].createElement(antd_1.Select, { showSearch: true, style: { width: '290px' }, placeholder: abpUtility_1.L('PleaseSelect'), optionFilterProp: "children", onChange: onPositionChange, onFocus: onFocus, onBlur: onBlur, onSearch: onSearch }, positionsItems !== undefined && positionsItems.map(function (item) { return react_1["default"].createElement(Option, { key: "position_" + item.id, value: item.id }, item.name); }))))),
-            react_1["default"].createElement(antd_1.Row, null,
+                        react_1["default"].createElement(antd_1.Select, { showSearch: true, style: { width: '100%' }, placeholder: abpUtility_1.L('PleaseSelect'), optionFilterProp: "children", onChange: onPositionChange, onFocus: onFocus, onBlur: onBlur, onSearch: onSearch }, positionsItems !== undefined &&
+                            positionsItems.map(function (item) { return (react_1["default"].createElement(Option, { key: "position_" + item.id, value: item.id }, item.name)); }))))),
+            react_1["default"].createElement(antd_1.Row, { gutter: [16, 16] },
                 react_1["default"].createElement(antd_1.Col, { span: 24 },
                     react_1["default"].createElement(antd_1.Form.Item, { name: "title" },
                         react_1["default"].createElement(antd_1.Transfer
                         // locale={{  L('NoData') }}
                         , { 
                             // locale={{  L('NoData') }}
-                            dataSource: nodesItems, titles: [sourceTitle, targetTitle], render: function (item) { return "" + item.title; }, selectedKeys: selectedKeys, targetKeys: targetKeys, onChange: function (nextTargetKeys) {
+                            style: { width: '100%' }, dataSource: nodesItems, titles: [sourceTitle, targetTitle], render: function (item) { return "" + item.title; }, selectedKeys: selectedKeys, targetKeys: targetKeys, onChange: function (nextTargetKeys) {
                                 setTargetKeys(nextTargetKeys);
+                                setItemsSelected(nextTargetKeys);
                             }, onSelectChange: function (sourceSelectedKeys, targetSelectedKeys) {
                                 setSelectedKeys(__spreadArrays(sourceSelectedKeys, targetSelectedKeys));
                             } })))))));

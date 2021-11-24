@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { PagedResultDto } from '../dto/pagedResultDto';
 import http from '../httpService';
-import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus, ChangeSelectedDto } from './dto/getAllHierarchyOutput';
+import { GetAllHierarchyOutput, UnitOutput, ChangeStatus, GenerateHierarchyDto, ChangeToPassiveStatus, ChangeSelectedTrueDto } from './dto/getAllHierarchyOutput';
 
 class KHierarchyService {
 
@@ -31,17 +31,25 @@ class KHierarchyService {
         });
         return result.data.result;
     }
- 
+
     public async updateOrderNodes(ids: any): Promise<boolean> {
         let result = await http.put('iknorm/Node/UpdateOrderNodes', ids);
         return result.data.result;
     }
 
-    public async updateSelected(changeSelected: ChangeSelectedDto): Promise<boolean> {
-        let result = await http.put('iknorm/Node/UpdateSelected', changeSelected);
+    public async updateSetFalse(id: string): Promise<boolean> {
+
+        console.log('updateSetFalse Service -> ', id)
+        let result = await http.put('iknorm/Node/UpdateSetFalse?id=' + id);
         return result.data.result;
     }
 
+    public async updateSetTrue(changeSelected: ChangeSelectedTrueDto): Promise<boolean> {
+
+        console.log(changeSelected)
+        let result = await http.put('iknorm/Node/UpdateSetTrue', changeSelected);
+        return result.data.result;
+    }
 }
 
 export default new KHierarchyService();

@@ -76,8 +76,8 @@ export interface GenerateHierarchyDto {
   pozisyon: string;
 }
 
-export interface ChangeSelectedDto {
-  id: string;
-  positionId: string;
-  selected: boolean;
+ 
+
+export interface ChangeSelectedTrueDto {
+  ids: string[];
 }

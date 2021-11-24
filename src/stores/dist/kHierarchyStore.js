@@ -42,6 +42,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+/* eslint-disable */
 var mobx_1 = require("mobx");
 var kHierarchyService_1 = require("../services/kHierarchy/kHierarchyService");
 var KHierarchyStore = /** @class */ (function () {
@@ -70,7 +71,7 @@ var KHierarchyStore = /** @class */ (function () {
                     case 1:
                         result = _a.sent();
                         this.units = result;
-                        return [2 /*return*/];
+                        return [2 /*return*/, result];
                 }
             });
         });
@@ -131,6 +132,37 @@ var KHierarchyStore = /** @class */ (function () {
             });
         });
     };
+    KHierarchyStore.prototype.updateSetFalse = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log("Selected updateSetFalse Store Çalıştı => ", id);
+                        return [4 /*yield*/, kHierarchyService_1["default"].updateSetFalse(id)];
+                    case 1:
+                        result = _a.sent();
+                        this.status = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    KHierarchyStore.prototype.updateSetTrue = function (changeSelected) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].updateSetTrue(changeSelected)];
+                    case 1:
+                        result = _a.sent();
+                        console.log("Selected ChangeSelectedTrueDto Çalıştı => ", changeSelected);
+                        this.status = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     __decorate([
         mobx_1.observable
     ], KHierarchyStore.prototype, "kHierarchies");
@@ -158,6 +190,12 @@ var KHierarchyStore = /** @class */ (function () {
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "updateOrderNodes");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "updateSetFalse");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "updateSetTrue");
     return KHierarchyStore;
 }());
 exports["default"] = KHierarchyStore;
