@@ -137,9 +137,7 @@ var KHierarchyStore = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log("Selected updateSetFalse Store Çalıştı => ", id);
-                        return [4 /*yield*/, kHierarchyService_1["default"].updateSetFalse(id)];
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].updateSetFalse(id)];
                     case 1:
                         result = _a.sent();
                         this.status = result;
@@ -156,8 +154,21 @@ var KHierarchyStore = /** @class */ (function () {
                     case 0: return [4 /*yield*/, kHierarchyService_1["default"].updateSetTrue(changeSelected)];
                     case 1:
                         result = _a.sent();
-                        console.log("Selected ChangeSelectedTrueDto Çalıştı => ", changeSelected);
                         this.status = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    KHierarchyStore.prototype.getNodes = function (pagedNodeResultRequestDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].getNodes(pagedNodeResultRequestDto)];
+                    case 1:
+                        result = _a.sent();
+                        this.nodes = result;
                         return [2 /*return*/];
                 }
             });
@@ -169,6 +180,9 @@ var KHierarchyStore = /** @class */ (function () {
     __decorate([
         mobx_1.observable
     ], KHierarchyStore.prototype, "units");
+    __decorate([
+        mobx_1.observable
+    ], KHierarchyStore.prototype, "nodes");
     __decorate([
         mobx_1.observable
     ], KHierarchyStore.prototype, "status");
@@ -196,6 +210,9 @@ var KHierarchyStore = /** @class */ (function () {
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "updateSetTrue");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "getNodes");
     return KHierarchyStore;
 }());
 exports["default"] = KHierarchyStore;

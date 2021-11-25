@@ -30,16 +30,19 @@ var antd_1 = require("antd");
 var HiearchyTransfer_1 = require("./components/HiearchyTransfer");
 var HiearchySortable_1 = require("./components/HiearchySortable");
 var AppComponentBase_1 = require("../../components/AppComponentBase");
+var react_uuid_1 = require("react-uuid");
 var Transfer = /** @class */ (function (_super) {
     __extends(Transfer, _super);
     function Transfer() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.state = { keys: [] };
+        _this.setSeletedItems = function (value) {
+            console.log('Transfer -> Values => ', value);
+            _this.setState({ keys: value });
+            setTimeout(function () { console.log('this.state.keys -> ', _this.state.keys); }, 200);
+        };
+        return _this;
     }
-    Transfer.prototype.setSeletedItems = function (value) {
-        this.setState({
-            nodes: value
-        });
-    };
     Transfer.prototype.render = function () {
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
             react_1["default"].createElement(antd_1.Card, { style: { marginBottom: 20 } },
@@ -57,7 +60,7 @@ var Transfer = /** @class */ (function (_super) {
                         react_1["default"].createElement(HiearchyTransfer_1["default"], { setSeletedItems: this.setSeletedItems, kHierarchyStore: this.props.kHierarchyStore, sourceTitle: abpUtility_1.L('Positions'), targetTitle: abpUtility_1.L('SelectedPositions') }))),
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchySortable_1["default"], { nodes: this.state.nodes }))))));
+                        react_1["default"].createElement(HiearchySortable_1["default"], { key: react_uuid_1["default"](), keys: this.state.keys, kHierarchyStore: this.props.kHierarchyStore }))))));
     };
     Transfer = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),

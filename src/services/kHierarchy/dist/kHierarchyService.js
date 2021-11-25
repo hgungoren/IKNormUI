@@ -45,7 +45,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetKHierarcies?tip=' + tip + "&id=" + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetKHierarcies?tip=' + tip + '&id=' + id)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -125,9 +125,7 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log('updateSetFalse Service -> ', id);
-                        return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetFalse?id=' + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetFalse?id=' + id)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -140,9 +138,20 @@ var KHierarchyService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(changeSelected);
-                        return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetTrue', changeSelected)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetTrue', changeSelected)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KHierarchyService.prototype.getNodes = function (pagedNodeResultRequestDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodes', { params: pagedNodeResultRequestDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];

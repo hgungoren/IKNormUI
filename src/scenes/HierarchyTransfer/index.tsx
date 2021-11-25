@@ -10,28 +10,26 @@ import KHierarchyStore from '../../stores/kHierarchyStore';
 import HiearchyTransfer from './components/HiearchyTransfer';
 import HiearchySortable from './components/HiearchySortable';
 import AppComponentBase from '../../components/AppComponentBase';
+import uuid  from 'react-uuid';
 
 export interface IProps {
   kHierarchyStore: KHierarchyStore;
 }
 
 export interface IState {
-  keys: any;
+  keys:string[];
 }
 
 @inject(Stores.KHierarchyStore)
 @observer
 class Transfer extends AppComponentBase<IProps, IState> {
-  state = {
-    keys: [],
-  };
+
+  state = { keys: [] };
 
   setSeletedItems = (value) => {
-    console.log('Values => ', value);
-
-    this.setState({
-      keys: value,
-    });
+    console.log('Transfer -> Values => ', value); 
+    this.setState({ keys: value }); 
+    setTimeout(() => {console.log('this.state.keys -> ',this.state.keys)}, 200)
   }
 
   render() {
@@ -83,7 +81,7 @@ class Transfer extends AppComponentBase<IProps, IState> {
             xxl={{ span: 12, offset: 0 }}
           >
             <Card hoverable>
-              <HiearchySortable  keys={this.state.keys} kHierarchyStore={this.props.kHierarchyStore}/>
+              <HiearchySortable key={uuid()}  keys={this.state.keys} kHierarchyStore={this.props.kHierarchyStore}/>
             </Card>
           </Col>
         </Row>
