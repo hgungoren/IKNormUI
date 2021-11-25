@@ -8,3 +8,4 @@ export interface PagedKHierarchyResultRequestDto extends PagedFilterAndSortedReq
 export interface PagedNodeResultRequestDto extends PagedFilterAndSortedRequest {
   keys: string[];
 }
+

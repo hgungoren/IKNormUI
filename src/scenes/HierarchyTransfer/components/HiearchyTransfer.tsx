@@ -15,21 +15,20 @@ export interface IProps {
 }
 
 export default function HiearchyTransfer(props: IProps) {
-
-  const [positionId, setPositionId] = useState(String); 
+  const [positionId, setPositionId] = useState(String);
   const [unitsItems, setUnitsItems] = useState([] as any);
   const [targetKeys, setTargetKeys] = useState([] as any);
   const [selectedKeys, setSelectedKeys] = useState([] as any);
   const [nodesItems, setNodesItems] = useState<TransferItem[]>([]);
   const [positionsItems, setPositionsItems] = useState<PositionOutput[]>([]);
 
-
   const formRef = React.createRef<FormInstance>();
   const { kHierarchyStore, sourceTitle, targetTitle } = props;
   const { Option } = Select;
 
-
-  useEffect(() => { getUnits(); }, []);
+  useEffect(() => {
+    getUnits();
+  }, []);
 
   async function getUnits() {
     let result = await kHierarchyStore.getUnit();
@@ -44,23 +43,24 @@ export default function HiearchyTransfer(props: IProps) {
   }
 
   const setItemsSelected = async (keys) => {
-    kHierarchyStore.updateSetFalse(positionId).then(() => {
-      kHierarchyStore.updateSetTrue({
-        ids: keys
+    kHierarchyStore
+      .updateSetFalse(positionId)
+      .then(() => {
+        kHierarchyStore.updateSetTrue({
+          ids: keys,
+        });
       })
-    }).catch((err) => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
-  function onUnitChange(value) { 
+  function onUnitChange(value) {
     setNodesItems([]);
     formRef.current?.resetFields(['position']);
     let positions = kHierarchyStore.units.items.find((item) => item.id === value)?.positions;
     setPositionsItems(positions || []);
-
   }
 
   function onPositionChange(value) {
-
     setPositionId(value);
     let nodes = positionsItems.find((item) => item.id === value)?.nodes;
 
@@ -71,23 +71,22 @@ export default function HiearchyTransfer(props: IProps) {
         description: 'Sample Description 5',
         selected: item.selected,
       }));
-
       setNodesItems(nodeList || []);
-      let seletedKeys = nodeList.filter(item => item.selected).map(item => item.key);
-      setTargetKeys(seletedKeys)
+      
+      let seletedKeys = nodeList.filter((item) => item.selected).map((item) => item.key);
+      setTargetKeys(seletedKeys);
     }
   }
 
-  function onBlur() { }
-  function onFocus() { }
-  function onSearch(val) { }
+  function onBlur() {}
+  function onFocus() {}
+  function onSearch(val) {}
 
   function onChange(keys) {
     setTargetKeys(keys);
-    setItemsSelected(keys); 
+    setItemsSelected(keys);
     props.setSeletedItems(keys);
   }
-
 
   return (
     <>

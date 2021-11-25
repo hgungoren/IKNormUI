@@ -69,9 +69,17 @@ class KHierarchyStore {
   }
 
   @action
-  async getNodes(pagedNodeResultRequestDto: PagedNodeResultRequestDto) {
-    let result = await kHierarchyService.getNodes(pagedNodeResultRequestDto);
+  async getNodesForKeys(pagedNodeResultRequestDto: PagedNodeResultRequestDto) {
+    let result = await kHierarchyService.getNodesForKeys(pagedNodeResultRequestDto);
     this.nodes = result;
+    return result;
+  }
+
+  @action
+  async getNodes(id: string) {
+    let result = await kHierarchyService.getNodes(id);
+    this.nodes = result;
+    return result;
   }
 }
 

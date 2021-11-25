@@ -8,34 +8,10 @@ import Stores from '../../../stores/storeIdentifier';
 import KHierarchyStore from '../../../stores/kHierarchyStore';
 import AppComponentBase from '../../../components/AppComponentBase';
 
-const dataArray = [
-  {
-    icon: 'question-circle-o',
-    color: '#FF5500',
-    title: 'Senior Product Designer',
-    text: 'Senior Product Designer',
-  },
-  {
-    icon: 'plus-circle-o',
-    color: '#5FC296',
-    title: 'Senior Animator',
-    text: 'Senior Animator',
-  },
-  {
-    icon: 'check-circle-o',
-    color: '#2DB7F5',
-    title: 'Visual Designer',
-    text: 'Visual Designer',
-  },
-  {
-    icon: 'cross-circle-o',
-    color: '#FFAA00',
-    title: 'Computer Engineer',
-    text: 'Computer Engineer',
-  },
-];
-
-export interface IState {}
+export interface IState {
+  dataArray: any;
+  getNode: any;
+}
 
 export interface IProps {
   keys: string[];
@@ -53,31 +29,54 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
     className: 'list-sort-demo',
   };
 
-  getNodes = async () => {
-    await this.props.kHierarchyStore.getNodes({
+  state = {
+    dataArray: [],
+    getNode: [],
+  };
+  getNodesForKeys = async () => {
+    if (
+      this.props.kHierarchyStore.units !== undefined &&
+      this.props.kHierarchyStore.units.items.length === 0
+    ) {
+      this.setState({
+        dataArray: [],
+      });
+    }
+    let response = await this.props.kHierarchyStore.getNodesForKeys({
       keys: this.props.keys,
       maxResultCount: 1000000,
       skipCount: 0,
     });
 
-    console.log('getNodes Keys -> ', this.props.kHierarchyStore.nodes);
+    this.setState({
+      dataArray: response,
+    });
+  };
+
+  getNodes = async () => {
+    let response = await this.props.kHierarchyStore.getNodes('1');
+    this.setState({
+      getNode: response,
+    });
+
+    console.log("ID 1 False => ",this.state.getNode);
   };
 
   componentDidMount = () => {
+    this.getNodesForKeys();
     this.getNodes();
   };
 
   render() {
-    const childrenToRender = dataArray.map((item, i) => {
-      const { title, text } = item;
+    const childrenToRender = this.state.dataArray.map((item, i) => {
+      const { title } = item;
       return (
         <div key={i} className={`list-sort-demo-text`}>
           <div className={`list-sort-demo-icon`}>
             {/* <Icon type={'check-circle-o'} style={{ color }} /> */}
           </div>
           <div className={`list-sort-demo-text`}>
-            <h1>{title}</h1>
-            <p>{text}</p>
+            <h1 style={{ width: '320px' }}>{title}</h1>
           </div>
         </div>
       );
