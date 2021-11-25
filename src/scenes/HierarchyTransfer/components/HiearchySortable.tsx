@@ -5,6 +5,7 @@ import './index.less';
 import ListSort from '../../../lib/ListSort';
 import PropTypes from 'prop-types';
 import AppComponentBase from '../../../components/AppComponentBase';
+import KHierarchyStore from '../../../stores/kHierarchyStore';
 
 const dataArray = [
     {
@@ -37,7 +38,8 @@ export interface IState {
 }
 
 export interface IProps {
-    nodes: []
+     keys: any
+     kHierarchyStore: KHierarchyStore;
 }
 
 export default class HiearchySortable extends AppComponentBase<IProps, IState> {
@@ -49,6 +51,19 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
     static defaultProps = {
         className: 'list-sort-demo',
     };
+
+
+    getNodes = async () => {
+        await this.props.kHierarchyStore.getNodes({
+         ids:this.props.keys
+        });
+        console.log("Keys => ", this.props.keys)
+      }
+
+      componentDidMount = () => {
+        console.log("Keys =>",this.props.keys)
+        this.getNodes();
+      }
 
     render() {
 

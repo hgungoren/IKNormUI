@@ -46,8 +46,12 @@ class KHierarchyService {
 
     public async updateSetTrue(changeSelected: ChangeSelectedTrueDto): Promise<boolean> {
 
-        console.log(changeSelected)
         let result = await http.put('iknorm/Node/UpdateSetTrue', changeSelected);
+        return result.data.result;
+    }
+
+    public async getNodes(ids: any):Promise<any>{
+        let result = await http.put('iknorm/Node/GetNodes', ids);
         return result.data.result;
     }
 }

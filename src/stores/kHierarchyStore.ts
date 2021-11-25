@@ -6,7 +6,7 @@ import {
   UnitOutput,
   ChangeStatus,
   GenerateHierarchyDto,
-  ChangeToPassiveStatus, 
+  ChangeToPassiveStatus,
   ChangeSelectedTrueDto,
 } from '../services/kHierarchy/dto/getAllHierarchyOutput';
 import kHierarchyService from '../services/kHierarchy/kHierarchyService';
@@ -55,7 +55,7 @@ class KHierarchyStore {
 
   @action
   async updateSetFalse(id: string) {
-    console.log("Selected updateSetFalse Store Çalıştı => ", id);
+    console.log('Selected updateSetFalse Store Çalıştı => ', id);
     let result = await kHierarchyService.updateSetFalse(id);
     this.status = result;
   }
@@ -63,11 +63,15 @@ class KHierarchyStore {
   @action
   async updateSetTrue(changeSelected: ChangeSelectedTrueDto) {
     let result = await kHierarchyService.updateSetTrue(changeSelected);
-    console.log("Selected ChangeSelectedTrueDto Çalıştı => ", changeSelected);
+    console.log('Selected ChangeSelectedTrueDto Çalıştı => ', changeSelected);
     this.status = result;
   }
 
-
+  @action
+  async getNodes(ids: any) {
+    let result = await kHierarchyService.getNodes(ids);
+    this.status = result;
+  }
 }
 
 export default KHierarchyStore;

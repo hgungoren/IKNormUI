@@ -16,24 +16,25 @@ export interface IProps {
 }
 
 export interface IState {
-  nodes: []
+  keys: any;
 }
 
 @inject(Stores.KHierarchyStore)
 @observer
-
 class Transfer extends AppComponentBase<IProps, IState> {
+  state = {
+    keys: [],
+  };
 
-
-  setSeletedItems(value) {
+  setSeletedItems = (value) => {
+    console.log('Values => ', value);
 
     this.setState({
-      nodes: value
-    })
+      keys: value,
+    });
   }
 
   render() {
-
     return (
       <React.Fragment>
         <Card style={{ marginBottom: 20 }}>
@@ -82,7 +83,7 @@ class Transfer extends AppComponentBase<IProps, IState> {
             xxl={{ span: 12, offset: 0 }}
           >
             <Card hoverable>
-              <HiearchySortable nodes={this.state.nodes} />
+              <HiearchySortable  keys={this.state.keys} kHierarchyStore={this.props.kHierarchyStore}/>
             </Card>
           </Col>
         </Row>
