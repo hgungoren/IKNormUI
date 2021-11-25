@@ -4,6 +4,7 @@ import './index.less';
 // import Icon from 'antd/lib/icon';
 import ListSort from '../../../lib/ListSort';
 import PropTypes from 'prop-types';
+import AppComponentBase from '../../../components/AppComponentBase';
 
 const dataArray = [
     {
@@ -32,8 +33,14 @@ const dataArray = [
     },
 ];
 
+export interface IState {
+}
 
-export default class HiearchySortable extends React.Component {
+export interface IProps {
+    nodes: []
+}
+
+export default class HiearchySortable extends AppComponentBase<IProps, IState> {
 
     static propTypes = {
         className: PropTypes.string,
@@ -44,8 +51,10 @@ export default class HiearchySortable extends React.Component {
     };
 
     render() {
+
+
         const childrenToRender = dataArray.map((item, i) => {
-            const {   title, text, } = item;
+            const { title, text, } = item;
             return (
                 <div key={i} className={`list-sort-demo-text`}>
                     <div className={`list-sort-demo-icon`}>
@@ -58,6 +67,8 @@ export default class HiearchySortable extends React.Component {
                 </div>
             );
         });
+
+        
         return (
             <div className={`list-sort-demo-wrapper`}>
                 <div className={'list-sort-demo'}>

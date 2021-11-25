@@ -1,28 +1,39 @@
 /* eslint-disable */
-import { Col, Card, PageHeader, Breadcrumb } from 'antd';
-import Row from 'antd/lib/row';
 import React from 'react';
-import AppComponentBase from '../../components/AppComponentBase';
-import HiearchyTransfer from './components/HiearchyTransfer';
-import HiearchySortable from './components/HiearchySortable';
-import { inject, observer } from 'mobx-react';
-import Stores from '../../stores/storeIdentifier';
-import KHierarchyStore from '../../stores/kHierarchyStore';
+import Row from 'antd/lib/row';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
+import { inject, observer } from 'mobx-react';
+import Stores from '../../stores/storeIdentifier';
+import { Col, Card, PageHeader, Breadcrumb } from 'antd';
+import KHierarchyStore from '../../stores/kHierarchyStore';
+import HiearchyTransfer from './components/HiearchyTransfer';
+import HiearchySortable from './components/HiearchySortable';
+import AppComponentBase from '../../components/AppComponentBase';
 
 export interface IProps {
   kHierarchyStore: KHierarchyStore;
 }
 
-export interface State {
-  sayi: number;
+export interface IState {
+  nodes: []
 }
 
 @inject(Stores.KHierarchyStore)
 @observer
-class Transfer extends AppComponentBase<IProps, State> {
+
+class Transfer extends AppComponentBase<IProps, IState> {
+
+
+  setSeletedItems(value) {
+
+    this.setState({
+      nodes: value
+    })
+  }
+
   render() {
+
     return (
       <React.Fragment>
         <Card style={{ marginBottom: 20 }}>
@@ -55,9 +66,10 @@ class Transfer extends AppComponentBase<IProps, State> {
           >
             <Card hoverable>
               <HiearchyTransfer
+                setSeletedItems={this.setSeletedItems}
                 kHierarchyStore={this.props.kHierarchyStore}
-                sourceTitle={'Pozisyonlar'}
-                targetTitle={'Aktif Pozisyonlar'}
+                sourceTitle={L('Positions')}
+                targetTitle={L('SelectedPositions')}
               />
             </Card>
           </Col>
@@ -70,7 +82,7 @@ class Transfer extends AppComponentBase<IProps, State> {
             xxl={{ span: 12, offset: 0 }}
           >
             <Card hoverable>
-              <HiearchySortable />
+              <HiearchySortable nodes={this.state.nodes} />
             </Card>
           </Col>
         </Row>

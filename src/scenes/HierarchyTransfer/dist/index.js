@@ -20,21 +20,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 /* eslint-disable */
-var antd_1 = require("antd");
-var row_1 = require("antd/lib/row");
 var react_1 = require("react");
-var AppComponentBase_1 = require("../../components/AppComponentBase");
-var HiearchyTransfer_1 = require("./components/HiearchyTransfer");
-var HiearchySortable_1 = require("./components/HiearchySortable");
-var mobx_react_1 = require("mobx-react");
-var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var row_1 = require("antd/lib/row");
 var react_router_dom_1 = require("react-router-dom");
 var abpUtility_1 = require("../../lib/abpUtility");
+var mobx_react_1 = require("mobx-react");
+var storeIdentifier_1 = require("../../stores/storeIdentifier");
+var antd_1 = require("antd");
+var HiearchyTransfer_1 = require("./components/HiearchyTransfer");
+var HiearchySortable_1 = require("./components/HiearchySortable");
+var AppComponentBase_1 = require("../../components/AppComponentBase");
 var Transfer = /** @class */ (function (_super) {
     __extends(Transfer, _super);
     function Transfer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Transfer.prototype.setSeletedItems = function (value) {
+        this.setState({
+            nodes: value
+        });
+    };
     Transfer.prototype.render = function () {
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
             react_1["default"].createElement(antd_1.Card, { style: { marginBottom: 20 } },
@@ -49,10 +54,10 @@ var Transfer = /** @class */ (function (_super) {
             react_1["default"].createElement(row_1["default"], { gutter: [16, 16] },
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchyTransfer_1["default"], { kHierarchyStore: this.props.kHierarchyStore, sourceTitle: 'Birim', targetTitle: 'Pozisyon' }))),
+                        react_1["default"].createElement(HiearchyTransfer_1["default"], { setSeletedItems: this.setSeletedItems, kHierarchyStore: this.props.kHierarchyStore, sourceTitle: abpUtility_1.L('Positions'), targetTitle: abpUtility_1.L('SelectedPositions') }))),
                 react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
                     react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchySortable_1["default"], null))))));
+                        react_1["default"].createElement(HiearchySortable_1["default"], { nodes: this.state.nodes }))))));
     };
     Transfer = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),

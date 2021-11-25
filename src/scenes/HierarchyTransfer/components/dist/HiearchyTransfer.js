@@ -46,19 +46,19 @@ exports.__esModule = true;
 /* eslint-disable */
 require("./index.less");
 var abpUtility_1 = require("../../../lib/abpUtility");
-var antd_1 = require("antd");
 var react_1 = require("react");
-function HiearchyTransfer(Props) {
+var antd_1 = require("antd");
+function HiearchyTransfer(props) {
     var _this = this;
+    var _a = react_1.useState(String), positionId = _a[0], setPositionId = _a[1];
+    var _b = react_1.useState([]), unitsItems = _b[0], setUnitsItems = _b[1];
+    var _c = react_1.useState([]), targetKeys = _c[0], setTargetKeys = _c[1];
+    var _d = react_1.useState([]), selectedKeys = _d[0], setSelectedKeys = _d[1];
+    var _e = react_1.useState([]), nodesItems = _e[0], setNodesItems = _e[1];
+    var _f = react_1.useState([]), positionsItems = _f[0], setPositionsItems = _f[1];
     var formRef = react_1["default"].createRef();
-    var kHierarchyStore = Props.kHierarchyStore, sourceTitle = Props.sourceTitle, targetTitle = Props.targetTitle;
-    var _a = react_1.useState([]), unitsItems = _a[0], setUnitsItems = _a[1];
-    var _b = react_1.useState([]), positionsItems = _b[0], setPositionsItems = _b[1];
-    var _c = react_1.useState([]), nodesItems = _c[0], setNodesItems = _c[1];
-    var _d = react_1.useState([]), targetKeys = _d[0], setTargetKeys = _d[1];
-    var _e = react_1.useState([]), selectedKeys = _e[0], setSelectedKeys = _e[1];
+    var kHierarchyStore = props.kHierarchyStore, sourceTitle = props.sourceTitle, targetTitle = props.targetTitle;
     var Option = antd_1.Select.Option;
-    var _f = react_1.useState(String), positionId = _f[0], setPositionId = _f[1];
     react_1.useEffect(function () { getUnits(); }, []);
     function getUnits() {
         return __awaiter(this, void 0, void 0, function () {
@@ -78,7 +78,6 @@ function HiearchyTransfer(Props) {
     var setItemsSelected = function (keys) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             kHierarchyStore.updateSetFalse(positionId).then(function () {
-                console.log('targetKeys -> ', targetKeys);
                 kHierarchyStore.updateSetTrue({
                     ids: keys
                 });
@@ -88,7 +87,6 @@ function HiearchyTransfer(Props) {
     }); };
     function onUnitChange(value) {
         var _a, _b;
-        setPositionId(value);
         setNodesItems([]);
         (_a = formRef.current) === null || _a === void 0 ? void 0 : _a.resetFields(['position']);
         var positions = (_b = kHierarchyStore.units.items.find(function (item) { return item.id === value; })) === null || _b === void 0 ? void 0 : _b.positions;
@@ -96,7 +94,7 @@ function HiearchyTransfer(Props) {
     }
     function onPositionChange(value) {
         var _a;
-        console.log('Position Value => ', value);
+        setPositionId(value);
         var nodes = (_a = positionsItems.find(function (item) { return item.id === value; })) === null || _a === void 0 ? void 0 : _a.nodes;
         if (nodes !== undefined) {
             var nodeList = nodes.map(function (item) { return ({
@@ -106,11 +104,18 @@ function HiearchyTransfer(Props) {
                 selected: item.selected
             }); });
             setNodesItems(nodeList || []);
+            var seletedKeys = nodeList.filter(function (item) { return item.selected; }).map(function (item) { return item.key; });
+            setTargetKeys(seletedKeys);
         }
     }
     function onBlur() { }
     function onFocus() { }
     function onSearch(val) { }
+    function onChange(keys) {
+        setTargetKeys(keys);
+        setItemsSelected(keys);
+        props.setSeletedItems(keys);
+    }
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(antd_1.Form, { name: "basic", labelCol: { span: 8 }, wrapperCol: { span: 16 }, initialValues: { remember: true }, 
             // onFinish={onFinish}
@@ -132,10 +137,7 @@ function HiearchyTransfer(Props) {
                         // locale={{  L('NoData') }}
                         , { 
                             // locale={{  L('NoData') }}
-                            style: { width: '100%' }, dataSource: nodesItems, titles: [sourceTitle, targetTitle], render: function (item) { return "" + item.title; }, selectedKeys: selectedKeys, targetKeys: targetKeys, onChange: function (nextTargetKeys) {
-                                setTargetKeys(nextTargetKeys);
-                                setItemsSelected(nextTargetKeys);
-                            }, onSelectChange: function (sourceSelectedKeys, targetSelectedKeys) {
+                            style: { width: '100%' }, dataSource: nodesItems, titles: [sourceTitle, targetTitle], render: function (item) { return "" + item.title; }, selectedKeys: selectedKeys, targetKeys: targetKeys, onChange: onChange, onSelectChange: function (sourceSelectedKeys, targetSelectedKeys) {
                                 setSelectedKeys(__spreadArrays(sourceSelectedKeys, targetSelectedKeys));
                             } })))))));
 }

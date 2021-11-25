@@ -19,6 +19,7 @@ require("./index.less");
 // import Icon from 'antd/lib/icon';
 var ListSort_1 = require("../../../lib/ListSort");
 var prop_types_1 = require("prop-types");
+var AppComponentBase_1 = require("../../../components/AppComponentBase");
 var dataArray = [
     {
         icon: 'question-circle-o',
@@ -70,5 +71,5 @@ var HiearchySortable = /** @class */ (function (_super) {
         className: 'list-sort-demo'
     };
     return HiearchySortable;
-}(react_1["default"].Component));
+}(AppComponentBase_1["default"]));
 exports["default"] = HiearchySortable;

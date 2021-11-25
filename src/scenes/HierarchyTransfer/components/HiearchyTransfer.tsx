@@ -2,30 +2,34 @@
 import './index.less';
 import { L } from '../../../lib/abpUtility';
 import { TransferItem } from 'antd/lib/transfer';
-import { Col, Form, FormInstance, Row, Select, Transfer } from 'antd';
 import React, { useState, useEffect } from 'react';
 import KHierarchyStore from '../../../stores/kHierarchyStore';
+import { Col, Form, FormInstance, Row, Select, Transfer } from 'antd';
 import { PositionOutput } from '../../../services/kHierarchy/dto/getAllHierarchyOutput';
 
 export interface IProps {
   kHierarchyStore: KHierarchyStore;
   sourceTitle: string;
   targetTitle: string;
+  setSeletedItems: Function;
 }
 
-export default function HiearchyTransfer(Props: IProps) {
-  const formRef = React.createRef<FormInstance>();
-  const { kHierarchyStore, sourceTitle, targetTitle } = Props;
+export default function HiearchyTransfer(props: IProps) {
+
+  const [positionId, setPositionId] = useState(String); 
   const [unitsItems, setUnitsItems] = useState([] as any);
-  const [positionsItems, setPositionsItems] = useState<PositionOutput[]>([]);
+  const [targetKeys, setTargetKeys] = useState([] as any);
+  const [selectedKeys, setSelectedKeys] = useState([] as any);
   const [nodesItems, setNodesItems] = useState<TransferItem[]>([]);
-  const [targetKeys, setTargetKeys] = useState([]) as any;
-  const [selectedKeys, setSelectedKeys] = useState([]) as any;
+  const [positionsItems, setPositionsItems] = useState<PositionOutput[]>([]);
+
+
+  const formRef = React.createRef<FormInstance>();
+  const { kHierarchyStore, sourceTitle, targetTitle } = props;
   const { Option } = Select;
-  const [positionId, setPositionId] = useState(String);
+
 
   useEffect(() => { getUnits(); }, []);
-
 
   async function getUnits() {
     let result = await kHierarchyStore.getUnit();
@@ -41,24 +45,25 @@ export default function HiearchyTransfer(Props: IProps) {
 
   const setItemsSelected = async (keys) => {
     kHierarchyStore.updateSetFalse(positionId).then(() => {
-      console.log('targetKeys -> ', targetKeys)
       kHierarchyStore.updateSetTrue({
         ids: keys
       })
     }).catch((err) => console.log(err))
   }
 
-  function onUnitChange(value) {
-    setPositionId(value);
+  function onUnitChange(value) { 
     setNodesItems([]);
     formRef.current?.resetFields(['position']);
     let positions = kHierarchyStore.units.items.find((item) => item.id === value)?.positions;
     setPositionsItems(positions || []);
+
   }
 
   function onPositionChange(value) {
-    console.log('Position Value => ', value);
+
+    setPositionId(value);
     let nodes = positionsItems.find((item) => item.id === value)?.nodes;
+
     if (nodes !== undefined) {
       let nodeList = nodes.map<TransferItem>((item) => ({
         key: `${item.id}`,
@@ -66,13 +71,23 @@ export default function HiearchyTransfer(Props: IProps) {
         description: 'Sample Description 5',
         selected: item.selected,
       }));
+
       setNodesItems(nodeList || []);
+      let seletedKeys = nodeList.filter(item => item.selected).map(item => item.key);
+      setTargetKeys(seletedKeys)
     }
   }
 
   function onBlur() { }
   function onFocus() { }
   function onSearch(val) { }
+
+  function onChange(keys) {
+    setTargetKeys(keys);
+    setItemsSelected(keys); 
+    props.setSeletedItems(keys);
+  }
+
 
   return (
     <>
@@ -151,10 +166,7 @@ export default function HiearchyTransfer(Props: IProps) {
                 render={(item) => `${item.title}`}
                 selectedKeys={selectedKeys}
                 targetKeys={targetKeys}
-                onChange={(nextTargetKeys) => {
-                  setTargetKeys(nextTargetKeys); 
-                  setItemsSelected(nextTargetKeys);
-                }}
+                onChange={onChange}
                 onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
                   setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
                 }}
