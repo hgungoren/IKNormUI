@@ -23,11 +23,11 @@ export interface Node {
   children: [];
 }
 
-export interface Props {
+export interface IProps {
   kHierarchyStore: KHierarchyStore;
 }
 
-export interface State {
+export interface IState {
   node: any;
   treeData: any;
   nodeKey: number;
@@ -36,7 +36,7 @@ export interface State {
 
 @inject(Stores.KHierarchyStore)
 @observer
-class Hierarchy extends AppComponentBase<Props, State> {
+class Hierarchy extends AppComponentBase<IProps, IState> {
   state = {
     nodeKey: 0,
     visible: false,

@@ -1,4 +1,4 @@
- 
+ /*eslint-disable */
 import { PagedResultDto } from '../dto/pagedResultDto';
 import http from '../httpService';
 import { GetAllKInkaLookUpTableOutput } from './dto/getAllKInkaLookUpTableOutput'; 

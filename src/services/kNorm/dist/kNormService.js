@@ -45,7 +45,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('api/services/app/KNorm/Create', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/Create', createKNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -58,7 +58,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/Get', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/Get', { params: entityDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -71,7 +71,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetById', { params: entityDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetById', { params: entityDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -84,7 +84,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNorms', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -97,7 +97,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetBolgeNormsCount', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -110,7 +110,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNorms', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -123,7 +123,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeNormsCount', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -136,7 +136,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNorms', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -149,7 +149,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KNorm/GetSubeDetailNormsCount', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -162,7 +162,7 @@ var KNormService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('api/services/app/KNorm/SetStatus', createKNormInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KNorm/SetStatus', createKNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];

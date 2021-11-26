@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var httpService_1 = require("../httpService");
-var KHierarchyService = /** @class */ (function () {
-    function KHierarchyService() {
+var KSubeNormService = /** @class */ (function () {
+    function KSubeNormService() {
     }
-    KHierarchyService.prototype.getAll = function (tip, id) {
-        return __awaiter(this, void 0, Promise, function () {
+    KSubeNormService.prototype.create = function (createKSubeNormInput) {
+        return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetKHierarcies?tip=' + tip + '&id=' + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].post('iknorm/KSubeNorm/Create', createKSubeNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -53,12 +53,12 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.getUnits = function () {
-        return __awaiter(this, void 0, Promise, function () {
+    KSubeNormService.prototype.update = function (updateKSubeNormInput) {
+        return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Unit/GetAll')];
+                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/KSubeNorm/Update', updateKSubeNormInput)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -66,12 +66,25 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.update = function (changeStatus) {
+    KSubeNormService.prototype["delete"] = function (entityDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"]["delete"]('iknorm/KSubeNorm/Delete', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data];
+                }
+            });
+        });
+    };
+    KSubeNormService.prototype.get = function (entityDto) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateStatus', changeStatus)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/Get', { params: entityDto })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -79,12 +92,12 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.updateToPassive = function (changeToPassiveStatus) {
+    KSubeNormService.prototype.getAllNorms = function (pagedFilterAndSortedRequest) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateStatuToPassive', changeToPassiveStatus)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetAll', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -92,14 +105,12 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.generateHierarchy = function (generateHierarchyDto) {
+    KSubeNormService.prototype.getNormCount = function () {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KHierarchy/GetHierarchy', {
-                            params: generateHierarchyDto
-                        })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormCount')];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -107,12 +118,12 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.updateOrderNodes = function (ids) {
+    KSubeNormService.prototype.getNormsCount = function () {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateOrderNodes', ids)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormsCount')];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -120,12 +131,12 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.updateSetFalse = function (id) {
+    KSubeNormService.prototype.getNormCountById = function (id) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetFalse?id=' + id)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KSubeNorm/GetNormCountById?id=' + id)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -133,32 +144,6 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.updateSetTrue = function (changeSelected) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].put('iknorm/Node/UpdateSetTrue', changeSelected)];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    KHierarchyService.prototype.getNodes = function (pagedNodeResultRequestDto) {
-        return __awaiter(this, void 0, Promise, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodes', { params: pagedNodeResultRequestDto })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.data.result];
-                }
-            });
-        });
-    };
-    return KHierarchyService;
+    return KSubeNormService;
 }());
-exports["default"] = new KHierarchyService();
+exports["default"] = new KSubeNormService();

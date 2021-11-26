@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var httpService_1 = require("../httpService");
-var TokenAuthService = /** @class */ (function () {
-    function TokenAuthService() {
+var KBolgeService = /** @class */ (function () {
+    function KBolgeService() {
     }
-    TokenAuthService.prototype.authenticate = function (authenticationInput) {
+    KBolgeService.prototype.getAll = function (pagedFilterAndSortedRequest) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('/iknormtokenauth/TokenAuth/Authenticate', authenticationInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KBolge/GetAll', { params: pagedFilterAndSortedRequest })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.data.result];
@@ -53,6 +53,19 @@ var TokenAuthService = /** @class */ (function () {
             });
         });
     };
-    return TokenAuthService;
+    KBolgeService.prototype.get = function (entityDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/KBolge/Get', { params: entityDto })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    return KBolgeService;
 }());
-exports["default"] = new TokenAuthService();
+exports["default"] = new KBolgeService();

@@ -6,21 +6,21 @@ import { PagedKPersonelResultRequestDto } from './dto/PagedKPersonelResultReques
 class KPersonelService {
 
     public async getAll(pagedFilterAndSortedRequest: PagedKPersonelResultRequestDto): Promise<PagedResultDto<GetAllKPersonelOutput>> {
-        let result = await http.get('api/services/app/KPersonel/GetAll', {
+        let result = await http.get('iknorm/KPersonel/GetAll', {
             params: pagedFilterAndSortedRequest
         });
         return result.data.result;
     }
  
     public async getAllEmployees(pagedFilterAndSortedRequest: PagedKPersonelResultRequestDto): Promise<PagedResultDto<GetAllKPersonelOutput>> {
-        let result = await http.get('api/services/app/KPersonel/GetAll', {
+        let result = await http.get('iknorm/KPersonel/GetAll', {
             params: pagedFilterAndSortedRequest
         });
         return result.data.result;
     } 
 
     public async getEmployeeCountById(id: string): Promise<number> {
-        let result = await http.get('api/services/app/KPersonel/GetTotalEmployeeCountById?id=' + id, {
+        let result = await http.get('iknorm/KPersonel/GetTotalEmployeeCountById?id=' + id, {
             params: id
         });
         return result.data.result;
@@ -28,12 +28,12 @@ class KPersonelService {
 
 
     public async getEmployeeCount(): Promise<number> {
-        let result = await http.get('api/services/app/KPersonel/GetTotalEmployeeCount'); 
+        let result = await http.get('iknorm/KPersonel/GetTotalEmployeeCount'); 
         return result.data.result;
     }
 
     public async getEmployeesCount(): Promise<number> {
-        let result = await http.get('api/services/app/KPersonel/GetEmployeesCount'); 
+        let result = await http.get('iknorm/KPersonel/GetEmployeesCount'); 
         return result.data.result;
     }
 }

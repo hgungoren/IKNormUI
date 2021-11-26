@@ -36,23 +36,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var httpService_1 = require("../httpService");
-var TokenAuthService = /** @class */ (function () {
-    function TokenAuthService() {
+var httpService_1 = require("./httpService");
+var AbpUserConfigurationService = /** @class */ (function () {
+    function AbpUserConfigurationService() {
     }
-    TokenAuthService.prototype.authenticate = function (authenticationInput) {
-        return __awaiter(this, void 0, Promise, function () {
+    AbpUserConfigurationService.prototype.getAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].post('/iknormtokenauth/TokenAuth/Authenticate', authenticationInput)];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknormconfiguration/AbpUserConfiguration/GetAll')];
                     case 1:
                         result = _a.sent();
-                        return [2 /*return*/, result.data.result];
+                        return [2 /*return*/, result];
                 }
             });
         });
     };
-    return TokenAuthService;
+    return AbpUserConfigurationService;
 }());
-exports["default"] = new TokenAuthService();
+exports["default"] = new AbpUserConfigurationService();

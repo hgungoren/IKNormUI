@@ -281,6 +281,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
   async createOrUpdateModalOpen(entityDto: EntityDto) {
     this.setState({ modalVisible: !this.state.modalVisible });
+    console.log("tip" + this.state.tip);
     this.getPosition(this.state.tip);
   }
 

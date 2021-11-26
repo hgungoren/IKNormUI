@@ -1,3 +1,4 @@
+/*eslint-disable */
 import { action, observable } from 'mobx'; 
 import { PagedResultDto } from '../services/dto/pagedResultDto';
 import { GetKInkaLookUpTableOutput } from '../services/kInkaLookUpTable/dto/getKInkaLookUpTableOutput';
@@ -11,7 +12,7 @@ class KInkaLookUpTableStore {
     async getAll(pagedFilterAndSortedRequest: PagedKInkaLookUpTableResultRequestDto) {
         let result = await kInkaLookUpTableService.getAll(pagedFilterAndSortedRequest);
 
-        //console.log('result', result)
+        console.log('result', result)
         this.positions = result
     } 
 }

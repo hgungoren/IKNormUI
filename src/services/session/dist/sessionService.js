@@ -45,7 +45,7 @@ var SessionService = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('api/services/app/Session/GetCurrentLoginInformations', {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Session/GetCurrentLoginInformations', {
                             headers: {
                                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
                             }
