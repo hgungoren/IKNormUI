@@ -7,6 +7,31 @@ export const userRouter: any = [
 ];
 
 export const appRouters: any = [
+<<<<<<< HEAD
+  { path: '/', exact: true,          permission: '',                                  title: 'Home',                   name: 'Home',                                             showInMenu: false, component: LoadableComponent(() => import('../../components/Layout/AppLayout')), isLayout: true,  },
+  { path: '/home',                   permission: '',                                  title: 'Home',                   name: 'Home',                 icon: UserOutlined ,        showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Home')), },
+  { path: '/dashboard',              permission: 'items.dashboard.menu.view',         title: 'Dashboard',              name: 'Dashboard',            icon: HomeOutlined,         showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Dashboard')), },
+  { path: '/khierarchy',             permission: 'items.hierarchy.menu.view',         title: 'Hierarchy',              name: 'Hierarchy',            icon: PartitionOutlined,    showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Hierarchy')), },
+  { path: '/ksube/:id',              permission: 'subitems.kareas.table.areas.btn',   title: 'KSube',                  name: 'KSube',                icon: TableOutlined,        showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
+  { path: '/ksube/:id',              permission: 'kbolge.branches',                   title: 'KSube',                  name: 'KSube',                icon: TableOutlined,        showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
+  { path: '/ksubedetay',             permission: 'items.branch.menu.view',            title: 'KSube',                  name: 'KSube',                icon: TableOutlined,        showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/ksubedetay/:id',         permission: 'items.branch.menu.view',            title: 'KSubeDetay',             name: 'KSubeDetay',           icon: TableOutlined,        showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/ksubedetay/:id',         permission: 'items.branch.menu.view',            title: 'KSube',                  name: 'KSube',                icon: TableOutlined,        showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/bolgemudurluk',          permission: 'items.kareas.menu.view',            title: 'KBolge',                 name: 'KBolge',               icon: TableOutlined,        showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KBolge')), },
+  { path: '/users',                  permission: 'items.user.menu.view',              title: 'Users',                  name: 'Users',                icon: UsergroupAddOutlined, showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Users')), },
+  { path: '/roles',                  permission: 'items.role.menu.view',              title: 'Roles',                  name: 'Roles',                icon: TagsOutlined,         showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Roles')), },
+  // { path: '/tenants',                permission: 'tenants',                           title: 'Tenants',                name: 'Tenants',              icon: AppstoreOutlined,     showInMenu: false, component: LoadableComponent(() => import('../../scenes/Tenants')), },
+  { path: '/logout',                 permission: '',                                  title: 'Logout',                 name: 'Logout',                                           showInMenu: false, component: LoadableComponent(() => import('../../components/Logout')), },
+  { path: '/exception?:type',        permission: '',                                  title: 'Exception',              name: 'Exception',                                        showInMenu: false, component: LoadableComponent(() => import('../../scenes/Exception')), },
+  { path: '/knormrequestdetail/:id', permission: 'kNormRequestDetail',                title: 'KNormRequestDetail',     name: 'KNormRequestDetail',   icon: UserOutlined,         showInMenu: false, component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')), },
+  { path: '/hasartazmin',            permission: '',                                  title: 'Tazmin Formu Oluştur',           name: 'HasarTazmin',          icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), },
+
+  { path: '/hasartazminsorgulama',   permission: '',                                   title: 'Tazmin Form Listesi',name: 'HasarTazmin Listesi',  icon: UnorderedListOutlined ,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
+
+  { path: '/damageconmpensationview/:id',   permission: '',                                   title: 'Hasar Tazmin Görüntüle',  name: 'DamageCompensationView',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/view')), },
+
+  { path: '/damageevalutaion/:id',   permission: '',                                   title: 'Hasar Tazmin Değerlendirme',  name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/updateEva')), },
+=======
   { path: '/', exact: true,           permission: '',                                  title: 'Home',                   name: 'Home',                                              showInMenu: false, component: LoadableComponent(() => import('../../components/Layout/AppLayout')), isLayout: true,  },
   { path: '/home',                    permission: '',                                  title: 'Home',                   name: 'Home',                 icon: UserOutlined ,         showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Home')), },
   { path: '/dashboard',               permission: 'items.dashboard.menu.view',         title: 'Dashboard',              name: 'Dashboard',            icon: HomeOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Dashboard')), },
@@ -26,6 +51,7 @@ export const appRouters: any = [
   { path: '/hasartazmin',             permission: '',                                  title: 'Hasar Tazmin',           name: 'HasarTazmin',          icon: AimOutlined,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), }, 
   { path: '/hasartazminsorgulama',    permission: '',                                  title: 'Hasar Tazmin Sorgulama', name: 'HasarTazmin Listesi',  icon: UnorderedListOutlined ,showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
   { path: '/hasartazminguncelle/:id', permission: '',                                  title: 'Hasar Tazmin Güncelle',  name: 'HasarTazminguncelle',  icon: AimOutlined,           showInMenu: false, component: LoadableComponent(() => import('../../scenes/HasarTazmin/updateDamageCompensation')), },
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 ];
 
 export const routers = [...userRouter, ...appRouters];

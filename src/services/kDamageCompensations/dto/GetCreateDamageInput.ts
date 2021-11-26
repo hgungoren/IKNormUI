@@ -13,7 +13,7 @@ export interface GetCreateDamageInput {
     aliciKodu              : string;
     takipNo                : string;
     birimi                 : string;
-    adet                   : number; 
+    adet                   : number;
 
     
   

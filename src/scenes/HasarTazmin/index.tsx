@@ -7,9 +7,11 @@ import {
   Button,
   Card,
   Col,
+  DatePicker,
   Divider,
   Form,
   Input,
+  Modal,
   notification,
   PageHeader,
   Radio,
@@ -24,14 +26,18 @@ import { inject, observer } from 'mobx-react';
 import rules from './HasarTazmin.validation';
 import { Link } from 'react-router-dom';
 import { isGranted, L } from '../../lib/abpUtility';
-// import GonderenCariSelect from './components/GonderenCariSelect';
-// import AliciCariSelect from './components/AliciCariSelect';
-// import FarkliCari from './components/FarkliCari';
+import GonderenCariSelect from './components/GonderenCariSelect';
+import AliciCariSelect from './components/AliciCariSelect';
+import FarkliCari from './components/FarkliCari';
 // import EditableTagGroup from './components/LinkTag';
 import Stores from '../../stores/storeIdentifier';
-import { AlertOutlined, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
+import { AlertOutlined, CheckCircleTwoTone, ExclamationCircleOutlined, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 import TextArea from 'rc-textarea';
+import moment from 'moment';
+import 'moment/locale/tr';
+import locale from 'antd/es/date-picker/locale/tr_TR'
+import DamageHistory from './components/damageHistory'
 
 
 
@@ -64,9 +70,32 @@ export interface IState {
   fileInput: string;
   //degerlendirme
   selectedItems: any;
+  tckInput:boolean;
+  vknInput:boolean;
+
+  evrakolusturmatarihi:any;
+  aktiftabs:string;
+
+  gonderenKoduCom:string;
+  gonderenCariCom:string;
+  aliciKoduCom:string;
+  aliciCariCom:string;
+
+
+  talepedilentutar:string;
+
+  odenecekTutar:boolean;
+
+
+  controlpage:boolean;
 
 }
+<<<<<<< HEAD
+ 
+const { confirm } = Modal;
+=======
 
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
@@ -99,28 +128,82 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     tagLink: 'cengiz',
     fileInput: '',
 
+    tckInput:true,
+    vknInput:true,
     //değerlendirme 
+<<<<<<< HEAD
+    selectedItems:[],
+    evrakolusturmatarihi:undefined,
+    aktiftabs:'1',
+
+    gonderenKoduCom:'',
+    gonderenCariCom:'',
+    aliciKoduCom:'',
+    aliciCariCom:'',
+    talepedilentutar:'',
+    odenecekTutar:true,
+    controlpage:true
+    
+=======
     selectedItems: []
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
   };
+
+
+
+ 
+
 
   getdamage = async (id: number) => {
     try {
       await this.props.kDamageCompensationStore
         .getDamageComppensation({ id: id })
-        .then((response) => {
-          setTimeout(() => {
-            this.formRef.current?.setFieldsValue({
-              ...this.props.kDamageCompensationStore.getCreateDamageInput,
-            });
-          }, 500)
-          // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
+        .then((response) =>        
+        {
+
+                   
+          if(this.props.kDamageCompensationStore.getCreateDamageInput ===null){          
+            notification.open({
+              icon: <AlertOutlined style={{ color: 'red' }} />,
+              message: 'Uyarı',
+              description: 'Kargo takip numarası bulunamadı.',
+            })
+          }
+          else if(this.props.kDamageCompensationStore.getCreateDamageInput.takipNo ==='999999999'){
+        
+            notification.open({
+              icon: <AlertOutlined style={{ color: 'red' }} />,
+              message: 'Uyarı',
+              description: 'Korgo tazmin numarası ile kayıtlı  '+this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu+' Nolu tazmin no bulunmaktadır.',
+            })
+          }
+          else
+          {
+            
+              
+            this.setState({gonderenKoduCom:this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu})
+            this.setState({gonderenCariCom:this.props.kDamageCompensationStore.getCreateDamageInput.gonderenUnvan})
+            this.setState({aliciKoduCom:this.props.kDamageCompensationStore.getCreateDamageInput.aliciKodu})
+            this.setState({aliciCariCom:this.props.kDamageCompensationStore.getCreateDamageInput.aliciUnvan})       
+             this.setState({evrakolusturmatarihi:moment(this.props.kDamageCompensationStore.getCreateDamageInput.sistem_InsertTime).format('DD-MM-YYYY') })
+
+            setTimeout(() => {             
+              this.formRef.current?.setFieldsValue({           
+                    ...this.props.kDamageCompensationStore.getCreateDamageInput,
+              });
+            }, 500)
+
+          }   
+        
+
+         // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
         }).catch(() => notification.open({
           icon: <AlertOutlined style={{ color: 'red' }} />,
           message: 'Uyarı',
           description: 'Kayıt Bulunamadı.Takip Numarası Hatalı',
         }));
     } catch (e) {
-      alert(e)
+     
     }
   };
 
@@ -174,28 +257,62 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     this.setState({ lastId: this.props.kDamageCompensationStore.lastIdDamage })
   }
 
+  
+
+
 
 
   async componentDidMount() {
-    await this.getsubelistdamageCompensation();
-    await this.getbirimlistdamageCompensation();
-    await this.getbolgelistdamageCompensation();
     await this.getlastiddamageCompensation();
-
+    await this.getsubelistdamageCompensation();
+    // await this.getbirimlistdamageCompensation();
+    await this.getbolgelistdamageCompensation();
   }
 
 
 
+  
 
-  // Tanzim  için  Oluşturma Metodu
+
+
+  //Tanzim  için  Oluşturma Metodu
   kDamageCompensationCreate = () => {
     const form = this.formRef.current;
     form!.validateFields().then(async (values: any) => {
-      values.FileInfo = this.state.fileInput;
-      await this.props.kDamageCompensationStore.create(values)
-      this.openNotificationWithIcon('success')
-      form!.resetFields();
-      await this.getlastiddamageCompensation();
+
+       values.FileInfo = this.state.fileInput;    
+       values.Talep_Edilen_Tutar=values.Talep_Edilen_Tutar.replace(',','.')
+     
+     
+      if (values.FileInfo ==='' || values.FileInfo=== undefined){
+                
+    
+
+        confirm({
+          icon: <ExclamationCircleOutlined />,
+          content: 'Hasar Tazmin Formu içerinsinde eksik evrak bulunmaktadır. Form eksik evrak statüsünde kaydedilecektir.',
+          okText: 'Kaydet',
+          cancelText: 'Vazgeç',
+          onOk: () => {
+                                  
+            this.props.kDamageCompensationStore.create(values)
+            this.setState({aktiftabs:'2'})
+            this.setState({talepedilentutar:values.Talep_Edilen_Tutar})
+
+          },
+          onCancel() { console.log(L('Cancel')); },
+      })
+      }else{
+        await this.props.kDamageCompensationStore.create(values)
+        notification.open({
+          icon: <AlertOutlined style={{ color: 'green' }} />,
+          message: 'Uyarı',
+          description: 'Tazmin Başarıyla Kaydedildi.',
+        })
+        this.setState({aktiftabs:'2'})
+      }
+
+
 
 
     });
@@ -203,30 +320,68 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
 
-  // Tanzim  Değerlendirm için  Oluşturma Metodu
+  // Tanzim  Değerlendirm için  Oluşturma Metoduf
   kDamageCompensationEvalutaionCreate = () => {
-    const form = this.formRefDeg.current;
-    form!.validateFields().then(async (values: any) => {
 
+    const form = this.formRefDeg.current;
+    form!.validateFields().then(async (values: any) => {  
+
+        console.log('giden EVA=>',values.evaTazmin_Odeme_Durumu)
+
+        if(values.evaTazmin_Odeme_Durumu === "Farklı Bir Tutar Ödenecek"){        
+          values.evaOdenecek_Tutar=values.evaOdenecek_Tutar.replace(',','.')
+        }    else{
+          values.evaOdenecek_Tutar=values.evaOdenecek_Tutar
+
+<<<<<<< HEAD
+        }
+
+        values.evaTalep_Edilen_Tutar=this.state.talepedilentutar.replace(',','.')
+        values.tazminId=this.state.lastId;      
+        values.evaTalep_Edilen_Tutar=this.state.talepedilentutar.replace(',','.')
+     
+        
+        if(values.evaTalep_Edilen_Tutar === '' || values.evaTalep_Edilen_Tutar ===undefined ||
+        values.evaTalep_Edilen_Tutar===null )
+        {
+          notification.open({
+            icon: <AlertOutlined style={{ color: 'red' }} />,
+            message: 'Uyarı',
+            description: 'Lütfen Önce Tazmin Bilgileri Tabını Doldurunuz.',
+          })
+        }
+        else {
+          this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values)  
+          
+        confirm({
+          icon: <CheckCircleTwoTone />,
+          content: 'Tazmin onaya gönderildi.Yeni form oluşturulsun mu?',
+          okText: 'Yeni Form',
+          cancelText:'Vazgeç',
+          onOk: () => {
+           
+             window.location.reload(true);
+          },
+          onCancel() { console.log(L('Cancel')); },
+      })
+        }
+=======
       await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values)
       this.openNotificationWithIcon('success')
       form!.resetFields();
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
     });
   };
-
-
 
 
   openNotificationWithIcon = type => {
     notification[type]({
-      message: type === "success" ? 'Tazmin Başarıyla Kaydedildi' : L('NormRejectNotificationMessageTitle'),
+      message: type === "success" ? 'Tazmin Eksik Evrak Olarak Kaydedildi' : L('NormRejectNotificationMessageTitle'),
       description: type === "success" ? '' : L('NormCreateNotificationMessageDescription'),
-      duration: 3
+      duration: 5
     });
   };
-
-
 
 
 
@@ -235,7 +390,11 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     const { Option } = Select;
     const { TabPane } = Tabs
 
-    //const dateFormat = 'YYYY/MM/DD';
+
+    const dateFormat = 'YYYY-MM-DD';
+    var today = new Date()    
+    const todayFinish=moment(today).format(dateFormat)
+
 
     const onChangeRadio = (e) => {
       let changeRadio = e.target.value;
@@ -259,7 +418,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       }
     };
 
-    const onChangeRadioTazminMusteri = (e) => {
+    const onChangeRadioTazminMusteri = (e) =>   {
+
       this.setState({ setradioValueTazminMusteri: e.target.value });
       if (e.target.value === 0) {
         this.setState({ settazminmusteriGonderici: true });
@@ -269,26 +429,17 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: true });
         this.setState({ settazminmusteriFarkli: false });
-      } else {
-        console.log(this.state.setsorgulama);
-
-        if (this.state.setsorgulama === false) {
-          this.setState({ settazminmusteriGonderici: false });
-          this.setState({ settazminmusteriAlici: false });
-          this.setState({ settazminmusteriFarkli: true });
-        } else {
-          notification.open({
-            icon: <AlertOutlined style={{ color: 'red' }} />,
-            message: 'Uyarı',
-            description:
-              'Farklı cari girilmesi için kargo takip numarasının bilinmiyor olması gerekiyor.',
-          });
-
-          this.setState({ setradioValueTazminMusteri: 4 });
-          this.setState({ settazminmusteriGonderici: false });
-          this.setState({ settazminmusteriAlici: false });
+      } 
+      else
+       {
+        this.setState({ settazminmusteriGonderici: false });
+        this.setState({ settazminmusteriAlici: false });
+        this.setState({ settazminmusteriFarkli: true });        
+          // this.setState({ setradioValueTazminMusteri: 4 });
+          // this.setState({ settazminmusteriGonderici: false });
+          // this.setState({ settazminmusteriAlici: false });         
         }
-      }
+      
     };
 
     const onFinish = (values: any) => {
@@ -300,8 +451,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
     //tab callback
-    function callback(key) {
-      console.log(key);
+    const callback=(key) =>{
+      this.setState({aktiftabs:key})
+      
     }
 
     const handleChange = (e) => {
@@ -309,10 +461,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
     const handleClick = (e) => {
+<<<<<<< HEAD
+    
+      if (this.state.Ktno != 0) {
+=======
 
       if (this.state.Ktno !== 0) {
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
         this.getdamage(this.state.Ktno);
-
         setTimeout(() => { console.log(this.props.kDamageCompensationStore.getCreateDamageInput) }, 1000)
       } else {
         notification.open({
@@ -322,37 +478,51 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
             'Takip No Numarası Giriniz.',
         });
       }
-
-
-
     };
 
 
-    const onSearch = (val) => {
-      if (val.length > 3) {
-        this.getcarilistdamageCompensation(val)
-        this.setState({
-          cariList: this.props.kDamageCompensationStore.getCariListDamage !== undefined && this.props.kDamageCompensationStore.getCariListDamage.map((value, index) =>
-            <Option key={'cari' + value.kodu} value={value.unvan}> {value.kodu} </Option>
-          )
-        })
-      }
-    }
+      
+       /// tazmin talep tarihi kontrol
+      //  const datetazmintaleptarihi=(values)=>{     
+         
+      //       if( moment(values.target.value).format(dateFormat) >  moment(today).format(dateFormat)){
+      //             notification.open({
+      //               icon: <AlertOutlined style={{ color: 'red' }} />,
+      //               message: 'Uyarı',
+      //               description:
+      //                 'İleri Tarihli Tazmin Talep Tarihi Girilemez',
+      //             })
+                       
+
+      //       }      
+      //   }
+      
+
+
+    // const onSearch = (val) => {
+    //   if (val.length > 3) {
+    //     this.getcarilistdamageCompensation(val)
+    //     this.setState({
+    //       cariList: this.props.kDamageCompensationStore.getCariListDamage !== undefined && this.props.kDamageCompensationStore.getCariListDamage.map((value, index) =>
+    //         <Option key={'cari' + value.kodu} value={value.unvan}> {value.kodu} </Option>
+    //       )
+    //     })
+    //   }
+    // }
 
 
 
-    const onChangeGondericiSelect = (res) => {
+    // const onChangeGondericiSelect = (res) => {
+    //   this.setState({ gonderiUnvanInput: res })
+    //   setTimeout(() => { console.log(this.state.gonderiUnvanInput) }, 100)
 
-      this.setState({ gonderiUnvanInput: res })
-      setTimeout(() => { console.log(this.state.gonderiUnvanInput) }, 100)
+    // }
 
-    }
+    // const onChangeAliciSelect = (res) => {
 
-    const onChangeAliciSelect = (res) => {
-
-      this.setState({ aliciUnvanInput: res })
-      setTimeout(() => { console.log(this.state.aliciUnvanInput) }, 100)
-    }
+    //   this.setState({ aliciUnvanInput: res })
+    //   setTimeout(() => { console.log(this.state.aliciUnvanInput) }, 100)
+    // }
 
 
 
@@ -362,35 +532,35 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
     //onDropdownVisibleChangeCikis cikis selectin tıklandıgında
-    const onDropdownVisibleChangeCikis = () => {
+    // const onDropdownVisibleChangeCikis = () => {
 
-      this.setState({
-        subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
-          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
-        )
-      })
+    //   this.setState({
+    //     subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
+    //       <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
+    //     )
+    //   })
 
-    }
+    // }
 
 
     //onDropdownVisibleChangeVaris varis selectin tıklandıgında
-    const onDropdownVisibleChangeVaris = () => {
-      this.setState({
-        subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
-          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
-        )
-      })
-    }
+    // const onDropdownVisibleChangeVaris = () => {
+    //   this.setState({
+    //     subeList: this.props.kDamageCompensationStore.getSubeListDamage !== undefined && this.props.kDamageCompensationStore.getSubeListDamage.map((value, index) =>
+    //       <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
+    //     )
+    //   })
+    // }
 
 
-    //onDropdownVisibleChangeBrim birim selectin tıklandıgında
-    const onDropdownVisibleChangeBirim = () => {
-      this.setState({
-        birimList: this.props.kDamageCompensationStore.getBirimListDamage !== undefined && this.props.kDamageCompensationStore.getBirimListDamage.map((value, index) =>
-          <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
-        )
-      })
-    }
+    // //onDropdownVisibleChangeBrim birim selectin tıklandıgında
+    // const onDropdownVisibleChangeBirim = () => {
+    //   this.setState({
+    //     birimList: this.props.kDamageCompensationStore.getBirimListDamage !== undefined && this.props.kDamageCompensationStore.getBirimListDamage.map((value, index) =>
+    //       <Option key={value.objId + '-' + index} value={value.objId + '-' + index}> {value.adi} </Option>
+    //     )
+    //   })
+    // }
 
 
 
@@ -413,18 +583,29 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     }
 
 
+    const tazminodemedurumu=(value)=>{
+      
+      if(value==='Ödenecek'){
+       this.setState({odenecekTutar :true})
+      }
+      else if(value==='Ödenmicek')
+      {
+       this.setState({odenecekTutar :true})
+      }else if(value ==='Farklı Bir Tutar Ödenecek')
+      {
+         this.setState({odenecekTutar :false})
+      }else{
+       this.setState({odenecekTutar :true})
+      }
 
 
-    // const onChangeFile = (info) => {
+    }
 
-    //   let len = info.fileList.length
-    //   this.setState({ fileInput: '' })
-    //   for (var i = 0; i < len; i++) {
-    //     let ttx = this.state.fileInput
-    //     this.setState({ fileInput: ttx + ',' + info.fileList[i].name })
-    //   }
 
-    // }
+ 
+
+
+
 
     const Deghasar = ['Taşımadan Kaynaklı', 'İstif Hatası', 'Kaza', 'Teslimat Esnasında Tespit-DTT Var', 'Teslimattan Sonra-DTT', 'Aracın Su Alması', 'Banttan Düşme',
       'Farklı Kargonun Zarar Vermesi', 'Ambalaj Yetersizliği', 'Doğal Afet', 'Müşteri Memnuniyeti'];
@@ -433,6 +614,40 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const DegGecTeslimat = ['Geç Teslim']
 
+<<<<<<< HEAD
+   const DegOnchangeTazminTipi=(value)=>{
+    
+    if(value==="Hasar"){    
+      this.setState({ selectedItems:Deghasar.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+    }
+    else if(value ==="Kayıp")
+    {
+      this.setState({ selectedItems:DegKayıp.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+      
+    }
+    else if(value ==="Geç Teslimat"){
+      this.setState({ selectedItems:DegGecTeslimat.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+
+    }
+    else if(value ==="Müşteri Memnuniyeti"){
+      this.setState({ selectedItems:DegMusteriMemnuniyeti.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+    }
+    else(
+      notification.open({
+        icon: <AlertOutlined style={{ color: 'red' }} />,
+        message: 'Uyarı',
+        description: 'Lütfen Tazmin Tipi Seçiniz.',
+      })
+    )
+=======
     const DegMusteriMemnuniyeti = ['Müşteri Memnuniyeti']
 
     const DegOnchangeTazminTipi = (value) => {
@@ -476,6 +691,35 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       )
 
     }
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+
+
+
+const OnChangeOdemeMusteriTipi =(value)=>{
+
+  if(value==="1"){
+
+    this.setState({vknInput:true})
+    this.setState({tckInput:false})
+  
+    this.formRef.current?.resetFields(["VK_NO"]);
+  }
+  else if(value==="2")
+  {
+    this.setState({vknInput:false})
+    this.setState({tckInput:true})
+    this.formRef.current?.resetFields(["TCK_NO"]);
+  }
+  else
+  {
+    
+    this.setState({vknInput:true})
+    this.setState({tckInput:true})
+  }
+
+  
+
+}
 
 
     return (
@@ -510,6 +754,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
               // type="card"
               tabPosition="top"
               size="large"
+              activeKey={this.state.aktiftabs}
             >
               <TabPane
                 tab={
@@ -525,6 +770,32 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Form>
 
                       <Row>
+<<<<<<< HEAD
+                          <Col >
+                                <Form.Item                                    
+                                      name="TazminNoDisable"
+                                      label={
+                                        <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin No</label>
+                                      }
+                                   
+                                    >
+                                      {console.log(this.state.lastId)}
+                                      <Input  disabled  className="formInput"  value={this.state.lastId}  />
+                               </Form.Item>
+                          </Col>     
+
+                          <Col >
+                                  <Form.Item
+                                          name="TazminStatuDisable"
+                                          label={<label>Tanzim Statüsü</label>}
+                                          labelCol={{ span: 10 }}
+                                          wrapperCol={{ span: 16 }}
+                                        >
+                                  <Input disabled className="formInput" defaultValue="Taslak"></Input>
+                                </Form.Item>
+                          </Col>  
+                      </Row>
+=======
                         <Col style={{ float: 'right' }}>
                           <Form.Item
                             name=""
@@ -552,6 +823,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
 
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                     </Form>
                   </Col>
                 </Row>
@@ -559,16 +831,56 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                 <Divider orientation="left">Sorgulama</Divider>
 
                 <Row>
-                  <Col span={12}>
-                    <Form layout="inline">
+                  <Col span={24}>
+                    <Form>
 
-                      <Form.Item label="Kargo Takip No" name='kargotakipNoRadio'>
-                        <Radio.Group onChange={onChangeRadio} defaultValue={this.state.setradioValue}>
-                          <Radio value={1}>Biliniyor</Radio>
-                          {/* <Radio value={2}>Bilinmiyor</Radio> */}
-                        </Radio.Group>
-                      </Form.Item>
+                      <Row>
+                          <Col>
+                          <Form.Item         
+                                      name="kargotakipNoRadio"
+                                      label={
+                                        <label style={{ maxWidth: 150, minWidth: 150 }}>Kargo Takip No</label>
+                                      }
+                                    >
+                                         <Radio.Group onChange={onChangeRadio} defaultValue={this.state.setradioValue}>
+                                            <Radio value={1}>Biliniyor</Radio>
+                                            {/* <Radio value={2}>Bilinmiyor</Radio> */}
+                                        </Radio.Group>
+                               </Form.Item>
+                          </Col>     
+                             
+                      </Row>
+                          
+                        <Row>
+                        <Col offset={2}>
+                                  <Form.Item 
+                                    rules={
+                                      [                                                       
+                                        { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
+                                      ]
+                                    }               
+                                   name="ktno" >
+                                  <Input placeholder='Kargo Takip Numarası'  
+                                  onChange={handleChange}   ></Input>
+                                </Form.Item>
+                          </Col>  
 
+
+
+
+                          <Col style={{marginLeft:25}} >
+                                <Form.Item name='getirbutton'>
+
+                                  <Button  style={{width:139}}  type="primary" onClick={handleClick}>
+                                    Getir
+                                  </Button>
+                                </Form.Item>
+                          </Col>          
+                        </Row>   
+
+<<<<<<< HEAD
+
+=======
                       {this.state.setsorgulama ? (
                         <>
                           <Form.Item
@@ -599,9 +911,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <Input placeholder="Kargo Kabul Fiş No" />
                         </Form.Item>
                       )}
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                     </Form>
                   </Col>
                 </Row>
+
+
+
 
                 <Divider orientation="left">Gönderi Bilgileri</Divider>
 
@@ -617,6 +933,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         <Input />
                       </Form.Item>
                       <Form.Item
+             
                         rules={rules.sistem_InsertTime}
                         name="sistem_InsertTime"
                         label={
@@ -624,12 +941,22 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                             Evrak Oluşturma Tarihi
                           </label>
                         }>
-                        {/* <DatePicker
-                        /> */}
+                       
+
+                         
+                          {console.log(this.state.evrakolusturmatarihi)}     
                         <Input
+<<<<<<< HEAD
+                         // readOnly={this.state.setformreadonly}
+                          className="formInput"      
+                          disabled
+                          placeholder='Evrak Oluşturma Tarihi'
+                          value={this.state.evrakolusturmatarihi}
+=======
                           readOnly={this.state.setformreadonly}
                           className="formInput"
                           type="date"
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                         />
                       </Form.Item>
                     </Col>
@@ -642,9 +969,11 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                             <label style={{ maxWidth: 150, minWidth: 150 }}>Evrak Seri Sıra No</label>
                           }>
                           <Input
+                           disabled
                             readOnly={this.state.setformreadonly}
                             className="formInput"
                             placeholder="Evrak Seri Sıra No"
+                            defaultValue={this.state.evrakolusturmatarihi}
                           />
                         </Form.Item>
                       </Col>
@@ -659,9 +988,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici Kodu</label>
                         }
                       >
-                        <Select
+                        {/* <Select
                           className="formInput"
-                          showSearch
+                          
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
@@ -671,7 +1000,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           {
                             this.state.cariList
                           }
-                        </Select>
+                        </Select> */}
+
+                         <Input  disabled   className="formInput"  placeholder='Gönderici Kodu' />
+
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -679,7 +1011,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         rules={rules.gonderenUnvan}
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>}
                       >
-                        <Input readOnly className="formInput" placeholder="Gönderici"
+                        <Input disabled className="formInput" placeholder="Gönderici"
 
                         // value={this.state.gonderiUnvanInput} 
 
@@ -694,12 +1026,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="aliciKodu"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı Kodu</label>}
                       >
-                        <Select
+                        {/* <Select
 
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
-                          showSearch
+                          
                           disabled={this.state.setformselectdisable}
                           // options={options}
                           onSearch={onSearch}
@@ -708,7 +1040,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                           {this.state.cariList}
 
-                        </Select>
+                        </Select> */}
+
+                        <Input  placeholder='Alıcı Kodu'  disabled   className="formInput"  />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -717,7 +1051,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı</label>}
                       >
                         <Input
-                          readOnly
+                          disabled
                           className="formInput"
                           placeholder="Alici"
                         // value={this.state.gonderiUnvanInput} 
@@ -735,21 +1069,21 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Çıkış Şube Adı</label>
                         }
                       >
-                        <Select
+                        {/* <Select
                           className="formInput"
                           disabled={this.state.setformselectdisable}
                           onDropdownVisibleChange={onDropdownVisibleChangeCikis}
                           placeholder="Seçiniz"
                           allowClear
-                          showSearch
+                          
                         >
                           {
                             this.state.subeList
 
                           }
-                        </Select>
+                        </Select> */}
 
-
+                         <Input placeholder='Çıkış Şube Adı' className='formInput' disabled />
                       </Form.Item>
 
 
@@ -771,9 +1105,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Varış Şube Adı</label>
                         }
                       >
-                        <Select
+                        {/* <Select
                           className="formInput"
-                          showSearch
+                          
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
@@ -786,7 +1120,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                           }
 
-                        </Select>
+                        </Select> */}
+
+                        <Input placeholder='Varış Şube Adı'  className='formInput' disabled />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -799,9 +1135,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="birimi"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Kargo Tipi</label>}
                       >
-                        <Select
+                        {/* <Select
                           className="formInput"
-                          showSearch
+                          
                           placeholder="Seçiniz"
                           allowClear
                           disabled={this.state.setformselectdisable}
@@ -809,10 +1145,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                         >
                           {this.state.birimList}
+                        </Select> */}
 
-
-
-                        </Select>
+                        <Input placeholder='Kargo Tipi' className='formInput' disabled />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -822,7 +1157,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Parça Adedi</label>}
                       >
                         <Input
-                          readOnly={this.state.setformreadonly}
+                          disabled
                           className="formInput"
                           type="number"
                           min={1}
@@ -846,7 +1181,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </label>
                         }
                       >
-                        <Input className="formInput" type='date' />
+                        {/* <Input  className="formInput" type='date' onChange={datetazmintaleptarihi} /> */}
+
+                        <DatePicker className="formInputDate" locale={locale}
+                         disabledDate={d => !d || d.isAfter(todayFinish) || d.isSameOrBefore("2000-01-01") } format="YYYY-MM-DD" 
+                        defaultPickerValue={moment(todayFinish)} placeholder="Tarih Seçiniz" />
+
+
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -855,7 +1196,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="Tazmin_Tipi"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Tipi</label>}
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
+                        <Select className="formInput"  placeholder="Seçiniz" allowClear>
                           <Option value="1">Hasar</Option>
                           <Option value="2">Kayıp</Option>
                           <Option value="3" >Geç Teslimat</Option>
@@ -880,13 +1221,24 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         >
                           <Radio value={0}>Gönderen Cari</Radio>
                           <Radio value={1}>Alıcı Cari</Radio>
-                          {/* <Radio value={2}>Farklı Cari</Radio> */}
+                          <Radio value={2}>Farklı Cari</Radio>
                         </Radio.Group>
                       </Form.Item>
 
-                      {/* {this.state.settazminmusteriGonderici ? <GonderenCariSelect kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
-                      {this.state.settazminmusteriAlici ? <AliciCariSelect kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
-                      {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''} */}
+                      {this.state.settazminmusteriGonderici ? <GonderenCariSelect
+                         gonderenCariCom={this.state.gonderenCariCom} 
+                         gonderenKoduCom={this.state.gonderenKoduCom}
+                        kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
+
+
+                      {this.state.settazminmusteriAlici ? <AliciCariSelect 
+                      
+                       aliciCariCom={this.state.aliciCariCom} 
+                       aliciCariKoduCom={this.state.aliciKoduCom}
+                      kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
+
+
+                      {this.state.settazminmusteriFarkli ? <FarkliCari   /> : ''}
                     </Col>
                     <Col span={12}>
                       <Form.Item
@@ -898,7 +1250,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </label>
                         }
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear>
+                        <Select className="formInput"   placeholder="Seçiniz" allowClear
+                         onChange={OnChangeOdemeMusteriTipi}
+                        >
                           <Option value="1">Bireysel</Option>
                           <Option value="2">Kurumsal</Option>
                         </Select>
@@ -911,7 +1265,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       <Form.Item
                         rules={
                           [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' },
+                            { required: this.state.vknInput, message: 'Lütfen Boş Bırakmayınız!' },
                             { pattern: /^[\d]{11,11}$/, message: 'TC no 11 karakterden az ve fazla olamaz' },
                             { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
                           ]
@@ -919,14 +1273,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="TCK_NO"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>TC Kimlik No</label>}
                       >
-                        <Input className="formInput" placeholder="TC Kimlik No" />
+                        <Input className="formInput" disabled={this.state.tckInput} maxLength={11}  placeholder="TC Kimlik No" />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
                       <Form.Item
                         rules={
                           [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' },
+                            { required: this.state.tckInput, message: 'Lütfen Boş Bırakmayınız!' },
                             { pattern: /^[\d]{11,11}$/, message: 'Vkno no 11 karakterden az ve fazla olamaz' },
                             { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
                           ]
@@ -936,7 +1290,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Vergi Kimlik No</label>
                         }
                       >
-                        <Input className="formInput" placeholder="Vergi Kimlik No" />
+                          
+                        <Input className="formInput"  maxLength={11}  disabled={this.state.vknInput}   placeholder="Vergi Kimlik No" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -950,7 +1305,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Ödeme Birimi/Bölge</label>
                         }
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear
+                        <Select className="formInput"  placeholder="Seçiniz" allowClear
                           onDropdownVisibleChange={onDropdownVisibleChangeBolge}>
                           {this.state.bolgeList}
                         </Select>
@@ -958,17 +1313,27 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        rules={rules.Talep_Edilen_Tutar}
+                        rules={
+                          [                                                       
+                            { required: true, message: 'Lütfen Boş Bırakmayıznı' },
+                            { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
+                          ]
+                        }
+                    
                         name="Talep_Edilen_Tutar"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar </label>
                         }
                       >
+                       
                         <Input
+                           
                           className="formInput"
-                          type="number"
+                          
                           placeholder="Talep Edilen Tutar KDV Hariç"
                         />
+
+                            
                       </Form.Item>
                     </Col>
                   </Row>
@@ -984,7 +1349,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </label>
                         }
                       >
-                        <Select className="formInput" showSearch placeholder="Seçiniz" allowClear
+                        <Select className="formInput"  placeholder="Seçiniz" allowClear
                           onDropdownVisibleChange={onDropdownVisibleChangeSurecSahibiBolge}>
                           {this.state.SurecSahibibolgeList}
                         </Select>
@@ -998,7 +1363,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="Telefon"
                         rules={
                           [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' },
+                            { required: false, message: 'Lütfen Boş Bırakmayınız!' },
                             { pattern: /^[\d]{10,11}$/, message: 'Lütfen geçerli bir telefon numarası giriniz' },
                             { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
                           ]
@@ -1007,7 +1372,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Bilgilendirme(SMS)</label>
                         }
                       >
-                        <Input className="formInput" placeholder="SMS" />
+                        <Input className="formInput" placeholder="Cep Telefonu" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1017,7 +1382,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="Email"
                         rules={
                           [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' },
+                            { required: false, message: 'Lütfen Boş Bırakmayınız!' },
                             { type: "email", message: 'Lütfen geçerli bir Email  giriniz' }
 
                           ]
@@ -1033,7 +1398,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     </Col>
                   </Row>
 
-                  <Divider orientation="left">Tazmin Belgeleri</Divider>
+                  {/* <Divider orientation="left">Tazmin Belgeleri</Divider> */}
 
                   {/* <Row>
                     <Col span={12}>
@@ -1067,7 +1432,11 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
                         <Button type="primary" onClick={this.kDamageCompensationCreate} icon={<SendOutlined />} htmlType="submit">
+<<<<<<< HEAD
+                         Kaydet                     
+=======
                           Kaydet
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                         </Button>
                       </Space>
                     </Col>
@@ -1084,6 +1453,24 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   </span>
                 }
                 key="2">
+<<<<<<< HEAD
+                  
+              <Form 
+              ref={this.formRefDeg}
+               layout='horizontal'>
+                    <Row>
+
+                        <Form.Item  name='tazminId' hidden>
+                          {console.log( 'son ID=>',this.state.lastId)}
+                          <Input defaultValue={this.state.lastId} value={this.state.lastId} /></Form.Item>
+                          
+
+                        <Col span={7}>
+                            <Form.Item  name='evaTazmin_Tipi'  label={
+                          <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
+                        }
+                        
+=======
 
                 <Form
                   ref={this.formRefDeg}
@@ -1094,6 +1481,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
                       }
 
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
@@ -1107,6 +1495,22 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           showSearch
                           onChange={DegOnchangeTazminTipi}
                         >
+<<<<<<< HEAD
+                                    <Select 
+                                     className="formInput"
+                                  placeholder="Seçiniz"
+                                  allowClear
+                                    
+                                  onChange={DegOnchangeTazminTipi}
+                                >
+                                      <Option value="Hasar">Hasar</Option>
+                                      <Option value="Kayıp">Kayıp</Option>
+                                      <Option value="Geç Teslimat" >Geç Teslimat</Option>
+                                      <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
+                                </Select>
+                          </Form.Item>
+                        </Col>
+=======
                           <Option value="1">Hasar</Option>
                           <Option value="2">Kayıp</Option>
                           <Option value="3" >Geç Teslimat</Option>
@@ -1114,6 +1518,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         </Select>
                       </Form.Item>
                     </Col>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
                     <Col span={7}>
@@ -1126,6 +1531,17 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Nedeni</label>
                         }>
+<<<<<<< HEAD
+                                          <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                            {this.state.selectedItems}
+                                      </Select>
+                                </Form.Item>
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1135,6 +1551,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           {this.state.selectedItems}
                         </Select>
                       </Form.Item>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
                     </Col>
 
@@ -1152,6 +1569,30 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kargonun Bulunduğu Yer</label>
                         }>
+<<<<<<< HEAD
+                                 <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                               <Option value="Çıkış Birim">Çıkış Birim</Option>
+                                               <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
+                                               <Option value="Varış Aktarma">Varış Aktarma</Option>
+                                               <Option value="Varış Birim">Varış Birim</Option>
+                                               <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
+                                               <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
+                                               <Option value="Diğer">Diğer</Option>
+                                               <Option value="İmha">İmha</Option>
+
+                                      </Select>
+                         </Form.Item>
+                       </Col>
+
+                       <Col span={7}>
+                         <Form.Item name='evaKusurlu_Birim'
+                         rules={
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1174,6 +1615,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Col span={7}>
                       <Form.Item name='evaKusurlu_Birim'
                         rules={
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
@@ -1181,6 +1623,20 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kusurlu Birim Var mı?</label>
                         }>
+<<<<<<< HEAD
+                                 <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                               <Option value="Evet">Evet</Option>
+                                               <Option value="Hayır">Hayır</Option>
+                                              
+                                      </Select>
+                         </Form.Item>
+                       </Col>
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1193,6 +1649,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         </Select>
                       </Form.Item>
                     </Col>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
 
@@ -1212,6 +1669,27 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>
                         }>
+<<<<<<< HEAD
+                                 <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                       <Option value="E-Ticaret">E-Ticaret</Option>
+                                       <Option value="Teknoloji">Teknoloji</Option>
+                                       <Option value="Basın">Basın</Option>
+                                       <Option value="Diğer">Diğer</Option>
+                                           
+
+                                      </Select>
+                         </Form.Item>
+                       </Col>
+
+                       <Col span={7}>
+                         <Form.Item  name='evaIcerik' 
+                         rules={
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1228,6 +1706,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Col span={7}>
                       <Form.Item name='evaIcerik'
                         rules={
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
@@ -1235,6 +1714,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>
                         }>
+<<<<<<< HEAD
+                              <Input className="formInput"/>
+                         </Form.Item>
+                       </Col>
+
+                    </Row>    
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1252,6 +1738,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
                   </Row>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
                   <Row>
@@ -1269,6 +1756,25 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
 
+<<<<<<< HEAD
+                       <Col span={7}>
+                         <Form.Item name='evaEkleyen_Kullanici' label={
+                          <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
+                        }>
+                                  <Input readOnly defaultValue={'Admin'}  disabled className="formInput"/>
+                         </Form.Item>
+                       </Col>
+                    </Row>   
+                    <Row>
+                        <Col span={13}>
+                          <Form.Item name='evaBolge_Aciklama'  
+                          rules={
+                            [
+                              { required: false, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                          label={
+=======
                     <Col span={7}>
                       <Form.Item name='evaEkleyen_Kullanici' label={
                         <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
@@ -1286,6 +1792,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           ]
                         }
                         label={
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Bölge Açıklama</label>
                         }>
 
@@ -1316,16 +1823,29 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       <Form.Item name='evaTalep_Edilen_Tutar'
                         rules={
                           [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            { required: false, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
                         }
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
                         }>
+<<<<<<< HEAD
+                          {console.log(this.state.talepedilentutar)}
+                          <Input  className="formInput" 
+                          disabled 
+                          defaultValue={this.state.talepedilentutar}  
+                         
+                         
+                          ></Input>
+                        </Form.Item>
+                        </Col>
+                    </Row>
+=======
                         <Input type='number' className="formInput" defaultValue={500} ></Input>
                       </Form.Item>
                     </Col>
                   </Row>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
                   <Row>
                     <Col span={7}>
@@ -1338,6 +1858,42 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Ödeme Durumu</label>
                         }>
+<<<<<<< HEAD
+                         <Select
+                                        className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                        onChange={tazminodemedurumu}
+                                      >
+                                               <Option value="Ödenecek">Ödenecek</Option>
+                                               <Option value="Ödenmicek">Ödenmicek</Option>
+                                               <Option value="Farklı Bir Tutar Ödenecek">Farklı Bir Tutar Ödenecek</Option>                                          
+                                      </Select>
+                        </Form.Item>
+                        </Col>
+                    </Row>
+
+
+
+                      {this.state.odenecekTutar ? '' :
+                       <Row>
+                       <Col span={7}>
+                       <Form.Item name='evaOdenecek_Tutar' 
+                       rules={
+                         [
+                           { required: false, message: 'Lütfen Boş Bırakmayınız!' },
+                           { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
+                         ]
+                       }
+                       label={
+                         <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
+                       }>
+                         <Input  className="formInput"  disabled={this.state.odenecekTutar}  ></Input>
+                       </Form.Item>
+                       </Col>
+                   </Row>}
+                   
+=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1367,6 +1923,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
+>>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
                   <Row style={{ float: 'right' }}>
@@ -1398,7 +1955,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   Tarihçe
                 </span>
               } key="3">
-                Content of Tab Pane 3
+                <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore}/>
+                
               </TabPane>
             </Tabs>
           </Card>
