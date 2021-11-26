@@ -6,6 +6,7 @@ var react_1 = require("react");
 var antd_1 = require("antd");
 require("./index.less");
 function HierarchyDrawer(props) {
+    console.log(props.node);
     var _a = react_1.useState(props.node.pushNotificationPhoneStatusChange), defaultVisiblePushNotificationPhoneStatusChange = _a[0], setDefaultVisiblePushNotificationPhoneStatusChange = _a[1];
     var _b = react_1.useState(props.node.pushNotificationWebStatusChange), defaultVisiblePushNotificationWebStatusChange = _b[0], setDefaultVisiblePushNotificationWebStatusChange = _b[1];
     var _c = react_1.useState(props.node.pushNotificationPhone), defaultVisiblePushNotificationPhone = _c[0], setDefaultVisiblePushNotificationPhone = _c[1];

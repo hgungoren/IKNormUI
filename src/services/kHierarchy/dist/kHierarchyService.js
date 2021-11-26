@@ -146,14 +146,45 @@ var KHierarchyService = /** @class */ (function () {
             });
         });
     };
-    KHierarchyService.prototype.getNodes = function (pagedNodeResultRequestDto) {
+    KHierarchyService.prototype.getNodesForKeys = function (pagedNodeResultRequestDto) {
         return __awaiter(this, void 0, Promise, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodes', { params: pagedNodeResultRequestDto })];
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodesForKeys', {
+                            params: pagedNodeResultRequestDto
+                        })];
                     case 1:
                         result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KHierarchyService.prototype.getNodesForKeyValues = function (pagedNodeResultRequestDto) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodesForKeyValues', {
+                            params: pagedNodeResultRequestDto
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data.result];
+                }
+            });
+        });
+    };
+    KHierarchyService.prototype.getNodes = function (id) {
+        return __awaiter(this, void 0, Promise, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, httpService_1["default"].get('iknorm/Node/GetNodes?id' + id)];
+                    case 1:
+                        result = _a.sent();
+                        console.log("Result => ", result);
                         return [2 /*return*/, result.data.result];
                 }
             });

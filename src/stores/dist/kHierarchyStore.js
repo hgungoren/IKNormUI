@@ -123,7 +123,9 @@ var KHierarchyStore = /** @class */ (function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].updateOrderNodes(ids)];
+                    case 0:
+                        console.log(ids);
+                        return [4 /*yield*/, kHierarchyService_1["default"].updateOrderNodes(ids)];
                     case 1:
                         result = _a.sent();
                         this.status = result;
@@ -160,12 +162,40 @@ var KHierarchyStore = /** @class */ (function () {
             });
         });
     };
-    KHierarchyStore.prototype.getNodes = function (pagedNodeResultRequestDto) {
+    KHierarchyStore.prototype.getNodesForKeys = function (pagedNodeResultRequestDto) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].getNodes(pagedNodeResultRequestDto)];
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].getNodesForKeys(pagedNodeResultRequestDto)];
+                    case 1:
+                        result = _a.sent();
+                        this.nodes = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    KHierarchyStore.prototype.getNodesForKeyValues = function (pagedNodeResultRequestDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].getNodesForKeyValues(pagedNodeResultRequestDto)];
+                    case 1:
+                        result = _a.sent();
+                        this.nodeKeyValues = result;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    KHierarchyStore.prototype.getNodes = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, kHierarchyService_1["default"].getNodes(id)];
                     case 1:
                         result = _a.sent();
                         this.nodes = result;
@@ -176,16 +206,19 @@ var KHierarchyStore = /** @class */ (function () {
     };
     __decorate([
         mobx_1.observable
-    ], KHierarchyStore.prototype, "kHierarchies");
-    __decorate([
-        mobx_1.observable
-    ], KHierarchyStore.prototype, "units");
+    ], KHierarchyStore.prototype, "status");
     __decorate([
         mobx_1.observable
     ], KHierarchyStore.prototype, "nodes");
     __decorate([
         mobx_1.observable
-    ], KHierarchyStore.prototype, "status");
+    ], KHierarchyStore.prototype, "nodeKeyValues");
+    __decorate([
+        mobx_1.observable
+    ], KHierarchyStore.prototype, "units");
+    __decorate([
+        mobx_1.observable
+    ], KHierarchyStore.prototype, "kHierarchies");
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "getAll");
@@ -210,6 +243,12 @@ var KHierarchyStore = /** @class */ (function () {
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "updateSetTrue");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "getNodesForKeys");
+    __decorate([
+        mobx_1.action
+    ], KHierarchyStore.prototype, "getNodesForKeyValues");
     __decorate([
         mobx_1.action
     ], KHierarchyStore.prototype, "getNodes");

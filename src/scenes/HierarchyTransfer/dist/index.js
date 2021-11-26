@@ -35,11 +35,15 @@ var Transfer = /** @class */ (function (_super) {
     __extends(Transfer, _super);
     function Transfer() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = { keys: [] };
-        _this.setSeletedItems = function (value) {
-            console.log('Transfer -> Values => ', value);
-            _this.setState({ keys: value });
-            setTimeout(function () { console.log('this.state.keys -> ', _this.state.keys); }, 200);
+        _this.state = {
+            keys: [],
+            selectedKeys: []
+        };
+        _this.setSeletedItems = function (keys) {
+            _this.setState({ keys: keys });
+        };
+        _this.setSeletedKeyValues = function (keys) {
+            _this.setState({ selectedKeys: keys });
         };
         return _this;
     }
@@ -54,13 +58,12 @@ var Transfer = /** @class */ (function (_super) {
                             " ",
                             abpUtility_1.L('pages.hierarchy'),
                             " ")) })),
-            react_1["default"].createElement(row_1["default"], { gutter: [16, 16] },
-                react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
-                    react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchyTransfer_1["default"], { setSeletedItems: this.setSeletedItems, kHierarchyStore: this.props.kHierarchyStore, sourceTitle: abpUtility_1.L('Positions'), targetTitle: abpUtility_1.L('SelectedPositions') }))),
-                react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
-                    react_1["default"].createElement(antd_1.Card, { hoverable: true },
-                        react_1["default"].createElement(HiearchySortable_1["default"], { key: react_uuid_1["default"](), keys: this.state.keys, kHierarchyStore: this.props.kHierarchyStore }))))));
+            react_1["default"].createElement(antd_1.Card, { hoverable: true },
+                react_1["default"].createElement(row_1["default"], { gutter: [16, 16] },
+                    react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
+                        react_1["default"].createElement(HiearchyTransfer_1["default"], { sourceTitle: abpUtility_1.L('Positions'), targetTitle: abpUtility_1.L('SelectedPositions'), setSeletedItems: this.setSeletedItems, kHierarchyStore: this.props.kHierarchyStore, setSeletedKeyValues: this.setSeletedKeyValues })),
+                    react_1["default"].createElement(antd_1.Col, { xs: { span: 12, offset: 0 }, sm: { span: 12, offset: 0 }, md: { span: 12, offset: 0 }, lg: { span: 12, offset: 0 }, xl: { span: 12, offset: 0 }, xxl: { span: 12, offset: 0 } },
+                        react_1["default"].createElement(HiearchySortable_1["default"], { key: react_uuid_1["default"](), keys: this.state.keys, selectedKeys: this.state.selectedKeys }))))));
     };
     Transfer = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),

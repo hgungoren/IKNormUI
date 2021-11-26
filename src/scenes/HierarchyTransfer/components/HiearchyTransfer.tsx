@@ -12,6 +12,7 @@ export interface IProps {
   sourceTitle: string;
   targetTitle: string;
   setSeletedItems: Function;
+  setSeletedKeyValues: Function;
 }
 
 export default function HiearchyTransfer(props: IProps) {
@@ -54,6 +55,7 @@ export default function HiearchyTransfer(props: IProps) {
   };
 
   function onUnitChange(value) {
+    props.setSeletedItems([]); 
     setNodesItems([]);
     formRef.current?.resetFields(['position']);
     let positions = kHierarchyStore.units.items.find((item) => item.id === value)?.positions;
@@ -61,6 +63,7 @@ export default function HiearchyTransfer(props: IProps) {
   }
 
   function onPositionChange(value) {
+    props.setSeletedItems([]);
     setPositionId(value);
     let nodes = positionsItems.find((item) => item.id === value)?.nodes;
 
@@ -72,20 +75,22 @@ export default function HiearchyTransfer(props: IProps) {
         selected: item.selected,
       }));
       setNodesItems(nodeList || []);
-      
+
       let seletedKeys = nodeList.filter((item) => item.selected).map((item) => item.key);
       setTargetKeys(seletedKeys);
+      props.setSeletedKeyValues(seletedKeys);
     }
   }
 
-  function onBlur() {}
-  function onFocus() {}
-  function onSearch(val) {}
+  function onBlur(result) {}
+  function onFocus(result) {}
+  function onSearch(result) {}
 
   function onChange(keys) {
     setTargetKeys(keys);
     setItemsSelected(keys);
     props.setSeletedItems(keys);
+    props.setSeletedKeyValues(keys);
   }
 
   return (
@@ -100,7 +105,7 @@ export default function HiearchyTransfer(props: IProps) {
         autoComplete="off"
         ref={formRef}
       >
-        <Row gutter={[16, 16]}>
+        <Row  >
           <Col
             xs={{ span: 12, offset: 0 }}
             sm={{ span: 12, offset: 0 }}
@@ -154,10 +159,9 @@ export default function HiearchyTransfer(props: IProps) {
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Form.Item name="title">
-              <Transfer
+        <Row >
+          <Col span={24}> 
+              <Transfer 
                 // locale={{  L('NoData') }}
                 style={{ width: '100%' }}
                 dataSource={nodesItems}
@@ -169,8 +173,7 @@ export default function HiearchyTransfer(props: IProps) {
                 onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
                   setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
                 }}
-              />
-            </Form.Item>
+              /> 
           </Col>
         </Row>
       </Form>

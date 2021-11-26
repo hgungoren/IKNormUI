@@ -58,79 +58,91 @@ exports.__esModule = true;
 /* eslint-disable */
 require("./index.less");
 var react_1 = require("react");
-var prop_types_1 = require("prop-types");
 var ListSort_1 = require("../../../lib/ListSort");
 var mobx_react_1 = require("mobx-react");
+var icons_1 = require("@ant-design/icons");
 var storeIdentifier_1 = require("../../../stores/storeIdentifier");
 var AppComponentBase_1 = require("../../../components/AppComponentBase");
-var dataArray = [
-    {
-        icon: 'question-circle-o',
-        color: '#FF5500',
-        title: 'Senior Product Designer',
-        text: 'Senior Product Designer'
-    },
-    {
-        icon: 'plus-circle-o',
-        color: '#5FC296',
-        title: 'Senior Animator',
-        text: 'Senior Animator'
-    },
-    {
-        icon: 'check-circle-o',
-        color: '#2DB7F5',
-        title: 'Visual Designer',
-        text: 'Visual Designer'
-    },
-    {
-        icon: 'cross-circle-o',
-        color: '#FFAA00',
-        title: 'Computer Engineer',
-        text: 'Computer Engineer'
-    },
-];
+var antd_1 = require("antd");
+var abpUtility_1 = require("../../../lib/abpUtility");
+var HierarchyDrawer_1 = require("./HierarchyDrawer");
 var HiearchySortable = /** @class */ (function (_super) {
     __extends(HiearchySortable, _super);
     function HiearchySortable() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.getNodes = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.props.kHierarchyStore.getNodes({
-                            keys: this.props.keys,
-                            maxResultCount: 1000000,
-                            skipCount: 0
-                        })];
-                    case 1:
-                        _a.sent();
-                        console.log('getNodes Keys -> ', this.props.kHierarchyStore.nodes);
-                        return [2 /*return*/];
-                }
+        _this.state = {
+            dataArray: [],
+            nodeKey: 0,
+            visible: false,
+            node: {}
+        };
+        _this.getNodes = function () {
+            var _a;
+            (_a = _this.props.kHierarchyStore) === null || _a === void 0 ? void 0 : _a.getNodesForKeyValues({
+                keys: _this.props.selectedKeys,
+                skipCount: 0,
+                maxResultCount: 1000000
+            }).then(function () {
+                var _a;
+                _this.setState({ dataArray: (_a = _this.props.kHierarchyStore) === null || _a === void 0 ? void 0 : _a.nodeKeyValues });
             });
-        }); };
+        };
         _this.componentDidMount = function () {
             _this.getNodes();
+        };
+        _this.onChange = function (values) {
+            var _a;
+            _this.getNodes();
+            var ids = values.map(function (item) { return item.key; });
+            (_a = _this.props.kHierarchyStore) === null || _a === void 0 ? void 0 : _a.updateOrderNodes(ids);
+        };
+        // Drawer Methods
+        _this.onSwitchChange = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                (_a = this.props.kHierarchyStore) === null || _a === void 0 ? void 0 : _a.update(data);
+                return [2 /*return*/];
+            });
+        }); };
+        _this.onPassive = function (position) { return __awaiter(_this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                (_a = this.props.kHierarchyStore) === null || _a === void 0 ? void 0 : _a.updateToPassive({ positionId: position });
+                return [2 /*return*/];
+            });
+        }); };
+        _this.drawerOnClose = function () {
+            _this.setState({ visible: false });
+        };
+        _this.drawerOnOpen = function (id) {
+            var node = _this.state.dataArray.find(function (n) { return n.id === id; });
+            _this.setState({
+                visible: true,
+                node: node,
+                nodeKey: node.id
+            });
         };
         return _this;
     }
     HiearchySortable.prototype.render = function () {
-        var childrenToRender = dataArray.map(function (item, i) {
-            var title = item.title, text = item.text;
-            return (react_1["default"].createElement("div", { key: i, className: "list-sort-demo-text" },
-                react_1["default"].createElement("div", { className: "list-sort-demo-icon" }),
-                react_1["default"].createElement("div", { className: "list-sort-demo-text" },
-                    react_1["default"].createElement("h1", null, title),
-                    react_1["default"].createElement("p", null, text))));
+        var _this = this;
+        var childrenToRender = this.state.dataArray.map(function (item, i) {
+            var title = item.title, id = item.id;
+            return (react_1["default"].createElement("div", { key: id, className: "list-sort-list" },
+                react_1["default"].createElement("div", { className: "list-sort-icon" },
+                    react_1["default"].createElement(icons_1.VerticalAlignMiddleOutlined, null)),
+                react_1["default"].createElement("div", { className: "list-sort-text" },
+                    react_1["default"].createElement("h1", { style: { width: '320px' } }, title)),
+                react_1["default"].createElement("div", { className: "list-sort-settings" },
+                    react_1["default"].createElement(antd_1.Button, { type: "text", onClick: function () { return _this.drawerOnOpen(id); } }, abpUtility_1.L('Operations')))));
         });
-        return (react_1["default"].createElement("div", { className: "list-sort-demo-wrapper" },
-            react_1["default"].createElement("div", { className: 'list-sort-demo' },
-                react_1["default"].createElement(ListSort_1["default"], { dragClassName: "list-drag-selected", appearAnim: { animConfig: { marginTop: [5, 30], opacity: [1, 0] } } }, childrenToRender))));
-    };
-    HiearchySortable.propTypes = {
-        className: prop_types_1["default"].string
-    };
-    HiearchySortable.defaultProps = {
-        className: 'list-sort-demo'
+        return (react_1["default"].createElement(react_1["default"].Fragment, null,
+            react_1["default"].createElement("div", { className: "list-sort-wrapper" },
+                react_1["default"].createElement("div", { className: 'list-sort' },
+                    react_1["default"].createElement(ListSort_1["default"], { onChange: this.onChange, 
+                        // onEventChange={this.onEventChange}
+                        dragClassName: "list-drag-selected", appearAnim: { animConfig: { marginTop: [5, 30], opacity: [1, 0] } } }, childrenToRender))),
+            react_1["default"].createElement(HierarchyDrawer_1.HierarchyDrawer, { node: this.state.node, key: this.state.nodeKey, visible: this.state.visible, onClose: this.drawerOnClose, onSwitchChange: this.onSwitchChange })));
     };
     HiearchySortable = __decorate([
         mobx_react_1.inject(storeIdentifier_1["default"].KHierarchyStore),
