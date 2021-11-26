@@ -26,7 +26,10 @@ export const appRouters: any = [
   { path: '/hasartazmin',            permission: '',                                  title: 'Tazmin Formu Oluştur',           name: 'HasarTazmin',          icon: AimOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazmin')), },
 
   { path: '/hasartazminsorgulama',   permission: '',                                   title: 'Tazmin Form Listesi',name: 'HasarTazmin Listesi',  icon: UnorderedListOutlined ,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HasarTazminList')), },
-  { path: '/hasartazminguncelle/:id',   permission: '',                                   title: 'Hasar Tazmin Güncelle',  name: 'HasarTazminguncelle',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/updateDamageCompensation')), },
+
+  { path: '/damageconmpensationview/:id',   permission: '',                                   title: 'Hasar Tazmin Görüntüle',  name: 'DamageCompensationView',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/view')), },
+
+  { path: '/damageevalutaion/:id',   permission: '',                                   title: 'Hasar Tazmin Değerlendirme',  name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,           showInMenu: false,  component: LoadableComponent(() => import('../../scenes/HasarTazmin/updateEva')), },
 ];
 
 export const routers = [...userRouter, ...appRouters];

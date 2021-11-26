@@ -14,11 +14,12 @@ class FarkliCari extends  Component  {
     render() {
       return (
         <>
-                       <Form.Item
-                        name='Tazmin_Musteri_Unvan'
+
+                        <Form.Item
+                        name='tazmin_Musteri_Unvan'
                         rules={rules.Tazmin_Musteri_Unvan}
                           label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Tanzim Müşterisi</label>
+                            <label style={{ maxWidth: 150, minWidth: 150 }}>Cari Unvan</label>
                           }
                         >
                           <Input placeholder='Tanzim Müşterisi' className="formInput"></Input>

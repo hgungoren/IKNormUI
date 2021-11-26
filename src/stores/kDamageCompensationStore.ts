@@ -15,15 +15,7 @@ import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/G
 import { updateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
-
-
-
-
-
-
-
-
-
+import { DamageCompensationViewClass } from '../services/kDamageCompensations/dto/viewClass';
 
 class KDamageCompensationStore {
 
@@ -41,6 +33,9 @@ class KDamageCompensationStore {
     @observable damageCompensationEvalutaion!:DamageCompensationEvalutainon
 
 
+    @observable damageCompensationViewClass!:DamageCompensationViewClass
+
+
 
 
 
@@ -54,9 +49,10 @@ class KDamageCompensationStore {
   
 
     @action
-    async getDamageComppensation(entityDto: EntityDto) {    
-        let result = await KDamageCompensationService.getDamageComppensation(entityDto);
-        this.getCreateDamageInput = result;
+    async getDamageComppensation(entityDto: EntityDto) {   
+
+            let result = await KDamageCompensationService.getDamageComppensation(entityDto);
+            this.getCreateDamageInput = result;
      
     }
 
@@ -97,6 +93,7 @@ class KDamageCompensationStore {
          let result= await KDamageCompensationService.getDamageComppensationLastId(); 
         //   console.log('STORE=>',result.data) 
           this.lastIdDamage=result.data.result; 
+          
           return result.data;
       }
   
@@ -134,19 +131,14 @@ class KDamageCompensationStore {
         //tazmin listesi cekme  Filtreleme
         @action
         async  StoregetFilterDamageCompansation(checktakipNo : boolean, checktazminID : boolean,search:number,start:Date,finish:Date){          
-            console.log('checktakipNo=>',checktakipNo)
-            console.log('checktazminID=>',checktazminID)
-            console.log('search=>',search)
-            console.log('start=>',start)
-            console.log('finish=>',finish)
-     
+
         let result = await KDamageCompensationService.getFilterDamageCompensationService(checktakipNo,checktazminID,search,start,finish);
         this.getAllDamageCompensationStoreClass = result;
             //console.log('STORE=>',result)
         return result
         }
 
- 
+            
          /// DEĞERLENDİRME CREATE    
         @action
         async createDamageCompensationEvalutaion(damageCompensationEvalutaion: DamageCompensationEvalutainon) {
@@ -155,6 +147,23 @@ class KDamageCompensationStore {
         }
     
 
+        
+     //get compensation View ById
+     @action
+     async StoregetDamageComppensationViewById(entityDto: EntityDto) {    
+        let result = await KDamageCompensationService.getDamageComppensationViewByIdService(entityDto);
+        this.damageCompensationViewClass = result;
+   
+    }
+
+       
+     //get compensationEva View ById
+     @action
+     async StoregetDamageComppensationEvaViewById(entityDto: EntityDto) {    
+        let result = await KDamageCompensationService.getDamageComppensationEvaViewByIdService(entityDto);
+        this.damageCompensationViewClass = result;
+   
+    }
 
 }
 

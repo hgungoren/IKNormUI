@@ -8,6 +8,8 @@ import { updateDamageCompensationClass  } from './dto/updateDamageCompensation'
 
 import { DamageCompensationEvalutainon} from './dto/damageCompensationEvalutaion'
 
+import { DamageCompensationViewClass} from './dto/viewClass'
+
 
 
 
@@ -105,6 +107,23 @@ class KDamageCompensationService {
     }
 
     
+
+     //get damageCompensationVİEW ByID
+     public async getDamageComppensationViewByIdService(entityDto: EntityDto): Promise<DamageCompensationViewClass> {
+        let result = await http.get('/api/services/app/DamageCompensation/GetViewById', { params: entityDto }); 
+         //console.log('resultService=>',result)     
+        return result.data.result
+    }
+
+
+ //get damageCompensationVİEW ByID
+  public async getDamageComppensationEvaViewByIdService(entityDto: EntityDto): Promise<DamageCompensationViewClass> {
+    let result = await http.get('/api/services/app/DamageCompensationEvalutaion/GetLastTazminIdRow', { params: entityDto }); 
+     //console.log('resultService=>',result)     
+    return result.data.result
+}
+
+
 
 
 

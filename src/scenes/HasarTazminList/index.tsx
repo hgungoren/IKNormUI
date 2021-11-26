@@ -6,13 +6,15 @@ import { inject, observer } from 'mobx-react';
 import Stores from '../../stores/storeIdentifier';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 import { Breadcrumb, Button, Card, Col, Dropdown, Form, FormInstance, Input, Menu, PageHeader, Radio, Row, Space, Table, Tag } from 'antd';
-import { SendOutlined, SettingOutlined } from '@ant-design/icons';
+import { FilterOutlined, OrderedListOutlined, SettingOutlined } from '@ant-design/icons';
 import { GetAllDamageCompensation } from '../../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { Link } from 'react-router-dom';
 import { L } from '../../lib/abpUtility';
 import { EntityDto } from '../../services/dto/entityDto';
 
+import './index.less';
 import 'moment/locale/tr';
+
 
 
 export interface IProps {
@@ -98,10 +100,33 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
 
 
+ //tazmin tüm listesi Filtre
+ getFilterdamagecompensaationAll = async () =>{
+  const form = this.formReffilter.current;
+  form!.validateFields().then(async (values: any) => {
+      
+    values.start=''
+    values.finish=''
+    
+    let tazminno=false
+    let tazminid=false
+    values.searchtxt=''
+
+   
+  
+    await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
+      tazminno,tazminid,values.searchtxt,values.start,values.finish
+    );
+    this.setState({ listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass })
+    form!.resetFields();
+  });
+};
+
 
 
   async componentDidMount() {
-
+    
+    
     await this.getalldamagecompensaation();
 
   }
@@ -142,17 +167,28 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: 'Tazmin No',
         dataIndex: 'tazminNo',
         key: 'tazminNo',
+        sorter: (a, b) => a.tazminNo - b.tazminNo,
       },
 
       {
         title: 'Takip No',
         dataIndex: 'takipNo',
         key: 'takipNo',
+        sorter: (a, b) => a.takipNo - b.takipNo,
       },
       {
         title: 'Tazmin Tipi',
         dataIndex: 'tazminTipi',
         key: 'tazminTipi',
+        filters: [
+          { text: 'Hasar', value: 'Hasar' },
+          { text: 'Kayıp', value: 'Kayıp' },
+          { text: 'Geç Teslimat', value: 'Geç Teslimat' },
+          { text: 'Müşteri Memnuniyeti', value: 'Müşteri Memnuniyeti' },
+        ],
+        onFilter: (value, record) => record.tazminTipi.includes(value),
+        ellipsis: true,
+        
       },
 
       {
@@ -175,11 +211,37 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: 'Tazmin Tarihi',
         dataIndex: 'tazminTarihi',
         key: 'tazminTarihi',
+        
       },
       {
         title: 'Süreç Sahibi Bölge',
         dataIndex: 'surecSahibiBolge',
         key: 'surecSahibiBolge',
+        filters: [
+                { text: 'Konya Bölge Md.', value: 'Konya Bölge Md.' },
+                { text: 'Erzurum Bölge Md.', value: 'Erzurum Bölge Md.' },
+                { text: 'Antalya Bölge Md.', value: 'Antalya Bölge Md.' },
+                { text: 'Eskişehir Bölge Md.', value: 'Eskişehir Bölge Md.' },
+                { text: 'Bursa Bölge Md.', value: 'Bursa Bölge Md.' },
+                { text: 'Batı Karadeniz Bölge Md.', value: 'Batı Karadeniz Bölge Md.' },
+                { text: 'Kayseri Bölge Md.', value: 'Kayseri Bölge Md.' },
+                { text: 'Denizli Bölge Md.', value: 'Denizli Bölge Md.' },
+                { text: 'İst. Surdışı Bölge Md.', value: 'İst. Surdışı Bölge Md.' },
+                { text: 'Trakya Bölge Md.', value: 'Trakya Bölge Md.' },
+                { text: 'İst. Boğaziçi Bölge Md.', value: 'İst. Boğaziçi Bölge Md.' },
+                { text: 'İzmir Bölge Md.', value: 'İzmir Bölge Md.' },
+                { text: 'Ankara Bölge Md.', value: 'Ankara Bölge Md.' },
+                { text: 'Karadeniz Bölge Md.', value: 'Karadeniz Bölge Md.' },
+                { text: 'Gaziantep Bölge Md.', value: 'Gaziantep Bölge Md.' },
+                { text: 'Diyarbakır Bölge Md.', value: 'Diyarbakır Bölge Md.' },
+                { text: 'Çukurova Bölge Md.', value: 'Çukurova Bölge Md.' },
+                { text: 'İst. Anadolu (1) Bölge Md.', value: 'İst. Anadolu (1) Bölge Md.' },
+                { text: 'İst. Anadolu (2) Bölge Md.', value: 'İst. Anadolu (2) Bölge Md.' },
+                { text: 'Merkez', value: 'Merkez' },
+
+        ],
+        onFilter: (value, record) => record.surecSahibiBolge.includes(value),
+        ellipsis: true,
       },
 
       {
@@ -198,9 +260,9 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
               trigger={['click']}
               overlay={
                 <Menu>
-                <Menu.Item > <Link to={{ pathname: `/hasartazminguncelle/${item.tazminNo}`,state: { test:item.tazminNo }  }}> Düzenle </Link> </Menu.Item>
-                  <Menu.Item >Görüntüle</Menu.Item>
-                  <Menu.Item >Değerlendir</Menu.Item>
+                  <Menu.Item ><Link to={{ pathname: `/hasartazminguncelle/${item.tazminNo}`}}> Düzenle </Link>  </Menu.Item>
+                  <Menu.Item ><Link to={{ pathname: `/damageevalutaion/${item.tazminNo}`}}> Değerlendir </Link> </Menu.Item>
+                  <Menu.Item ><Link to={{ pathname: `/damageconmpensationview/${item.tazminNo}`}}> Görüntüle </Link> </Menu.Item>
                 </Menu>
               }
               placement="bottomLeft"
@@ -221,8 +283,8 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
     return (
       <>
-        <React.Fragment>
-          <Card style={{ marginBottom: 20 }}>
+        <React.Fragment >
+          <Card  style={{ marginBottom: 20 }}>
             <PageHeader
               ghost={false}
               onBack={() => window.history.back()}
@@ -248,58 +310,87 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                   initialValues={{ remember: false }}
                   >
               <Row>
-                <Col span={6}  >                  
-                    <Form.Item name='raidocheck'>
+                <Col >                  
+                    <Form.Item 
+                    label={
+                      <label style={{ maxWidth: 150, minWidth: 150 }}>Seçim</label>
+                    }
+                    name='raidocheck'>
                         
                               <Radio.Group  >
-                                    <Space direction='vertical'>
+                                    <Space direction='horizontal'>
                                       <Radio value={1}>Tazmin No</Radio>
                                       <Radio value={2}>Takip No</Radio>
-                                      {/* <Radio value={3}>Kargo Kabul Fiş No</Radio> */}
                                     </Space>
                               </Radio.Group>
                           
                     </Form.Item>                          
                 </Col>
-                <Col span={4}  >
-                  <Form.Item name='searchtxt'>
-                    <Input type='number'   />
-                  </Form.Item>
-                </Col>
+             
+              </Row>
+
+              <Row>
+                    <Col>
+                                <Form.Item 
+                                label={
+                                  <label style={{ maxWidth: 150, minWidth: 150 }}>Arama</label>
+                                }
+                                rules={
+                                  [                                                       
+                                    { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
+                                  ]
+                                }       
+                                name='searchtxt'>
+                                  <Input   className="formInput"   />
+                                </Form.Item>
+                      </Col>
               </Row>
 
 
               <Row>
-                <Col span={4}>
-                <Form.Item name='start' label='Başlangıç Tarihi'> 
-                <Input type='date' size='middle'   />        
-               </Form.Item>
-                </Col>
-
-
-                <Col span={4} offset={1} >
-                <Form.Item name='finish' label='Bitiş Tarihi'>               
-                <Input type='date'   />
-               </Form.Item>
-                </Col>
-
+                      <Col>
+                              <Form.Item name='start'      label={
+                                                      <label style={{ maxWidth: 150, minWidth: 150 }}>Başlangıç Tarihi</label>
+                                                    }> 
+                              <Input type='date'  className="formInput"   />        
+                            </Form.Item>
+                      </Col>
+                </Row>
+                <Row>   
+                      <Col  >
+                                <Form.Item name='finish'      label={
+                                                        <label style={{ maxWidth: 150, minWidth: 150 }}>Bitiş Tarihi</label>
+                                                      }>               
+                                <Input type='date'   className="formInput"  />
+                              </Form.Item>
+                      </Col>
+                
                 <Col span={6} offset={1}>
-                <Form.Item name=''  >               
-                      <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />}  onClick={this.getFilterdamagecompensaation} htmlType="submit">
-                        Filtrele
-                        </Button>
-                      </Space>
+                    <Form.Item name=''  >               
+                          <Space style={{ width: '100%' }}>
+                            <Button type="primary"  icon={<FilterOutlined  />}  onClick={this.getFilterdamagecompensaation} htmlType="submit">
+                            Filtrele
+                            </Button>
+                            <Button type="primary"  icon={<OrderedListOutlined  />}  onClick={this.getFilterdamagecompensaation} htmlType="submit">
+                            Tüm Liste
+                            </Button>
+                          </Space>
+                
+                  </Form.Item>
+                    </Col>
+                </Row>
+              
+              
             
-               </Form.Item>
-                </Col>
-            
-              </Row>
+           
             </Form> 
             <Table 
             loading={getAllDamageCompensationStoreClass === undefined ? true : false}
             columns={columns} 
-            dataSource={getAllDamageCompensationStoreClass} />
+            dataSource={getAllDamageCompensationStoreClass} 
+            locale={{ emptyText: L('NoData')  , sortTitle :'test' }} 
+          bordered
+             />
 
           </Card>
 
@@ -318,3 +409,4 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 }
 
 export default DamageCompensationList;
+
