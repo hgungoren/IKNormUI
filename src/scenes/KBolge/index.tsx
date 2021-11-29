@@ -24,7 +24,7 @@ import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
 import { notification, message, Button, Card, Col, Dropdown, Menu, Row, Table, Input, Breadcrumb, PageHeader, Modal } from 'antd';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { dateHelper } from '../../helper/date';
-
+  
 export interface Props {
     kNormStore: KNormStore;
     kBolgeStore: KBolgeStore;
@@ -95,7 +95,7 @@ class KBolge extends AppComponentBase<Props, State> {
             skipCount: 0,
             id: this.state.subeObjId,
             maxResultCount: 100000,
-        });
+        }); 
     }
 
     async getKSubeEmployees() {

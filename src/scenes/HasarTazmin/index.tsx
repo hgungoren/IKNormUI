@@ -44,7 +44,7 @@ import TextArea from 'rc-textarea';
 import moment from 'moment';
 import 'moment/locale/tr';
 import locale from 'antd/es/date-picker/locale/tr_TR';
-import DamageHistory from './components/damageHistory';
+import DamageHistory from './components/damageHistory'; 
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
@@ -375,9 +375,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       }
     };
 
-    const onFinish = (values: any) => {
-      console.log('Success:', values);
-    };
+    // const onFinish = (values: any) => {
+    //   console.log('Success:', values);
+    // };
 
     const onFinishFailed = (errorInfo: any) => {
       console.log('Failed:', errorInfo);
@@ -607,6 +607,21 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       }
     };
 
+
+
+
+    const handleUpload = (values) => {
+      const { file } = values;
+      const reader = new FileReader();
+      reader.addEventListener('load', (event) => {
+          // const base64Data = reader.result.split(',')[1]; 
+
+          console.log(reader)
+      });
+      reader.readAsDataURL(file[0]);
+  };
+
+
     return (
       <>
         <React.Fragment>
@@ -654,8 +669,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     <Form>
                       <Row>
                         <Col style={{ float: 'right' }}>
-                          <Form.Item
-                            name=""
+                          <Form.Item 
                             label={<label>Tanzim No</label>}
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
@@ -665,8 +679,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </Form.Item>
                         </Col>
                         <Col>
-                          <Form.Item
-                            name=""
+                          <Form.Item 
                             label={<label>Tanzim Statüsü</label>}
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
@@ -764,9 +777,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                 <Form
                   ref={this.formRef}
                   initialValues={{ remember: false }}
-                  onFinish={onFinish}
+                  // onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
+                  onFinish={handleUpload}
                 >
                   <Row>
                     <Col span={12}>
