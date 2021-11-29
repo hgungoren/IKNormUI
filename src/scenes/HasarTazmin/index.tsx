@@ -19,6 +19,7 @@ import {
   Select,
   Space,
   Tabs,
+  Upload,
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
@@ -32,9 +33,11 @@ import FarkliCari from './components/FarkliCari';
 import Stores from '../../stores/storeIdentifier';
 import {
   AlertOutlined,
+  CheckCircleTwoTone,
   ExclamationCircleOutlined,
   SendOutlined,
   SwitcherOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
 import TextArea from 'rc-textarea';
@@ -82,7 +85,10 @@ export interface IState {
   talepedilentutar: string;
   odenecekTutar: boolean;
   evaTalepEdilenTutar: string;
+
+  onayaGonderBtn: boolean;
 }
+
 const { confirm } = Modal;
 @inject(Stores.KDamageCompensationStore)
 @observer
@@ -111,15 +117,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     SurecSahibibolgeList: [],
     tagLink: 'cengiz',
     fileInput: '',
-
     tckInput: true,
     vknInput: true,
     //değerlendirme
     selectedItems: [],
-
     aktiftabs: '1',
     evrakolusturmatarihi: '',
-
     gonderenKoduCom: '',
     gonderenCariCom: '',
     aliciKoduCom: '',
@@ -127,6 +130,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     talepedilentutar: '',
     odenecekTutar: true,
     evaTalepEdilenTutar: '',
+    onayaGonderBtn: false,
   };
 
   getdamage = async (id: number) => {
@@ -243,13 +247,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   kDamageCompensationCreate = () => {
     const form = this.formRef.current;
     form!.validateFields().then(async (values: any) => {
-      values.FileInfo = this.state.fileInput;
+      values.FileInfo = undefined;
 
       if (values.evaTazmin_Odeme_Durumu == 'Farklı Bir Tutar Ödenecek') {
         values.evaOdenecek_Tutar = values.evaOdenecek_Tutar.replace(',', '.');
       }
 
-      console.log('values.FileInfo', values.FileInfo);
       if (values.FileInfo === '' || values.FileInfo === undefined) {
         confirm({
           icon: <ExclamationCircleOutlined />,
@@ -269,8 +272,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       } else {
         confirm({
           icon: <ExclamationCircleOutlined />,
-          content:
-            'Hasar Tazmin Formu içerinsinde eksik evrak bulunmaktadır. Form eksik evrak statüsünde kaydedilecektir.',
+          content: 'Hasar tazmin kayıt işlemi başarılı.Değerlendirme tabına geçebilirsiniz.',
           okText: 'Kaydet',
           cancelText: 'Vazgeç',
           onOk: () => {
@@ -290,6 +292,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   kDamageCompensationEvalutaionCreate = () => {
     const form = this.formRefDeg.current;
     form!.validateFields().then(async (values: any) => {
+      values.tazminId = this.state.lastId; 
+      values.evaTalep_Edilen_Tutar = this.state.talepedilentutar;
       if (values.evaTazmin_Odeme_Durumu === 'Farklı Bir Tutar Ödenecek') {
         values.evaOdenecek_Tutar = values.evaOdenecek_Tutar.replace(',', '.');
       } else {
@@ -297,8 +301,18 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       }
 
       await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values);
-      this.openNotificationWithIcon('success');
-      form!.resetFields();
+      confirm({
+        icon: <CheckCircleTwoTone />,
+        content: 'Hasar tazmin onaya gönderilmiştir.',
+        okText: 'Yeni Form',
+        cancelText: 'Vazgeç',
+        onOk: () => {
+          window.location.reload();
+        },
+        onCancel: () => {
+          this.setState({ onayaGonderBtn: true });
+        },
+      });
     });
   };
 
@@ -533,37 +547,37 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     const DegMusteriMemnuniyeti = ['Müşteri Memnuniyeti'];
 
     const DegOnchangeTazminTipi = (value) => {
-      if (value === '1') {
+      if (value === 'Hasar') {
         this.setState({
           selectedItems: Deghasar.map((value, index) => (
-            <Option key={index} value={index}>
+            <Option key={index} value={value}>
               {' '}
               {value}{' '}
             </Option>
           )),
         });
-      } else if (value === '2') {
+      } else if (value === 'Kayıp') {
         this.setState({
           selectedItems: DegKayıp.map((value, index) => (
-            <Option key={index} value={index}>
+            <Option key={index} value={value}>
               {' '}
               {value}{' '}
             </Option>
           )),
         });
-      } else if (value === '3') {
+      } else if (value === 'Geç Teslimat') {
         this.setState({
           selectedItems: DegGecTeslimat.map((value, index) => (
-            <Option key={index} value={index}>
+            <Option key={index} value={value}>
               {' '}
               {value}{' '}
             </Option>
           )),
         });
-      } else if (value === '4') {
+      } else if (value === 'Müşteri Memnuniyeti') {
         this.setState({
           selectedItems: DegMusteriMemnuniyeti.map((value, index) => (
-            <Option key={index} value={index}>
+            <Option key={index} value={value}>
               {' '}
               {value}{' '}
             </Option>
@@ -650,7 +664,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                             <Input disabled className="formInput" value={this.state.lastId} />
                           </Form.Item>
                         </Col>
-
                         <Col>
                           <Form.Item
                             name=""
@@ -665,9 +678,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     </Form>
                   </Col>
                 </Row>
-
                 <Divider orientation="left">Sorgulama</Divider>
-
                 <Row>
                   <Col span={24}>
                     <Form>
@@ -689,7 +700,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           </Form.Item>
                         </Col>
                       </Row>
-
                       <Row>
                         <Col offset={2}>
                           <Form.Item
@@ -708,7 +718,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                             ></Input>
                           </Form.Item>
                         </Col>
-
                         <Col style={{ marginLeft: 25 }}>
                           <Form.Item name="getirbutton">
                             <Button style={{ width: 139 }} type="primary" onClick={handleClick}>
@@ -751,9 +760,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                     </Form>
                   </Col>
                 </Row>
-
                 <Divider orientation="left">Gönderi Bilgileri</Divider>
-
                 <Form
                   ref={this.formRef}
                   initialValues={{ remember: false }}
@@ -890,7 +897,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -916,7 +922,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
                         <Input placeholder="Çıkış Şube Adı" className="formInput" disabled />
                       </Form.Item>
-
                       <Form.Item hidden name="ilkGondericiSube_ObjId">
                         {' '}
                       </Form.Item>
@@ -948,12 +953,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           }
 
                         </Select> */}
-
                         <Input placeholder="Varış Şube Adı" className="formInput" disabled />
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item hidden name="birimi_ObjId">
@@ -975,7 +978,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         >
                           {this.state.birimList}
                         </Select> */}
-
                         <Input placeholder="Kargo Tipi" className="formInput" disabled />
                       </Form.Item>
                     </Col>
@@ -996,9 +998,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Divider orientation="left">Tazmin Bilgileri</Divider>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1039,7 +1039,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1103,7 +1102,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1150,7 +1148,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1190,7 +1187,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1213,7 +1209,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1252,27 +1247,87 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
-                  {/* <Divider orientation="left">Tazmin Belgeleri</Divider> */}
-
-                  {/* <Row>
+                  <Divider orientation="left">Tazmin Belgeleri</Divider>
+                  <Row>
                     <Col span={12}>
                       <Form.Item
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
+                        label={
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Dilekçesi</label>
+                        }
                       >
-
-                        <Upload multiple maxCount={3} onChange={onChangeFile} listType="text">
-                          <Button icon={<UploadOutlined />}>Click to upload</Button>
+                        <Upload multiple maxCount={3} listType="picture-card">
+                          <Button icon={<UploadOutlined />}>Yükle</Button>
                         </Upload>
                       </Form.Item>
-
-                      <Form.Item name="FileInfo" hidden >
+                      <Form.Item name="FileInfo" hidden>
+                        <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Fatura</label>}
+                      >
+                        <Upload multiple maxCount={3} listType="picture-card">
+                          <Button icon={<UploadOutlined />}>Yükle</Button>
+                        </Upload>
+                      </Form.Item>
+                      <Form.Item name="FileInfo" hidden>
+                        <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        label={
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>Sevk İrsaliyesi</label>
+                        }
+                      >
+                        <Upload multiple maxCount={3} listType="text">
+                          <Button icon={<UploadOutlined />}>Yükle</Button>
+                        </Upload>
+                      </Form.Item>
+                      <Form.Item name="FileInfo" hidden>
+                        <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        label={
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>TC.No/Vergi No</label>
+                        }
+                      >
+                        <Upload multiple maxCount={3} listType="text">
+                          <Button icon={<UploadOutlined />}>Yükle</Button>
+                        </Upload>
+                      </Form.Item>
+                      <Form.Item name="FileInfo" hidden>
+                        <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        label={
+                          <label style={{ maxWidth: 150, minWidth: 150 }}>Hepsini Yükle</label>
+                        }
+                      >
+                        <Upload multiple maxCount={3} listType="text">
+                          <Button icon={<UploadOutlined />}>Yükle</Button>
+                        </Upload>
+                      </Form.Item>
+                      <Form.Item name="FileInfo" hidden>
                         <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row>
+                  {/* <Row>
                     <Col span={12}>
                       <Form.Item
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Link</label>}
@@ -1299,7 +1354,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   </Row>
                 </Form>
               </TabPane>
-
               <TabPane
                 tab={
                   <span>
@@ -1324,14 +1378,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           showSearch
                           onChange={DegOnchangeTazminTipi}
                         >
-                          <Option value="1">Hasar</Option>
-                          <Option value="2">Kayıp</Option>
-                          <Option value="3">Geç Teslimat</Option>
-                          <Option value="4">Müşteri Memnuniyeti</Option>
+                          <Option value="Hasar">Hasar</Option>
+                          <Option value="Kayıp">Kayıp</Option>
+                          <Option value="Geç">Geç Teslimat</Option>
+                          <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
                         </Select>
                       </Form.Item>
                     </Col>
-
                     <Col span={7}>
                       <Form.Item
                         name="evaTazmin_Nedeni"
@@ -1346,7 +1399,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={7}>
                       <Form.Item
@@ -1359,14 +1411,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="1">Çıkış Birim</Option>
-                          <Option value="2">Çıkış Aktarma</Option>
-                          <Option value="3">Varış Aktarma</Option>
-                          <Option value="4">Varış Birim</Option>
-                          <Option value="5">Gönderici Müsteri</Option>
-                          <Option value="6">Alıcı Müşteri</Option>
-                          <Option value="7">Diğer</Option>
-                          <Option value="8">İmha</Option>
+                          <Option value="Çıkış Birim">Çıkış Birim</Option>
+                          <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
+                          <Option value="Varış Aktarma">Varış Aktarma</Option>
+                          <Option value="Varış Birim">Varış Birim</Option>
+                          <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
+                          <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
+                          <Option value="Diğer">Diğer</Option>
+                          <Option value="İmha">İmha</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -1382,13 +1434,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="1">Evet</Option>
-                          <Option value="2">Hayır</Option>
+                          <Option value="Evet">Evet</Option>
+                          <Option value="Hayır">Hayır</Option>
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={7}>
                       <Form.Item
@@ -1397,11 +1448,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={<label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>}
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="1">İçerik</Option>
+                          <Option value="E-Ticaret">E-Ticaret</Option>
+                          <Option value="Teknoloji">Teknoloji</Option>
+                          <Option value="Basın">Basın</Option>
+                          <Option value="Diğer">Diğer</Option>
                         </Select>
                       </Form.Item>
                     </Col>
-
                     <Col span={7}>
                       <Form.Item
                         name="evaIcerik"
@@ -1409,13 +1462,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         label={<label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>}
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="1">Evet</Option>
-                          <Option value="2">Hayır</Option>
+                          <Option value="Evet">Evet</Option>
+                          <Option value="Hayır">Hayır</Option>
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={7}>
                       <Form.Item
@@ -1453,7 +1505,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={13}>
                       <Form.Item
@@ -1465,22 +1516,26 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col span={7}>
                       <Form.Item
                         name="evaTalep_Edilen_Tutar"
-                        rules={[{ required: false, message: 'Lütfen Boş Bırakmayınız!' }]}
+                        // rules={
+                        //   [
+                        //     { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                        //   ]
+                        // }
+
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
                         }
                       >
+                        {console.log(this.state.talepedilentutar)}
                         <Input
-                          type="number"
+                          defaultValue={this.state.talepedilentutar}
                           disabled
                           className="formInput"
-                          defaultValue={500}
-                        ></Input>
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1543,6 +1598,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         <Button
                           type="primary"
                           icon={<SendOutlined />}
+                          disabled={this.state.onayaGonderBtn}
                           onClick={this.kDamageCompensationEvalutaionCreate}
                           htmlType="submit"
                         >
