@@ -39,6 +39,9 @@ import 'moment/locale/tr';
 import locale from 'antd/es/date-picker/locale/tr_TR'
 import DamageHistory from './components/damageHistory'
 
+import FileBase64 from 'react-file-base64';
+
+
 
 
 
@@ -70,32 +73,34 @@ export interface IState {
   fileInput: string;
   //degerlendirme
   selectedItems: any;
-  tckInput:boolean;
-  vknInput:boolean;
+  tckInput: boolean;
+  vknInput: boolean;
 
-  evrakolusturmatarihi:any;
-  aktiftabs:string;
+  evrakolusturmatarihi: any;
+  aktiftabs: string;
 
-  gonderenKoduCom:string;
-  gonderenCariCom:string;
-  aliciKoduCom:string;
-  aliciCariCom:string;
+  gonderenKoduCom: string;
+  gonderenCariCom: string;
+  aliciKoduCom: string;
+  aliciCariCom: string;
+  talepedilentutar: string;
+  odenecekTutar: boolean;
+  evaTalepEdilenTutar: string;
 
-
-  talepedilentutar:string;
-
-  odenecekTutar:boolean;
-
-
-  controlpage:boolean;
-
+  onayaGonderBtn: boolean;
+  filesTazminDilekcesi: any;
+  filesFatura:  any;
+  filesSevkirsaliye:  any;
+  filesTcVkno:  any;
+  tazminStatu:string;
+  btnkaydet:boolean;
+  TarihTab:Boolean;
+  DegTab:Boolean;
+  btngetir:boolean;
 }
-<<<<<<< HEAD
- 
-const { confirm } = Modal;
-=======
 
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+
+const { confirm } = Modal
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
@@ -127,83 +132,85 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     SurecSahibibolgeList: [],
     tagLink: 'cengiz',
     fileInput: '',
-
-    tckInput:true,
-    vknInput:true,
+    tckInput: true,
+    vknInput: true,
     //değerlendirme 
-<<<<<<< HEAD
-    selectedItems:[],
-    evrakolusturmatarihi:undefined,
-    aktiftabs:'1',
+    selectedItems: [],
+    aktiftabs: '1',
+    evrakolusturmatarihi: '',
+    gonderenKoduCom: '',
+    gonderenCariCom: '',
+    aliciKoduCom: '',
+    aliciCariCom: '',
+    talepedilentutar: '',
+    odenecekTutar: true,
+    evaTalepEdilenTutar: '',
+    onayaGonderBtn: false,
+    filesTazminDilekcesi: [],
+    filesFatura:  [],
+    filesSevkirsaliye:  [],
+    filesTcVkno:  [],
+    tazminStatu:'Taslak',
+    btnkaydet:false,
+    TarihTab:true,
+    DegTab:true,
+    btngetir:false
 
-    gonderenKoduCom:'',
-    gonderenCariCom:'',
-    aliciKoduCom:'',
-    aliciCariCom:'',
-    talepedilentutar:'',
-    odenecekTutar:true,
-    controlpage:true
-    
-=======
-    selectedItems: []
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+
   };
 
 
 
- 
+
 
 
   getdamage = async (id: number) => {
     try {
       await this.props.kDamageCompensationStore
         .getDamageComppensation({ id: id })
-        .then((response) =>        
-        {
+        .then((response) => {
 
-                   
-          if(this.props.kDamageCompensationStore.getCreateDamageInput ===null){          
+          if (this.props.kDamageCompensationStore.getCreateDamageInput === null) {
             notification.open({
               icon: <AlertOutlined style={{ color: 'red' }} />,
               message: 'Uyarı',
               description: 'Kargo takip numarası bulunamadı.',
             })
           }
-          else if(this.props.kDamageCompensationStore.getCreateDamageInput.takipNo ==='999999999'){
-        
+          else if (this.props.kDamageCompensationStore.getCreateDamageInput.takipNo === '999999999') {
+
             notification.open({
               icon: <AlertOutlined style={{ color: 'red' }} />,
               message: 'Uyarı',
-              description: 'Korgo tazmin numarası ile kayıtlı  '+this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu+' Nolu tazmin no bulunmaktadır.',
+              description: 'Korgo tazmin numarası ile kayıtlı  ' + this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu + ' Nolu tazmin no bulunmaktadır.',
             })
           }
-          else
-          {
-            
-              
-            this.setState({gonderenKoduCom:this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu})
-            this.setState({gonderenCariCom:this.props.kDamageCompensationStore.getCreateDamageInput.gonderenUnvan})
-            this.setState({aliciKoduCom:this.props.kDamageCompensationStore.getCreateDamageInput.aliciKodu})
-            this.setState({aliciCariCom:this.props.kDamageCompensationStore.getCreateDamageInput.aliciUnvan})       
-             this.setState({evrakolusturmatarihi:moment(this.props.kDamageCompensationStore.getCreateDamageInput.sistem_InsertTime).format('DD-MM-YYYY') })
+          else {
 
-            setTimeout(() => {             
-              this.formRef.current?.setFieldsValue({           
-                    ...this.props.kDamageCompensationStore.getCreateDamageInput,
+
+            this.setState({ gonderenKoduCom: this.props.kDamageCompensationStore.getCreateDamageInput.gonderenKodu })
+            this.setState({ gonderenCariCom: this.props.kDamageCompensationStore.getCreateDamageInput.gonderenUnvan })
+            this.setState({ aliciKoduCom: this.props.kDamageCompensationStore.getCreateDamageInput.aliciKodu })
+            this.setState({ aliciCariCom: this.props.kDamageCompensationStore.getCreateDamageInput.aliciUnvan })
+            this.setState({ evrakolusturmatarihi: moment(this.props.kDamageCompensationStore.getCreateDamageInput.sistem_InsertTime).format('DD-MM-YYYY') })
+
+            setTimeout(() => {
+              this.formRef.current?.setFieldsValue({
+                ...this.props.kDamageCompensationStore.getCreateDamageInput,
               });
             }, 500)
 
-          }   
-        
+          }
 
-         // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
+
+          // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
         }).catch(() => notification.open({
           icon: <AlertOutlined style={{ color: 'red' }} />,
           message: 'Uyarı',
           description: 'Kayıt Bulunamadı.Takip Numarası Hatalı',
         }));
     } catch (e) {
-     
+
     }
   };
 
@@ -257,7 +264,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     this.setState({ lastId: this.props.kDamageCompensationStore.lastIdDamage })
   }
 
-  
+
 
 
 
@@ -271,51 +278,73 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
 
-  
+
 
 
 
   //Tanzim  için  Oluşturma Metodu
   kDamageCompensationCreate = () => {
     const form = this.formRef.current;
-    form!.validateFields().then(async (values: any) => {
 
-       values.FileInfo = this.state.fileInput;    
-       values.Talep_Edilen_Tutar=values.Talep_Edilen_Tutar.replace(',','.')
-     
-     
-      if (values.FileInfo ==='' || values.FileInfo=== undefined){
-                
+      form!.validateFields().then(async (values: any) => {
+
+      values.FileTazminDilekcesi = JSON.stringify(this.state.filesTazminDilekcesi )
+      values.FileFatura = JSON.stringify(this.state.filesFatura )
+      values.FileSevkirsaliye = JSON.stringify(this.state.filesSevkirsaliye )
+      values.FileTcVkno = JSON.stringify(this.state.filesTcVkno )
+      values.Id=this.state.lastId
+
+       if(values.evaTazmin_Odeme_Durumu =="Farklı Bir Tutar Ödenecek"){
+        values.evaOdenecek_Tutar=values.evaOdenecek_Tutar.replace(',','.')
+       }
+
+        if(values.FileTazminDilekcesi==="[]" || values.FileFatura==="[]"  || values.FileSevkirsaliye==="[]"
+        ||values.FileTcVkno==="[]" )
+          {
+            confirm({
+              icon: <ExclamationCircleOutlined />,
+              content: 'Hasar Tazmin Formu içerinsinde eksik evrak bulunmaktadır. Form eksik evrak statüsünde kaydedilecektir.Değerlendirme yapılamıcaktır.',
+              okText: 'Kaydet',
+              cancelText: 'Vazgeç',
+              onOk: () => {  
+                this.props.kDamageCompensationStore.create(values)
+                this.setState({talepedilentutar:values.Talep_Edilen_Tutar})
+                this.setState({btnkaydet:true})
+                this.setState({btngetir:true})
+                this.setState({tazminStatu :'Tazmin Eksik Evrak'})
+              },
+              onCancel() { console.log(L('Cancel')); },
+          })
+          }else {    
+            this.props.kDamageCompensationStore.create(values)    
+            confirm({
+              icon: <ExclamationCircleOutlined />,
+              content: 'Hasar tazmin kaydedildi.Değerlendirme yapabilirsiniz',
+              okText: 'Değerlendirme',
+              cancelText: 'Vazgeç',
+              onOk: () => {               
+                this.setState({aktiftabs:'2'})
+                this.setState({talepedilentutar:values.Talep_Edilen_Tutar})
+                this.setState({tazminStatu :'Tazmin Oluşturuldu'})
+                this.setState({btnkaydet:true})
+                this.setState({DegTab:false})
+                this.setState({btngetir:true})
+   
+              },
+              onCancel:() =>{  
+                this.setState({btnkaydet:true}) 
+                this.setState({tazminStatu :'Tazmin Oluşturuldu'} )     
+                this.setState({btngetir:true})       
+              },
+          })
+            
+          }
+
     
 
-        confirm({
-          icon: <ExclamationCircleOutlined />,
-          content: 'Hasar Tazmin Formu içerinsinde eksik evrak bulunmaktadır. Form eksik evrak statüsünde kaydedilecektir.',
-          okText: 'Kaydet',
-          cancelText: 'Vazgeç',
-          onOk: () => {
-                                  
-            this.props.kDamageCompensationStore.create(values)
-            this.setState({aktiftabs:'2'})
-            this.setState({talepedilentutar:values.Talep_Edilen_Tutar})
-
-          },
-          onCancel() { console.log(L('Cancel')); },
-      })
-      }else{
-        await this.props.kDamageCompensationStore.create(values)
-        notification.open({
-          icon: <AlertOutlined style={{ color: 'green' }} />,
-          message: 'Uyarı',
-          description: 'Tazmin Başarıyla Kaydedildi.',
-        })
-        this.setState({aktiftabs:'2'})
-      }
 
 
-
-
-    });
+    }).catch((err) => console.log(err))
   };
 
 
@@ -324,52 +353,36 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   kDamageCompensationEvalutaionCreate = () => {
 
     const form = this.formRefDeg.current;
-    form!.validateFields().then(async (values: any) => {  
+    form!.validateFields().then(async (values: any) => {
 
-        console.log('giden EVA=>',values.evaTazmin_Odeme_Durumu)
 
-        if(values.evaTazmin_Odeme_Durumu === "Farklı Bir Tutar Ödenecek"){        
-          values.evaOdenecek_Tutar=values.evaOdenecek_Tutar.replace(',','.')
-        }    else{
-          values.evaOdenecek_Tutar=values.evaOdenecek_Tutar
+      values.tazminId = this.state.lastId
+      values.evaTalep_Edilen_Tutar = this.state.talepedilentutar
+      if (values.evaTazmin_Odeme_Durumu === "Farklı Bir Tutar Ödenecek") {
+        values.evaOdenecek_Tutar = values.evaOdenecek_Tutar.replace(',', '.')
+      } else {
+        values.evaOdenecek_Tutar = values.evaOdenecek_Tutar
+      }
 
-<<<<<<< HEAD
-        }
-
-        values.evaTalep_Edilen_Tutar=this.state.talepedilentutar.replace(',','.')
-        values.tazminId=this.state.lastId;      
-        values.evaTalep_Edilen_Tutar=this.state.talepedilentutar.replace(',','.')
-     
-        
-        if(values.evaTalep_Edilen_Tutar === '' || values.evaTalep_Edilen_Tutar ===undefined ||
-        values.evaTalep_Edilen_Tutar===null )
-        {
-          notification.open({
-            icon: <AlertOutlined style={{ color: 'red' }} />,
-            message: 'Uyarı',
-            description: 'Lütfen Önce Tazmin Bilgileri Tabını Doldurunuz.',
-          })
-        }
-        else {
-          this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values)  
-          
-        confirm({
-          icon: <CheckCircleTwoTone />,
-          content: 'Tazmin onaya gönderildi.Yeni form oluşturulsun mu?',
-          okText: 'Yeni Form',
-          cancelText:'Vazgeç',
-          onOk: () => {
-           
-             window.location.reload(true);
-          },
-          onCancel() { console.log(L('Cancel')); },
-      })
-        }
-=======
       await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values)
-      this.openNotificationWithIcon('success')
-      form!.resetFields();
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+      confirm({
+        icon: <CheckCircleTwoTone />,
+        content: 'Hasar tazmin onaya gönderilmiştir.',
+        okText: 'Yeni Form',
+        cancelText: 'Vazgeç',
+        onOk: () => {
+
+          window.location.reload();
+
+        },
+        onCancel: () => {
+          this.setState({ onayaGonderBtn: true })
+
+        },
+      })
+
+
+
 
     });
   };
@@ -377,7 +390,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   openNotificationWithIcon = type => {
     notification[type]({
-      message: type === "success" ? 'Tazmin Eksik Evrak Olarak Kaydedildi' : L('NormRejectNotificationMessageTitle'),
+      message: type === "success" ? 'Tazmin Onaya Gönderildi' : L('NormRejectNotificationMessageTitle'),
       description: type === "success" ? '' : L('NormCreateNotificationMessageDescription'),
       duration: 5
     });
@@ -392,8 +405,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
 
     const dateFormat = 'YYYY-MM-DD';
-    var today = new Date()    
-    const todayFinish=moment(today).format(dateFormat)
+    var today = new Date()
+    const todayFinish = moment(today).format(dateFormat)
 
 
     const onChangeRadio = (e) => {
@@ -418,7 +431,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       }
     };
 
-    const onChangeRadioTazminMusteri = (e) =>   {
+    const onChangeRadioTazminMusteri = (e) => {
 
       this.setState({ setradioValueTazminMusteri: e.target.value });
       if (e.target.value === 0) {
@@ -429,17 +442,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: true });
         this.setState({ settazminmusteriFarkli: false });
-      } 
-      else
-       {
+      }
+      else {
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: false });
-        this.setState({ settazminmusteriFarkli: true });        
-          // this.setState({ setradioValueTazminMusteri: 4 });
-          // this.setState({ settazminmusteriGonderici: false });
-          // this.setState({ settazminmusteriAlici: false });         
-        }
-      
+        this.setState({ settazminmusteriFarkli: true });
+        // this.setState({ setradioValueTazminMusteri: 4 });
+        // this.setState({ settazminmusteriGonderici: false });
+        // this.setState({ settazminmusteriAlici: false });         
+      }
+
     };
 
     const onFinish = (values: any) => {
@@ -451,9 +463,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
     //tab callback
-    const callback=(key) =>{
-      this.setState({aktiftabs:key})
-      
+    const callback = (key) => {
+      this.setState({ aktiftabs: key })
+
     }
 
     const handleChange = (e) => {
@@ -461,14 +473,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
     const handleClick = (e) => {
-<<<<<<< HEAD
-    
-      if (this.state.Ktno != 0) {
-=======
 
       if (this.state.Ktno !== 0) {
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
         this.getdamage(this.state.Ktno);
+        
         setTimeout(() => { console.log(this.props.kDamageCompensationStore.getCreateDamageInput) }, 1000)
       } else {
         notification.open({
@@ -481,22 +489,22 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     };
 
 
-      
-       /// tazmin talep tarihi kontrol
-      //  const datetazmintaleptarihi=(values)=>{     
-         
-      //       if( moment(values.target.value).format(dateFormat) >  moment(today).format(dateFormat)){
-      //             notification.open({
-      //               icon: <AlertOutlined style={{ color: 'red' }} />,
-      //               message: 'Uyarı',
-      //               description:
-      //                 'İleri Tarihli Tazmin Talep Tarihi Girilemez',
-      //             })
-                       
 
-      //       }      
-      //   }
-      
+    /// tazmin talep tarihi kontrol
+    //  const datetazmintaleptarihi=(values)=>{     
+
+    //       if( moment(values.target.value).format(dateFormat) >  moment(today).format(dateFormat)){
+    //             notification.open({
+    //               icon: <AlertOutlined style={{ color: 'red' }} />,
+    //               message: 'Uyarı',
+    //               description:
+    //                 'İleri Tarihli Tazmin Talep Tarihi Girilemez',
+    //             })
+
+
+    //       }      
+    //   }
+
 
 
     // const onSearch = (val) => {
@@ -583,26 +591,24 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     }
 
 
-    const tazminodemedurumu=(value)=>{
-      
-      if(value==='Ödenecek'){
-       this.setState({odenecekTutar :true})
+    const tazminodemedurumu = (value) => {
+
+      if (value === 'Ödenecek') {
+        this.setState({ odenecekTutar: true })
       }
-      else if(value==='Ödenmicek')
-      {
-       this.setState({odenecekTutar :true})
-      }else if(value ==='Farklı Bir Tutar Ödenecek')
-      {
-         this.setState({odenecekTutar :false})
-      }else{
-       this.setState({odenecekTutar :true})
+      else if (value === 'Ödenmicek') {
+        this.setState({ odenecekTutar: true })
+      } else if (value === 'Farklı Bir Tutar Ödenecek') {
+        this.setState({ odenecekTutar: false })
+      } else {
+        this.setState({ odenecekTutar: true })
       }
 
 
     }
 
 
- 
+
 
 
 
@@ -614,71 +620,37 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
     const DegGecTeslimat = ['Geç Teslim']
 
-<<<<<<< HEAD
-   const DegOnchangeTazminTipi=(value)=>{
-    
-    if(value==="Hasar"){    
-      this.setState({ selectedItems:Deghasar.map((value, index) =>
-        <Option key={index} value={value}> {value} </Option>
-      ) });
-    }
-    else if(value ==="Kayıp")
-    {
-      this.setState({ selectedItems:DegKayıp.map((value, index) =>
-        <Option key={index} value={value}> {value} </Option>
-      ) });
-      
-    }
-    else if(value ==="Geç Teslimat"){
-      this.setState({ selectedItems:DegGecTeslimat.map((value, index) =>
-        <Option key={index} value={value}> {value} </Option>
-      ) });
-
-    }
-    else if(value ==="Müşteri Memnuniyeti"){
-      this.setState({ selectedItems:DegMusteriMemnuniyeti.map((value, index) =>
-        <Option key={index} value={value}> {value} </Option>
-      ) });
-    }
-    else(
-      notification.open({
-        icon: <AlertOutlined style={{ color: 'red' }} />,
-        message: 'Uyarı',
-        description: 'Lütfen Tazmin Tipi Seçiniz.',
-      })
-    )
-=======
     const DegMusteriMemnuniyeti = ['Müşteri Memnuniyeti']
 
     const DegOnchangeTazminTipi = (value) => {
 
-      if (value === "1") {
+      if (value === "Hasar") {
         this.setState({
           selectedItems: Deghasar.map((value, index) =>
-            <Option key={index} value={index}> {value} </Option>
+            <Option key={index} value={value}> {value} </Option>
           )
         });
       }
-      else if (value === "2") {
+      else if (value === "Kayıp") {
         this.setState({
           selectedItems: DegKayıp.map((value, index) =>
-            <Option key={index} value={index}> {value} </Option>
+            <Option key={index} value={value}> {value} </Option>
           )
         });
 
       }
-      else if (value === "3") {
+      else if (value === "Geç Teslimat") {
         this.setState({
           selectedItems: DegGecTeslimat.map((value, index) =>
-            <Option key={index} value={index}> {value} </Option>
+            <Option key={index} value={value}> {value} </Option>
           )
         });
 
       }
-      else if (value === "4") {
+      else if (value === "Müşteri Memnuniyeti") {
         this.setState({
           selectedItems: DegMusteriMemnuniyeti.map((value, index) =>
-            <Option key={index} value={index}> {value} </Option>
+            <Option key={index} value={value}> {value} </Option>
           )
         });
       }
@@ -691,35 +663,69 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       )
 
     }
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
 
-const OnChangeOdemeMusteriTipi =(value)=>{
+    const OnChangeOdemeMusteriTipi = (value) => {
 
-  if(value==="1"){
+      if (value === "1") {
 
-    this.setState({vknInput:true})
-    this.setState({tckInput:false})
-  
-    this.formRef.current?.resetFields(["VK_NO"]);
-  }
-  else if(value==="2")
-  {
-    this.setState({vknInput:false})
-    this.setState({tckInput:true})
-    this.formRef.current?.resetFields(["TCK_NO"]);
-  }
-  else
-  {
-    
-    this.setState({vknInput:true})
-    this.setState({tckInput:true})
-  }
+        this.setState({ vknInput: true })
+        this.setState({ tckInput: false })
 
-  
+        this.formRef.current?.resetFields(["VK_NO"]);
+      }
+      else if (value === "2") {
+        this.setState({ vknInput: false })
+        this.setState({ tckInput: true })
+        this.formRef.current?.resetFields(["TCK_NO"]);
+      }
+      else {
 
-}
+        this.setState({ vknInput: true })
+        this.setState({ tckInput: true })
+      }
+
+
+
+    }
+
+
+    // const onChangeFile =(e)=>{
+
+    //   var filedata = e.file
+    //   //console.log('filedata',filedata)
+
+    //   // let formData = new FormData();    //formdata object
+
+    //   //   formData.append('file', filedata);
+    //   // const config = {     
+    //   //     headers: { 'content-type': 'multipart/form-data' }
+
+    //   // }
+
+    //   //  console.log('this is the value of data in uploadAction ', formData);
+    //   // console.log('this is the value of filedata in uploadAction ', filedata),
+
+    //   console.log('filedata=>',filedata)
+    //   console.log('jsoon=>',JSON.stringify(filedata))
+
+    // }
+
+    // Callback~
+    const getFileTazminDilekcesi = (files) => {
+      this.setState({ filesTazminDilekcesi: files })
+    }
+    const getFileFatura = (files) => {
+      this.setState({ filesFatura: files })
+    }
+    const getFileSevkirsaliye = (files) => {
+      this.setState({ filesSevkirsaliye: files })
+    }
+    const getFileTcVkno = (files) => {
+      this.setState({ filesTcVkno: files })
+    }
+
 
 
     return (
@@ -770,35 +776,8 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     <Form>
 
                       <Row>
-<<<<<<< HEAD
-                          <Col >
-                                <Form.Item                                    
-                                      name="TazminNoDisable"
-                                      label={
-                                        <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin No</label>
-                                      }
-                                   
-                                    >
-                                      {console.log(this.state.lastId)}
-                                      <Input  disabled  className="formInput"  value={this.state.lastId}  />
-                               </Form.Item>
-                          </Col>     
-
-                          <Col >
-                                  <Form.Item
-                                          name="TazminStatuDisable"
-                                          label={<label>Tanzim Statüsü</label>}
-                                          labelCol={{ span: 10 }}
-                                          wrapperCol={{ span: 16 }}
-                                        >
-                                  <Input disabled className="formInput" defaultValue="Taslak"></Input>
-                                </Form.Item>
-                          </Col>  
-                      </Row>
-=======
                         <Col style={{ float: 'right' }}>
                           <Form.Item
-                            name=""
                             label={<label>Tanzim No</label>}
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
@@ -810,12 +789,12 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
                         <Col >
                           <Form.Item
-                            name=""
+
                             label={<label>Tanzim Statüsü</label>}
                             labelCol={{ span: 10 }}
                             wrapperCol={{ span: 16 }}
                           >
-                            <Input readOnly className="formInput" defaultValue="Taslak"></Input>
+                            <Input disabled className="formInput" defaultValue={this.state.tazminStatu}></Input>
                           </Form.Item>
                         </Col>
                       </Row>
@@ -823,7 +802,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
 
 
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                     </Form>
                   </Col>
                 </Row>
@@ -835,53 +813,50 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     <Form>
 
                       <Row>
-                          <Col>
-                          <Form.Item         
-                                      name="kargotakipNoRadio"
-                                      label={
-                                        <label style={{ maxWidth: 150, minWidth: 150 }}>Kargo Takip No</label>
-                                      }
-                                    >
-                                         <Radio.Group onChange={onChangeRadio} defaultValue={this.state.setradioValue}>
-                                            <Radio value={1}>Biliniyor</Radio>
-                                            {/* <Radio value={2}>Bilinmiyor</Radio> */}
-                                        </Radio.Group>
-                               </Form.Item>
-                          </Col>     
-                             
+                        <Col>
+                          <Form.Item
+                            name="kargotakipNoRadio"
+                            label={
+                              <label style={{ maxWidth: 150, minWidth: 150 }}>Kargo Takip No</label>
+                            }
+                          >
+                            <Radio.Group onChange={onChangeRadio} defaultValue={this.state.setradioValue}>
+                              <Radio value={1}>Biliniyor</Radio>
+                              {/* <Radio value={2}>Bilinmiyor</Radio> */}
+                            </Radio.Group>
+                          </Form.Item>
+                        </Col>
+
                       </Row>
-                          
-                        <Row>
+
+                      <Row>
                         <Col offset={2}>
-                                  <Form.Item 
-                                    rules={
-                                      [                                                       
-                                        { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
-                                      ]
-                                    }               
-                                   name="ktno" >
-                                  <Input placeholder='Kargo Takip Numarası'  
-                                  onChange={handleChange}   ></Input>
-                                </Form.Item>
-                          </Col>  
+                          <Form.Item
+                            rules={
+                              [
+                                { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
+                              ]
+                            }
+                            name="ktno" >
+                            <Input placeholder='Kargo Takip Numarası' className='formInput'
+                              onChange={handleChange}   ></Input>
+                          </Form.Item>
+                        </Col>
 
 
 
 
-                          <Col style={{marginLeft:25}} >
-                                <Form.Item name='getirbutton'>
+                        <Col style={{ marginLeft: 25 }} >
+                          <Form.Item name='getirbutton'>
 
-                                  <Button  style={{width:139}}  type="primary" onClick={handleClick}>
-                                    Getir
-                                  </Button>
-                                </Form.Item>
-                          </Col>          
-                        </Row>   
+                            <Button style={{ width: 139 }} type="primary" disabled={this.state.btngetir} onClick={handleClick}>
+                              Getir
+                            </Button>
+                          </Form.Item>
+                        </Col>
+                      </Row>
 
-<<<<<<< HEAD
-
-=======
-                      {this.state.setsorgulama ? (
+                      {/* {this.state.setsorgulama ? (
                         <>
                           <Form.Item
 
@@ -910,8 +885,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         >
                           <Input placeholder="Kargo Kabul Fiş No" />
                         </Form.Item>
-                      )}
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+                      )} */}
                     </Form>
                   </Col>
                 </Row>
@@ -933,7 +907,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         <Input />
                       </Form.Item>
                       <Form.Item
-             
+
                         rules={rules.sistem_InsertTime}
                         name="sistem_InsertTime"
                         label={
@@ -941,22 +915,15 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                             Evrak Oluşturma Tarihi
                           </label>
                         }>
-                       
 
-                         
-                          {console.log(this.state.evrakolusturmatarihi)}     
+
+
+                        {console.log(this.state.evrakolusturmatarihi)}
                         <Input
-<<<<<<< HEAD
-                         // readOnly={this.state.setformreadonly}
-                          className="formInput"      
                           disabled
-                          placeholder='Evrak Oluşturma Tarihi'
-                          value={this.state.evrakolusturmatarihi}
-=======
-                          readOnly={this.state.setformreadonly}
                           className="formInput"
-                          type="date"
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
+                          value={this.state.evrakolusturmatarihi}
+                          placeholder="Evrak Oluşturma Tarihi"
                         />
                       </Form.Item>
                     </Col>
@@ -969,7 +936,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                             <label style={{ maxWidth: 150, minWidth: 150 }}>Evrak Seri Sıra No</label>
                           }>
                           <Input
-                           disabled
+                            disabled
                             readOnly={this.state.setformreadonly}
                             className="formInput"
                             placeholder="Evrak Seri Sıra No"
@@ -1002,7 +969,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           }
                         </Select> */}
 
-                         <Input  disabled   className="formInput"  placeholder='Gönderici Kodu' />
+                        <Input disabled className="formInput" placeholder='Gönderici Kodu' />
 
                       </Form.Item>
                     </Col>
@@ -1042,7 +1009,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
                         </Select> */}
 
-                        <Input  placeholder='Alıcı Kodu'  disabled   className="formInput"  />
+                        <Input placeholder='Alıcı Kodu' disabled className="formInput" />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -1083,7 +1050,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           }
                         </Select> */}
 
-                         <Input placeholder='Çıkış Şube Adı' className='formInput' disabled />
+                        <Input placeholder='Çıkış Şube Adı' className='formInput' disabled />
                       </Form.Item>
 
 
@@ -1122,7 +1089,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
                         </Select> */}
 
-                        <Input placeholder='Varış Şube Adı'  className='formInput' disabled />
+                        <Input placeholder='Varış Şube Adı' className='formInput' disabled />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1184,8 +1151,8 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         {/* <Input  className="formInput" type='date' onChange={datetazmintaleptarihi} /> */}
 
                         <DatePicker className="formInputDate" locale={locale}
-                         disabledDate={d => !d || d.isAfter(todayFinish) || d.isSameOrBefore("2000-01-01") } format="YYYY-MM-DD" 
-                        defaultPickerValue={moment(todayFinish)} placeholder="Tarih Seçiniz" />
+                          disabledDate={d => !d || d.isAfter(todayFinish) || d.isSameOrBefore("2000-01-01")} format="YYYY-MM-DD"
+                          defaultPickerValue={moment(todayFinish)} placeholder="Tarih Seçiniz" />
 
 
                       </Form.Item>
@@ -1196,7 +1163,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         name="Tazmin_Tipi"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Tipi</label>}
                       >
-                        <Select className="formInput"  placeholder="Seçiniz" allowClear>
+                        <Select className="formInput" placeholder="Seçiniz" allowClear>
                           <Option value="1">Hasar</Option>
                           <Option value="2">Kayıp</Option>
                           <Option value="3" >Geç Teslimat</Option>
@@ -1226,19 +1193,19 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                       </Form.Item>
 
                       {this.state.settazminmusteriGonderici ? <GonderenCariSelect
-                         gonderenCariCom={this.state.gonderenCariCom} 
-                         gonderenKoduCom={this.state.gonderenKoduCom}
+                        gonderenCariCom={this.state.gonderenCariCom}
+                        gonderenKoduCom={this.state.gonderenKoduCom}
                         kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
 
 
-                      {this.state.settazminmusteriAlici ? <AliciCariSelect 
-                      
-                       aliciCariCom={this.state.aliciCariCom} 
-                       aliciCariKoduCom={this.state.aliciKoduCom}
-                      kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
+                      {this.state.settazminmusteriAlici ? <AliciCariSelect
+
+                        aliciCariCom={this.state.aliciCariCom}
+                        aliciCariKoduCom={this.state.aliciKoduCom}
+                        kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
 
 
-                      {this.state.settazminmusteriFarkli ? <FarkliCari   /> : ''}
+                      {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''}
                     </Col>
                     <Col span={12}>
                       <Form.Item
@@ -1250,8 +1217,8 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           </label>
                         }
                       >
-                        <Select className="formInput"   placeholder="Seçiniz" allowClear
-                         onChange={OnChangeOdemeMusteriTipi}
+                        <Select className="formInput" placeholder="Seçiniz" allowClear
+                          onChange={OnChangeOdemeMusteriTipi}
                         >
                           <Option value="1">Bireysel</Option>
                           <Option value="2">Kurumsal</Option>
@@ -1273,7 +1240,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         name="TCK_NO"
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>TC Kimlik No</label>}
                       >
-                        <Input className="formInput" disabled={this.state.tckInput} maxLength={11}  placeholder="TC Kimlik No" />
+                        <Input className="formInput" disabled={this.state.tckInput} maxLength={11} placeholder="TC Kimlik No" />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -1290,8 +1257,8 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Vergi Kimlik No</label>
                         }
                       >
-                          
-                        <Input className="formInput"  maxLength={11}  disabled={this.state.vknInput}   placeholder="Vergi Kimlik No" />
+
+                        <Input className="formInput" maxLength={11} disabled={this.state.vknInput} placeholder="Vergi Kimlik No" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1305,7 +1272,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Ödeme Birimi/Bölge</label>
                         }
                       >
-                        <Select className="formInput"  placeholder="Seçiniz" allowClear
+                        <Select className="formInput" placeholder="Seçiniz" allowClear
                           onDropdownVisibleChange={onDropdownVisibleChangeBolge}>
                           {this.state.bolgeList}
                         </Select>
@@ -1314,26 +1281,26 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     <Col span={12}>
                       <Form.Item
                         rules={
-                          [                                                       
+                          [
                             { required: true, message: 'Lütfen Boş Bırakmayıznı' },
                             { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
                           ]
                         }
-                    
+
                         name="Talep_Edilen_Tutar"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Talep Edilen Tutar </label>
                         }
                       >
-                       
+
                         <Input
-                           
+
                           className="formInput"
-                          
+
                           placeholder="Talep Edilen Tutar KDV Hariç"
                         />
 
-                            
+
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1349,7 +1316,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           </label>
                         }
                       >
-                        <Select className="formInput"  placeholder="Seçiniz" allowClear
+                        <Select className="formInput" placeholder="Seçiniz" allowClear
                           onDropdownVisibleChange={onDropdownVisibleChangeSurecSahibiBolge}>
                           {this.state.SurecSahibibolgeList}
                         </Select>
@@ -1376,6 +1343,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                       </Form.Item>
                     </Col>
                   </Row>
+
                   <Row>
                     <Col span={12}>
                       <Form.Item
@@ -1398,26 +1366,59 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     </Col>
                   </Row>
 
-                  {/* <Divider orientation="left">Tazmin Belgeleri</Divider> */}
+                  <Divider orientation="left">Tazmin Belgeleri</Divider>
 
-                  {/* <Row>
+                  <Row>
                     <Col span={12}>
                       <Form.Item
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Belgeler</label>}
-                      >
-
-                        <Upload multiple maxCount={3} onChange={onChangeFile} listType="text">
-                          <Button icon={<UploadOutlined />}>Click to upload</Button>
-                        </Upload>
+                        name='FileTazminDilekcesi'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Dilekçesi</label>}
+                      >             
+                              <FileBase64  multiple={false}onDone={getFileTazminDilekcesi.bind(this)} /> 
                       </Form.Item>
+                    </Col>                    
+                  </Row>
 
-                      <Form.Item name="FileInfo" hidden >
-                        <Input value={this.state.fileInput} defaultValue={this.state.fileInput} />
+
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name='FileFatura'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Fatura</label>}
+                      >             
+                              <FileBase64  multiple={false}onDone={getFileFatura.bind(this)} /> 
                       </Form.Item>
-                    </Col>
+                    </Col>                    
+                  </Row>
+
+
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name='FileSevkirsaliye'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Sevk İrsaliyesi</label>}
+                      >             
+                              <FileBase64  multiple={false}onDone={getFileSevkirsaliye.bind(this)} /> 
+                      </Form.Item>
+                    </Col>                    
                   </Row>
 
                   <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name='FileTcVkno'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Fatura</label>}
+                      >             
+                              <FileBase64  multiple={false}onDone={getFileTcVkno.bind(this)} /> 
+                      </Form.Item>
+                    </Col>                    
+                  </Row>
+
+
+
+
+
+                  {/* <Row>
                     <Col span={12}>
                       <Form.Item
                         label={<label style={{ maxWidth: 150, minWidth: 150 }}>Link</label>}
@@ -1431,12 +1432,10 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                   <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary" onClick={this.kDamageCompensationCreate} icon={<SendOutlined />} htmlType="submit">
-<<<<<<< HEAD
-                         Kaydet                     
-=======
+                        <Button type="primary" onClick={this.kDamageCompensationCreate} icon={<SendOutlined />} 
+                        disabled={this.state.btnkaydet}
+                        htmlType="submit">
                           Kaydet
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                         </Button>
                       </Space>
                     </Col>
@@ -1445,7 +1444,7 @@ const OnChangeOdemeMusteriTipi =(value)=>{
               </TabPane>
 
 
-              <TabPane
+              <TabPane disabled={this.state.DegTab}
                 tab={
                   <span>
                     <SwitcherOutlined />
@@ -1453,24 +1452,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                   </span>
                 }
                 key="2">
-<<<<<<< HEAD
-                  
-              <Form 
-              ref={this.formRefDeg}
-               layout='horizontal'>
-                    <Row>
-
-                        <Form.Item  name='tazminId' hidden>
-                          {console.log( 'son ID=>',this.state.lastId)}
-                          <Input defaultValue={this.state.lastId} value={this.state.lastId} /></Form.Item>
-                          
-
-                        <Col span={7}>
-                            <Form.Item  name='evaTazmin_Tipi'  label={
-                          <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
-                        }
-                        
-=======
 
                 <Form
                   ref={this.formRefDeg}
@@ -1481,7 +1462,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
                       }
 
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                         rules={
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
@@ -1495,30 +1475,13 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           showSearch
                           onChange={DegOnchangeTazminTipi}
                         >
-<<<<<<< HEAD
-                                    <Select 
-                                     className="formInput"
-                                  placeholder="Seçiniz"
-                                  allowClear
-                                    
-                                  onChange={DegOnchangeTazminTipi}
-                                >
-                                      <Option value="Hasar">Hasar</Option>
-                                      <Option value="Kayıp">Kayıp</Option>
-                                      <Option value="Geç Teslimat" >Geç Teslimat</Option>
-                                      <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
-                                </Select>
-                          </Form.Item>
-                        </Col>
-=======
-                          <Option value="1">Hasar</Option>
-                          <Option value="2">Kayıp</Option>
-                          <Option value="3" >Geç Teslimat</Option>
-                          <Option value="4">Müşteri Memnuniyeti</Option>
+                          <Option value="Hasar">Hasar</Option>
+                          <Option value="Kayıp">Kayıp</Option>
+                          <Option value="Geç">Geç Teslimat</Option>
+                          <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
                         </Select>
                       </Form.Item>
                     </Col>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
                     <Col span={7}>
@@ -1531,17 +1494,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Nedeni</label>
                         }>
-<<<<<<< HEAD
-                                          <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                          
-                                      >
-                                            {this.state.selectedItems}
-                                      </Select>
-                                </Form.Item>
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
@@ -1551,7 +1503,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           {this.state.selectedItems}
                         </Select>
                       </Form.Item>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
                     </Col>
 
@@ -1569,44 +1520,20 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kargonun Bulunduğu Yer</label>
                         }>
-<<<<<<< HEAD
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                          
-                                      >
-                                               <Option value="Çıkış Birim">Çıkış Birim</Option>
-                                               <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
-                                               <Option value="Varış Aktarma">Varış Aktarma</Option>
-                                               <Option value="Varış Birim">Varış Birim</Option>
-                                               <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
-                                               <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
-                                               <Option value="Diğer">Diğer</Option>
-                                               <Option value="İmha">İmha</Option>
-
-                                      </Select>
-                         </Form.Item>
-                       </Col>
-
-                       <Col span={7}>
-                         <Form.Item name='evaKusurlu_Birim'
-                         rules={
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
                           showSearch
                         >
-                          <Option value="1">Çıkış Birim</Option>
-                          <Option value="2">Çıkış Aktarma</Option>
-                          <Option value="3">Varış Aktarma</Option>
-                          <Option value="4">Varış Birim</Option>
-                          <Option value="5">Gönderici Müsteri</Option>
-                          <Option value="6">Alıcı Müşteri</Option>
-                          <Option value="7">Diğer</Option>
-                          <Option value="8">İmha</Option>
+                          <Option value="Çıkış Birim">Çıkış Birim</Option>
+                          <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
+                          <Option value="Varış Aktarma">Varış Aktarma</Option>
+                          <Option value="Varış Birim">Varış Birim</Option>
+                          <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
+                          <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
+                          <Option value="Diğer">Diğer</Option>
+                          <Option value="İmha">İmha</Option>
 
                         </Select>
                       </Form.Item>
@@ -1615,7 +1542,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     <Col span={7}>
                       <Form.Item name='evaKusurlu_Birim'
                         rules={
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
@@ -1623,33 +1549,18 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kusurlu Birim Var mı?</label>
                         }>
-<<<<<<< HEAD
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                          
-                                      >
-                                               <Option value="Evet">Evet</Option>
-                                               <Option value="Hayır">Hayır</Option>
-                                              
-                                      </Select>
-                         </Form.Item>
-                       </Col>
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
                           showSearch
                         >
-                          <Option value="1">Evet</Option>
-                          <Option value="2">Hayır</Option>
+                          <Option value="Evet">Evet</Option>
+                          <Option value="Hayır">Hayır</Option>
 
                         </Select>
                       </Form.Item>
                     </Col>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
 
@@ -1669,35 +1580,16 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>
                         }>
-<<<<<<< HEAD
-                                 <Select
-                                           className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                          
-                                      >
-                                       <Option value="E-Ticaret">E-Ticaret</Option>
-                                       <Option value="Teknoloji">Teknoloji</Option>
-                                       <Option value="Basın">Basın</Option>
-                                       <Option value="Diğer">Diğer</Option>
-                                           
-
-                                      </Select>
-                         </Form.Item>
-                       </Col>
-
-                       <Col span={7}>
-                         <Form.Item  name='evaIcerik' 
-                         rules={
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
                           showSearch
                         >
-                          <Option value="1">İçerik</Option>
-
+                          <Option value="E-Ticaret">E-Ticaret</Option>
+                          <Option value="Teknoloji">Teknoloji</Option>
+                          <Option value="Basın">Basın</Option>
+                          <Option value="Diğer">Diğer</Option>
 
                         </Select>
                       </Form.Item>
@@ -1706,7 +1598,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                     <Col span={7}>
                       <Form.Item name='evaIcerik'
                         rules={
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           [
                             { required: true, message: 'Lütfen Boş Bırakmayınız!' }
                           ]
@@ -1714,21 +1605,14 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>
                         }>
-<<<<<<< HEAD
-                              <Input className="formInput"/>
-                         </Form.Item>
-                       </Col>
-
-                    </Row>    
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
                           showSearch
                         >
-                          <Option value="1">Evet</Option>
-                          <Option value="2">Hayır</Option>
+                          <Option value="Evet">Evet</Option>
+                          <Option value="Hayır">Hayır</Option>
 
                         </Select>
                       </Form.Item>
@@ -1738,7 +1622,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
 
                   </Row>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
 
                   <Row>
@@ -1756,30 +1639,11 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                       </Form.Item>
                     </Col>
 
-<<<<<<< HEAD
-                       <Col span={7}>
-                         <Form.Item name='evaEkleyen_Kullanici' label={
-                          <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
-                        }>
-                                  <Input readOnly defaultValue={'Admin'}  disabled className="formInput"/>
-                         </Form.Item>
-                       </Col>
-                    </Row>   
-                    <Row>
-                        <Col span={13}>
-                          <Form.Item name='evaBolge_Aciklama'  
-                          rules={
-                            [
-                              { required: false, message: 'Lütfen Boş Bırakmayınız!' }
-                            ]
-                          }
-                          label={
-=======
                     <Col span={7}>
                       <Form.Item name='evaEkleyen_Kullanici' label={
                         <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
                       }>
-                        <Input readOnly value={'Admin'} className="formInput" />
+                        <Input disabled defaultValue={'Admin'} className="formInput" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1792,7 +1656,6 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                           ]
                         }
                         label={
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Bölge Açıklama</label>
                         }>
 
@@ -1821,31 +1684,24 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                   <Row>
                     <Col span={7}>
                       <Form.Item name='evaTalep_Edilen_Tutar'
-                        rules={
-                          [
-                            { required: false, message: 'Lütfen Boş Bırakmayınız!' }
-                          ]
-                        }
+
+                        // rules={
+                        //   [
+                        //     { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                        //   ]
+                        // }
+
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
-                        }>
-<<<<<<< HEAD
-                          {console.log(this.state.talepedilentutar)}
-                          <Input  className="formInput" 
-                          disabled 
-                          defaultValue={this.state.talepedilentutar}  
-                         
-                         
-                          ></Input>
-                        </Form.Item>
-                        </Col>
-                    </Row>
-=======
-                        <Input type='number' className="formInput" defaultValue={500} ></Input>
+                        }
+                      >
+                        {console.log(this.state.talepedilentutar)}
+                        <Input defaultValue={this.state.talepedilentutar} disabled className="formInput" />
+
+
                       </Form.Item>
                     </Col>
                   </Row>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
 
                   <Row>
                     <Col span={7}>
@@ -1858,78 +1714,43 @@ const OnChangeOdemeMusteriTipi =(value)=>{
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Ödeme Durumu</label>
                         }>
-<<<<<<< HEAD
-                         <Select
-                                        className="formInput"
-                                        placeholder="Seçiniz"
-                                        allowClear
-                                        onChange={tazminodemedurumu}
-                                      >
-                                               <Option value="Ödenecek">Ödenecek</Option>
-                                               <Option value="Ödenmicek">Ödenmicek</Option>
-                                               <Option value="Farklı Bir Tutar Ödenecek">Farklı Bir Tutar Ödenecek</Option>                                          
-                                      </Select>
-                        </Form.Item>
-                        </Col>
-                    </Row>
-
-
-
-                      {this.state.odenecekTutar ? '' :
-                       <Row>
-                       <Col span={7}>
-                       <Form.Item name='evaOdenecek_Tutar' 
-                       rules={
-                         [
-                           { required: false, message: 'Lütfen Boş Bırakmayınız!' },
-                           { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
-                         ]
-                       }
-                       label={
-                         <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
-                       }>
-                         <Input  className="formInput"  disabled={this.state.odenecekTutar}  ></Input>
-                       </Form.Item>
-                       </Col>
-                   </Row>}
-                   
-=======
                         <Select
                           className="formInput"
                           placeholder="Seçiniz"
                           allowClear
                           showSearch
+                          onChange={tazminodemedurumu}
                         >
-                          <Option value="1">Ödenecek</Option>
-                          <Option value="2">Ödenmicek</Option>
-                          <Option value="2">Farklı Bir Tutar Ödenecek</Option>
+                          <Option value="Ödenecek">Ödenecek</Option>
+                          <Option value="Ödenmicek">Ödenmicek</Option>
+                          <Option value="Farklı Bir Tutar Ödenecek">Farklı Bir Tutar Ödenecek</Option>
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row>
-                    <Col span={7}>
-                      <Form.Item name='evaOdenecek_Tutar'
-                        rules={
-                          [
-                            { required: true, message: 'Lütfen Boş Bırakmayınız!' }
-                          ]
-                        }
-                        label={
-                          <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
-                        }>
-                        <Input type='number' className="formInput"  ></Input>
-                      </Form.Item>
-                    </Col>
-                  </Row>
->>>>>>> c272037ba44bfc0b49d26670fd06aef7f382fc3f
-
+                  {this.state.odenecekTutar ? '' :
+                    <Row>
+                      <Col span={7}>
+                        <Form.Item name='evaOdenecek_Tutar'
+                          rules={
+                            [
+                              { required: false, message: 'Lütfen Boş Bırakmayınız!' },
+                              { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
+                            ]
+                          }
+                          label={
+                            <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
+                          }>
+                          <Input className="formInput" disabled={this.state.odenecekTutar}  ></Input>
+                        </Form.Item>
+                      </Col>
+                    </Row>}
 
                   <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary" icon={<SendOutlined />} onClick={this.kDamageCompensationEvalutaionCreate} htmlType="submit">
+                        <Button type="primary" icon={<SendOutlined />} disabled={this.state.onayaGonderBtn} onClick={this.kDamageCompensationEvalutaionCreate} htmlType="submit">
                           Onaya Gönder
                         </Button>
                       </Space>
@@ -1949,14 +1770,15 @@ const OnChangeOdemeMusteriTipi =(value)=>{
 
 
               </TabPane>
-              <TabPane tab={
+
+              <TabPane disabled={this.state.TarihTab} tab={
                 <span>
                   <SwitcherOutlined />
                   Tarihçe
                 </span>
               } key="3">
-                <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore}/>
-                
+                <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore} />
+
               </TabPane>
             </Tabs>
           </Card>
