@@ -1,19 +1,19 @@
 /* eslint-disable */
 import React, { useState } from 'react'; 
 import { Alert, Checkbox, Col, Drawer, Row, Space } from 'antd';
-import './index.less';
-import KHierarchyStore from '../../../stores/kHierarchyStore';
+import './index.less'; 
+
 
 export interface Props {
   onClose: () => void;
   onSwitchChange: (node) => void;
   visible: boolean;
-  node: any;
-  kHierarchyStore: KHierarchyStore;
+  node: any; 
 }
 
-export function HierarchyDrawer(props: Props) {
- 
+export function HierarchyDrawer(props: Props) { 
+
+  console.log(props.node)
   const [defaultVisiblePushNotificationPhoneStatusChange, setDefaultVisiblePushNotificationPhoneStatusChange] = useState(props.node.pushNotificationPhoneStatusChange);
   const [defaultVisiblePushNotificationWebStatusChange, setDefaultVisiblePushNotificationWebStatusChange] = useState(props.node.pushNotificationWebStatusChange);
   const [defaultVisiblePushNotificationPhone, setDefaultVisiblePushNotificationPhone] = useState(props.node.pushNotificationPhone);
@@ -21,10 +21,7 @@ export function HierarchyDrawer(props: Props) {
   const [defaultVisibleCanTerminate, setDefaultVisibleCanTerminate] = useState(props.node.canTerminate);
   const [defaultVisibleMailStatusChange, setDefaultVisibleMailStatusChange] = useState(props.node.mailStatusChange);
   const [defaultVisibleMail, setDefaultVisibleMail] = useState(props.node.mail);
-
-
-
-
+ 
   return (
     <>
       <Drawer

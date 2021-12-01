@@ -1,98 +1,127 @@
 /* eslint-disable */
 import './index.less';
 import React from 'react';
-import PropTypes from 'prop-types';
 import ListSort from '../../../lib/ListSort';
 import { inject, observer } from 'mobx-react';
+import { VerticalAlignMiddleOutlined } from '@ant-design/icons';
 import Stores from '../../../stores/storeIdentifier';
 import KHierarchyStore from '../../../stores/kHierarchyStore';
 import AppComponentBase from '../../../components/AppComponentBase';
+import { Button } from 'antd';
+import { L } from '../../../lib/abpUtility';
+import { HierarchyDrawer } from './HierarchyDrawer';
 
 export interface IState {
   dataArray: any;
-  getNode: any;
+  visible: boolean;
+  nodeKey: number;
+  node: any;
 }
 
 export interface IProps {
   keys: string[];
-  kHierarchyStore: KHierarchyStore;
+  kHierarchyStore?: KHierarchyStore;
+  selectedKeys: string[];
 }
 
 @inject(Stores.KHierarchyStore)
 @observer
 export default class HiearchySortable extends AppComponentBase<IProps, IState> {
-  static propTypes = {
-    className: PropTypes.string,
-  };
-
-  static defaultProps = {
-    className: 'list-sort-demo',
-  };
-
   state = {
-    dataArray: [],
-    getNode: [],
+    dataArray: [] as any,
+    nodeKey: 0,
+    visible: false,
+    node: {} as Node,
   };
-  getNodesForKeys = async () => {
-    if (
-      this.props.kHierarchyStore.units !== undefined &&
-      this.props.kHierarchyStore.units.items.length === 0
-    ) {
-      this.setState({
-        dataArray: [],
+
+  getNodes = () => {
+    this.props.kHierarchyStore
+      ?.getNodesForKeyValues({
+        keys: this.props.selectedKeys,
+        skipCount: 0,
+        maxResultCount: 1000000,
+      })
+      .then(() => {
+        this.setState({ dataArray: this.props.kHierarchyStore?.nodeKeyValues });
       });
-    }
-    let response = await this.props.kHierarchyStore.getNodesForKeys({
-      keys: this.props.keys,
-      maxResultCount: 1000000,
-      skipCount: 0,
-    });
-
-    this.setState({
-      dataArray: response,
-    });
-  };
-
-  getNodes = async () => {
-    let response = await this.props.kHierarchyStore.getNodes('1');
-    this.setState({
-      getNode: response,
-    });
-
-    console.log("ID 1 False => ",this.state.getNode);
   };
 
   componentDidMount = () => {
-    this.getNodesForKeys();
     this.getNodes();
+  };
+
+  onChange = (values) => {
+    this.getNodes();
+    let ids = values.map((item) => item.key);
+    this.props.kHierarchyStore?.updateOrderNodes(ids);
+  };
+
+  // Drawer Methods
+
+  onSwitchChange = async (data: any) => {
+    this.props.kHierarchyStore?.update(data);
+  };
+
+  onPassive = async (position: string) => {
+    this.props.kHierarchyStore?.updateToPassive({ positionId: position });
+  };
+
+  drawerOnClose = () => {
+    this.setState({ visible: false });
+  };
+
+  drawerOnOpen = (id: number) => {
+    let node = this.state.dataArray.find((n) => n.id === id);
+    this.setState({
+      visible: true,
+      node: node,
+      nodeKey: node.id,
+    }); 
   };
 
   render() {
     const childrenToRender = this.state.dataArray.map((item, i) => {
-      const { title } = item;
+      const { title, id } = item;
       return (
-        <div key={i} className={`list-sort-demo-text`}>
-          <div className={`list-sort-demo-icon`}>
-            {/* <Icon type={'check-circle-o'} style={{ color }} /> */}
+        <div key={id} className={`list-sort-list`}>
+          <div className={`list-sort-icon`}>
+            <VerticalAlignMiddleOutlined />
           </div>
-          <div className={`list-sort-demo-text`}>
+          <div className={`list-sort-text`}>
             <h1 style={{ width: '320px' }}>{title}</h1>
+          </div>
+          <div className={`list-sort-settings`}>
+            <Button type="text" onClick={() => this.drawerOnOpen(id)}>
+              {L('Operations')}
+            </Button>
           </div>
         </div>
       );
     });
 
     return (
-      <div className={`list-sort-demo-wrapper`}>
-        <div className={'list-sort-demo'}>
-          <ListSort
-            dragClassName="list-drag-selected"
-            appearAnim={{ animConfig: { marginTop: [5, 30], opacity: [1, 0] } }}
-          >
-            {childrenToRender}
-          </ListSort>
+      <>
+        <div className={`list-sort-wrapper`}>
+          <div className={'list-sort'}>
+            <ListSort
+              onChange={this.onChange}
+              // onEventChange={this.onEventChange}
+              dragClassName="list-drag-selected"
+              appearAnim={{ animConfig: { marginTop: [5, 30], opacity: [1, 0] } }}
+            >
+              {childrenToRender}
+            </ListSort>
+          </div>
         </div>
-      </div>
+
+        <HierarchyDrawer
+          node={this.state.node}
+          key={this.state.nodeKey}
+          visible={this.state.visible}
+          onClose={this.drawerOnClose}
+          onSwitchChange={this.onSwitchChange}
+        />
+      </>
     );
   }
 }

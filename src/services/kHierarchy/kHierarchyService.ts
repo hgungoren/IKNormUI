@@ -9,7 +9,7 @@ import {
   ChangeToPassiveStatus,
   ChangeSelectedTrueDto,
 } from './dto/getAllHierarchyOutput';
-import { NodeDto } from './dto/nodeDto';
+import { NodeDto, NodeKeyValueDto } from './dto/nodeDto';
 import { PagedNodeResultRequestDto } from './dto/PagedKHierarchyResultRequestDto';
 
 class KHierarchyService {
@@ -62,8 +62,15 @@ class KHierarchyService {
       params: pagedNodeResultRequestDto,
     });
     return result.data.result;
+  }  
+  
+  public async getNodesForKeyValues(pagedNodeResultRequestDto: PagedNodeResultRequestDto): Promise<NodeKeyValueDto[]> {
+    let result = await http.get('iknorm/Node/GetNodesForKeyValues', {
+      params: pagedNodeResultRequestDto,
+    });
+    return result.data.result;
   }
-
+  
   public async getNodes(id: string): Promise<NodeDto[]> {
     let result = await http.get('iknorm/Node/GetNodes?id' + id);
     console.log("Result => ",result);

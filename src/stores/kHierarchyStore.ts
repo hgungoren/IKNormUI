@@ -9,15 +9,16 @@ import {
   ChangeToPassiveStatus,
   ChangeSelectedTrueDto,
 } from '../services/kHierarchy/dto/getAllHierarchyOutput';
-import { NodeDto } from '../services/kHierarchy/dto/nodeDto';
+import { NodeDto, NodeKeyValueDto } from '../services/kHierarchy/dto/nodeDto';
 import { PagedNodeResultRequestDto } from '../services/kHierarchy/dto/PagedKHierarchyResultRequestDto';
 import kHierarchyService from '../services/kHierarchy/kHierarchyService';
 
 class KHierarchyStore {
-  @observable kHierarchies!: GetAllHierarchyOutput[];
-  @observable units!: PagedResultDto<UnitOutput>;
-  @observable nodes!: NodeDto[];
   @observable status!: boolean;
+  @observable nodes!: NodeDto[];
+  @observable nodeKeyValues!: NodeKeyValueDto[];
+  @observable units!: PagedResultDto<UnitOutput>;
+  @observable kHierarchies!: GetAllHierarchyOutput[];
 
   @action
   async getAll(tip: string, id: string) {
@@ -51,7 +52,8 @@ class KHierarchyStore {
   }
 
   @action
-  async updateOrderNodes(ids: any) {
+  async updateOrderNodes(ids: any) { 
+    console.log(ids)
     let result = await kHierarchyService.updateOrderNodes(ids);
     this.status = result;
   }
@@ -72,14 +74,18 @@ class KHierarchyStore {
   async getNodesForKeys(pagedNodeResultRequestDto: PagedNodeResultRequestDto) {
     let result = await kHierarchyService.getNodesForKeys(pagedNodeResultRequestDto);
     this.nodes = result;
-    return result;
+  }
+
+  @action
+  async getNodesForKeyValues(pagedNodeResultRequestDto: PagedNodeResultRequestDto) {
+    let result = await kHierarchyService.getNodesForKeyValues(pagedNodeResultRequestDto);  
+    this.nodeKeyValues = result;
   }
 
   @action
   async getNodes(id: string) {
     let result = await kHierarchyService.getNodes(id);
     this.nodes = result;
-    return result;
   }
 }
 

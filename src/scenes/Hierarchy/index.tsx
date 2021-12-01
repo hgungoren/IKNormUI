@@ -156,8 +156,7 @@ class Hierarchy extends AppComponentBase<IProps, IState> {
             key={this.state.nodeKey}
             visible={this.state.visible}
             onClose={this.drawerOnClose}
-            onSwitchChange={this.onSwitchChange}
-          
+            onSwitchChange={this.onSwitchChange} 
             kHierarchyStore={this.props.kHierarchyStore}
           />
         </div>

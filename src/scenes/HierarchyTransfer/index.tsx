@@ -10,27 +10,37 @@ import KHierarchyStore from '../../stores/kHierarchyStore';
 import HiearchyTransfer from './components/HiearchyTransfer';
 import HiearchySortable from './components/HiearchySortable';
 import AppComponentBase from '../../components/AppComponentBase';
+
+
 import uuid from 'react-uuid';
-
-
 export interface IProps {
   kHierarchyStore: KHierarchyStore;
 }
 
 export interface IState {
-  keys: string[];
+
+  keys: string[]; 
+  selectedKeys: string[];
 }
 
 @inject(Stores.KHierarchyStore)
 @observer
 class Transfer extends AppComponentBase<IProps, IState> {
-  state = { keys: []};
-
-  setSeletedItems = (value) => {
-    this.setState({ keys: value });
-    setTimeout(() => {
-    }, 200);
+  state = {
+    keys: [], 
+    selectedKeys: [], 
   };
+
+  setSeletedItems = (keys) => {
+    this.setState({ keys: keys });
+  };
+
+  setSeletedKeyValues = (keys) => {
+    this.setState({ selectedKeys: keys });
+  };
+
+
+
   render() {
     return (
       <React.Fragment>
@@ -53,41 +63,42 @@ class Transfer extends AppComponentBase<IProps, IState> {
           ></PageHeader>
         </Card>
 
-        <Row gutter={[16, 16]}>
-          <Col
-            xs={{ span: 12, offset: 0 }}
-            sm={{ span: 12, offset: 0 }}
-            md={{ span: 12, offset: 0 }}
-            lg={{ span: 12, offset: 0 }}
-            xl={{ span: 12, offset: 0 }}
-            xxl={{ span: 12, offset: 0 }}
-          >
-            <Card hoverable>
+        <Card hoverable>
+          <Row gutter={[16, 16]}>
+            <Col
+              xs={{ span: 12, offset: 0 }}
+              sm={{ span: 12, offset: 0 }}
+              md={{ span: 12, offset: 0 }}
+              lg={{ span: 12, offset: 0 }}
+              xl={{ span: 12, offset: 0 }}
+              xxl={{ span: 12, offset: 0 }}
+            >
               <HiearchyTransfer
-                setSeletedItems={this.setSeletedItems}
-                kHierarchyStore={this.props.kHierarchyStore}
                 sourceTitle={L('Positions')}
                 targetTitle={L('SelectedPositions')}
+                setSeletedItems={this.setSeletedItems}
+                kHierarchyStore={this.props.kHierarchyStore}
+                setSeletedKeyValues={this.setSeletedKeyValues}
               />
-            </Card>
-          </Col>
-          <Col
-            xs={{ span: 12, offset: 0 }}
-            sm={{ span: 12, offset: 0 }}
-            md={{ span: 12, offset: 0 }}
-            lg={{ span: 12, offset: 0 }}
-            xl={{ span: 12, offset: 0 }}
-            xxl={{ span: 12, offset: 0 }}
-          >
-            <Card hoverable>
-              <HiearchySortable
+            </Col>
+            <Col
+              xs={{ span: 12, offset: 0 }}
+              sm={{ span: 12, offset: 0 }}
+              md={{ span: 12, offset: 0 }}
+              lg={{ span: 12, offset: 0 }}
+              xl={{ span: 12, offset: 0 }}
+              xxl={{ span: 12, offset: 0 }}
+            >
+              <HiearchySortable 
                 key={uuid()}
                 keys={this.state.keys}
-                kHierarchyStore={this.props.kHierarchyStore}
+                selectedKeys={this.state.selectedKeys}
               />
-            </Card>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </Card>
+
+
       </React.Fragment>
     );
   }
