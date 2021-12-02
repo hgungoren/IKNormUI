@@ -27,6 +27,9 @@ export interface CreateDamageInput {
        TCK_NO :string;
        Email :string;
       //belgeler
-       FileInfo:string;
+      FileTazminDilekcesi:string;
+      FileFatura:string;
+      FileSevkirsaliye:string;
+      FileTcVkno:string;
     
 }

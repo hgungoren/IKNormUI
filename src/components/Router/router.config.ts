@@ -1,7 +1,3 @@
- 
-
-
-
 import LoadableComponent from './../Loadable/index';
 import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined } from '@ant-design/icons';
 

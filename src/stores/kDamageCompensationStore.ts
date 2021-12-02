@@ -34,6 +34,7 @@ class KDamageCompensationStore {
 
 
     @observable damageCompensationViewClass!:DamageCompensationViewClass
+    @observable createNev !:string
 
 
 
@@ -42,11 +43,13 @@ class KDamageCompensationStore {
 
     @action
     async create(createDamage: CreateDamageInput) {
-       await KDamageCompensationService.create(createDamage);  
-       // this.kdamage.items.push(result);  
+        await KDamageCompensationService.create(createDamage);  
+       //console.log('CreateNew Store=>',result)
+       //this.createNev=result
     }
 
-  
+
+
 
     @action
     async getDamageComppensation(entityDto: EntityDto) {   
