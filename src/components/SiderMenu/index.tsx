@@ -1,5 +1,4 @@
 import './index.less';
-
 import * as React from 'react';
 import { Avatar, Col, Layout, Menu } from 'antd';
 import { L, isGranted } from '../../lib/abpUtility';
@@ -24,6 +23,7 @@ const SiderMenu = (props: ISiderMenuProps) => {
   const currentRoute = utils.getRoute(history.location.pathname);
   return (
     <Sider
+      style={{ backgroundColor: '#fff' }}
       trigger={null}
       className={'sidebar'}
       width={256}
@@ -41,7 +41,7 @@ const SiderMenu = (props: ISiderMenuProps) => {
         </Col>
       )}
 
-      <Menu theme="dark" mode="inline" selectedKeys={[currentRoute ? currentRoute.path : '']}>
+      <Menu theme="light" mode="inline" selectedKeys={[currentRoute ? currentRoute.path : '']}>
         {appRouters
           .filter((item: any) => !item.isLayout && item.showInMenu && item.type === '')
           .map((route: any, index: number) => {

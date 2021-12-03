@@ -5,7 +5,7 @@ import {
   
   } from 'antd';
 
-  import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
+  import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
 import rules from '../HasarTazmin.validation';
 
   export interface ICProps {

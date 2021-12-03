@@ -8,9 +8,9 @@ module.exports = {
       plugin: CracoAntDesignPlugin,
       options: {
         customizeTheme: {
-          '@primary-color': '#1DA57A',
-          '@link-color': '#1DA57A',
-          '@back-color':'#1DA57A'
+          '@primary-color': '#03387b',
+          '@link-color': '#03387b',
+          '@back-color':'#03387b'
         },
       },
     },
@@ -54,3 +54,4 @@ module.exports = {
     },
   },
 };
+ 

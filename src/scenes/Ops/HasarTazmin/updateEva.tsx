@@ -1,7 +1,6 @@
-import React from 'react';
-import 'antd/dist/antd.css';
+import React from 'react'; 
 import './index.less';
-import AppComponentBase from '../../components/AppComponentBase';
+import AppComponentBase from '../../../components/AppComponentBase';
 import {
   Breadcrumb,
   Button,
@@ -10,9 +9,12 @@ import {
   Divider,
   Form,
   Input,
+  Modal,
+  notification,
   PageHeader,
   Radio,
   Row,
+  Select,
   Space,
   Spin,
   Tabs,
@@ -22,17 +24,18 @@ import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import rules from './HasarTazmin.validation';
 import { Link } from 'react-router-dom';
-import { isGranted, L } from '../../lib/abpUtility';
+import { isGranted, L } from '../../../lib/abpUtility';
 // import GonderenCariSelect from './components/GonderenCariSelect';
 // import AliciCariSelect from './components/AliciCariSelect';
 // import FarkliCari from './components/FarkliCari';
 // import EditableTagGroup from './components/LinkTag';
-import Stores from '../../stores/storeIdentifier';
-import { SendOutlined, SwitcherOutlined } from '@ant-design/icons';
-import KDamageCompensationStore from '../../stores/kDamageCompensationStore';
+import Stores from '../../../stores/storeIdentifier';
+import { AlertOutlined, CheckCircleTwoTone, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
+import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
 import TextArea from 'rc-textarea';
 import 'moment/locale/tr';
-import DamageHistory from './components/damageHistory';
+import DamageHistory from './components/damageHistory'
+
 
  
 
@@ -49,9 +52,13 @@ export interface IState {
   takipNo:string;
   tazminMusteriTipi:string;
   loading:boolean;
+  selectedItems: any;
+  odenecekTutar:boolean;
   evaTalepEdilenTutar:string;
+  aktiveTab:string;
+  onayaGonderBtn:boolean;
 }
- 
+ const { confirm } = Modal;
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
@@ -64,96 +71,182 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   tazminStatu:'',
   takipNo:'',
   tazminMusteriTipi:'',
-  loading:true,
-  evaTalepEdilenTutar:''
+  loading:false,
+  selectedItems: [],
+  odenecekTutar:true,
+  evaTalepEdilenTutar:'',
+  aktiveTab:'2',
+  onayaGonderBtn:false
+
   };
-
-
-
-
 
 
   //gelen url idden sayfayı yükleme
   getdamagePage = async (id: number) => {
-         
-
 
     this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id }) 
-
      setTimeout(() => {  
-    
       this.setState({tazminStatu:this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu})
       this.setState({takipNo:this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo})
       this.setState({tazminMusteriTipi:this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi})
       //this.setState({tazminMusteriTipi:'AliciCari'})
       this.formRef.current?.setFieldsValue({               
             ...this.props.kDamageCompensationStore.damageCompensationViewClass,
-      });
-
-  
+      }); 
       this.setState({loading:false})
-    }, 1000) 
-
-
-  
-
-
-    
+    }, 500)  
   };
 
 
-
-  
   //gelen url idden Eva sayfayı yükleme
   getdamagePageEva = async (id: number) => {
    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id })    
       setTimeout(() => {   
-        
-         
           
-
-          console.log('geelen vieweva=>' ,this.props.kDamageCompensationStore.damageCompensationViewClass)  
+        
+        
         if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0"){
           this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
         }else {
           this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
         }
 
-
-         this.formRefDeg.current?.setFieldsValue({               
-             ...this.props.kDamageCompensationStore.damageCompensationViewClass,
-       });
+          
+          
        this.setState({loading:false})
-     }, 500)
+     }, 1000)
 
 
   };
 
 
-
-
-
-
 async componentDidMount() {
-  this.getdamagePage(this.props['match'].params['id'])
+   this.getdamagePageEva(this.props['match'].params['id'])
 
 }
+
+
+
+
+// Tanzim  Değerlendirm için  Oluşturma Metoduf
+kDamageCompensationEvalutaionCreate = () => {
+
+    const form = this.formRefDeg.current;
+    form!.validateFields().then(async (values: any) => {    
+      console.log('Giden Form=>',values)      
+      
+      values.evaTalep_Edilen_Tutar=this.state.evaTalepEdilenTutar
+      values.evaEkleyen_Kullanici='Admin'
+      values.tazminId=this.props['match'].params['id']
+      
+       if(values.evaTazmin_Odeme_Durumu =="Farklı Bir Tutar Ödenecek"){
+        values.evaOdenecek_Tutar=values.evaOdenecek_Tutar.replace(',','.')
+       }
+     
+
+      confirm({
+              icon: <CheckCircleTwoTone />,
+              content: 'Değerlendirme Onaya Gönderilsin mi?',
+              okText: 'Onaya Gönder',
+              cancelText:'Vazgeç',
+              onOk: () => {
+                this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values) 
+                 this.setState({aktiveTab:'3'})
+                 this.setState({onayaGonderBtn:true})
+              },
+              onCancel() { console.log(L('Cancel')); },
+          })
+
+
+    });
+  };
+
+
 
 
   public render() {
    
     const { TabPane } = Tabs
+    const { Option } = Select;
 
 
 
     const oncahangeTab=(value)=>{
-       if(value =="2"){    
-       this.setState({loading:true})  
-       this.getdamagePageEva(this.props['match'].params['id'])
-       }
 
+       this.setState({aktiveTab:''+value+''})
+       if(value =="1"){    
+       this.setState({loading:true})  
+       this.getdamagePage(this.props['match'].params['id'])
+       }
+    }
+
+
+
+    
+     /// tazmin odeme durumu 
+     const tazminodemedurumu=(value)=>{
+      
+        if(value==='Ödenecek'){
+         this.setState({odenecekTutar :true})
+        }
+        else if(value==='Ödenmicek')
+        {
+         this.setState({odenecekTutar :true})
+        }else if(value ==='Farklı Bir Tutar Ödenecek')
+        {
+           this.setState({odenecekTutar :false})
+        }else{
+         this.setState({odenecekTutar :true})
+        }
+ 
+ 
+      }
+ 
+
+    
+    const Deghasar = ['Taşımadan Kaynaklı', 'İstif Hatası', 'Kaza', 'Teslimat Esnasında Tespit-DTT Var','Teslimattan Sonra-DTT','Aracın Su Alması','Banttan Düşme',
+  'Farklı Kargonun Zarar Vermesi','Ambalaj Yetersizliği','Doğal Afet','Müşteri Memnuniyeti'];
+
+   const DegKayıp=['Adres Teslim Sırasında Kayıp','Aktarma-Aktarma Arasında','Faturası Düzenlenmeden Kayıp','Gasp','İçten Eksilme','Kaza','Şube Kayıp','Birim-Aktarma Arasında Kayıp','Teslim Belgesi Sunulamaması','Yanlış Kişiye Teslimat','Müşteri Memnuniyeti']
+   
+   const DegGecTeslimat=['Geç Teslim']
+
+   const DegMusteriMemnuniyeti=['Müşteri Memnuniyeti']
+
+   const DegOnchangeTazminTipi=(value)=>{
+    
+    if(value==="Hasar"){    
+      this.setState({ selectedItems:Deghasar.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+    }
+    else if(value ==="Kayıp")
+    {
+      this.setState({ selectedItems:DegKayıp.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+      
+    }
+    else if(value ==="Geç Teslimat"){
+      this.setState({ selectedItems:DegGecTeslimat.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
 
     }
+    else if(value ==="Müşteri Memnuniyeti"){
+      this.setState({ selectedItems:DegMusteriMemnuniyeti.map((value, index) =>
+        <Option key={index} value={value}> {value} </Option>
+      ) });
+    }
+    else(
+      notification.open({
+        icon: <AlertOutlined style={{ color: 'red' }} />,
+        message: 'Uyarı',
+        description: 'Lütfen Tazmin Tipi Seçiniz.',
+      })
+    )
+
+   }
 
 
 
@@ -178,7 +271,7 @@ async componentDidMount() {
                     )}{' '}
                   </Breadcrumb.Item>
                   <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
-                  <Breadcrumb.Item>Hasar Tazmin Formu </Breadcrumb.Item>
+                  <Breadcrumb.Item>Hasar Tazmin Değerlendirme </Breadcrumb.Item>
                 </Breadcrumb>
               }
             ></PageHeader>
@@ -186,12 +279,12 @@ async componentDidMount() {
 
           <Card>
             <Tabs
-              defaultActiveKey="1"           
+              defaultActiveKey="2"           
               tabBarGutter={50}
-              // type="card"
               tabPosition="top"
               size="large"
               onChange={oncahangeTab}
+              activeKey={this.state.aktiveTab}
         
             >
               <TabPane
@@ -703,16 +796,32 @@ async componentDidMount() {
                layout='horizontal'>
                     <Row>
 
-                    
-                          
-
                         <Col span={7}>
-                            <Form.Item  name='evaTazmin_Tipi'  label={
+                            <Form.Item 
+                           rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                            name='evaTazmin_Tipi'  label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Tipi</label>
                         } >
                                    
 
-                           <Input className='formInput' disabled />
+                                <Select 
+                                  className="formInput"
+                                  placeholder="Seçiniz"
+                                  allowClear                                  
+                                  onChange={DegOnchangeTazminTipi}
+                                >
+                                      <Option value="Hasar">Hasar</Option>
+                                      <Option value="Kayıp">Kayıp</Option>
+                                      <Option value="Geç Teslimat" >Geç Teslimat</Option>
+                                      <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
+                                </Select>
+
+
+
                           </Form.Item>
                         </Col>
 
@@ -727,7 +836,14 @@ async componentDidMount() {
                               label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Nedeni</label>
                         }>
-                                        <Input className='formInput' disabled />
+                                     <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                            {this.state.selectedItems}
+                                      </Select>
                                 </Form.Item>
 
                         </Col>
@@ -746,16 +862,46 @@ async componentDidMount() {
                          label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kargonun Bulunduğu Yer</label>
                         }>
-                                   <Input className='formInput' disabled />
+                                   <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                               <Option value="Çıkış Birim">Çıkış Birim</Option>
+                                               <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
+                                               <Option value="Varış Aktarma">Varış Aktarma</Option>
+                                               <Option value="Varış Birim">Varış Birim</Option>
+                                               <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
+                                               <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
+                                               <Option value="Diğer">Diğer</Option>
+                                               <Option value="İmha">İmha</Option>
+
+                                      </Select>
                          </Form.Item>
                        </Col>
 
                        <Col span={7}>
-                         <Form.Item name='evaKusurlu_Birim'                     
+                         <Form.Item 
+                         rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                         name='evaKusurlu_Birim'                     
                          label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Kusurlu Birim Var mı?</label>
                         }>
-                                  <Input className='formInput' disabled />
+                                 <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                               <Option value="Evet">Evet</Option>
+                                               <Option value="Hayır">Hayır</Option>
+                                              
+                                      </Select>
                          </Form.Item>
                        </Col>
 
@@ -768,20 +914,45 @@ async componentDidMount() {
 
                     <Row>
                        <Col span={7}>
-                         <Form.Item name='evaIcerik_Grubu'                          
+                         <Form.Item
+                         rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                         name='evaIcerik_Grubu'                          
                          label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>
                         }>
-                                  <Input className='formInput' disabled />
+                                  <Select
+                                           className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                          
+                                      >
+                                       <Option value="E-Ticaret">E-Ticaret</Option>
+                                       <Option value="Teknoloji">Teknoloji</Option>
+                                       <Option value="Basın">Basın</Option>
+                                       <Option value="Diğer">Diğer</Option>
+                                           
+
+                                      </Select>
                          </Form.Item>
                        </Col>
 
                        <Col span={7}>
-                         <Form.Item  name='evaIcerik' 
+                         <Form.Item 
+                         rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                         name='evaIcerik' 
                          label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>
                         }>
-                              <Input disabled className="formInput"/>
+                                
+                                <Input className='formInput'  />
                          </Form.Item>
                        </Col>
 
@@ -791,10 +962,15 @@ async componentDidMount() {
                     <Row>
                        <Col span={7}>
                          <Form.Item
+                         rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
                          name='evaUrun_Aciklama'    label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Ürün Açıklaması</label>
                         }>
-                                <Input className='formInput' disabled />
+                                <Input className='formInput'  />
                          </Form.Item>
                        </Col>
 
@@ -802,46 +978,55 @@ async componentDidMount() {
                          <Form.Item name='evaEkleyen_Kullanici' label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
                         }>
-                                   <Input className='formInput' disabled />
+                                   <Input className='formInput' disabled defaultValue='Admin' />
                          </Form.Item>
                        </Col>
                     </Row>   
                     <Row>
                         <Col span={13}>
-                          <Form.Item name='evaBolge_Aciklama'  
+                          <Form.Item 
+                          rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                          name='evaBolge_Aciklama'  
                           label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Bölge Açıklama</label>
                         }>
 
-                           <TextArea disabled rows={4} style={{width:'100%'}} ></TextArea>
+                           <TextArea  rows={4} style={{width:'100%'}} ></TextArea>
                           </Form.Item>
                         </Col>
                     </Row> 
 
                     <Row>
                         <Col span={13}>
-                          <Form.Item name='evaGm_Aciklama' 
+                          <Form.Item
+                          rules={
+                            [
+                              { required: true, message: 'Lütfen Boş Bırakmayınız!' }
+                            ]
+                          }
+                          name='evaGm_Aciklama' 
                           label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Gm Açıklama</label>
                         }>
 
-                           <TextArea disabled rows={4} style={{width:'100%'}} ></TextArea>
+                           <TextArea  rows={4} style={{width:'100%'}} ></TextArea>
                           </Form.Item>
                         </Col>
                     </Row> 
 
                     <Row>
                         <Col span={7}>
-                        <Form.Item name='evaOdenecek_Tutar' 
+                        <Form.Item name='evaTalep_Edilen_Tutar' 
     
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
                         }>
                            {console.log(this.state.evaTalepEdilenTutar)}
-                          <Input  className="formInput"  value={this.state.evaTalepEdilenTutar}
-                          disabled 
-                         
-                         
+                          <Input  className="formInput" disabled value={this.state.evaTalepEdilenTutar}
                           ></Input>
                         </Form.Item>
                         </Col>
@@ -858,33 +1043,42 @@ async componentDidMount() {
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Ödeme Durumu</label>
                         }>
-                              <Input className='formInput' disabled />
+                            <Select
+                                        className="formInput"
+                                        placeholder="Seçiniz"
+                                        allowClear
+                                        onChange={tazminodemedurumu}
+                                      >
+                                                <Option value="Ödenecek">Ödenecek</Option>
+                                               <Option value="Ödenmicek">Ödenmicek</Option>
+                                               <Option value="Farklı Bir Tutar Ödenecek">Farklı Bir Tutar Ödenecek</Option>                                           
+                                      </Select>
                         </Form.Item>
                         </Col>
                     </Row>
 
-
-
-                    <Row>
+                    {this.state.odenecekTutar ? '' :
+                       <Row>
                        <Col span={7}>
                        <Form.Item name='evaOdenecek_Tutar' 
                        rules={
                          [
-                           { required: false, message: 'Lütfen Boş Bırakmayınız!' }
+                           { required: false, message: 'Lütfen Boş Bırakmayınız!' },
+                           { pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/, message: 'Sadece parasal değerler girilebilir' }
                          ]
                        }
                        label={
                          <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
                        }>
-                             <Input className='formInput' disabled />
+                         <Input  className="formInput"  disabled={this.state.odenecekTutar}  ></Input>
                        </Form.Item>
                        </Col>
-                   </Row>
+                   </Row>}
 
                     <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />} disabled   htmlType="submit">
+                        <Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.kDamageCompensationEvalutaionCreate}   htmlType="submit">
                           Onaya Gönder
                         </Button>
                       </Space>
@@ -892,22 +1086,13 @@ async componentDidMount() {
                   </Row>
               </Form>
               </TabPane>
-
-
               <TabPane tab={
                 <span>
                   <SwitcherOutlined />
                   Tarihçe
                 </span>
               } key="3">
-
-                
-                 
-                 <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore}/>
-                
-
-
-
+                  <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore}/>
               </TabPane>
             </Tabs>
           </Card>

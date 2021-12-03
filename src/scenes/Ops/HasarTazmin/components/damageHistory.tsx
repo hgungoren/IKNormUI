@@ -3,12 +3,12 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 
-import AppComponentBase from '../../../components/AppComponentBase';
+import AppComponentBase from '../../../../components/AppComponentBase';
 import { inject, observer } from 'mobx-react';
-import Stores from '../../../stores/storeIdentifier';
-import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
+import Stores from '../../../../stores/storeIdentifier';
+import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
 import {    Button, Card, Col, Divider, Form, Row, Select, Space, Table } from 'antd';
-import { L } from '../../../lib/abpUtility';
+import { L } from '../../../../lib/abpUtility';
 
 
 import './../index.less';
