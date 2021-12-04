@@ -187,27 +187,49 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         key: 'tazminStatusu',
         render: (text: string) =>
           text === 'Taslak' ? (
-            <Tag color="#2db7f5">Taslak</Tag>
+            <Tag style={{ padding: 5 }} color="#faad14">
+              Taslak
+            </Tag>
           ) : text == 'TazminEksikEvrak' ? (
-            <Tag color="red">Tazmin Eksik Evrak</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="skcancel">
+              Tazmin Eksik Evrak
+            </Tag>
           ) : text == 'TazminOlusturuldu' ? (
-            <Tag color="green">Tazmin Olusturuldu</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#1da57a">
+              Tazmin Olusturuldu
+            </Tag>
           ) : text == 'BolgeIslemde' ? (
-            <Tag color="orange">Bolge Islemde</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bolge Islemde
+            </Tag>
           ) : text == 'OperasyonBolgeMudurYardımcısıOnayında' ? (
-            <Tag color="blue">Operasyon Bolge Mudur Yardımcısı Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Operasyon Bolge Mudur Yardımcısı Onayında
+            </Tag>
           ) : text == 'BolgeMuduruOnayında' ? (
-            <Tag color="gold">Bolge Muduru Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bolge Muduru Onayında
+            </Tag>
           ) : text == 'OperasyonGMYOnayında' ? (
-            <Tag color="purple">Operasyon GMY Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Operasyon GMY Onayında
+            </Tag>
           ) : text == 'GmSatisMuduruOnayında' ? (
-            <Tag color="red">Gm Satis Muduru Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Gm Satis Muduru Onayında
+            </Tag>
           ) : text == 'GmMusteriIliskileriMuduruOnayında' ? (
-            <Tag color="processing">Gm MusteriIliskileri Muduru Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Gm MusteriIliskileri Muduru Onayında
+            </Tag>
           ) : text == 'SatisGMYOnayında' ? (
-            <Tag color="cyan">Satis GMY Onayında</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Satis GMY Onayında
+            </Tag>
           ) : (
-            <Tag color="yellow">Bilinmiyor</Tag>
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bilinmiyor
+            </Tag>
           ),
       },
       {
