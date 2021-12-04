@@ -1,5 +1,7 @@
-import React from 'react'; 
-import './index.less'; 
+import React from 'react';
+import 'antd/dist/antd.css';
+import './index.less';
+import AppComponentBase from '../../../components/AppComponentBase';
 import {
   Breadcrumb,
   Button,
@@ -8,6 +10,7 @@ import {
   Divider,
   Form,
   Input,
+  notification,
   PageHeader,
   Radio,
   Row,
@@ -26,13 +29,12 @@ import { isGranted, L } from '../../../lib/abpUtility';
 // import FarkliCari from './components/FarkliCari';
 // import EditableTagGroup from './components/LinkTag';
 import Stores from '../../../stores/storeIdentifier';
-import { SendOutlined, SwitcherOutlined } from '@ant-design/icons';
+import { AlertOutlined, CheckCircleTwoTone, SendOutlined, SwitcherOutlined } from '@ant-design/icons';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
 import TextArea from 'rc-textarea';
 import 'moment/locale/tr';
 import DamageHistory from './components/damageHistory';
-import AppComponentBase from '../../../components/AppComponentBase';
-
+import FileBase64 from 'react-file-base64';
  
 
 
@@ -49,6 +51,11 @@ export interface IState {
   tazminMusteriTipi:string;
   loading:boolean;
   evaTalepEdilenTutar:string;
+
+  filesTazminDilekcesi: any;
+  filesFatura:  any;
+  filesSevkirsaliye:  any;
+  filesTcVkno:  any;
 }
  
 @inject(Stores.KDamageCompensationStore)
@@ -57,6 +64,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   formRef = React.createRef<FormInstance>();
   formRefDeg = React.createRef<FormInstance>();
+   formFileRef = React.createRef<FormInstance>();
+  
   
   state = {
   urlid:0,
@@ -64,16 +73,18 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   takipNo:'',
   tazminMusteriTipi:'',
   loading:true,
-  evaTalepEdilenTutar:''
+  evaTalepEdilenTutar:'',
+
+  filesTazminDilekcesi:[],
+  filesFatura:  [],
+  filesSevkirsaliye:  [],
+  filesTcVkno:[],
   };
-
-
-
-
 
 
   //gelen url idden sayfayı yükleme
   getdamagePage = async (id: number) => {
+         
     this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id }) 
 
      setTimeout(() => {  
@@ -88,39 +99,65 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   
       this.setState({loading:false})
-    }, 1000) 
-
-
-  
-
-
-    
+    }, 2000)   
   };
 
-
-
-  
   //gelen url idden Eva sayfayı yükleme
   getdamagePageEva = async (id: number) => {
    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id })    
       setTimeout(() => {   
-        
+      
           console.log('geelen vieweva=>' ,this.props.kDamageCompensationStore.damageCompensationViewClass)  
-        if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0"){
-          this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
-        }else {
-          this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
-        }
-
-
-         this.formRefDeg.current?.setFieldsValue({               
-             ...this.props.kDamageCompensationStore.damageCompensationViewClass,
-       });
+            if(this.props.kDamageCompensationStore.damageCompensationViewClass !=null)
+            {
+                if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0"){
+                  this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
+                }else {
+                  this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
+                }  
+                this.formRefDeg.current?.setFieldsValue({               
+                  ...this.props.kDamageCompensationStore.damageCompensationViewClass,
+            });
+         } 
+     
        this.setState({loading:false})
      }, 500)
 
 
   };
+
+
+
+
+  //Tanzim  dosya güncelleme Metodu
+  kDamageCompensationUpdate = () => {
+      
+
+    this.setState({loading:true})
+    const form = this.formFileRef.current;            
+      form!.validateFields().then(async (values: any) => {
+       values.FileTazminDilekcesi = JSON.stringify(this.state.filesTazminDilekcesi )
+       values.FileFatura = JSON.stringify(this.state.filesFatura )
+       values.FileSevkirsaliye = JSON.stringify(this.state.filesSevkirsaliye )
+       values.FileTcVkno = JSON.stringify(this.state.filesTcVkno )
+       values.TazminId=this.props['match'].params['id']
+    
+
+        await this.props.kDamageCompensationStore.StoregetFileUpdateDamageCompansation(values) 
+        notification.open({
+          icon: <CheckCircleTwoTone style={{ color: 'red' }} />,
+          message: 'Bilgilendirme',
+          description: 'Dosyanız Güncellenmiştir.',
+        });
+
+
+       this.setState({loading:false})
+   
+    }).catch((err) => console.log(err))
+  };
+
+
+
 
 
 
@@ -148,6 +185,58 @@ async componentDidMount() {
 
     }
 
+
+
+
+      // Callback~
+      const getFileTazminDilekcesi = (files) => {
+        if(files.type ==='' || files.type===undefined || files.type==='application/x-msdownload'){
+          notification.open({
+                          icon: <AlertOutlined style={{ color: 'red' }} />,
+                          message: 'Uyarı',
+                          description:
+                            'Lütfen dosya uzantısını kontrol ediniz.',
+                        })
+        }
+        else
+        {this.setState({ filesTazminDilekcesi: files })}
+        
+      }
+      const getFileFatura = (files) => {
+        if(files.type ==='' || files.type===undefined || files.type==='application/x-msdownload'){
+          notification.open({
+                          icon: <AlertOutlined style={{ color: 'red' }} />,
+                          message: 'Uyarı',
+                          description:
+                            'Lütfen dosya uzantısını kontrol ediniz.',
+                        })
+        }else{
+        this.setState({ filesFatura: files })}
+  
+      }
+      const getFileSevkirsaliye = (files) => {
+        if(files.type ==='' || files.type===undefined || files.type==='application/x-msdownload'){
+          notification.open({
+                          icon: <AlertOutlined style={{ color: 'red' }} />,
+                          message: 'Uyarı',
+                          description:
+                            'Lütfen dosya uzantısını kontrol ediniz.',
+                        })
+        }else{
+        this.setState({ filesSevkirsaliye: files })}
+      }
+      const getFileTcVkno = (files) => {
+        if(files.type ==='' || files.type===undefined || files.type==='application/x-msdownload'){
+          notification.open({
+                          icon: <AlertOutlined style={{ color: 'red' }} />,
+                          message: 'Uyarı',
+                          description:
+                            'Lütfen dosya uzantısını kontrol ediniz.',
+                        })
+        }else{
+        this.setState({ filesTcVkno: files })}
+      }
+  
 
 
 
@@ -667,17 +756,70 @@ async componentDidMount() {
                     </Col>
                   </Row>
 
-                
+                     
 
+                  <Divider orientation="left">Tazmin Belgeleri</Divider>
+
+                   {/* file formm */}
+                  <Form  ref={this.formFileRef}>                 
+                    <Row>
+                    <Col span={12}>
+                        <Form.Item
+                        name='FileTazminDilekcesi'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Dilekçesi</label>}
+                        >             
+                                <FileBase64  multiple={false}onDone={getFileTazminDilekcesi.bind(this)} /> 
+                        </Form.Item>
+                    </Col>                    
+                    </Row>
+
+
+                    <Row>
+                    <Col span={12}>
+                        <Form.Item
+                        name='FileFatura'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Fatura</label>}
+                        >             
+                                <FileBase64  multiple={false} onDone={getFileFatura.bind(this)} /> 
+                        </Form.Item>
+                    </Col>                    
+                    </Row>
+
+
+                    <Row>
+                    <Col span={12}>
+                        <Form.Item
+                        name='FileSevkirsaliye'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Sevk İrsaliyesi</label>}
+                        >             
+                                <FileBase64  multiple={false}onDone={getFileSevkirsaliye.bind(this)} /> 
+                        </Form.Item>
+                    </Col>                    
+                    </Row>
+
+                    <Row>
+                    <Col span={12}>
+                        <Form.Item
+                        name='FileTcVkno'
+                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>Fatura</label>}
+                        >             
+                                <FileBase64  multiple={false}onDone={getFileTcVkno.bind(this)} /> 
+                        </Form.Item>
+                    </Col>                    
+                    </Row>
+                                
                   <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />} disabled htmlType="submit">
-                         Kaydet                     
+                        <Button type="primary"  icon={<SendOutlined />} onClick={this.kDamageCompensationUpdate}   htmlType="submit">
+                         Evrak Ekle                     
                         </Button>
                       </Space>
                     </Col>
                   </Row>
+
+                  </Form>
+
                 </Form>
               </TabPane>
 

@@ -31,8 +31,10 @@ import FarkliCari from './components/FarkliCari';
 import Stores from '../../../stores/storeIdentifier';
 import {
   AlertOutlined,
-  CheckCircleTwoTone,
-  ExclamationCircleOutlined,
+  
+   CheckCircleTwoTone,
+  
+   ExclamationCircleOutlined,
   SendOutlined,
   SwitcherOutlined,
 } from '@ant-design/icons';
@@ -123,7 +125,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     bolgeList: [],
     lastId: 0,
     SurecSahibibolgeList: [],
-    tagLink: 'cengiz',
+    tagLink: 'Test',
     fileInput: '',
     tckInput: true,
     vknInput: true,
@@ -146,7 +148,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     tazminStatu: 'Taslak',
     btnkaydet: false,
     TarihTab: true,
-    DegTab: true,
+    DegTab: false,
     btngetir: false,
   };
 
@@ -199,8 +201,6 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
               });
             }, 500);
           }
-
-          // console.log('gelenform',this.props.kDamageCompensationStore.getCreateDamageInput)
         })
         .catch(() =>
           notification.open({
@@ -330,16 +330,16 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   // Tanzim  Değerlendirm için  Oluşturma Metoduf
   kDamageCompensationEvalutaionCreate = () => {
+   if(this.state.talepedilentutar !==''){
     const form = this.formRefDeg.current;
     form!.validateFields().then(async (values: any) => {
       values.tazminId = this.state.lastId;
       values.evaTalep_Edilen_Tutar = this.state.talepedilentutar;
-      if (values.evaTazmin_Odeme_Durumu === 'Farklı Bir Tutar Ödenecek') {
+      if (values.evaTazmin_Odeme_Durumu === '3') {
         values.evaOdenecek_Tutar = values.evaOdenecek_Tutar.replace(',', '.');
       } else {
         values.evaOdenecek_Tutar = values.evaOdenecek_Tutar;
       }
-
       await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values);
       confirm({
         icon: <CheckCircleTwoTone />,
@@ -354,6 +354,20 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
         },
       });
     });
+   }else{
+    notification.open({
+      icon: <AlertOutlined style={{ color: 'red' }} />,
+      message: 'Uyarı',
+      description: 'Lütfen tazmin bilgileri tabını doldurunuz',
+    });
+
+        
+   }
+
+
+   
+
+
   };
 
   openNotificationWithIcon = (type) => {
@@ -521,8 +535,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
           this.props.kDamageCompensationStore.getBolgeListDamage !== undefined &&
           this.props.kDamageCompensationStore.getBolgeListDamage.map((value, index) => (
             <Option key={value.objId + '-' + index} value={value.objId + '-' + index}>
-              {' '}
-              {value.adi}{' '}
+              
+              {value.adi}
             </Option>
           )),
       });
@@ -535,19 +549,19 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
           this.props.kDamageCompensationStore.getBolgeListDamage !== undefined &&
           this.props.kDamageCompensationStore.getBolgeListDamage.map((value, index) => (
             <Option key={value.objId + '-' + index} value={value.objId + '-' + index}>
-              {' '}
-              {value.adi}{' '}
+              
+              {value.adi}
             </Option>
           )),
       });
     };
 
     const tazminodemedurumu = (value) => {
-      if (value === 'Ödenecek') {
+      if (value === '1') {
         this.setState({ odenecekTutar: true });
-      } else if (value === 'Ödenmicek') {
+      } else if (value === '2') {
         this.setState({ odenecekTutar: true });
-      } else if (value === 'Farklı Bir Tutar Ödenecek') {
+      } else if (value === '3') {
         this.setState({ odenecekTutar: false });
       } else {
         this.setState({ odenecekTutar: true });
@@ -587,39 +601,35 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     const DegMusteriMemnuniyeti = ['Müşteri Memnuniyeti'];
 
     const DegOnchangeTazminTipi = (value) => {
-      if (value === 'Hasar') {
+      if (value === '1') {
         this.setState({
           selectedItems: Deghasar.map((value, index) => (
-            <Option key={index} value={value}>
-              {' '}
-              {value}{' '}
+            <Option key={index} value={value}>            
+              {value}
             </Option>
           )),
         });
-      } else if (value === 'Kayıp') {
+      } else if (value === '2') {
         this.setState({
           selectedItems: DegKayıp.map((value, index) => (
-            <Option key={index} value={value}>
-              {' '}
-              {value}{' '}
+            <Option key={index} value={value}>            
+              {value}
             </Option>
           )),
         });
-      } else if (value === 'Geç Teslimat') {
+      } else if (value === '3') {
         this.setState({
           selectedItems: DegGecTeslimat.map((value, index) => (
-            <Option key={index} value={value}>
-              {' '}
-              {value}{' '}
+            <Option key={index} value={value}>            
+              {value}
             </Option>
           )),
         });
-      } else if (value === 'Müşteri Memnuniyeti') {
+      } else if (value === '4') {
         this.setState({
           selectedItems: DegMusteriMemnuniyeti.map((value, index) => (
-            <Option key={index} value={value}>
-              {' '}
-              {value}{' '}
+            <Option key={index} value={value}>             
+              {value}
             </Option>
           )),
         });
@@ -744,7 +754,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       <Link to="/dashboard">{L('Dashboard')}</Link>
                     ) : (
                       <Link to="/home">{L('Dashboard')}</Link>
-                    )}{' '}
+                    )}
                   </Breadcrumb.Item>
                   <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
                   <Breadcrumb.Item>Hasar Tazmin Formu </Breadcrumb.Item>
@@ -1064,12 +1074,12 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                       </Form.Item>
 
                       <Form.Item hidden name="ilkGondericiSube_ObjId">
-                        {' '}
+                        
                       </Form.Item>
                     </Col>
                     <Col span={12}>
                       <Form.Item hidden name="varisSube_ObjId">
-                        {' '}
+                        
                       </Form.Item>
                       <Form.Item
                         rules={rules.varis_Sube_Unvan}
@@ -1103,7 +1113,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                   <Row>
                     <Col span={12}>
                       <Form.Item hidden name="birimi_ObjId">
-                        {' '}
+                        
                       </Form.Item>
                       <Form.Item
                         rules={rules.birimi}
@@ -1328,7 +1338,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         name="Talep_Edilen_Tutar"
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>
-                            Talep Edilen Tutar{' '}
+                            Talep Edilen Tutar
                           </label>
                         }
                       >
@@ -1504,10 +1514,10 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           showSearch
                           onChange={DegOnchangeTazminTipi}
                         >
-                          <Option value="Hasar">Hasar</Option>
-                          <Option value="Kayıp">Kayıp</Option>
-                          <Option value="Geç">Geç Teslimat</Option>
-                          <Option value="Müşteri Memnuniyeti">Müşteri Memnuniyeti</Option>
+                          <Option value="1">Hasar</Option>
+                          <Option value="2">Kayıp</Option>
+                          <Option value="3">Geç Teslimat</Option>
+                          <Option value="4">Müşteri Memnuniyeti</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -1539,14 +1549,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="Çıkış Birim">Çıkış Birim</Option>
-                          <Option value="Çıkış Aktarma">Çıkış Aktarma</Option>
-                          <Option value="Varış Aktarma">Varış Aktarma</Option>
-                          <Option value="Varış Birim">Varış Birim</Option>
-                          <Option value="Gönderici Müsteri">Gönderici Müsteri</Option>
-                          <Option value="Alıcı Müşteri">Alıcı Müşteri</Option>
-                          <Option value="Diğer">Diğer</Option>
-                          <Option value="İmha">İmha</Option>
+                          <Option value="1">Çıkış Birim</Option>
+                          <Option value="2">Çıkış Aktarma</Option>
+                          <Option value="3">Varış Aktarma</Option>
+                          <Option value="4">Varış Birim</Option>
+                          <Option value="5">Gönderici Müsteri</Option>
+                          <Option value="6">Alıcı Müşteri</Option>
+                          <Option value="7">Diğer</Option>
+                          <Option value="8">İmha</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -1562,8 +1572,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         }
                       >
                         <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="Evet">Evet</Option>
-                          <Option value="Hayır">Hayır</Option>
+                          <Option value="1">Evet</Option>
+                          <Option value="2">Hayır</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -1591,10 +1601,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         rules={[{ required: true, message: 'Lütfen Boş Bırakmayınız!' }]}
                         label={<label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>}
                       >
-                        <Select className="formInput" placeholder="Seçiniz" allowClear showSearch>
-                          <Option value="Evet">Evet</Option>
-                          <Option value="Hayır">Hayır</Option>
-                        </Select>
+                        <Input/>
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1691,9 +1698,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                           showSearch
                           onChange={tazminodemedurumu}
                         >
-                          <Option value="Ödenecek">Ödenecek</Option>
-                          <Option value="Ödenmicek">Ödenmicek</Option>
-                          <Option value="Farklı Bir Tutar Ödenecek">
+                          <Option value="1">Ödenecek</Option>
+                          <Option value="2">Ödenmicek</Option>
+                          <Option value="3">
                             Farklı Bir Tutar Ödenecek
                           </Option>
                         </Select>

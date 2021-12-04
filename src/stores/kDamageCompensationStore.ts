@@ -10,12 +10,10 @@ import { getBirimList } from '../services/kDamageCompensations/dto/getBirimList'
 import { getBolgeList } from '../services/kDamageCompensations/dto/getBolgeList';
 //import { lastIdDamage } from '../services/kDamageCompensations/dto/lastIdDamage';
 import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
-
-
 import { updateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
-
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { DamageCompensationViewClass } from '../services/kDamageCompensations/dto/viewClass';
+import { fileDamage } from '../services/kDamageCompensations/dto/updataFile';
 
 class KDamageCompensationStore {
 
@@ -35,7 +33,9 @@ class KDamageCompensationStore {
 
     @observable damageCompensationViewClass!:DamageCompensationViewClass
     @observable createNev !:string
+    @observable updateFile !:string
 
+    @observable fileDamage!:fileDamage
 
 
 
@@ -167,6 +167,17 @@ class KDamageCompensationStore {
         this.damageCompensationViewClass = result;
    
     }
+
+
+   //file update
+   @action
+   async  StoregetFileUpdateDamageCompansation(entityDto: fileDamage){          
+     let result = await KDamageCompensationService.postFileUpdateDamageCompensationService(entityDto);
+      this.updateFile = result.data.result;
+       return result.data.result;
+   }
+
+
 
 }
 

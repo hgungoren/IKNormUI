@@ -19,7 +19,7 @@ import {
   Form,
   FormInstance,
   Input,
-  Menu,
+  Menu, 
   PageHeader,
   Radio,
   Row,
@@ -262,7 +262,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
               overlay={
                 <Menu>
                   <Menu.Item>
-                    <Link to={{ pathname: `/hasartazminguncelle/${item.tazminNo}` }}>Düzenle</Link>
+                    <Link to={{ pathname: `/damageupdate/${item.tazminNo}` }}>Düzenle</Link>
                   </Menu.Item>
                   <Menu.Item>
                     <Link to={{ pathname: `/damageevalutaion/${item.tazminNo}` }}>Değerlendir</Link>
