@@ -1,6 +1,4 @@
-
-
-export interface getBirimList{
-    adi:string;
-    objId:number;
+export interface getBirimList {
+  adi: string;
+  objId: number;
 }

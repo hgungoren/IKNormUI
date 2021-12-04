@@ -19,7 +19,7 @@ import {
   Form,
   FormInstance,
   Input,
-  Menu, 
+  Menu,
   PageHeader,
   Radio,
   Row,
@@ -27,7 +27,7 @@ import {
   Table,
   Tag,
 } from 'antd';
-import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/GetAllDamageCompensation';
+import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation';
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
@@ -89,13 +89,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         values.searchtxt = '';
       }
 
-      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
-        tazminno,
-        tazminid,
-        values.searchtxt,
-        values.start,
-        values.finish
-      );
+      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation({
+        checktakipNo: tazminno,
+        checktazminId: tazminid,
+        search: values.searchtxt,
+        start: values.start,
+        finish: values.finish,
+      });
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });
@@ -114,13 +114,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
       let tazminid = false;
       values.searchtxt = '';
 
-      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
-        tazminno,
-        tazminid,
-        values.searchtxt,
-        values.start,
-        values.finish
-      );
+      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation({
+        checktakipNo: tazminno,
+        checktazminId: tazminid,
+        search: values.searchtxt,
+        start: values.start,
+        finish: values.finish,
+      });
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });
@@ -310,20 +310,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     return (
       <>
         <React.Fragment>
-          <Space direction="vertical">
-            {/* <Card hoverable>
-              <Row>
-                <Col
-                  xs={{ span: 6, offset: 0 }}
-                  sm={{ span: 6, offset: 0 }}
-                  md={{ span: 6, offset: 0 }}
-                  lg={{ span: 4, offset: 0 }}
-                  xl={{ span: 4, offset: 0 }}
-                  xxl={{ span: 4, offset: 0 }}
-                ></Col>
-              </Row>
-            </Card> */}
-
+          <Space direction="vertical"> 
             <Card hoverable>
               <PageHeader
                 ghost={false}

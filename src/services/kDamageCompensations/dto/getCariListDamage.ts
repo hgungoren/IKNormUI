@@ -1,4 +1,4 @@
-export interface GetCariListDamage { 
-    kodu : string;
-    unvan:string 
+export interface GetCariListDamage {
+  kodu: string;
+  unvan: string;
 }

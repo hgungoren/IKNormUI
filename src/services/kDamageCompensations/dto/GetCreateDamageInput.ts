@@ -1,4 +1,3 @@
-
 export interface GetCreateDamageInput {
     ilkGondericiSube_ObjId : number;
     sistem_InsertTime      : Date;
@@ -13,8 +12,5 @@ export interface GetCreateDamageInput {
     aliciKodu              : string;
     takipNo                : string;
     birimi                 : string;
-    adet                   : number;
-
-    
-  
+    adet                   : number; 
 }
