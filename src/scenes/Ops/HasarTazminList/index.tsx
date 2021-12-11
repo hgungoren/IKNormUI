@@ -29,8 +29,11 @@ import {
   Tag,
 } from 'antd';
 import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation';
+<<<<<<< HEAD
 import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+=======
+>>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
@@ -201,6 +204,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('CompensationStatus'),
         dataIndex: 'tazminStatusu',
         key: 'tazminStatusu',
+<<<<<<< HEAD
         responsive: ['sm'] as Breakpoint[],
         render: (text : string) =>
            
@@ -223,6 +227,54 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                </Tag>
  
             
+=======
+        render: (text: string) =>
+          text === 'Taslak' ? (
+            <Tag style={{ padding: 5 }} color="#faad14">
+              Taslak
+            </Tag>
+          ) : text == 'TazminEksikEvrak' ? (
+            <Tag style={{ padding: '2px 5px' }} color="skcancel">
+              Tazmin Eksik Evrak
+            </Tag>
+          ) : text == 'TazminOlusturuldu' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#1da57a">
+              Tazmin Olusturuldu
+            </Tag>
+          ) : text == 'BolgeIslemde' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bolge Islemde
+            </Tag>
+          ) : text == 'OperasyonBolgeMudurYardımcısıOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Operasyon Bolge Mudur Yardımcısı Onayında
+            </Tag>
+          ) : text == 'BolgeMuduruOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bolge Muduru Onayında
+            </Tag>
+          ) : text == 'OperasyonGMYOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Operasyon GMY Onayında
+            </Tag>
+          ) : text == 'GmSatisMuduruOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Gm Satis Muduru Onayında
+            </Tag>
+          ) : text == 'GmMusteriIliskileriMuduruOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Gm MusteriIliskileri Muduru Onayında
+            </Tag>
+          ) : text == 'SatisGMYOnayında' ? (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Satis GMY Onayında
+            </Tag>
+          ) : (
+            <Tag style={{ padding: '2px 5px' }} color="#faad14">
+              Bilinmiyor
+            </Tag>
+          ),
+>>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
       },
       {
         title: L('CompensationRequestDate'),
