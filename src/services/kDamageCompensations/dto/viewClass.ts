@@ -1,4 +1,4 @@
-export interface DamageCompensationViewClass {
+export interface ViewClass {
 
    
    takipNo :string;

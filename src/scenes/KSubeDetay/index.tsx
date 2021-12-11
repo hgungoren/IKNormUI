@@ -243,6 +243,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
   setPageState = async () => {
     this.setState({ id: this.props['match'].params['id'] });
+     alert(this.state.id)
     this.props.kSubeStore.get({ id: this.state.id }).then(() => {
       this.pageSettings();
     });

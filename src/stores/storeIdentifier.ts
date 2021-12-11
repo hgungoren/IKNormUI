@@ -16,5 +16,6 @@ export default class Stores {
   static KHierarchyStore                     : string = 'kHierarchyStore';
   static NotificationStore                   : string = 'notificationStore'; 
   static KDamageCompensationStore            : string = 'kDamageCompensationStore';
+  static OpsHierarchyStore                   : string = 'opsHierarchyStore';
 
 }

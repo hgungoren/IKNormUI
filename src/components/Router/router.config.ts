@@ -30,7 +30,11 @@ export const appRouters: any = [
   { path: '/damageevalutaion/:id',         key:'menu-item-20', permission: '',                                  title: 'DamageCompensationEvaluation', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/updateEva')), },
 
 
-  { path: '/damageupdate/:id',         key:'menu-item-20', permission: '',                                  title: 'DamageCompensationUpdate', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')), },
+  { path: '/damageupdate/:id',         key:'menu-item-21', permission: '',                                  title: 'DamageCompensationUpdate', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')), },
+
+
+  { path: '/opshierarchytransfer',         key:'menu-item-22',   permission: '',        title: 'Operasyon Hiyearsi', type:'op',       name: 'OperasyonHiyearsi',  icon: PartitionOutlined,                showInMenu: true, component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')), },
+
 
 ];
 

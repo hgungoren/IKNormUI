@@ -1,13 +1,10 @@
-
-export interface GetAllDamageCompensation{
-
-    TazminNo:number;
-    TakipNo:number;
-    TazminTipi:string;
-    TazminStatusu:string;
-    TazminTarihi:string;
-    SurecSahibiBolge:string;
-    EklyenKullanici:string;
-
-
+export interface GetAllDamageCompensation {
+  tazminNo: number;
+  takipNo: number;
+  tazminTipi: string;
+  tazminStatusu: string;
+  tazminTarihi: string;
+  surecSahibiBolge: string;
+  eklyenKullanici: string;
+  btnControl:boolean;
 }

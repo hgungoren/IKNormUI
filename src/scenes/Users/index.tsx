@@ -112,6 +112,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     form!.validateFields().then(async (values: any) => {
       if (this.state.userId === 0) {
         try {
+          console.log(values)
           await this.props.userStore.create(values);
         } catch (e) {
           console.log('ERROR : ', e)
@@ -125,6 +126,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       form!.resetFields();
 
     }).catch((err) => console.log('CreateError : ', err));
+
   };
 
   handleSearch = (value: string) => {

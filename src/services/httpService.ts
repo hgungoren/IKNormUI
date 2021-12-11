@@ -49,6 +49,7 @@ http.interceptors.response.use(
       Modal.error({
         title: L('LoginFailed'),
         content: L(error.response.data.error.message),
+        className:"closeErrorModal"
       });
     } else if (!error.response) {
       Modal.error({ content: L('UnknownError') });

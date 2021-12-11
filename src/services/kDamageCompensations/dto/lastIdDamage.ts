@@ -1,3 +1,3 @@
-export interface lastIdDamage{
+export interface LastIdDamage{
     id:number;
 }

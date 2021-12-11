@@ -8,6 +8,7 @@ import Stores from '../../../stores/storeIdentifier';
 import { EntityDto } from '../../../services/dto/entityDto';
 import AppComponentBase from '../../../components/AppComponentBase';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
+import OpsHierarchyStore from '../../../stores/opsHierarchyStore';
 import { FilterOutlined, OrderedListOutlined, SettingOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
@@ -19,7 +20,7 @@ import {
   Form,
   FormInstance,
   Input,
-  Menu, 
+  Menu,
   PageHeader,
   Radio,
   Row,
@@ -27,18 +28,23 @@ import {
   Table,
   Tag,
 } from 'antd';
-import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/GetAllDamageCompensation';
+import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation';
+import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
+  opsHierarchyStore:OpsHierarchyStore
 }
 
 export interface IState {
   listdata: GetAllDamageCompensation[];
   modalVisible: boolean;
   tazminid: number;
+  control:boolean;
 }
 
+@inject(Stores.OpsHierarchyStore)
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensationList extends AppComponentBase<IProps, IState> {
@@ -49,6 +55,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
     modalVisible: false,
     tazminid: 0,
+    control:false
   };
 
   //tazmin listesi
@@ -67,7 +74,6 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
   getFilterdamagecompensaation = async () => {
     const form = this.formReffilter.current;
     form!.validateFields().then(async (values: any) => {
-      console.log('values=>', values);
 
       if (values.start === undefined) {
         values.start = '';
@@ -89,13 +95,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         values.searchtxt = '';
       }
 
-      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
-        tazminno,
-        tazminid,
-        values.searchtxt,
-        values.start,
-        values.finish
-      );
+      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation({
+        checktakipNo: tazminno,
+        checktazminId: tazminid,
+        search: values.searchtxt,
+        start: values.start,
+        finish: values.finish,
+      });
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });
@@ -114,13 +120,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
       let tazminid = false;
       values.searchtxt = '';
 
-      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation(
-        tazminno,
-        tazminid,
-        values.searchtxt,
-        values.start,
-        values.finish
-      );
+      await this.props.kDamageCompensationStore.StoregetFilterDamageCompansation({
+        checktakipNo: tazminno,
+        checktazminId: tazminid,
+        search: values.searchtxt,
+        start: values.start,
+        finish: values.finish,
+      });
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });
@@ -128,8 +134,16 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     });
   };
 
+
+
+  getCompensationStatusCheck=async()=>{
+    this.setState({control:await this.props.opsHierarchyStore.GetCompensationStatusCheck()})  
+  }
+
+
   async componentDidMount() {
     await this.getalldamagecompensaation();
+    await this.getCompensationStatusCheck();
   }
 
   Modal = () => {
@@ -139,7 +153,6 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
   };
 
   async UpdateModalOpen(entityDto: EntityDto) {
-    console.log('entityDto.id=>', entityDto.id);
 
     this.setState({ tazminid: entityDto.id });
     this.Modal();
@@ -155,20 +168,22 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     const { getAllDamageCompensationStoreClass } = this.props.kDamageCompensationStore;
     const columns = [
       {
-        title: 'Tazmin No',
+        title: L('CompensationNumber') ,
         dataIndex: 'tazminNo',
         key: 'tazminNo',
         sorter: (a, b) => a.tazminNo - b.tazminNo,
+        responsive: ['sm'] as Breakpoint[]
       },
 
       {
-        title: 'Takip No',
+        title: L('CargoTrackingNumber'),
         dataIndex: 'takipNo',
         key: 'takipNo',
         sorter: (a, b) => a.takipNo - b.takipNo,
+        responsive: ['sm'] as Breakpoint[]
       },
       {
-        title: 'Tazmin Tipi',
+        title: L('CompensationType'),
         dataIndex: 'tazminTipi',
         key: 'tazminTipi',
         filters: [
@@ -179,44 +194,44 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         ],
         onFilter: (value, record) => record.tazminTipi.includes(value),
         ellipsis: true,
+        responsive: ['sm'] as Breakpoint[]
       },
 
       {
-        title: 'Tazmin Statüsü',
+        title: L('CompensationStatus'),
         dataIndex: 'tazminStatusu',
         key: 'tazminStatusu',
-        render: (text: string) =>
-          text === 'Taslak' ? (
-            <Tag color="#2db7f5">Taslak</Tag>
-          ) : text == 'TazminEksikEvrak' ? (
-            <Tag color="red">Tazmin Eksik Evrak</Tag>
-          ) : text == 'TazminOlusturuldu' ? (
-            <Tag color="green">Tazmin Olusturuldu</Tag>
-          ) : text == 'BolgeIslemde' ? (
-            <Tag color="orange">Bolge Islemde</Tag>
-          ) : text == 'OperasyonBolgeMudurYardımcısıOnayında' ? (
-            <Tag color="blue">Operasyon Bolge Mudur Yardımcısı Onayında</Tag>
-          ) : text == 'BolgeMuduruOnayında' ? (
-            <Tag color="gold">Bolge Muduru Onayında</Tag>
-          ) : text == 'OperasyonGMYOnayında' ? (
-            <Tag color="purple">Operasyon GMY Onayında</Tag>
-          ) : text == 'GmSatisMuduruOnayında' ? (
-            <Tag color="red">Gm Satis Muduru Onayında</Tag>
-          ) : text == 'GmMusteriIliskileriMuduruOnayında' ? (
-            <Tag color="processing">Gm MusteriIliskileri Muduru Onayında</Tag>
-          ) : text == 'SatisGMYOnayında' ? (
-            <Tag color="cyan">Satis GMY Onayında</Tag>
-          ) : (
-            <Tag color="yellow">Bilinmiyor</Tag>
-          ),
+        responsive: ['sm'] as Breakpoint[],
+        render: (text : string) =>
+           
+          text === "Taslak" ? (           
+            <Tag style={{ padding: 5 }} color="#fa541c">
+             {CompensationStatus.Taslak}   
+            </Tag> ) : 
+            text =="TazminEksikEvrak" ?(
+            <Tag style={{ padding: '2px 5px' }} color="#fa541c">
+               { CompensationStatus.TazminEksikEvrak}
+             </Tag>
+            ) :
+            text =="TazminOlusturuldu" ?(
+              <Tag style={{ padding: '2px 5px' }} color="#1da57a">
+                 {CompensationStatus.TazminOlusturuldu}
+               </Tag>
+              ) :
+              <Tag style={{ padding: '2px 5px' }} color="#faad14">     
+                 { CompensationStatus[text] }
+               </Tag>
+ 
+            
       },
       {
-        title: 'Tazmin Tarihi',
+        title: L('CompensationRequestDate'),
         dataIndex: 'tazminTarihi',
         key: 'tazminTarihi',
+        responsive: ['sm'] as Breakpoint[]
       },
       {
-        title: 'Süreç Sahibi Bölge',
+        title: L('ProcessOwnerRegion'),
         dataIndex: 'surecSahibiBolge',
         key: 'surecSahibiBolge',
         filters: [
@@ -243,33 +258,40 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         ],
         onFilter: (value, record) => record.surecSahibiBolge.includes(value),
         ellipsis: true,
+        responsive: ['sm'] as Breakpoint[]
       },
 
       {
-        title: 'Ekleyen Kullanıcı',
+        title: L('AddedUser'),
         dataIndex: 'eklyenKullanici',
         key: 'eklyenKullanici',
+        
+        responsive: ['sm'] as Breakpoint[]
       },
 
       {
-        title: 'İşlemler',
+        title: L('Operations'),
         key: 'islemler',
         render: (text: string, item: any) => (
           <div>
-            {console.log('item=>', item)}
+                                         
+           { console.log('text',item.tazminStatusu) }
             <Dropdown
+
               trigger={['click']}
-              overlay={
+              overlay=
+              {                        
                 <Menu>
-                  <Menu.Item>
-                    <Link to={{ pathname: `/damageupdate/${item.tazminNo}` }}>Düzenle</Link>
+                  <Menu.Item disabled={item.btnControl}  className={'ClassMenuItem'+item.tazminStatusu} >
+                    <Link to={{ pathname:`/damageupdate/${item.tazminNo}` }}>{L('DamageCompensationEdit')}</Link>
                   </Menu.Item>
-                  <Menu.Item>
-                    <Link to={{ pathname: `/damageevalutaion/${item.tazminNo}` }}>Değerlendir</Link>
+
+                  <Menu.Item disabled={item.btnControl}  className={'ClassMenuItem'+item.tazminStatusu}>
+                    <Link to={{ pathname: `/damageevalutaion/${item.tazminNo}` }}>{L('DamageCompensationEvalution')}</Link>
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item  >
                     <Link to={{ pathname: `/damageconmpensationview/${item.tazminNo}` }}>
-                      Görüntüle
+                    {L('DamageCompensationView')}
                     </Link>
                   </Menu.Item>
                 </Menu>
@@ -277,31 +299,19 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
               placement="bottomLeft"
             >
               <Button type="primary" icon={<SettingOutlined />}>
-                İşlemler
+               {L('Operations')}
               </Button>
             </Dropdown>
           </div>
         ),
+        responsive: ['sm'] as Breakpoint[]
       },
     ];
 
     return (
       <>
         <React.Fragment>
-          <Space direction="vertical">
-            {/* <Card hoverable>
-              <Row>
-                <Col
-                  xs={{ span: 6, offset: 0 }}
-                  sm={{ span: 6, offset: 0 }}
-                  md={{ span: 6, offset: 0 }}
-                  lg={{ span: 4, offset: 0 }}
-                  xl={{ span: 4, offset: 0 }}
-                  xxl={{ span: 4, offset: 0 }}
-                ></Col>
-              </Row>
-            </Card> */}
-
+          <Space direction="vertical"> 
             <Card hoverable>
               <PageHeader
                 ghost={false}
@@ -316,13 +326,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                       )}
                     </Breadcrumb.Item>
                     <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
-                    <Breadcrumb.Item>Hasar Tazmin Listesi </Breadcrumb.Item>
+                    <Breadcrumb.Item>{L('DamageCompensationList')} </Breadcrumb.Item>
                   </Breadcrumb>
                 }
               ></PageHeader>
             </Card>
 
-            <Card hoverable title={L('DamageCompensationFilterCardHeader')}>
+            <Card hoverable>
               <Form ref={this.formReffilter} initialValues={{ remember: false }}>
                 <Row gutter={[16, 16]}>
                   <Col
@@ -336,14 +346,14 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                     <Form.Item label={<label>Seçim</label>} name="raidocheck">
                       <Radio.Group>
                         <Space direction="horizontal">
-                          <Radio value={1}>Tazmin No</Radio>
-                          <Radio value={2}>Takip No</Radio>
+                          <Radio value={1}>{L('CompensationNumber')}</Radio>
+                          <Radio value={2}>{L('CargoTrackingNumber')}</Radio>
                         </Space>
                       </Radio.Group>
                     </Form.Item>
 
                     <Form.Item
-                      label={<label>Arama</label>}
+                      label={<label>{L('Filter')}</label>}
                       rules={[
                         {
                           pattern: /^(?:\d*)$/,
@@ -373,7 +383,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                         xl={{ span: 6, offset: 0 }}
                         xxl={{ span: 6, offset: 0 }}
                       >
-                        <Form.Item name="start" label={<label>Başlangıç Tarihi</label>}>
+                        <Form.Item name="start" label={<label>{L('StartDate')}</label>}>
                           <Input type="date" className="formInput" style={{ float: 'left' }} />
                         </Form.Item>
                       </Col>
@@ -385,7 +395,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                         xl={{ span: 6, offset: 0 }}
                         xxl={{ span: 6, offset: 0 }}
                       >
-                        <Form.Item name="finish" label={<label>Bitiş Tarihi</label>}>
+                        <Form.Item name="finish" label={<label> {L('FinishDate')}  </label>}>
                           <Input type="date" className="formInput" style={{ float: 'left' }} />
                         </Form.Item>
                       </Col>
@@ -426,7 +436,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                       onClick={this.getFilterdamagecompensaation}
                       htmlType="submit"
                     >
-                      Tüm Liste
+                      {L('AllList')}
                     </Button>
                   </Col>
                 </Row>

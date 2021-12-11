@@ -1,15 +1,15 @@
 /* eslint-disable */
 import './index.less';
 import React from 'react';
-import ListSort from '../../../lib/ListSort';
+import ListSort from '../../../../lib/ListSort';
 import { inject, observer } from 'mobx-react';
-import { VerticalAlignMiddleOutlined } from '@ant-design/icons';
-import Stores from '../../../stores/storeIdentifier';
-import KHierarchyStore from '../../../stores/kHierarchyStore';
-import AppComponentBase from '../../../components/AppComponentBase';
+import Stores from '../../../../stores/storeIdentifier';
+import OpsHierarchyStore from '../../../../stores/opsHierarchyStore';
+import AppComponentBase from '../../../../components/AppComponentBase';
 import { Button } from 'antd';
-import { L } from '../../../lib/abpUtility';
-import { HierarchyDrawer } from './HierarchyDrawer';
+import { L } from '../../../../lib/abpUtility';
+import { OpsHierarchyDrawer } from './OpsHierarchyDrawer';
+import { VerticalAlignMiddleOutlined } from '@ant-design/icons';
 
 export interface IState {
   dataArray: any;
@@ -20,13 +20,13 @@ export interface IState {
 
 export interface IProps {
   keys: string[];
-  kHierarchyStore?: KHierarchyStore;
+  opsHierarchyStore?: OpsHierarchyStore;
   selectedKeys: string[];
 }
 
-@inject(Stores.KHierarchyStore)
+@inject(Stores.OpsHierarchyStore)
 @observer
-export default class HiearchySortable extends AppComponentBase<IProps, IState> {
+export default class OpsHiearchySortable extends AppComponentBase<IProps, IState> {
   state = {
     dataArray: [] as any,
     nodeKey: 0,
@@ -35,15 +35,22 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
   };
 
   getNodes = () => {
-    this.props.kHierarchyStore
-      ?.getNodesForKeyValues({
+   
+     try {
+       
+       this.props.opsHierarchyStore?.getNodesForKeyValues({
         keys: this.props.selectedKeys,
         skipCount: 0,
         maxResultCount: 1000000,
       })
       .then(() => {
-        this.setState({ dataArray: this.props.kHierarchyStore?.nodeKeyValues });
+        this.setState({ dataArray: this.props.opsHierarchyStore?.nodeKeyValues });
       });
+       
+     } catch (error) {
+     }
+
+   
   };
 
   componentDidMount = () => {
@@ -53,17 +60,18 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
   onChange = (values) => {
     this.getNodes();
     let ids = values.map((item) => item.key);
-    this.props.kHierarchyStore?.updateOrderNodes(ids);
+    this.props.opsHierarchyStore?.updateOrderNodes(ids);
+
   };
 
   // Drawer Methods
 
   onSwitchChange = async (data: any) => {
-    this.props.kHierarchyStore?.update(data);
+    this.props.opsHierarchyStore?.update(data);
   };
 
   onPassive = async (position: string) => {
-    this.props.kHierarchyStore?.updateToPassive({ positionId: position });
+    this.props.opsHierarchyStore?.updateToPassive({ positionId: position });
   };
 
   drawerOnClose = () => {
@@ -80,13 +88,15 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
   };
 
   render() {
-    const childrenToRender = this.state.dataArray.map((item, i) => {
+    const childrenToRender = this.state.dataArray.map((item, i) => {   
       const { title, id } = item;
-      return (
+      return (        
         <div key={id} className={`list-sort-list`}>
+          
           <div className={`list-sort-icon`}>
             <VerticalAlignMiddleOutlined />
           </div>
+
           <div className={`list-sort-text`}>
             <h1 style={{ width: '320px' }}>{title}</h1>
           </div>
@@ -104,8 +114,9 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
         <div className={`list-sort-wrapper`}>
           <div className={'list-sort'}>
             <ListSort
+             
               onChange={this.onChange}
-              // onEventChange={this.onEventChange}
+              //onEventChange={this.onEventChange}             
               dragClassName="list-drag-selected"
               appearAnim={{ animConfig: { marginTop: [5, 30], opacity: [1, 0] } }}
             >
@@ -113,8 +124,8 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
             </ListSort>
           </div>
         </div>
-        {console.log('dataarrya=>',this.state.dataArray)}
-        <HierarchyDrawer
+        
+        <OpsHierarchyDrawer
           node={this.state.node}
           key={this.state.nodeKey}
           visible={this.state.visible}

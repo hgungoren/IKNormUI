@@ -164,6 +164,28 @@ kDamageCompensationEvalutaionCreate = () => {
 
 
 
+  //Tazmin Formu Onaylama
+ DamageCompensationApproval=()=>{
+
+      confirm({
+        icon: <CheckCircleTwoTone />,
+        content: 'Onaylama işlemi ile form değerlendirme süreci tamamlanacaktır. Devam etmek istiyor musunuz?',
+        okText: L('Save'),
+        cancelText:L('GiveUp'),
+        onOk: () => {
+          this.props.kDamageCompensationStore.StoregetpostCompensationApproval(this.props['match'].params['id']) 
+          this.setState({onayaGonderBtn:true})
+
+        },
+        onCancel() { console.log(L('Cancel')); },
+    })
+
+ }
+
+
+
+
+
   public render() {
    
     const { TabPane } = Tabs
@@ -1078,9 +1100,22 @@ kDamageCompensationEvalutaionCreate = () => {
                     <Row style={{ float: 'right' }}>
                     <Col span={12}>
                       <Space style={{ width: '100%' }}>
+
+
                         <Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.kDamageCompensationEvalutaionCreate}   htmlType="submit">
                           Onaya Gönder
                         </Button>
+
+                         { isGranted("items.hierarchy.approval.btn") ? 
+                                (<Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.DamageCompensationApproval}   >
+                                Onaylama
+                              </Button>) : '' 
+                        
+                        }
+                           
+                        
+
+
                       </Space>
                     </Col>
                   </Row>

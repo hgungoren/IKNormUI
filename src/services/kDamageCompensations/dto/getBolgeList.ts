@@ -1,4 +1,4 @@
-export interface getBolgeList{
-    objId:string;
-    adi:string
+export interface GetBolgeList {
+  objId: string;
+  adi: string;
 }
