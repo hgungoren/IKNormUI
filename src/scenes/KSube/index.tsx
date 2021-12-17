@@ -193,7 +193,7 @@ class KSube extends AppComponentBase<Props, State>{
 
             if (this.state.normId === '0') {
 
-                if (isGranted('ksubenorm.create')) {
+                if (isGranted('items.knorm.ksubenorm.create')) {
                     await this.props.kSubeNormStore.create(values);
                     this.openNotificationWithIcon('success')
                 } else {
@@ -202,7 +202,7 @@ class KSube extends AppComponentBase<Props, State>{
             }
 
             else {
-                if (isGranted('ksubenorm.edit')) {
+                if (isGranted('items.knorm.ksubenorm.edit')) {
                     await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
                 } else {
                     this.permissionNotification('warning');
@@ -286,7 +286,7 @@ class KSube extends AppComponentBase<Props, State>{
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.getPosition(tip);
 
-        if (isGranted('ksubenorm.view')) {
+        if (isGranted('items.knorm.ksubenorm.view')) {
             await this.getKSubeNorms();
             await this.getKSubeEmployees();
             await this.mergeArray();
@@ -453,7 +453,7 @@ class KSube extends AppComponentBase<Props, State>{
                                     </Menu.Item>
                                     }
                                     {
-                                        this.isGranted('ksubenorm.operation') && <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
+                                        this.isGranted('items.knorm.ksubenorm.operation') && <Menu.Item > <Link to={'#'} onClick={() => this.createOrUpdateModalOpen(item.tip, item.objId, item.adi)} > {L('NormCreate')} </Link> </Menu.Item>
                                     }
                                 </Menu>
                             }

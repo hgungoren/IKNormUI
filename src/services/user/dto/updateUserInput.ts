@@ -11,4 +11,6 @@ export interface UpdateUserInput {
   id: number;
   title: string;
   companyCode: string;
+
+
 }

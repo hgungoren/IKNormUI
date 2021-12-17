@@ -71,13 +71,13 @@ class KSubeNormTable extends React.Component<ICreateNormTableProps> {
                 render: (text: string, item: any) => (
                     <div>
                         {
-                            isGranted('ksubenorm.edit') && <>
+                            isGranted('items.knorm.ksubenorm.edit') && <>
                                 <Tooltip placement="topRight" title={L('Edit')}>
                                     <Button style={{ backgroundColor: '#faad14', borderColor: '#faad14', color: 'white' }} onClick={() => kSubeNormEdit({ id: item.id })} icon={<EditOutlined />} ></Button>
                                 </Tooltip></>
                         }
                         {
-                            isGranted('ksubenorm.delete') && <>
+                            isGranted('items.knorm.ksubenorm.delete') && <>
                                 <Tooltip placement="topLeft" title={L('Delete')}>
                                     <Button style={{ marginLeft: 3 }} type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
                                 </Tooltip>
@@ -92,7 +92,7 @@ class KSubeNormTable extends React.Component<ICreateNormTableProps> {
             <>
 
                 {
-                    isGranted('ksubenorm.view') && <Table
+                    isGranted('items.knorm.ksubenorm.view') && <Table
                         locale={{ emptyText: L('NoData') }}
                         rowKey={(record) => record.id.toString()}
                         bordered={false}

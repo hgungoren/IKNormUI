@@ -12,7 +12,7 @@ class KBolgeService {
     }
 
     public async get(entityDto: EntityDto<string>): Promise<CreateOrUpdateKBolgeInput> {
-        let result = await http.get('iknorm/KBolge/Get', { params: entityDto });
+        let result = await http.get('iknorm/KBolge/Get', { params: entityDto }); 
         return result.data.result;
     }
 }

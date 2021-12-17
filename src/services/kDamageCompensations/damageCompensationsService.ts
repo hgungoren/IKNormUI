@@ -3,15 +3,9 @@ import { EntityDto } from '../dto/entityDto';
 import { FileDamage } from './dto/fileDamage';
 import { GetCariListDamage } from './dto/getCariListDamage';
 import { CreateDamageInput } from './dto/createDamageInput';
-<<<<<<< HEAD
 import { ViewClass } from './dto/viewClass';
 import { GetCreateDamageInput } from './dto/getCreateDamageInput';
 import { UpdateDamageCompensationClass } from './dto/updateDamageCompensation';
-=======
-import { DamageCompensationViewClass } from './dto/viewClass';
-import { GetCreateDamageInput } from './dto/getCreateDamageInput';
-import { updateDamageCompensationClass } from './dto/updateDamageCompensation';
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
 import { FilterDamageCompensationDto } from './dto/filterDamageCompensationDto';
 import { DamageCompensationEvalutainon } from './dto/damageCompensationEvalutaion';
 
@@ -66,11 +60,7 @@ class KDamageCompensationService {
     return result.data.result;
   }
 
-<<<<<<< HEAD
   public async updateDamage(updateDamage: UpdateDamageCompensationClass) {
-=======
-  public async updateDamage(updateDamage: updateDamageCompensationClass) {
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
     let result = await http.put('iknorm/DamageCompensation/Update', updateDamage);
     return result;
   }
@@ -111,7 +101,6 @@ class KDamageCompensationService {
   }
 
   public async postFileUpdateDamageCompensationService(fileDamage: FileDamage) {
-<<<<<<< HEAD
     let result = await http.put('/iknorm/DamageCompensationFileInfo/UpdateFileList', fileDamage);
     return result;
   }
@@ -135,18 +124,15 @@ class KDamageCompensationService {
 
 
 
+  //tazmin tarihce
+  public async getDamageHistroy(id:number){
+    let result= await http.get('iknorm/OpsHistory/GetListDamage?id='+id+'')
+    return result.data.result;
+ }
 
 
 
-=======
-    let result = await http.put(
-      '/api/services/app/DamageCompensationFileInfo/UpdateFileList',
-      fileDamage
-    );
-    console.log('servidenDÖNEN=>', result);
-    return result;
-  }
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
+
 }
 
 export default new KDamageCompensationService();

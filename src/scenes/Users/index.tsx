@@ -41,7 +41,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
   state = {
     modalVisible: false,
-    maxResultCount: 10,
+    maxResultCount: 10000,
     skipCount: 0,
     userId: 0,
     filter: '',
@@ -56,10 +56,10 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
   async getAll() {
     await this.props.userStore.getAll({
-       maxResultCount: this.state.maxResultCount,
-        skipCount: this.state.skipCount, 
-        keyword: this.state.filter 
-      });
+      maxResultCount: this.state.maxResultCount,
+      skipCount: this.state.skipCount,
+      keyword: this.state.filter
+    });
   }
 
   // handleTableChange = (pagination: any) => {
@@ -107,33 +107,36 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   }
 
   handleCreate = async () => {
-    const form = this.formRef.current;
 
-    form!.validateFields().then(async (values: any) => {
+    const form = this.formRef.current;
+    // form?.setFieldsValue({sicilNo:888})
+    // form?.setFieldsValue({companyCode:'0'})
+    // form?.setFieldsValue({userObjId:0})
+    // form?.setFieldsValue({companyObjId:0})
+    // form?.setFieldsValue({companyRelationObjId:0})
+
+    form!.validateFields().then(async (values: any) => { 
       if (this.state.userId === 0) {
-        try {
-          console.log(values)
-          await this.props.userStore.create(values);
+        try { 
+          await this.props.userStore.create(values); 
         } catch (e) {
           console.log('ERROR : ', e)
         }
-      } else {
+      } else { 
         await this.props.userStore.update({ ...values, id: this.state.userId });
-      }
-
+      } 
       await this.getAll();
       this.setState({ modalVisible: false });
       form!.resetFields();
 
-    }).catch((err) => console.log('CreateError : ', err));
-
+    }).catch((err) => console.log('CreateError : ', err)); 
   };
 
   handleSearch = (value: string) => {
     this.setState({ filter: value }, async () => await this.getAll());
   };
 
-  handlePaginationTable = pagination => { 
+  handlePaginationTable = pagination => {
     const { filterTable } = this.state;
     const { pageSize, current } = pagination;
     this.setState({
@@ -212,25 +215,25 @@ class User extends AppComponentBase<IUserProps, IUserState> {
             </Dropdown>
           </div>
         ), responsive: ['sm'] as Breakpoint[]
-      }, 
+      },
     ];
 
     return (
       <>
 
-               
-       <Card style={{ marginBottom: 20 }}>
-                    <PageHeader
-                        ghost={false}
-                        onBack={() => window.history.back()}
-                        title={
-                            <Breadcrumb>
-                                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
-                                <Breadcrumb.Item> {L('pages.user')} </Breadcrumb.Item>
-                            </Breadcrumb>
-                        }  >
-                    </PageHeader>
-                </Card>
+
+        <Card style={{ marginBottom: 20 }}>
+          <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title={
+              <Breadcrumb>
+                <Breadcrumb.Item>{this.isGranted('items.dashboard.view') ? <Link to="/dashboard">{L('Dashboard')}</Link> : <Link to="/home">{L('Dashboard')}</Link>}  </Breadcrumb.Item>
+                <Breadcrumb.Item> {L('pages.user')} </Breadcrumb.Item>
+              </Breadcrumb>
+            }  >
+          </PageHeader>
+        </Card>
 
 
         <Card>
@@ -282,6 +285,10 @@ class User extends AppComponentBase<IUserProps, IUserState> {
               />
             </Col>
           </Row>
+
+          {
+            console.log(this.state.userId)
+          }
           <CreateOrUpdateUser
             formRef={this.formRef}
             visible={this.state.modalVisible}

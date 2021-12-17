@@ -28,7 +28,7 @@ class KSubeNormForm extends React.Component<IKSubeNorFormProps> {
         return (
             <> 
                 {
-                    (isGranted('ksubenorm.create') || isGranted('ksubenorm.edit')) && <Form ref={formRef}>
+                    (isGranted('items.knorm.ksubenorm.create') || isGranted('items.knorm.ksubenorm.edit')) && <Form ref={formRef}>
                         <Form.Item initialValue={subeObjId} name='subeObjId' rules={rules.subeObjId}>
                             <Input style={{ display: 'none' }} />
                         </Form.Item>

@@ -9,7 +9,7 @@ import { EntityDto } from '../../../services/dto/entityDto';
 import AppComponentBase from '../../../components/AppComponentBase';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
 import OpsHierarchyStore from '../../../stores/opsHierarchyStore';
-import { FilterOutlined, OrderedListOutlined, SettingOutlined } from '@ant-design/icons';
+import {  FilterOutlined, OrderedListOutlined, SettingOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
   Button,
@@ -29,11 +29,8 @@ import {
   Tag,
 } from 'antd';
 import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation';
-<<<<<<< HEAD
 import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
-=======
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
@@ -204,7 +201,6 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('CompensationStatus'),
         dataIndex: 'tazminStatusu',
         key: 'tazminStatusu',
-<<<<<<< HEAD
         responsive: ['sm'] as Breakpoint[],
         render: (text : string) =>
            
@@ -227,54 +223,6 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                </Tag>
  
             
-=======
-        render: (text: string) =>
-          text === 'Taslak' ? (
-            <Tag style={{ padding: 5 }} color="#faad14">
-              Taslak
-            </Tag>
-          ) : text == 'TazminEksikEvrak' ? (
-            <Tag style={{ padding: '2px 5px' }} color="skcancel">
-              Tazmin Eksik Evrak
-            </Tag>
-          ) : text == 'TazminOlusturuldu' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#1da57a">
-              Tazmin Olusturuldu
-            </Tag>
-          ) : text == 'BolgeIslemde' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Bolge Islemde
-            </Tag>
-          ) : text == 'OperasyonBolgeMudurYardımcısıOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Operasyon Bolge Mudur Yardımcısı Onayında
-            </Tag>
-          ) : text == 'BolgeMuduruOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Bolge Muduru Onayında
-            </Tag>
-          ) : text == 'OperasyonGMYOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Operasyon GMY Onayında
-            </Tag>
-          ) : text == 'GmSatisMuduruOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Gm Satis Muduru Onayında
-            </Tag>
-          ) : text == 'GmMusteriIliskileriMuduruOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Gm MusteriIliskileri Muduru Onayında
-            </Tag>
-          ) : text == 'SatisGMYOnayında' ? (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Satis GMY Onayında
-            </Tag>
-          ) : (
-            <Tag style={{ padding: '2px 5px' }} color="#faad14">
-              Bilinmiyor
-            </Tag>
-          ),
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
       },
       {
         title: L('CompensationRequestDate'),
@@ -386,16 +334,18 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
             <Card hoverable>
               <Form ref={this.formReffilter} initialValues={{ remember: false }}>
-                <Row gutter={[16, 16]}>
-                  <Col
-                    xs={{ span: 6, offset: 0 }}
+
+                <Row >
+
+                 <Col xs={{ span: 6, offset: 0 }}
                     sm={{ span: 6, offset: 0 }}
                     md={{ span: 6, offset: 0 }}
                     lg={{ span: 6, offset: 0 }}
                     xl={{ span: 6, offset: 0 }}
                     xxl={{ span: 6, offset: 0 }}
-                  >
-                    <Form.Item label={<label>Seçim</label>} name="raidocheck">
+                    
+                    >
+                 <Form.Item label={<label>Seçim</label>} name="raidocheck">
                       <Radio.Group>
                         <Space direction="horizontal">
                           <Radio value={1}>{L('CompensationNumber')}</Radio>
@@ -403,9 +353,18 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                         </Space>
                       </Radio.Group>
                     </Form.Item>
+                 </Col>  
 
-                    <Form.Item
-                      label={<label>{L('Filter')}</label>}
+
+                 <Col xs={{ span: 6, offset: 0 }}
+                    sm={{ span: 6, offset: 0 }}
+                    md={{ span: 6, offset: 0 }}
+                    lg={{ span: 6, offset: 0 }}
+                    xl={{ span: 6, offset: 0 }}
+                    xxl={{ span: 6, offset: 0 }}>
+
+                <Form.Item
+                       label={<label>{L('Filter')} </label>}
                       rules={[
                         {
                           pattern: /^(?:\d*)$/,
@@ -414,31 +373,33 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                       ]}
                       name="searchtxt"
                     >
-                      <Input className="formInput" />
+                      <Input className="formInput formInputSearch"  />
                     </Form.Item>
-                  </Col>
+                 </Col>
+               
+                  
 
-                  <Col
-                    xs={{ span: 18, offset: 0 }}
-                    sm={{ span: 18, offset: 0 }}
-                    md={{ span: 18, offset: 0 }}
-                    lg={{ span: 18, offset: 0 }}
-                    xl={{ span: 18, offset: 0 }}
-                    xxl={{ span: 18, offset: 0 }}
-                  >
-                    <Row>
-                      <Col
+
+                </Row>
+
+
+
+                <Row gutter={[8, 8]}>
+
+                <Col
                         xs={{ span: 6, offset: 0 }}
                         sm={{ span: 6, offset: 0 }}
                         md={{ span: 6, offset: 0 }}
                         lg={{ span: 6, offset: 0 }}
                         xl={{ span: 6, offset: 0 }}
                         xxl={{ span: 6, offset: 0 }}
+                       
                       >
                         <Form.Item name="start" label={<label>{L('StartDate')}</label>}>
                           <Input type="date" className="formInput" style={{ float: 'left' }} />
                         </Form.Item>
                       </Col>
+
                       <Col
                         xs={{ span: 6, offset: 0 }}
                         sm={{ span: 6, offset: 0 }}
@@ -446,43 +407,44 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                         lg={{ span: 6, offset: 0 }}
                         xl={{ span: 6, offset: 0 }}
                         xxl={{ span: 6, offset: 0 }}
+                  
                       >
                         <Form.Item name="finish" label={<label> {L('FinishDate')}  </label>}>
                           <Input type="date" className="formInput" style={{ float: 'left' }} />
                         </Form.Item>
                       </Col>
+
+
                       <Col
-                        xs={{ span: 24, offset: 0 }}
-                        sm={{ span: 24, offset: 0 }}
-                        md={{ span: 24, offset: 0 }}
-                        lg={{ span: 24, offset: 0 }}
-                        xl={{ span: 24, offset: 0 }}
-                        xxl={{ span: 24, offset: 0 }}
+                        xs={{ span: 3, offset: 0 }}
+                        sm={{ span: 3, offset: 0 }}
+                        md={{ span: 3, offset: 0 }}
+                        lg={{ span: 3, offset: 0 }}
+                        xl={{ span: 3, offset: 0 }}
+                        xxl={{ span: 3, offset: 0 }}
                       >
                         <Button
                           type="primary"
                           icon={<FilterOutlined />}
                           onClick={this.getFilterdamagecompensaation}
                           htmlType="submit"
+                      
                         >
                           Filtrele
                         </Button>
                       </Col>
-                    </Row>
-                  </Col>
-                </Row>
-                <Divider />
-                <Row>
-                  <Col
-                    xs={{ span: 24, offset: 0 }}
-                    sm={{ span: 24, offset: 0 }}
-                    md={{ span: 24, offset: 0 }}
-                    lg={{ span: 24, offset: 0 }}
-                    xl={{ span: 24, offset: 0 }}
-                    xxl={{ span: 24, offset: 0 }}
+
+
+                      <Col
+                    xs={{ span: 1, offset: 0 }}
+                    sm={{ span: 1, offset: 0 }}
+                    md={{ span: 1, offset: 0 }}
+                    lg={{ span: 1, offset: 0 }}
+                    xl={{ span: 1, offset: 0 }}
+                    xxl={{ span: 1, offset: 0 }}
                   >
                     <Button
-                      style={{ float: 'right' }}
+                 
                       type="primary"
                       icon={<OrderedListOutlined />}
                       onClick={this.getFilterdamagecompensaation}
@@ -491,6 +453,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                       {L('AllList')}
                     </Button>
                   </Col>
+
+                </Row>
+
+
+                <Divider />
+                <Row>
+                 
                 </Row>
               </Form>
             </Card>

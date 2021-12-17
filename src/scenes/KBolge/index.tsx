@@ -203,15 +203,16 @@ class KBolge extends AppComponentBase<Props, State> {
         form!.validateFields()
             .then(async (values: any) => {
                 if (this.state.normId === '0') {
-                    if (isGranted('kbolge.norm.create')) {
+                    if (isGranted('items.knorm.kbolgenorm.create')) {                    
                         await this.props.kSubeNormStore.create(values);
                         this.openNotificationWithIcon('success')
                     }
                     else {
+                      
                         this.permissionNotification('warning');
                     }
                 } else {
-                    if (isGranted('kbolge.norm.edit')) {
+                    if (isGranted('items.knorm.kbolgenorm.edit')) {
                         await this.props.kSubeNormStore.update({ ...values, id: this.state.normId });
                     }
                     else {
@@ -292,7 +293,7 @@ class KBolge extends AppComponentBase<Props, State> {
         await this.setState({ subeObjId: id, subeAdi: subeAdi })
         await this.getPosition(tip);
 
-        if (isGranted('kbolge.norm.view')) {
+        if (isGranted('items.knorm.kbolgenorm.view')) {
             await this.getKSubeNorms();
             await this.getKSubeEmployees();
             await this.mergeArray();

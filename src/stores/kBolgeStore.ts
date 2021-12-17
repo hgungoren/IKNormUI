@@ -9,6 +9,7 @@ import { EntityDto } from '../services/dto/entityDto';
 class KBolgeStore {
   @observable kBolge!: PagedResultDto<GetKBolgeOutput>;
   @observable editKBolge!: CreateOrUpdateKBolgeInput;
+  @observable branchname!: string;
 
   @action
   async getAll(pagedFilterAndSortedRequest: PagedKBolgeResultRequestDto) {
@@ -20,6 +21,15 @@ class KBolgeStore {
   async get(entityDto: EntityDto<string>) {
     let result = await kBolgeService.get(entityDto);
     this.editKBolge = result;
+  }
+
+ 
+  @action
+  async branchName(entityDto: EntityDto<string>) {
+    let result = await kBolgeService.get(entityDto);  
+    console.log('result',result)
+    console.log('result.adi',result.adi)
+    this.branchname = result.adi;
   }
 }
 

@@ -43,6 +43,7 @@ export interface IState {
   tazminMusteriTipi: string;
   loading: boolean;
   evaTalepEdilenTutar: string;
+  listDataHistroy:any;
 }
 
 @inject(Stores.KDamageCompensationStore)
@@ -58,6 +59,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
     tazminMusteriTipi: '',
     loading: true,
     evaTalepEdilenTutar: '',
+    listDataHistroy:[] as any
   };
 
   //gelen url idden sayfayı yükleme
@@ -88,14 +90,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
   getdamagePageEva = async (id: number) => {
     await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id });
     setTimeout(() => {
-<<<<<<< HEAD
   
-=======
-      console.log(
-        'geelen vieweva=>',
-        this.props.kDamageCompensationStore.damageCompensationViewClass
-      );
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
       if (
         this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar == '0'
       ) {
@@ -117,8 +112,18 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
     }, 500);
   };
 
+
+ //gelen url idden histrouy sayfayı yükleme
+ getdamagePagehistroy = async (id: number) => {
+  await this.props.kDamageCompensationStore.StoregetCompansationHistroy(id);
+    this.setState({listDataHistroy:this.props.kDamageCompensationStore.gethistroy})
+};
+
+
+
   async componentDidMount() {
     this.getdamagePage(this.props['match'].params['id']);
+    this.getdamagePagehistroy(this.props['match'].params['id'])
   }
 
   public render() {
@@ -129,6 +134,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
         this.getdamagePageEva(this.props['match'].params['id']);
       }
     };
+
     return (
       <>
         <React.Fragment>
@@ -147,11 +153,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       )}{' '}
                     </Breadcrumb.Item>
                     <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
-<<<<<<< HEAD
                     <Breadcrumb.Item>{L('DamageCompensationForm')}</Breadcrumb.Item>
-=======
-                    <Breadcrumb.Item>Hasar Tazmin Formu </Breadcrumb.Item>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                   </Breadcrumb>
                 }
               ></PageHeader>
@@ -170,11 +172,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                   tab={
                     <span>
                       <SwitcherOutlined />
-<<<<<<< HEAD
                      {L('CompensationInformation')}
-=======
-                      Tanzim Bilgileri
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                     </span>
                   }
                   key="1"
@@ -187,11 +185,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                             <Form.Item
                               name="TazminNoDisable"
                               label={
-<<<<<<< HEAD
                                 <label style={{ maxWidth: 150, minWidth: 150 }}>{L('CompensationNumber')}</label>
-=======
-                                <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin No</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                               }
                             >
                               {console.log(this.props['match'].params['id'])}
@@ -206,13 +200,8 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           <Col>
                             <Form.Item
                               name="TazminStatuDisable"
-<<<<<<< HEAD
-                              label={<label>{L('CompensationStatus')}</label>}
+                              label={<label style={{ maxWidth: 150, minWidth: 150 }} >{L('CompensationStatus')}</label>}
                               labelCol={{ span: 12 }}
-=======
-                              label={<label>Tanzim Statüsü</label>}
-                              labelCol={{ span: 10 }}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                               wrapperCol={{ span: 16 }}
                             >
                               {console.log(this.state.tazminStatu)}
@@ -228,11 +217,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     </Col>
                   </Row>
 
-<<<<<<< HEAD
                   <Divider orientation="left">{L('Questioning')}</Divider>
-=======
-                  <Divider orientation="left">Sorgulama</Divider>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
 
                   <Row>
                     <Col span={24}>
@@ -243,11 +228,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                               name="kargotakipNoRadio"
                               label={
                                 <label style={{ maxWidth: 150, minWidth: 150 }}>
-<<<<<<< HEAD
                                   {L('CargoTrackingNumber')}
-=======
-                                  Kargo Takip No
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                                 </label>
                               }
                             >
@@ -262,16 +243,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Row>
                           <Col offset={2}>
                             <Form.Item
-<<<<<<< HEAD
                               
-=======
-                              rules={[
-                                {
-                                  pattern: /^(?:\d*)$/,
-                                  message: 'Sadece sayısal değerler girilebilir',
-                                },
-                              ]}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                               name="ktno"
                             >
                               {console.log(this.state.takipNo)}
@@ -279,11 +251,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                                 disabled
                                 className="formInput"
                                 value={this.state.takipNo}
-<<<<<<< HEAD
                                
-=======
-                                placeholder="Kargo Takip Numarası"
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                               ></Input>
                             </Form.Item>
                           </Col>
@@ -291,11 +259,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           <Col style={{ marginLeft: 25 }}>
                             <Form.Item name="getirbutton">
                               <Button disabled style={{ width: 139 }} type="primary">
-<<<<<<< HEAD
                                 {L('Bring')}
-=======
-                                Getir
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                               </Button>
                             </Form.Item>
                           </Col>
@@ -303,15 +267,9 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       </Form>
                     </Col>
                   </Row>
-<<<<<<< HEAD
 
                   <Divider orientation="left">{L('ShipmentInformation')}</Divider>
 
-=======
-
-                  <Divider orientation="left">Gönderi Bilgileri</Divider>
-
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                   <Form ref={this.formRef} initialValues={{ remember: false }} autoComplete="off">
                     <Row>
                       <Col span={12}>
@@ -319,29 +277,17 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           <Input />
                         </Form.Item>
                         <Form.Item
-<<<<<<< HEAD
                          
                           name="sistem_InsertTime"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
                               {L('DocumentationHistory')}
-=======
-                          rules={rules.sistem_InsertTime}
-                          name="sistem_InsertTime"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Evrak Oluşturma Tarihi
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
                           <Input
                             className="formInput"
                             disabled
-<<<<<<< HEAD
-=======
-                            placeholder="Evrak Oluşturma Tarihi"
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           />
                         </Form.Item>
                       </Col>
@@ -351,11 +297,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           name="evrakSeriNo"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
-<<<<<<< HEAD
                               {L('DocumentationSerialNumber')}
-=======
-                              Evrak Seri Sıra No
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
@@ -368,31 +310,18 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="gonderenKodu"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('SenderCode')}</label>
                           }
                         >
                           <Input disabled className="formInput"  />
-=======
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici Kodu</label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Gönderici Kodu" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item
                           name="gonderenUnvan"
-<<<<<<< HEAD
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('SenderTitle')}</label>}
                         >
                           <Input disabled className="formInput" />
-=======
-                          label={<label style={{ maxWidth: 150, minWidth: 150 }}>Gönderici</label>}
-                        >
-                          <Input disabled className="formInput" placeholder="Gönderici" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -400,11 +329,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={12}>
                         <Form.Item
                           name="aliciKodu"
-<<<<<<< HEAD
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('BuyerCode')}</label>}
-=======
-                          label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı Kodu</label>}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         >
                           <Input placeholder="Alıcı Kodu" disabled className="formInput" />
                         </Form.Item>
@@ -412,15 +337,9 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={12}>
                         <Form.Item
                           name="aliciUnvan"
-<<<<<<< HEAD
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('BuyerTitle')}</label>}
                         >
                           <Input disabled className="formInput"  />
-=======
-                          label={<label style={{ maxWidth: 150, minWidth: 150 }}>Alıcı</label>}
-                        >
-                          <Input disabled className="formInput" placeholder="Alici" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -430,7 +349,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="cikis_Sube_Unvan"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('ExitBranchName')}</label>
                           }
                         >
@@ -439,21 +357,10 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
 
                         <Form.Item hidden name="ilkGondericiSube_ObjId">
                     
-=======
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Çıkış Şube Adı</label>
-                          }
-                        >
-                          <Input placeholder="Çıkış Şube Adı" className="formInput" disabled />
-                        </Form.Item>
-
-                        <Form.Item hidden name="ilkGondericiSube_ObjId">
-                          {' '}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item hidden name="varisSube_ObjId">
-<<<<<<< HEAD
                         
                         </Form.Item>
                         <Form.Item
@@ -464,18 +371,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input className="formInput" disabled />
-=======
-                          {' '}
-                        </Form.Item>
-                        <Form.Item
-                          rules={rules.varis_Sube_Unvan}
-                          name="varis_Sube_Unvan"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Varış Şube Adı</label>
-                          }
-                        >
-                          <Input placeholder="Varış Şube Adı" className="formInput" disabled />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -483,24 +378,14 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     <Row>
                       <Col span={12}>
                         <Form.Item hidden name="birimi_ObjId">
-<<<<<<< HEAD
                   
-=======
-                          {' '}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                         <Form.Item
                           rules={rules.birimi}
                           name="birimi"
-<<<<<<< HEAD
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('CargoTyp')}</label>}
                         >
                           <Input  className="formInput" disabled />
-=======
-                          label={<label style={{ maxWidth: 150, minWidth: 150 }}>Kargo Tipi</label>}
-                        >
-                          <Input placeholder="Kargo Tipi" className="formInput" disabled />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -508,11 +393,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           rules={rules.adet}
                           name="adet"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('PiecesQuantity')}</label>
-=======
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Parça Adedi</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input
@@ -521,26 +402,17 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                             type="number"
                             min={1}
                             max={1000}
-<<<<<<< HEAD
                             
-=======
-                            placeholder="Parça Adedi"
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           />
                         </Form.Item>
                       </Col>
                     </Row>
 
-<<<<<<< HEAD
                     <Divider orientation="left">{L('CompensationInformation')}</Divider>
-=======
-                    <Divider orientation="left">Tazmin Bilgileri</Divider>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
 
                     <Row>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                     
                           name="tazmin_Talep_Tarihi"
                           label={
@@ -550,44 +422,16 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input disabled className="formInput"  />
-=======
-                          rules={rules.Tazmin_Talep_Tarihi}
-                          name="tazmin_Talep_Tarihi"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Tazmin Talep Tarihi
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Tarih Seçiniz" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                           name="tazmin_Tipi"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('CompensationType')}</label>
                           }
                         >
                           <Input disabled className="formInput"  />
-=======
-                          rules={rules.Tazmin_Tipi}
-                          name="tazmin_Tipi"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Tipi</label>
-                          }
-                        >
-                          {/* <Select className="formInput"  placeholder="Seçiniz" allowClear>
-                          <Option value="1">Hasar</Option>
-                          <Option value="2">Kayıp</Option>
-                          <Option value="3" >Geç Teslimat</Option>
-                          <Option value="4">Müşteri Memnuniyeti</Option>
-                        </Select> */}
-
-                          <Input disabled className="formInput" placeholder="Seçiniz" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -595,21 +439,13 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                           name="tazmin_Musteri_Tipi"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('CompensationCustomer')}</label>
-=======
-                          rules={rules.Tazmin_Musteri_Tipi}
-                          name="tazmin_Musteri_Tipi"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Müşterisi</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           {console.log(this.state.tazminMusteriTipi)}
                           <Radio.Group disabled value={this.state.tazminMusteriTipi}>
-<<<<<<< HEAD
                             <Radio value="GonderenCari">{L('SenderCustomer')}</Radio>
                             <Radio value="AliciCari">{L('BuyerCustomer')}</Radio>
                             <Radio value="Farkli">{L('DifferentCustomer')}</Radio>
@@ -627,40 +463,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input disabled className="formInput"  />
-=======
-                            <Radio value="GonderenCari">Gönderen Cari</Radio>
-                            <Radio value="AliciCari">Alıcı Cari</Radio>
-                            <Radio value="Farkli">Farklı Cari</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-
-                        {/* {this.state.settazminmusteriGonderici ? <GonderenCariSelect
-                         gonderenCariCom={this.state.gonderenCariCom} 
-                         gonderenKoduCom={this.state.gonderenKoduCom}
-                        kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
-
-
-                      {this.state.settazminmusteriAlici ? <AliciCariSelect 
-                      
-                       aliciCariCom={this.state.aliciCariCom} 
-                       aliciCariKoduCom={this.state.aliciKoduCom}
-                      kDamageCompensationStore={this.props.kDamageCompensationStore} /> : ''}
-
-
-                      {this.state.settazminmusteriFarkli ? <FarkliCari   /> : ''} */}
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item
-                          rules={rules.Odeme_Musteri_Tipi}
-                          name="odeme_Musteri_Tipi"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Ödenecek Müşteri Tipi
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Seçiniz" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -670,22 +472,14 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="tcK_NO"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('IdentityNo')}</label>
-=======
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>TC Kimlik No</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input
                             disabled
                             className="formInput"
                             maxLength={11}
-<<<<<<< HEAD
                             
-=======
-                            placeholder="TC Kimlik No"
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           />
                         </Form.Item>
                       </Col>
@@ -693,18 +487,13 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="vK_NO"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('TaxNo')}</label>
-=======
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>Vergi Kimlik No</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input
                             disabled
                             className="formInput"
                             maxLength={11}
-<<<<<<< HEAD
                           />
                         </Form.Item>
                       </Col>
@@ -737,9 +526,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                             disabled
                             className="formInput"
                           
-=======
-                            placeholder="Vergi Kimlik No"
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           />
                         </Form.Item>
                       </Col>
@@ -748,7 +534,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                           rules={rules.Surec_Sahibi_Birim_Bolge}
                           name="surec_Sahibi_Birim_Bolge"
                           label={
@@ -758,33 +543,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input disabled className="formInput" />
-=======
-                          rules={rules.Odeme_Birimi_Bolge}
-                          name="odeme_Birimi_Bolge"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Ödeme Birimi/Bölge
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Seçiniz" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item
-                          name="talep_Edilen_Tutar"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Talep Edilen Tutar{' '}
-                            </label>
-                          }
-                        >
-                          <Input
-                            disabled
-                            className="formInput"
-                            placeholder="Talep Edilen Tutar KDV Hariç"
-                          />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -792,7 +550,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                           name="telefon"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
@@ -801,17 +558,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input disabled className="formInput" />
-=======
-                          rules={rules.Surec_Sahibi_Birim_Bolge}
-                          name="surec_Sahibi_Birim_Bolge"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Süreç Sahibi Birim/Bölge
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Seçiniz" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -819,7 +565,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-<<<<<<< HEAD
                           name="email"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
@@ -828,30 +573,6 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           }
                         >
                           <Input disabled className="formInput"  />
-=======
-                          name="telefon"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Bilgilendirme(SMS)
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Cep Telefonu" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item
-                          name="email"
-                          label={
-                            <label style={{ maxWidth: 150, minWidth: 150 }}>
-                              Bilgilendirme(Email)
-                            </label>
-                          }
-                        >
-                          <Input disabled className="formInput" placeholder="Email" />
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         </Form.Item>
                       </Col>
                     </Row>
@@ -860,33 +581,21 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={12}>
                         <Space style={{ width: '100%' }}>
                           <Button type="primary" icon={<SendOutlined />} disabled htmlType="submit">
-<<<<<<< HEAD
                             {L('Save')}
-=======
-                            Kaydet
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           </Button>
                         </Space>
                       </Col>
                     </Row>
-<<<<<<< HEAD
                     
                   </Form>
 
-=======
-                  </Form>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                 </TabPane>
 
                 <TabPane
                   tab={
                     <span>
                       <SwitcherOutlined />
-<<<<<<< HEAD
                       {L('Evalution')}
-=======
-                      Değerlendirme
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                     </span>
                   }
                   key="2"
@@ -907,14 +616,8 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={7}>
                         <Form.Item
                           name="evaTazmin_Nedeni"
-<<<<<<< HEAD
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('CompensationType')}</label>
-=======
-                          rules={[{ required: true, message: 'Lütfen Boş Bırakmayınız!' }]}
-                          label={
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Tazmin Nedeni</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input className="formInput" disabled />
@@ -926,16 +629,9 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={7}>
                         <Form.Item
                           name="evaKargo_Bulundugu_Yer"
-<<<<<<< HEAD
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>
                               {L('LocationOfCargo')}
-=======
-                          rules={[{ required: true, message: 'Lütfen Boş Bırakmayınız!' }]}
-                          label={
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>
-                              Kargonun Bulunduğu Yer
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
@@ -948,11 +644,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           name="evaKusurlu_Birim"
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>
-<<<<<<< HEAD
                              {L('IsThereDefectiveUnit')}
-=======
-                              Kusurlu Birim Var mı?
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
@@ -966,11 +658,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="evaIcerik_Grubu"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('ContentesGruop')}</label>
-=======
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>İçerik Grubu</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input className="formInput" disabled />
@@ -980,11 +668,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={7}>
                         <Form.Item
                           name="evaIcerik"
-<<<<<<< HEAD
                           label={<label style={{ maxWidth: 155, minWidth: 155 }}>{L('Contentes')}</label>}
-=======
-                          label={<label style={{ maxWidth: 155, minWidth: 155 }}>İçerik</label>}
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                         >
                           <Input disabled className="formInput" />
                         </Form.Item>
@@ -996,11 +680,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="evaUrun_Aciklama"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('ProductDescription')}</label>
-=======
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Ürün Açıklaması</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input className="formInput" disabled />
@@ -1011,11 +691,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="evaEkleyen_Kullanici"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('AddedUser')}</label>
-=======
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Ekleyen Kullancı</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input className="formInput" disabled />
@@ -1027,11 +703,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="evaBolge_Aciklama"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('AreaDescription')}</label>
-=======
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Bölge Açıklama</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <TextArea disabled rows={4} style={{ width: '100%' }}></TextArea>
@@ -1044,11 +716,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                         <Form.Item
                           name="evaGm_Aciklama"
                           label={
-<<<<<<< HEAD
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('GMDescription')}</label>
-=======
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Gm Açıklama</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <TextArea disabled rows={4} style={{ width: '100%' }}></TextArea>
@@ -1062,11 +730,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                           name="evaOdenecek_Tutar"
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>
-<<<<<<< HEAD
                               {L('RequestedAmount')}
-=======
-                              Talep Edilen Tutar
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
@@ -1084,16 +748,9 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={7}>
                         <Form.Item
                           name="evaTazmin_Odeme_Durumu"
-<<<<<<< HEAD
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>
                               {L('CompensationPaymentStatus')}
-=======
-                          rules={[{ required: true, message: 'Lütfen Boş Bırakmayınız!' }]}
-                          label={
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>
-                              Tazmin Ödeme Durumu
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                             </label>
                           }
                         >
@@ -1106,14 +763,8 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={7}>
                         <Form.Item
                           name="evaOdenecek_Tutar"
-<<<<<<< HEAD
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>{L('AmountPaid')}</label>
-=======
-                          rules={[{ required: false, message: 'Lütfen Boş Bırakmayınız!' }]}
-                          label={
-                            <label style={{ maxWidth: 155, minWidth: 155 }}>Ödenecek Tutar</label>
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           }
                         >
                           <Input className="formInput" disabled />
@@ -1125,11 +776,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                       <Col span={12}>
                         <Space style={{ width: '100%' }}>
                           <Button type="primary" icon={<SendOutlined />} disabled htmlType="submit">
-<<<<<<< HEAD
                             {L('ApprovalSend')}
-=======
-                            Onaya Gönder
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                           </Button>
                         </Space>
                       </Col>
@@ -1141,16 +788,15 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                   tab={
                     <span>
                       <SwitcherOutlined />
-<<<<<<< HEAD
                       {L('History')}
-=======
-                      Tarihçe
->>>>>>> ae4cecf0c9e6761ad5fb12d44d2407efacc1344e
                     </span>
                   }
                   key="3"
                 >
-                  <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore} />
+                  <DamageHistory 
+                  kDamageCompensationStore={this.props.kDamageCompensationStore}  
+                  listdata={this.state.listDataHistroy} 
+                  />
                 </TabPane>
               </Tabs>
             </Card>

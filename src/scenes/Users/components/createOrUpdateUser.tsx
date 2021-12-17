@@ -23,14 +23,16 @@ class CreateOrUpdateUser extends React.Component<IProps> {
 
   compareToFirstPassword = (rule: any, value: any, callback: any) => {
     const form = this.props.formRef.current;
-
     if (value && value !== form!.getFieldValue('password')) {
       return Promise.reject(L('TwoPasswordsThatYouEnterIsInconsistent'));
     }
     return Promise.resolve();
   };
 
+
+
   validateToNextPassword = (rule: any, value: any, callback: any) => {
+
     const { validateFields, getFieldValue } = this.props.formRef.current!;
 
     this.setState({
@@ -39,7 +41,9 @@ class CreateOrUpdateUser extends React.Component<IProps> {
 
     if (value && this.state.confirmDirty && getFieldValue('confirm')) {
       validateFields(['confirm']);
+      validateFields(['password']);
     }
+
     return Promise.resolve();
   };
 
@@ -117,31 +121,18 @@ class CreateOrUpdateUser extends React.Component<IProps> {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item
-                    label={L('Surname')}
-                    {...formItemLayout}
-                    name={'surname'}
-                    rules={rules.surname}
-                  >
+                  <Form.Item label={L('Surname')}  {...formItemLayout} name={'surname'} rules={rules.surname}   >
                     <Input />
                   </Form.Item>
 
-                  <Form.Item
-                    label={L('Title')}
-                    {...formItemLayout}
-                    name={'title'}
-                    rules={rules.title}
-                  >
+                  <Form.Item label={L('Title')} {...formItemLayout} name={'title'} rules={rules.title}   >
                     <Input />
                   </Form.Item>
-                  <Form.Item
-                    label={L('UserName')}
-                    {...formItemLayout}
-                    name={'userName'}
-                    rules={rules.userName}
-                  >
+
+                  <Form.Item label={L('UserName')}  {...formItemLayout} name={'userName'} rules={rules.userName}   >
                     <Input />
                   </Form.Item>
+
                 </Col>
                 <Col
                   xs={{ span: 24, offset: 0 }}
@@ -151,12 +142,11 @@ class CreateOrUpdateUser extends React.Component<IProps> {
                   xl={{ span: 10, offset: 0 }}
                   xxl={{ span: 10, offset: 0 }}
                 >
-                  <Form.Item
-                    label={L('Email')}
-                    {...formItemLayout}
-                    name={'emailAddress'}
-                    rules={rules.emailAddress as []}
-                  >
+                  <Form.Item label={'sicilNo'} {...formItemLayout} name={'sicilNo'}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label={L('Email')} {...formItemLayout} name={'emailAddress'} rules={rules.emailAddress as []}>
                     <Input />
                   </Form.Item>
 
@@ -171,14 +161,14 @@ class CreateOrUpdateUser extends React.Component<IProps> {
                           message: L('PleaseInputYourPassword'),
                         },
                         {
-                          validator: this.validateToNextPassword,
+                          //validator: this.validateToNextPassword,
                         },
                       ]}
                     >
                       <Input type="password" />
                     </Form.Item>
                   ) : null}
-                  {this.props.modalType === 'edit' ? (
+                  {/* {this.props.modalType === 'edit' ? (
                     <Form.Item
                       label={L('ConfirmPassword')}
                       {...formItemLayout}
@@ -195,7 +185,7 @@ class CreateOrUpdateUser extends React.Component<IProps> {
                     >
                       <Input type="password" />
                     </Form.Item>
-                  ) : null}
+                  ) : null} */}
                   <Form.Item
                     label={L('IsActiveStatus')}
                     {...tailFormItemLayout}

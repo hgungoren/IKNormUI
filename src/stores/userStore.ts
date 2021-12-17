@@ -23,6 +23,7 @@ class UserStore {
   @action
   async update(updateUserInput: UpdateUserInput) {
     let result = await userService.update(updateUserInput);
+    
     this.users.items = this.users.items.map((x: GetUserOutput) => {
       if (x.id === updateUserInput.id) x = result;
       return x;
@@ -57,13 +58,10 @@ class UserStore {
       surname: '',
       password: '',
       userName: '',
-      roleNames: [],
-      userObjId: '0',
+      roleNames: [], 
       isActive: false,
-      emailAddress: '',
-      companyCode: '0',
-      companyObjId: '0',
-      companyRelationObjId: '0',
+      emailAddress: '',   
+      confirm:''
     };
     this.roles = [];
   }

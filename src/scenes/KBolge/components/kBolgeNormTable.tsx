@@ -79,7 +79,7 @@ class KBolgeNormTable extends React.Component<Props> {
                 width: 30,
                 render: (text: string, item: any) => (
                     <div>
-                        {isGranted('kbolge.norm.edit') && <>   <Tooltip placement="topRight" title={L('Edit')}>
+                        {isGranted('items.knorm.kbolgenorm.edit') && <>   <Tooltip placement="topRight" title={L('Edit')}>
                             <Button
                                 style={{
                                     backgroundColor: '#faad14',
@@ -89,7 +89,7 @@ class KBolgeNormTable extends React.Component<Props> {
                                 icon={<EditOutlined />} >
                             </Button>
                         </Tooltip></>}
-                        {isGranted('kbolge.norm.delete') && <><Tooltip placement="topLeft" title={L('Delete')}>
+                        {isGranted('items.knorm.kbolgenorm.delete') && <><Tooltip placement="topLeft" title={L('Delete')}>
                             <Button style={{ marginLeft: 3 }} type="primary" onClick={() => kSubeNormDelete({ id: item.id })} danger icon={<DeleteOutlined />} ></Button>
                         </Tooltip> </>}
                     </div>
@@ -100,7 +100,7 @@ class KBolgeNormTable extends React.Component<Props> {
         return (
             <>
                 {
-                    //isGranted('kbolge.norm.view') &&
+                   
                     <Table
                         locale={{ emptyText: L('NoData') }}
                         rowKey={(record) => record.id.toString()}

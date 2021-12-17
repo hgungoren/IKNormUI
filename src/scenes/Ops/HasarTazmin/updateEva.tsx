@@ -57,6 +57,7 @@ export interface IState {
   evaTalepEdilenTutar:string;
   aktiveTab:string;
   onayaGonderBtn:boolean;
+  listDataHistroy:any;
 }
  const { confirm } = Modal;
 @inject(Stores.KDamageCompensationStore)
@@ -76,7 +77,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   odenecekTutar:true,
   evaTalepEdilenTutar:'',
   aktiveTab:'2',
-  onayaGonderBtn:false
+  onayaGonderBtn:false,
+  listDataHistroy:[] as any
 
   };
 
@@ -1127,7 +1129,7 @@ kDamageCompensationEvalutaionCreate = () => {
                   Tarihçe
                 </span>
               } key="3">
-                  <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore}/>
+                  <DamageHistory  kDamageCompensationStore={this.props.kDamageCompensationStore} listdata={this.state.listDataHistroy}/>
               </TabPane>
             </Tabs>
           </Card>

@@ -73,19 +73,21 @@ const SiderMenu = (props: ISiderMenuProps) => {
         </SubMenu>
 
         <SubMenu key="sub2" icon={<AppstoreAddOutlined />} title={L('sk.menu.operations')}>
-          {appRouters
-            .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'op')
-            .map((route: any, index: number) => {
-              if (route.permission && !isGranted(route.permission)) return null;
-              return (
-                <>
-                  <Menu.Item key={route.key} onClick={() => history.push(route.path)}>
-                    <route.icon />
-                    <span> {' ' + L(route.title)} </span>
-                  </Menu.Item>
-                </>
-              );
-            })}
+              <SubMenu icon={<AppstoreAddOutlined />}  key="sub4"  title={L('DamageCompensation')}>
+                    {appRouters
+                  .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'op')
+                  .map((route: any, index: number) => {
+                    if (route.permission && !isGranted(route.permission)) return null;
+                    return (
+                      <>
+                        <Menu.Item key={route.key} onClick={() => history.push(route.path)}>
+                          <route.icon />
+                          <span> {' ' + L(route.title)} </span>
+                        </Menu.Item>
+                      </>
+                    );
+                  })}
+             </SubMenu>  
         </SubMenu>
 
         <SubMenu key="sub3" icon={<SettingOutlined />} title={L('sk.menu.settings')}>

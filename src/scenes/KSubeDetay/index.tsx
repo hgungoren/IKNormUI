@@ -146,6 +146,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   async getPosition(key: string) {
+    console.log('key=>',key)
     await this.props.kInkaLookUpTableStore.getAll({
       maxResultCount: 20000,
       keyword: key,
@@ -217,8 +218,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   pageSettings = async () => {
-    let tur = this.props.kSubeStore.editKSube.tur;
 
+     let tur = this.props.kSubeStore.editKSube.tur;  
+  
     if (tur === 'Acente') {
       this.setState({ tip: tur });
     } else {
@@ -229,22 +231,22 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       bagliOlduguSubeId: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId,
     });
 
-    if (isGranted('items_kareas_menu_view')) {
-      this.props.kBolgeStore.get({ id: this.state.bagliOlduguSubeId });
-
-      this.setState({
-        breadcrumbBolgeAdi: 'bölge adı',
-        // breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-        // breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
-        breadcrumbSubeAdi: 'şube adı gelecek',
+    if (isGranted('items.kareas.menu.view')) {
+      await this.props.kSubeStore.get({ id: this.props['match'].params['id'] }); 
+      await this.props.kBolgeStore.get({ id: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId });  
+      this.setState({     
+          breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+          breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+       
       });
     }
+
   };
 
   setPageState = async () => {
-    this.setState({ id: this.props['match'].params['id'] });
-     alert(this.state.id)
-    this.props.kSubeStore.get({ id: this.state.id }).then(() => {
+
+      this.setState({ id: this.props['match'].params['id'] });      
+      this.props.kSubeStore.get({ id: this.state.id }).then(() => {
       this.pageSettings();
     });
   };
@@ -269,7 +271,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       await this.mergeArray();
     }
 
-    console.log(this.props.kNormStore);
+
   };
 
   handleSearch = (value: string) => {
@@ -716,8 +718,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
                 {
                   isGranted('items_branch_menu_view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
                 }
-
+          
                 {
+                 
                   breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
                 }
                 {

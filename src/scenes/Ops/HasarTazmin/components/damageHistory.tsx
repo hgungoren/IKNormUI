@@ -19,11 +19,11 @@ import { SendOutlined } from '@ant-design/icons';
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
-
+  listdata:[];
 }
 
 export interface IState {
- 
+  
 }
 
 
@@ -31,10 +31,6 @@ export interface IState {
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensationList extends AppComponentBase<IProps, IState> {
-
-
-
-
   state = {
     
   };
@@ -44,6 +40,9 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
 
   public render() {
+
+
+    console.log('test=>',this.props.listdata)
 
     const { Option } = Select;
     const columns = [
@@ -55,84 +54,42 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
       {
         title: 'İşlemi Yapan Kullanıcı',
-        dataIndex: 'islemiYapanKullanici',
-        key: 'islemiYapanKullanici',
+        dataIndex: 'islemYapanKullanici',
+        key: 'islemYapanKullanici',
       },
       {
         title: 'İşlem Tarihi',
-        dataIndex: 'islemTarihi',
-        key: 'islemTarihi',
+        dataIndex: 'creationTime',
+        key: 'creationTime',
       
         
       },
 
       {
         title: 'Statü',
-        dataIndex: 'statu',
-        key: 'statu',
+        dataIndex: 'tazminStatu',
+        key: 'tazminStatu',
       },
       {
         title: 'Ödeme',
-        dataIndex: 'odeme',
-        key: 'odeme',
+        dataIndex: 'odemeDurumu',
+        key: 'odemeDurumu',
         
       },
       {
-        title: 'Açiklama',
-        dataIndex: 'aciklama',
-        key: 'aciklama',
+        title: 'Gm Açıklama',
+        dataIndex: 'gmAciklama',
+        key: 'gmAciklama',
+        
+      },
+
+      {
+        title: 'Bölge Açıklama',
+        dataIndex: 'bolgeAciklama',
+        key: 'bolgeAciklama',
         
       },
     ];
-
-
-
-    const dataSource = [
-      {
-        key: '1',
-        islem: 'Tazmin Değerlendirme',
-        islemiYapanKullanici:'test',
-        islemTarihi:'11-11-2021',
-        statu:'Tazmin Formu Onaylandı',
-        odeme:'Evet',
-        aciklama:'Ödeme yapılacak'
-
-       
-      },
-      {
-        key: '2',
-        islem: 'Eksik Evrak',
-        islemiYapanKullanici:'test',
-        islemTarihi:'11-11-2021',
-        statu:'Tazmin Formu Onaylandı',
-        odeme:'Evet',
-        aciklama:'Ödeme yapılacak'
-    
-      },
-
-      {
-        key: '2',
-        islem: 'Eksik Evrak',
-        islemiYapanKullanici:'test',
-        islemTarihi:'11-11-2021',
-        statu:'Tazmin Formu Onaylandı',
-        odeme:'Evet',
-        aciklama:'Ödeme yapılacak'
-    
-      },
-
-      {
-        key: '2',
-        islem: 'Eksik Evrak',
-        islemiYapanKullanici:'test',
-        islemTarihi:'11-11-2021',
-        statu:'Tazmin Formu Onaylandı',
-        odeme:'Evet',
-        aciklama:'Ödeme yapılacak'
-    
-      },
-    ];
-
 
 
     return (
@@ -143,7 +100,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
              <Divider orientation="left">Tarihçe</Divider>
             <Table 
             columns={columns} 
-             dataSource={dataSource}
+             dataSource={this.props.listdata}
             locale={{ emptyText: L('NoData')  , sortTitle :'test' }} 
              bordered
              />

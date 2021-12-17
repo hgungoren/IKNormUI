@@ -56,6 +56,7 @@ export interface IState {
   filesFatura:  any;
   filesSevkirsaliye:  any;
   filesTcVkno:  any;
+  listDataHistroy:any;
 }
  
 @inject(Stores.KDamageCompensationStore)
@@ -79,6 +80,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   filesFatura:  [],
   filesSevkirsaliye:  [],
   filesTcVkno:[],
+  listDataHistroy:[] as any
   };
 
 
@@ -877,7 +879,7 @@ async componentDidMount() {
                   }
                   key="3"
                 >
-                  <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore} />
+                  <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore}  listdata={this.state.listDataHistroy}/>
                 </TabPane>
             </Tabs>
           </Card>

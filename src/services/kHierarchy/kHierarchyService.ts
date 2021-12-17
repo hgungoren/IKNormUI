@@ -36,7 +36,7 @@ class KHierarchyService {
   public async generateHierarchy(
     generateHierarchyDto: GenerateHierarchyDto
   ): Promise<GetAllHierarchyOutput[]> {
-    let result = await http.get('iknorm/OpsHierarchy/GetHierarchy', {
+    let result = await http.get('iknorm/KHierarchy/GetHierarchy', {
       params: generateHierarchyDto,
     });
     return result.data.result;
