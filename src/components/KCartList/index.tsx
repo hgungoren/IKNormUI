@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import './index.less';
 import { Row } from 'antd';
 import KCart from '../KCart';
@@ -15,6 +16,8 @@ interface KCartListProps {
     subeObjId;
     normCount;
     kNormStore;
+    kPersonelStore;
+    kSubeNormStore;
     cardLoading;
     onDateFilter;
     kPersonelCount;
@@ -46,6 +49,8 @@ function KCartList({
     subeObjId,
     normCount,
     kNormStore,
+    kPersonelStore,
+    kSubeNormStore,
     cardLoading,
     onDateFilter,
     kPersonelCount,
@@ -202,6 +207,8 @@ function KCartList({
                 visible={visible}
                 subeObjId={subeObjId}
                 kNormStore={kNormStore}
+                kPersonelStore={kPersonelStore}
+                kSubeNormStore={kSubeNormStore}
                 onCancel={onCancelModal}
                 title={table.replace('get', '')}
                 kNormDetailStore={kNormDetailStore}
@@ -215,7 +222,9 @@ KCartList.propTypes = {
     cardLoading: PropTypes.bool,
     normCount: PropTypes.number,
     kNormStore: PropTypes.object,
-    kPersonelCount: PropTypes.number
+    kPersonelCount: PropTypes.number,
+    kPersonelStore :PropTypes.object,
+    kSubeNormStore:PropTypes.object,
 };
 
 export default KCartList;

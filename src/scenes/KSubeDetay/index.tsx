@@ -354,6 +354,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     });
 
     this.setState({ groupData: groupData });
+    console.log(groupData)
   };
 
   getHierarchy = async (subeId: string, bolgeId: string, tip: string, pozisyon: string) => {
@@ -887,6 +888,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
               detaillModalVisible: false,
             });
           }}
+          groupData ={groupData === undefined ? [] : groupData}
+          
         />
       </React.Fragment>
     );

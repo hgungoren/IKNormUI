@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { action, observable } from 'mobx';
 import { EntityDto } from '../services/dto/entityDto';
 import { PagedResultDto } from '../services/dto/pagedResultDto';

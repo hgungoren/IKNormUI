@@ -1,3 +1,4 @@
+/*eslint-disable */
 import './index.less';
 import React from 'react';
 //import uuid from 'react-uuid';
@@ -13,7 +14,7 @@ import { CheckCircleOutlined, ClockCircleOutlined, StopOutlined } from '@ant-des
 
 const { Step } = Steps;
 
-const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
+const NormDetailTimeLine = ({ visible, onCancel, title, data,groupData, norm }) => {
 
     
     return (
@@ -48,7 +49,7 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                                 }
 
                             </Descriptions>
-                        </Col>
+                        </Col>  
                         <Col xs={{ span: 24, offset: 2 }} sm={{ span: 10, offset: 2 }}>
 
                             <Steps direction="vertical" >
@@ -66,6 +67,49 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, norm }) => {
                                 }
                             </Steps>
                         </Col>
+                    </Row>
+                    <Row gutter={16} align="middle" style={{marginTop:"10px"}}>
+                    <Col xs={{ span: 6, offset: 3 }} sm={{ span: 6, offset: 3}}>
+                            <Descriptions column={1} size={'small'} title={L('table.branch.duty')} bordered={true}>
+                                {
+                                groupData !== undefined && groupData.map((record,index) => <>
+                                    <Descriptions.Item key={index} >{record.gorev}</Descriptions.Item>
+                                </>)
+                                }
+
+                            </Descriptions>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 0 }} sm={{ span: 4, offset: 0 }}>
+                            <Descriptions column={1} size={'small'} title={L('table.branch.employeecount')} bordered={true}>
+                                {
+                                groupData !== undefined && groupData.map((record) => <>
+                                    <Descriptions.Item key={'branch_employeecount' + groupData.id} className='norm-detail-center'>{record.employeeCount}</Descriptions.Item>
+                                </>)
+                                }
+
+                            </Descriptions>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 0 }} sm={{ span: 4, offset: 0 }}>
+                            <Descriptions column={1} size={'small'} title={L('table.branch.normcount')} bordered={true}>
+                                {
+                                groupData !== undefined && groupData.map((record) => <>
+                                    <Descriptions.Item key={'branch_normcount' + groupData.id} className='norm-detail-center'>{record.nomrCount}</Descriptions.Item>
+                                </>)
+                                }
+
+                            </Descriptions>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 0 }} sm={{ span: 4, offset: 0 }}>
+                            <Descriptions column={1} size={'small'} title={L('table.branch.normgap')} bordered={true}>
+                                {
+                                groupData !== undefined && groupData.map((record) => <>
+                                    <Descriptions.Item key={'branch_normgap' + groupData.id} className='norm-detail-center'>{record.norm}</Descriptions.Item>
+                                </>)
+                                }
+
+                            </Descriptions>
+                        </Col>
+                       
                     </Row>
                 </>
             </Modal>
