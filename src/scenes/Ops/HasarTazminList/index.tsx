@@ -1,3 +1,4 @@
+/* eslint-disable */
 import './index.less';
 import React from 'react';
 import 'moment/locale/tr';
@@ -27,8 +28,8 @@ import {
   Space,
   Table,
   Tag,
-} from 'antd';
-import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation';
+} from 'antd'
+import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 

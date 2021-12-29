@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import './index.less';
 import AppComponentBase from '../../../components/AppComponentBase';

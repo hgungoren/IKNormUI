@@ -348,6 +348,8 @@ export class Dashboard extends React.Component<Props, State> {
           kPersonelCount={kPersonelCount}
           onDateFilter={this.onDateFilter}
           kNormStore={this.props.kNormStore}
+          kSubeNormStore={this.props.kSubeNormStore}
+          kPersonelStore={this.props.kPersonelStore}
           kNormDetailStore={this.props.kNormDetailStore}
           getTotalNormUpdateRequestCount={getTotalNormUpdateRequestCount}
           getPendingNormFillRequestCount={getPendingNormFillRequestCount}

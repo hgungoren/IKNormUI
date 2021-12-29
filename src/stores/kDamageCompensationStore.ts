@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { action, observable } from 'mobx';
 import { EntityDto } from '../services/dto/entityDto';
 import { PagedResultDto } from '../services/dto/pagedResultDto';
@@ -8,9 +9,9 @@ import { GetBolgeList } from '../services/kDamageCompensations/dto/getBolgeList'
 import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariListDamage';
 import { CreateDamageInput } from '../services/kDamageCompensations/dto/createDamageInput';
 import { ViewClass } from '../services/kDamageCompensations/dto/viewClass';
-import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/getCreateDamageInput';
+import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/GetCreateDamageInput';
 import KDamageCompensationService from '../services/kDamageCompensations/damageCompensationsService';
-import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/getAllDamageCompensation';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
@@ -41,6 +42,7 @@ class KDamageCompensationStore {
   @observable createNev!: string;
   @observable updateFile!: string;
   @observable fileDamage!: FileDamage;
+<<<<<<< HEAD
   @observable getEnumCompensationWhy !:GetEnumCompensationWhy[]
   @observable gethistroy !:Gethistroy[]
   @observable getcurrent !:GetCurrent
@@ -51,6 +53,11 @@ class KDamageCompensationStore {
 
 
   
+=======
+  @observable getEnumCompensationWhy!: GetEnumCompensationWhy[];
+  @observable gethistroy!: Gethistroy[];
+
+>>>>>>> a26b4a500807f938adc8df5272c8a4b9e31208b2
   @action
   async create(createDamage: CreateDamageInput) {
     await KDamageCompensationService.create(createDamage);
@@ -172,22 +179,22 @@ class KDamageCompensationStore {
     return result.data.result;
   }
 
-//tazmin nedeni enum cekme 
-@action
-async  StoregetCompansationWhy(id : string){          
-let result = await KDamageCompensationService.getEnumCompensationWhyService(id);
-this.getEnumCompensationWhy = result;
-return result
-}
-
-   
-  //tazmin formu onyalandı kapatıldı
+  //tazmin nedeni enum cekme
   @action
-  async  StoregetpostCompensationApproval(id : number){          
-  let result = await KDamageCompensationService.postCompensationApproval(id);
-  return result
+  async StoregetCompansationWhy(id: string) {
+    let result = await KDamageCompensationService.getEnumCompensationWhyService(id);
+    this.getEnumCompensationWhy = result;
+    return result;
   }
 
+  //tazmin formu onyalandı kapatıldı
+  @action
+  async StoregetpostCompensationApproval(id: number) {
+    let result = await KDamageCompensationService.postCompensationApproval(id);
+    return result;
+  }
+
+<<<<<<< HEAD
 
 
 //tazmin tarhice
@@ -252,6 +259,15 @@ async  StorePostUpdateFileAfter(id : number){
   }
  
 
+=======
+  //tazmin tarhice
+  @action
+  async StoregetCompansationHistroy(id: number) {
+    let result = await KDamageCompensationService.getDamageHistroy(id);
+    this.gethistroy = result;
+    return result;
+  }
+>>>>>>> a26b4a500807f938adc8df5272c8a4b9e31208b2
 }
 
 export default KDamageCompensationStore;

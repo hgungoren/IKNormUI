@@ -1,10 +1,11 @@
+/* eslint-disable */
 import http from '../httpService';
 import { EntityDto } from '../dto/entityDto';
 import { FileDamage } from './dto/fileDamage';
 import { GetCariListDamage } from './dto/getCariListDamage';
 import { CreateDamageInput } from './dto/createDamageInput';
 import { ViewClass } from './dto/viewClass';
-import { GetCreateDamageInput } from './dto/getCreateDamageInput';
+import { GetCreateDamageInput } from './dto/GetCreateDamageInput';
 import { UpdateDamageCompensationClass } from './dto/updateDamageCompensation';
 import { FilterDamageCompensationDto } from './dto/filterDamageCompensationDto';
 import { DamageCompensationEvalutainon } from './dto/damageCompensationEvalutaion';
