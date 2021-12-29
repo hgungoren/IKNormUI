@@ -66,7 +66,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });
     } catch (e) {
-      console.log(e);
+      console.log('ERROR', e);
     }
   };
 
@@ -275,25 +275,38 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         render: (text: string, item: any) => (
           <div>
                                          
-           { console.log('text',item.tazminStatusu) }
+           { console.log('text',item) }
             <Dropdown
 
               trigger={['click']}
               overlay=
-              {                        
+              {       
+                
+                
                 <Menu>
-                  <Menu.Item disabled={item.btnControl}  className={'ClassMenuItem'+item.tazminStatusu} >
+                  {  item.btnDuzenle ?
+                    <Menu.Item>
                     <Link to={{ pathname:`/damageupdate/${item.tazminNo}` }}>{L('DamageCompensationEdit')}</Link>
-                  </Menu.Item>
-
-                  <Menu.Item disabled={item.btnControl}  className={'ClassMenuItem'+item.tazminStatusu}>
+                    </Menu.Item> : ''
+                  }
+                  
+                  
+                  {
+                    item.btnDegerlendir ?
+                    <Menu.Item>
                     <Link to={{ pathname: `/damageevalutaion/${item.tazminNo}` }}>{L('DamageCompensationEvalution')}</Link>
-                  </Menu.Item>
-                  <Menu.Item  >
-                    <Link to={{ pathname: `/damageconmpensationview/${item.tazminNo}` }}>
-                    {L('DamageCompensationView')}
-                    </Link>
-                  </Menu.Item>
+                  </Menu.Item> :''
+                  }
+                
+                  {
+                    item.btnGoruntule ? 
+                    <Menu.Item  >
+                    <Link to={{ pathname: `/damageconmpensationview/${item.tazminNo}` }}>{L('DamageCompensationView')}</Link>
+                  </Menu.Item> :''
+
+                  }
+                 
+
                 </Menu>
               }
               placement="bottomLeft"

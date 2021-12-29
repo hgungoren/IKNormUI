@@ -83,6 +83,13 @@ class OpsHierarchyService {
   }
 
 
+
+  public async GetServiceOpsNodesCode() {
+    let result = await http.get('iknorm/OpsNode/GetOpsNodesCode');
+    return result.data.result;
+  }
+
+
 }
 
 export default new OpsHierarchyService();

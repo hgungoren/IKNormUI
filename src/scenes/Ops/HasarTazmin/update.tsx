@@ -142,9 +142,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
        values.FileSevkirsaliye = JSON.stringify(this.state.filesSevkirsaliye )
        values.FileTcVkno = JSON.stringify(this.state.filesTcVkno )
        values.TazminId=this.props['match'].params['id']
-    
-
         await this.props.kDamageCompensationStore.StoregetFileUpdateDamageCompansation(values) 
+        try {
+          await this.props.kDamageCompensationStore.StorePostUpdateFileAfter(this.props['match'].params['id'])
+
+        } catch (error) {
+          console.log('error=>',error)
+        }
         notification.open({
           icon: <CheckCircleTwoTone style={{ color: 'red' }} />,
           message: L('Information'),

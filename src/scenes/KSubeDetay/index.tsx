@@ -220,7 +220,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   pageSettings = async () => {
 
      let tur = this.props.kSubeStore.editKSube.tur;  
-  
     if (tur === 'Acente') {
       this.setState({ tip: tur });
     } else {
@@ -244,9 +243,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   setPageState = async () => {
-
       this.setState({ id: this.props['match'].params['id'] });      
-      this.props.kSubeStore.get({ id: this.state.id }).then(() => {
+      this.props.kSubeStore.get({ id: this.props['match'].params['id'] }).then(() => {     
       this.pageSettings();
     });
   };
@@ -284,7 +282,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
   async createOrUpdateModalOpen(entityDto: EntityDto) {
     this.setState({ modalVisible: !this.state.modalVisible });
-    console.log("tip" + this.state.tip);
+    console.log("tip=>" + this.state.tip);
     this.getPosition(this.state.tip);
   }
 
@@ -853,6 +851,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             </Row>
           </Card>
         )}
+       
         <CreateNormForm
           tip={tip}
           subeId={id}

@@ -88,28 +88,34 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
 
   //gelen url idden Eva sayfayı yükleme
   getdamagePageEva = async (id: number) => {
-    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id });
-    setTimeout(() => {
-  
-      if (
-        this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar == '0'
-      ) {
-        this.setState({
-          evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass
-            .evaTalep_Edilen_Tutar,
-        });
-      } else {
-        this.setState({
-          evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass
-            .evaOdenecek_Tutar,
-        });
-      }
 
-      this.formRefDeg.current?.setFieldsValue({
-        ...this.props.kDamageCompensationStore.damageCompensationViewClass,
-      });
+    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id });
+   
+    if(this.props.kDamageCompensationStore.damageCompensationViewClass !=undefined)
+     {
+          setTimeout(() => {
+            if (
+              this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar == '0'
+            ) {
+              this.setState({
+                evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass
+                  .evaTalep_Edilen_Tutar,
+              });
+            } else {
+              this.setState({
+                evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass
+                  .evaOdenecek_Tutar,
+              });
+            }
+
+            this.formRefDeg.current?.setFieldsValue({
+              ...this.props.kDamageCompensationStore.damageCompensationViewClass,
+            });
+            this.setState({ loading: false });
+          }, 500);
+    }else{
       this.setState({ loading: false });
-    }, 500);
+    }
   };
 
 

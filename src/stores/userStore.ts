@@ -22,7 +22,8 @@ class UserStore {
 
   @action
   async update(updateUserInput: UpdateUserInput) {
-    let result = await userService.update(updateUserInput);
+    console.log('store girdi')
+    let result = await userService.update(updateUserInput);   
     
     this.users.items = this.users.items.map((x: GetUserOutput) => {
       if (x.id === updateUserInput.id) x = result;

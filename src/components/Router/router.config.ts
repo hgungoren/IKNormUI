@@ -12,7 +12,11 @@ export const appRouters: any = [
   { path: '/home',   key:'menu-item-2',  permission: '',    title: 'Home',   type:'',   name: 'Home',   icon: UserOutlined , showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Home')), },
   { path: '/dashboard',  key:'menu-item-3',  permission: 'items.dashboard.menu.view',         title: 'Dashboard',                    type:'',         name: 'Dashboard',                    icon: HomeOutlined,               showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Dashboard')), },
   { path: '/khierarchy',                   key:'menu-item-4',  permission: 'items.hierarchy.menu.view',         title: 'Hierarchy',                    type:'hr',       name: 'Hierarchy',                    icon: PartitionOutlined,          showInMenu: false, component: LoadableComponent(() => import('../../scenes/Hierarchy')), },
+  
+
   { path: '/hierarchytransfer',            key:'menu-item-5',  permission: 'items.hierarchy.menu.view',         title: 'HierarchyTransfer',            type:'hr',       name: 'HierarchyTransfer',            icon: PartitionOutlined,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/HierarchyTransfer')), },
+
+
   { path: '/ksube/:id',                    key:'menu-item-6',  permission: 'subitems.kareas.table.areas.btn',   title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
   { path: '/ksube/:id',                    key:'menu-item-7',  permission: 'kbolge.branches',                   title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
   { path: '/ksubedetay',                   key:'menu-item-8',  permission: 'items.branch.menu.view',            title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },

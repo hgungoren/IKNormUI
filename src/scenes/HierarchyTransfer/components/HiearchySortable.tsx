@@ -76,8 +76,15 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
       visible: true,
       node: node,
       nodeKey: node.id,
-    }); 
+    });
   };
+
+
+
+  // onEventChange = (event, position) => {
+  //   console.log('position -> ', position)
+  // }
+
 
   render() {
     const childrenToRender = this.state.dataArray.map((item, i) => {
@@ -104,6 +111,7 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
         <div className={`list-sort-wrapper`}>
           <div className={'list-sort'}>
             <ListSort
+
               onChange={this.onChange}
               // onEventChange={this.onEventChange}
               dragClassName="list-drag-selected"
@@ -113,7 +121,6 @@ export default class HiearchySortable extends AppComponentBase<IProps, IState> {
             </ListSort>
           </div>
         </div>
-        {console.log('dataarrya=>',this.state.dataArray)}
         <HierarchyDrawer
           node={this.state.node}
           key={this.state.nodeKey}

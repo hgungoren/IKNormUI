@@ -5,16 +5,15 @@ import {
   
   } from 'antd';
 
-  import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
+import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
 import rules from '../HasarTazmin.validation';
+
+
 
   export interface ICProps {
     kDamageCompensationStore: KDamageCompensationStore;
     aliciCariCom:string;
     aliciCariKoduCom:string;
-
-
-
   }
 
   
@@ -28,7 +27,7 @@ export interface IState {
 
 
 
-class AliciCariSelect   extends React.Component<ICProps,IState>  {  
+class AliciCariSelect extends React.Component<ICProps,IState>  {  
   state={
     cariList:[],
  

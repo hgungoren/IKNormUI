@@ -31,6 +31,7 @@ import FarkliCari from './components/FarkliCari';
 import Stores from '../../../stores/storeIdentifier';
 import {AlertOutlined,CheckCircleTwoTone,ExclamationCircleOutlined,SendOutlined,SwitcherOutlined,} from '@ant-design/icons';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
+import OpsHierarchyStore from '../../../stores/opsHierarchyStore';
 import TextArea from 'rc-textarea';
 import moment from 'moment';
 import 'moment/locale/tr';
@@ -43,6 +44,7 @@ import CargoLocations from  '../../../services/kDamageCompensations/dto/cargoLoc
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
+  opsHierarchyStore: OpsHierarchyStore;
 }
 
 export interface IState {
@@ -90,11 +92,13 @@ export interface IState {
   btngetir: boolean;
   loadingBring:boolean;
   listDataHistroy:any;
- 
+  opsRoleCode:any;
 }
 
 const { confirm } = Modal;
+@inject(Stores.OpsHierarchyStore)
 @inject(Stores.KDamageCompensationStore)
+
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
   formRef = React.createRef<FormInstance>();
@@ -145,7 +149,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     DegTab: true,
     btngetir: false,
     loadingBring:false,
-    listDataHistroy:[] as any
+    listDataHistroy:[] as any,
+    opsRoleCode:0
    
   };
 
@@ -209,23 +214,13 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     } catch (e) {}
   };
 
-
-
   getEnumCompensationWhy = async (id: string) => {
     try {
-         await this.props.kDamageCompensationStore.StoregetCompansationWhy(id);
-       
-        
- 
+         await this.props.kDamageCompensationStore.StoregetCompansationWhy(id);     
     } catch (e) {
       console.log(e);
     }
   };
-
-
-
-
-
 
   getcarilistdamageCompensation = async (id: number) => {
     try {
@@ -239,13 +234,15 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   getsubelistdamageCompensation = async () => {
     try {
       await this.props.kDamageCompensationStore.getSubeListDamageComppensation();
+
+
     } catch (e) {
       console.log(e);
     }
   };
 
   //Bolge listesi
-  getbolgelistdamageCompensation = async () => {
+  getbolgelistdamageCompensation = async () => { 
     try {
       await this.props.kDamageCompensationStore.getBolgeListDamageComppensation();
     } catch (e) {
@@ -268,12 +265,20 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     this.setState({ lastId: this.props.kDamageCompensationStore.lastIdDamage });
   };
 
+//ops node role code cekme 
+OpsNodesRoleCode = async ()=>{
+    await this.props.opsHierarchyStore.GetOpsNodesCode();
+     this.setState({opsRoleCode :this.props.opsHierarchyStore.opsrolecode });
+  
+}
+
+
   async componentDidMount() {
+    await  this.OpsNodesRoleCode();
     await this.getlastiddamageCompensation();
     await this.getsubelistdamageCompensation();
-    // await this.getbirimlistdamageCompensation();
+    //await this.getbirimlistdamageCompensation();
     await this.getbolgelistdamageCompensation();
-
   }
 
   //Tanzim  için  Oluşturma Metodu
@@ -293,15 +298,14 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
           values.evaOdenecek_Tutar = values.evaOdenecek_Tutar.replace(',', '.');
         }
 
-        if (
-          values.FileTazminDilekcesi === '[]'
+        if ( values.FileTazminDilekcesi === '[]'
         ) {
           confirm({
             icon: <ExclamationCircleOutlined />,
             content:L('MissingDocumentationWarning'),
             okText: L('Save'),
             cancelText: L('GiveUp'),
-            onOk: () => {
+            onOk: () => {              
               this.props.kDamageCompensationStore.create(values);
               this.setState({ talepedilentutar: values.Talep_Edilen_Tutar });
               this.setState({ btnkaydet: true });
@@ -318,21 +322,19 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
           }, 3000);
           confirm({
             icon: <ExclamationCircleOutlined />,
-            content: L('MissingDocumentationEvalutaionOk'),
-            okText: L('Evalution'),
+            content: 'Hasar Tazmin Kaydedildi',
+            okText: L('Save'),
             cancelText: L('GiveUp'),
-            onOk: () => {
-              this.setState({ aktiftabs: '2' });
+            onOk: () => {              
               this.setState({ talepedilentutar: values.Talep_Edilen_Tutar });
               this.setState({ tazminStatu: 'Tazmin Oluşturuldu' });
-              this.setState({ btnkaydet: true });
-              this.setState({ DegTab: false });
+              this.setState({ btnkaydet: true }); 
               this.setState({ btngetir: true });
-              
+                                  
             },
             onCancel: () => {
               this.setState({ btnkaydet: true });
-              this.setState({ tazminStatu: 'Tazmin Oluşturuldu' });
+              this.setState({ tazminStatu: 'Taslak' });
               this.setState({ btngetir: true });
             },
           });
@@ -428,6 +430,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       } else {
         this.setState({ settazminmusteriGonderici: false });
         this.setState({ settazminmusteriAlici: false });
+
+        /// farklı  cari burda
         this.setState({ settazminmusteriFarkli: true });
         // this.setState({ setradioValueTazminMusteri: 4 });
         // this.setState({ settazminmusteriGonderici: false });
@@ -962,7 +966,9 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
                         ''
                       )} */}
 
-                      {this.state.settazminmusteriFarkli ? <FarkliCari /> : ''}
+                      {this.state.settazminmusteriFarkli ? <FarkliCari 
+                       kDamageCompensationStore={this.props.kDamageCompensationStore}   /> : ''}
+
                     </Col>
                     <Col span={12}>
                       <Form.Item

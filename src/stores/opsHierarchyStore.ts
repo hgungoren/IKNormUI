@@ -21,6 +21,7 @@ class OpsHierarchyStore {
   @observable units!: PagedResultDto<UnitOutput>;
   @observable opsHierarchies!: GetAllHierarchyOutput[];
   @observable btnStatus!:boolean;
+  @observable opsrolecode!:number;
 
   @action
   async getAll(tip: string, id: string) {
@@ -96,6 +97,14 @@ class OpsHierarchyStore {
     let result = await OpsHierarchyService.GetCompensationStatusCheck();
     this.btnStatus = result;
     return this.btnStatus;
+  }
+
+
+  @action
+  async GetOpsNodesCode() {
+    let result = await OpsHierarchyService.GetServiceOpsNodesCode();
+    this.opsrolecode = result;
+    return this.opsrolecode;
   }
 
 

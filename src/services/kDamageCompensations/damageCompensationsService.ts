@@ -8,6 +8,8 @@ import { GetCreateDamageInput } from './dto/getCreateDamageInput';
 import { UpdateDamageCompensationClass } from './dto/updateDamageCompensation';
 import { FilterDamageCompensationDto } from './dto/filterDamageCompensationDto';
 import { DamageCompensationEvalutainon } from './dto/damageCompensationEvalutaion';
+import { GetCurrent } from './dto/getCurrent';
+
 
 class KDamageCompensationService {
   public async create(createDamageInput: CreateDamageInput) {
@@ -119,7 +121,7 @@ class KDamageCompensationService {
 
   //tazmin formu onyalandı kapatıldı
   public async postCompensationApproval(id:number){
-     await http.post('iknorm/DamageCompensation/DamageCompensationApproval?id='+id+'')
+     await http.post('iknorm/DamageCompensation/ApprovalBtn?id='+id+'')
   }
 
 
@@ -129,6 +131,51 @@ class KDamageCompensationService {
     let result= await http.get('iknorm/OpsHistory/GetListDamage?id='+id+'')
     return result.data.result;
  }
+
+ 
+//tazmin formu onyalandı kapatıldı
+public async postDamageUpdateFileAfter(id:number){
+  await http.get('iknorm/DamageCompensation/GetUpdateFileAfter?id='+id+'')
+}
+
+
+//Cari kart kaydetme  
+public async postCurrentCreate(createCurrent: GetCurrent){
+  await http.post('iknorm/OpsCuurent/Create', createCurrent);
+}
+
+
+
+//il listesi
+public async getAllCity(){
+    let result= await http.get('https://localhost:44373/kcity'); 
+  return result.data
+}
+
+
+//ile göre ilce çagırma 
+public async GetByIdDistrict(id:number){
+  let result= await http.get('https://localhost:44373/kdistrictbyid?cityId='+id+'');
+  return result.data
+}
+
+
+
+//ülke listesi
+public async GetCountry(){
+  let result= await http.get('https://localhost:44373/GetCountry');
+return result.data
+}
+
+
+
+
+
+//mahalle arama göre ilce çagırma 
+public async GetByFindAddress(districtId:number ,districtName:string,myp_adi:string){
+  let result= await http.get('https://localhost:44373/GetByFindAddress?districtId='+districtId+'&districtName='+districtName+'&myp_adi='+myp_adi+'');
+  return result.data
+}
 
 
 

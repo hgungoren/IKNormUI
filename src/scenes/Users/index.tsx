@@ -109,12 +109,6 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   handleCreate = async () => {
 
     const form = this.formRef.current;
-    // form?.setFieldsValue({sicilNo:888})
-    // form?.setFieldsValue({companyCode:'0'})
-    // form?.setFieldsValue({userObjId:0})
-    // form?.setFieldsValue({companyObjId:0})
-    // form?.setFieldsValue({companyRelationObjId:0})
-
     form!.validateFields().then(async (values: any) => { 
       if (this.state.userId === 0) {
         try { 
@@ -123,7 +117,12 @@ class User extends AppComponentBase<IUserProps, IUserState> {
           console.log('ERROR : ', e)
         }
       } else { 
-        await this.props.userStore.update({ ...values, id: this.state.userId });
+          
+        try {
+          await this.props.userStore.update({ ...values, id: this.state.userId });
+        }catch(e){
+          console.log('UPDATERERROR : ', e)
+        }
       } 
       await this.getAll();
       this.setState({ modalVisible: false });

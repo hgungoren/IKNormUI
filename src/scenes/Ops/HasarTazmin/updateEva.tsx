@@ -58,6 +58,7 @@ export interface IState {
   aktiveTab:string;
   onayaGonderBtn:boolean;
   listDataHistroy:any;
+  talepedilentuatarState:any;
 }
  const { confirm } = Modal;
 @inject(Stores.KDamageCompensationStore)
@@ -78,8 +79,8 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   evaTalepEdilenTutar:'',
   aktiveTab:'2',
   onayaGonderBtn:false,
-  listDataHistroy:[] as any
-
+  listDataHistroy:[] as any,
+  talepedilentuatarState:0,
   };
 
 
@@ -91,6 +92,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
       this.setState({tazminStatu:this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu})
       this.setState({takipNo:this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo})
       this.setState({tazminMusteriTipi:this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi})
+      this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar})   
       //this.setState({tazminMusteriTipi:'AliciCari'})
       this.formRef.current?.setFieldsValue({               
             ...this.props.kDamageCompensationStore.damageCompensationViewClass,
@@ -103,18 +105,20 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
   //gelen url idden Eva sayfayı yükleme
   getdamagePageEva = async (id: number) => {
    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id })    
-      setTimeout(() => {   
+      setTimeout(() => {     
           
-        
-        
-        if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0"){
-          this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
-        }else {
-          this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
-        }
 
-          
-          
+        if(this.props.kDamageCompensationStore.damageCompensationViewClass!=undefined ){       
+          if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0")
+          {
+            this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
+          }
+          else {
+            this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
+          }
+        }else{
+          this.getdamagePage(this.props['match'].params['id'])          
+        }     
        this.setState({loading:false})
      }, 1000)
 
@@ -176,7 +180,7 @@ kDamageCompensationEvalutaionCreate = () => {
         cancelText:L('GiveUp'),
         onOk: () => {
           this.props.kDamageCompensationStore.StoregetpostCompensationApproval(this.props['match'].params['id']) 
-          this.setState({onayaGonderBtn:true})
+          this.setState({onayaGonderBtn:false})
 
         },
         onCancel() { console.log(L('Cancel')); },
@@ -1104,13 +1108,20 @@ kDamageCompensationEvalutaionCreate = () => {
                       <Space style={{ width: '100%' }}>
 
 
-                        <Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.kDamageCompensationEvalutaionCreate}   htmlType="submit">
-                          Onaya Gönder
-                        </Button>
 
-                         { isGranted("items.hierarchy.approval.btn") ? 
+                      { isGranted("items.damagecompensation.approval.btn") ? 
+                                (<Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.kDamageCompensationEvalutaionCreate}   htmlType="submit">
+                                {L('items.damagecompensation.approval.btn')}
+                                {/* Onaya Gönder */}
+                              </Button>) : '' 
+                        
+                        }
+
+                      
+                         { isGranted("items.damagecompensation.approvalsend.btnO") ? 
                                 (<Button type="primary"  icon={<SendOutlined />} disabled={this.state.onayaGonderBtn}  onClick={this.DamageCompensationApproval}   >
-                                Onaylama
+                               {L('items.damagecompensation.approvalsend.btn')}   
+                               {/* Onaylama */}
                               </Button>) : '' 
                         
                         }

@@ -9,6 +9,7 @@ declare var abp: any;
 
 const http = axios.create({
   baseURL: AppConsts.remoteServiceBaseUrl,
+  headers: { 'Content-Type': 'application/json'},
   timeout: 30000,
   paramsSerializer: function(params) {
     return qs.stringify(params, {
