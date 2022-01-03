@@ -54,6 +54,7 @@ export interface State {
     filter: { offset: number, limit: number, current: number },
     normList: any;
     dateFilter: boolean;
+    tableloding:boolean;
 }
 
 const confirm = Modal.confirm;
@@ -83,7 +84,8 @@ class KSube extends AppComponentBase<Props, State>{
         filter: { offset: 0, limit: 5, current: 0, },
         moment: [] as any,
         normList: [] as any,
-        dateFilter: false
+        dateFilter: false,
+        tableloding:true
     };
 
     getNormRequests = async (id: string, start?: any, end?: any) => {
@@ -250,6 +252,8 @@ class KSube extends AppComponentBase<Props, State>{
 
 
     async getAll() {
+ 
+
         await this.props.kSubeStore.getAll({
             isActive: true,
             isActivity: true,
@@ -258,10 +262,9 @@ class KSube extends AppComponentBase<Props, State>{
             skipCount: this.state.skipCount,
             maxResultCount: this.state.maxResultCount
         });
-
         await this.props.kSubeStore.getNormCount(this.state.id);
-
         this.setState({ cardLoading: false })
+        this.setState({tableloding:false})
     }
 
     async get(entityDto: EntityDto<string>) {
@@ -337,6 +340,7 @@ class KSube extends AppComponentBase<Props, State>{
     };
 
     handleSearch = (value: string) => {
+       this.setState({tableloding:true});
         this.setState({ searchFilter: value }, async () => await this.getAll());
     };
 
@@ -549,7 +553,8 @@ class KSube extends AppComponentBase<Props, State>{
                                 onChange={this.handlePagination}
                                 locale={{ emptyText: L('NoData') }}
                                 rowKey={(record) => record.objId.toString()}
-                                loading={kSubes === undefined ? true : false}
+                                //loading={kSubes === undefined ? true : false}
+                                loading={this.state.tableloding}
                                 dataSource={kSubes === undefined ? [] : kSubes.items}
                             />
                         </Col>

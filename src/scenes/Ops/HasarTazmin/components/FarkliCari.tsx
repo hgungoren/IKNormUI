@@ -76,8 +76,6 @@ class FarkliCari extends React.Component<ICProps, IState> {
   }
 
 
-
-
   handonChange = async (values) => {
     try {
       await this.props.kDamageCompensationStore.StoreGetDistrictById(values);

@@ -9,9 +9,9 @@ import { GetBolgeList } from '../services/kDamageCompensations/dto/getBolgeList'
 import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariListDamage';
 import { CreateDamageInput } from '../services/kDamageCompensations/dto/createDamageInput';
 import { ViewClass } from '../services/kDamageCompensations/dto/viewClass';
-import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/GetCreateDamageInput';
+import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/getCreateDamageInput';
 import KDamageCompensationService from '../services/kDamageCompensations/damageCompensationsService';
-import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/getAllDamageCompensation';
 import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
@@ -42,7 +42,6 @@ class KDamageCompensationStore {
   @observable createNev!: string;
   @observable updateFile!: string;
   @observable fileDamage!: FileDamage;
-<<<<<<< HEAD
   @observable getEnumCompensationWhy !:GetEnumCompensationWhy[]
   @observable gethistroy !:Gethistroy[]
   @observable getcurrent !:GetCurrent
@@ -53,11 +52,6 @@ class KDamageCompensationStore {
 
 
   
-=======
-  @observable getEnumCompensationWhy!: GetEnumCompensationWhy[];
-  @observable gethistroy!: Gethistroy[];
-
->>>>>>> a26b4a500807f938adc8df5272c8a4b9e31208b2
   @action
   async create(createDamage: CreateDamageInput) {
     await KDamageCompensationService.create(createDamage);
@@ -194,7 +188,6 @@ class KDamageCompensationStore {
     return result;
   }
 
-<<<<<<< HEAD
 
 
 //tazmin tarhice
@@ -259,15 +252,6 @@ async  StorePostUpdateFileAfter(id : number){
   }
  
 
-=======
-  //tazmin tarhice
-  @action
-  async StoregetCompansationHistroy(id: number) {
-    let result = await KDamageCompensationService.getDamageHistroy(id);
-    this.gethistroy = result;
-    return result;
-  }
->>>>>>> a26b4a500807f938adc8df5272c8a4b9e31208b2
 }
 
 export default KDamageCompensationStore;

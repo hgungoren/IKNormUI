@@ -17,8 +17,8 @@ class KPersonelStore {
     }
  
     @action
-    async getAllEmployees(pagedFilterAndSortedRequest: PagedKPersonelResultRequestDto) {
-        let result = await kPersonelService.getAll(pagedFilterAndSortedRequest);
+    async getAllEmployees(pagedFilterAndSortedRequest: PagedKPersonelResultRequestDto) { 
+        let result = await kPersonelService.getAll(pagedFilterAndSortedRequest); 
         this.kAllPersonels = result;
     }
 

@@ -46,8 +46,9 @@ export interface INormRequestListTableState {
     dateEnd: any;
     groupData: any[];
     groupEmployee: {};
-    groupNorm :{};
-
+    groupNorm: {};
+    sbObjId: string;
+    pozisyon:string;
 }
 
 
@@ -69,6 +70,7 @@ interface INormRequestListTableProps {
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
 
+
 }
 
 
@@ -80,6 +82,7 @@ const Search = Input.Search;
 @inject(Stores.SessionStore)
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore)
+
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 
@@ -104,19 +107,21 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         dateEnd: '',
         groupData: [
             {
-              id: 0,
-              norm: 0,
-              gorev: '',
-              normCount: 0,
-              employeeCount: 0,
+                id: 0,
+                norm: 0,
+                gorev: '',
+                normCount: 0,
+                employeeCount: 0,
             },
-          ],
+        ],
         groupNorm: {},
         groupEmployee: {},
+        sbObjId: '0',
+        pozisyon:''
     }
 
     formRef = React.createRef<FormInstance>();
-    
+
     getNormRequests = async () => {
         this.props.kNormStore.getAll({
             bolgeId: '0',
@@ -175,97 +180,103 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     async getAllSubeNormForGroupBy() {
         await this.props.kSubeNormStore.getAllNorms({
-            id: "0",
+            id: this.state.sbObjId,
             keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
         });
+    }
 
-        console.log("getALLSubeNorm =>",this.props.kSubeNormStore.norms)
-      }
-    
-      async setAllSubeNormGroupBy() {
+    async setAllSubeNormGroupBy() {
+
         let groupNorm = this.props.kSubeNormStore.norms.items.reduce((result, currentValue) => {
-          (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || []).push(
-            currentValue
-          );
-          return result;
+            (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || []).push(
+                currentValue
+            );
+            return result;
         }, {});
-        this.setState({ groupNorm});
-      }
-    
-      async getAllEmployeesForGroupBy() {
+
+        this.setState({ groupNorm });        
+    }
+
+
+    async getAllEmployeesForGroupBy() {
+       
         await this.props.kPersonelStore.getAllEmployees({
-            id:"0",
+            id:this.state.sbObjId,
             keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
         });
-      }
-    
-      async setAllEmployeesGroupBy() {
+    }
+
+    async setAllEmployeesGroupBy() {
         let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce(
-          (result, currentValue) => {
-            (result[currentValue['gorevi']] = result[currentValue['gorevi']] || []).push(currentValue);
-            return result;
-          },
-          {}
+            (result, currentValue) => {
+                (result[currentValue['gorevi']] = result[currentValue['gorevi']] || []).push(currentValue);
+                return result;
+            },
+            {}
         );
-        this.setState({ groupEmployee});
-      }
-    
-      async getAllEmployees() {
+      
+        this.setState({ groupEmployee });
+
+    }
+
+    async getAllEmployees() {
         await this.props.kPersonelStore.getAll({
             id: "0",
             keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
         });
-      }
+    }
 
-      
-  mergeArray = async () => {
-    let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
-      id: i,
-      gorev: y,
-      employeeCount: [...this.state.groupEmployee[y]].length,
-      normCount: 0,
-    }));
 
-    let norms = Object.keys(this.state.groupNorm).map((y, i) => ({
-      id: i,
-      gorev: y,
-      employeeCount: 0,
-      normCount: [...this.state.groupNorm[y]].length,
-    }));
+    mergeArray = async () => {
+        let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: [...this.state.groupEmployee[y]].length,
+            normCount: 0,
+        }));
 
-    let result = [...employees, ...norms];
-    let names = result.map((x) => x.gorev);
-    let set = new Set(names);
 
-    let groupData = [...set].map((x, i) => {
-      let gorev = x;
-      let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
-      let norm = norms.find((x) => x.gorev === gorev)?.normCount;
+ 
+        let norms = Object.keys(this.state.groupNorm).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: 0,
+            normCount: [...this.state.groupNorm[y]].length,
+        }));
 
-      return Object.assign({
-        id: i,
-        gorev: x,
-        employeeCount: employee !== undefined ? employee : 0,
-        nomrCount: norm !== undefined ? norm : 0,
-        norm: (norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0),
-      });
+        let result = [...employees, ...norms];
+        let names = result.map((x) => x.gorev);
+        let set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
 
-     
-    });
-    console.log("GroupData =>=>=>",groupData);
-    this.setState({ groupData: groupData });
-  };
+
+        let groupData = [...set].map((x, i) => {
+            let gorev = x;
+            let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
+            let norm = norms.find((x) => x.gorev === gorev)?.normCount;
+
+            return Object.assign({
+                id: i,
+                gorev: x,
+                employeeCount: employee !== undefined ? employee : 0,
+                nomrCount: norm !== undefined ? norm : 0,
+                norm: (norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0),
+            });
+
+        });
+            
+        this.setState({ groupData: groupData });
+    };
 
     async componentDidMount() {
         if (this.props.isModal) {
-            
-        
+
+
             if (this.props.moment.length > 0) {
 
                 let start: any;
@@ -289,16 +300,18 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             }
         }
         else
-        this.getNormRequests()
+            this.getNormRequests()
 
         await this.getAllNormDetails();
-   
-      await this.getAllEmployeesForGroupBy();
-      await this.getAllSubeNormForGroupBy();
-      await this.setAllEmployeesGroupBy();
-      await this.setAllSubeNormGroupBy();
-      await this.mergeArray();
-   
+
+        await this.getAllEmployeesForGroupBy();
+        await this.getAllSubeNormForGroupBy();
+        await this.setAllEmployeesGroupBy();
+        await this.setAllSubeNormGroupBy();
+        //await this.mergeArray();
+
+
+
     }
 
 
@@ -311,11 +324,25 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         }
     };
 
-    async detailModalOpen(id: number, name: string) {
+    async detailModalOpen(id: number, name: string, subeObjId: number,pozisyon:string) {  
         await this.props.kNormDetailStore.getDetails(id);
         let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
         this.setState({ getAllKNormOutput: norm })
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
+
+        var tt = subeObjId.toString();
+        this.setState({ sbObjId: tt })
+        this.setState({pozisyon:pozisyon})
+
+        this.getAllEmployeesForGroupBy();//
+        this.getAllSubeNormForGroupBy();//
+        this.setAllEmployeesGroupBy(); /////
+        this.setAllSubeNormGroupBy();
+        this.mergeArray();
+
+
+  
+
     }
 
     async normRejectDescriptionModalOpen(id: number) {
@@ -339,7 +366,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             onOk: () => {
                 const form = this.formRef.current;
                 form!.validateFields()
-                    .then(async (values: any) => { 
+                    .then(async (values: any) => {
                         values.status = Status.Reject;
                         await this.props.kNormDetailStore.update(values)
                             .then(() => {
@@ -489,11 +516,10 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                 dataIndex: 'id',
                 width: 50,
                 render: (text, norm: GetAllKNormOutput) => <Space size={'small'}>
-
                     {
                         kNormDetails !== undefined && (isGranted('items.knorm.detail.btn')) && (
                             <Tooltip placement="topLeft" title={L('Detail')}>
-                                <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" ></Button>
+                                <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi, norm.subeObjId,norm.pozisyon)} icon={<FileSearchOutlined />} type="primary" > </Button>
                             </Tooltip>)
                     }
 
@@ -521,6 +547,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         return (
             <>
+                
                 <Card hoverable={isHoverable} style={{ marginTop: 15 }}>
                     <Row >
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
@@ -577,8 +604,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     norm={getAllKNormOutput}
                     visible={detaillModalVisible}
                     groupData={this.state.groupData}
-                    onCancel={() => { this.setState({ detaillModalVisible: false, }); }} />
-console.log(groupData);
+                    onCancel={() => { this.setState({ detaillModalVisible: false, }); }} 
+                    toplam={0}/>
+
                 <NormRejectDescription
                     formRef={this.formRef}
                     title={L('RequestRejectForm')}
@@ -591,6 +619,7 @@ console.log(groupData);
                         });
                     }}
                 />
+
             </>
         )
     }

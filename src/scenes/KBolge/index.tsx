@@ -53,6 +53,7 @@ export interface State {
     modalVisible: boolean;
     maxResultCount: number;
     filter: { offset: number, limit: number, current: number };
+    tableloding:boolean;
 }
 
 const Search = Input.Search;
@@ -85,7 +86,8 @@ class KBolge extends AppComponentBase<Props, State> {
         filter: { offset: 0, limit: 5, current: 0, },
         moment: [] as any,
         normList: [] as any,
-        dateFilter: false
+        dateFilter: false,
+        tableloding:true
     };
 
 
@@ -275,6 +277,8 @@ class KBolge extends AppComponentBase<Props, State> {
         });
 
         setTimeout(() => this.setState({ cardLoading: false }), 500);
+        setTimeout(() => this.setState({ tableloding: false }), 500);
+        
     }
 
     async getPosition(key: string) {
@@ -334,7 +338,10 @@ class KBolge extends AppComponentBase<Props, State> {
     }
 
     handleSearch = (value: string) => {
-        this.setState({ searchFilter: value }, async () => await this.getAll());
+    
+    this.setState({tableloding:true})
+    this.setState({ searchFilter: value }, async () => await this.getAll())
+
     };
 
     handlePagination = pagination => {
@@ -469,10 +476,11 @@ class KBolge extends AppComponentBase<Props, State> {
                 </Card>
 
  
-
-
+                 
                      
                 <KCartList
+                    kSubeNormStore={this.props.kSubeNormStore}                
+                    kPersonelStore={this.props.kPersonelStore}
                     dateFilter={dateFilter}
                     moment={moment}
                     type={"bolge"}
@@ -536,8 +544,10 @@ class KBolge extends AppComponentBase<Props, State> {
                                     onChange={this.handlePagination}
                                     locale={{ emptyText: L('NoData') }}
                                     rowKey={(record) => record.objId.toString()}
-                                    loading={kBolge === undefined ? true : false}
+                                    // loading={kBolge === undefined  ? true : false}
+                                    loading={this.state.tableloding}
                                     dataSource={kBolge === undefined ? [] : kBolge.items}
+
                                 />
                             </Col>
                         </Row>

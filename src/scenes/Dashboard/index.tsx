@@ -69,6 +69,9 @@ export class Dashboard extends React.Component<Props, State> {
     dateFilter: false
   }
  
+
+
+  
   getEmployeeCount = async () => await this.props.kPersonelStore.getEmployeeCount();
   getNormCount = async () => await this.props.kSubeNormStore.getNormCount();
 

@@ -88,6 +88,9 @@ export interface State {
   filterTable1: { offset: number; limit: number; current: number };
   filterTable2: { offset: number; limit: number; current: number };
   filterTable3: { offset: number; limit: number; current: number };
+  tablelodingPerson:boolean;
+  tablelodingNorm:boolean;
+
 }
 
 const Search = Input.Search;
@@ -143,6 +146,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     totalSizeTable2: 0,
     totalSizeTable3: 0,
     searchFilter: '',
+    tablelodingPerson:true,
+    tablelodingNorm:true
   };
 
   async getPosition(key: string) {
@@ -163,6 +168,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       bolgeId: '0',
       type: 'subedetail',
     });
+
+    this.setState({tablelodingNorm:false})
+
   }
 
   async getAllSubeNormForGroupBy() {
@@ -211,6 +219,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       keyword: this.state.searchFilter,
       id: this.state.id,
     });
+   
+    this.setState({tablelodingPerson:false})
+
   }
 
   getKHierarchy = async () => {
@@ -273,10 +284,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   handleSearch = (value: string) => {
+    this.setState({tablelodingPerson:true})
     this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
   };
 
   handleNormSearch = (value: string) => {
+    this.setState({tablelodingNorm:true})
+
     this.setState({ normFilter: value }, async () => await this.getNormRequests());
   };
 
@@ -352,7 +366,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     });
 
     this.setState({ groupData: groupData });
-    console.log(groupData)
   };
 
   getHierarchy = async (subeId: string, bolgeId: string, tip: string, pozisyon: string) => {
@@ -781,7 +794,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
                   columns={columns}
                   onChange={this.handlePaginationTable2}
                   rowKey={(record) => record.objId.toString()}
-                  loading={kPersonels === undefined ? true : false}
+                  //loading={kPersonels === undefined ? true : false}
+                  loading={this.state.tablelodingPerson}
                   dataSource={kPersonels === undefined ? [] : kPersonels.items}
                   pagination={tablePaginationTable2}
                 />
@@ -844,7 +858,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
                   locale={{ emptyText: L('NoData') }}
                   onChange={this.handlePaginationTable3}
                   rowKey={(record) => record.id}
-                  loading={kNorms === undefined ? true : false}
+                  //loading={kNorms === undefined ? true : false}
+                  loading={this.state.tablelodingNorm}
+
                   dataSource={kNorms === undefined ? [] : kNorms.items}
                   pagination={tablePaginationTable3}
                 />
@@ -877,6 +893,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             });
             form!.resetFields();
           }} />
+          
         <NormDetailTimeLine
           norm={editKNorm}
           data={kNormAllDetails}
@@ -888,7 +905,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             });
           }}
           groupData ={groupData === undefined ? [] : groupData}
-          
+          toplam={0}
         />
       </React.Fragment>
     );

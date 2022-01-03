@@ -45,6 +45,7 @@ class KSubeNormStore {
 
   @action
   async getAllNorms(pagedFilterAndSortedRequest: PagedKSubeNormResultRequestDto) {
+
     let result = await kSubeNormService.getAllNorms(pagedFilterAndSortedRequest);
    
     this.norms = result;

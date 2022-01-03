@@ -28,7 +28,8 @@ export interface IUserState {
   filter: string;
   drawerVisible: boolean;
   totalSizeTable: number,
-  filterTable: { offset: number, limit: number, current: number }
+  filterTable: { offset: number, limit: number, current: number },
+  tableloding:boolean
 }
 
 const confirm = Modal.confirm;
@@ -47,7 +48,8 @@ class User extends AppComponentBase<IUserProps, IUserState> {
     filter: '',
     drawerVisible: false,
     totalSizeTable: 0,
-    filterTable: { offset: 0, limit: 5, current: 0, }
+    filterTable: { offset: 0, limit: 5, current: 0, },
+    tableloding:true
   };
 
   async componentDidMount() {
@@ -60,6 +62,9 @@ class User extends AppComponentBase<IUserProps, IUserState> {
       skipCount: this.state.skipCount,
       keyword: this.state.filter
     });
+
+    setTimeout(() => this.setState({ tableloding: false }), 500);
+
   }
 
   // handleTableChange = (pagination: any) => {
@@ -132,8 +137,14 @@ class User extends AppComponentBase<IUserProps, IUserState> {
   };
 
   handleSearch = (value: string) => {
+
+    this.setState({tableloding :true})
     this.setState({ filter: value }, async () => await this.getAll());
+    
+
   };
+
+
 
   handlePaginationTable = pagination => {
     const { filterTable } = this.state;
@@ -261,7 +272,7 @@ class User extends AppComponentBase<IUserProps, IUserState> {
           </Row>
           <Row>
             <Col sm={{ span: 10, offset: 0 }}>
-              <Search placeholder={L('Filter')} onSearch={this.handleSearch} />
+              <Search placeholder={L('Filter')}  onSearch={this.handleSearch} />
             </Col>
           </Row>
           <Row style={{ marginTop: 20 }}>
@@ -277,10 +288,13 @@ class User extends AppComponentBase<IUserProps, IUserState> {
                 locale={{ emptyText: L('NoData') }}
                 rowKey={(record) => record.id.toString()}
                 columns={columns}
-                loading={users === undefined ? true : false}
+                //loading={users === undefined ? true : false}
+                 loading={this.state.tableloding}
                 dataSource={users === undefined ? [] : users.items}
                 onChange={this.handlePaginationTable}
                 pagination={tablePaginationTable}
+                
+                
               />
             </Col>
           </Row>
