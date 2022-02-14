@@ -13,4 +13,7 @@ export interface DamageCompensationEvalutainon {
   evaTalep_Edilen_Tutar: string;
   evaTazmin_Odeme_Durumu: string;
   evaOdenecek_Tutar: number;
+  surecSahibiBolge:string;
+  file:string;
+
 }

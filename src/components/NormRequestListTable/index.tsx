@@ -48,7 +48,9 @@ export interface INormRequestListTableState {
     groupEmployee: {};
     groupNorm: {};
     sbObjId: string;
-    pozisyon:string;
+    pozisyon: string;
+    subeadi: string;
+    cargodetail: any;
 }
 
 
@@ -86,6 +88,7 @@ const Search = Input.Search;
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 
+
 @observer
 class NormRequestListTable extends React.Component<INormRequestListTableProps, INormRequestListTableState> {
 
@@ -117,7 +120,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         groupNorm: {},
         groupEmployee: {},
         sbObjId: '0',
-        pozisyon:''
+        pozisyon: '',
+        subeadi: '',
+        cargodetail: [] as any
     }
 
     formRef = React.createRef<FormInstance>();
@@ -189,6 +194,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     async setAllSubeNormGroupBy() {
 
+        console.log(this.props.kSubeNormStore.norms)
         let groupNorm = this.props.kSubeNormStore.norms.items.reduce((result, currentValue) => {
             (result[currentValue['pozisyon']] = result[currentValue['pozisyon']] || []).push(
                 currentValue
@@ -196,14 +202,14 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             return result;
         }, {});
 
-        this.setState({ groupNorm });        
+        this.setState({ groupNorm });
     }
 
 
     async getAllEmployeesForGroupBy() {
-       
+
         await this.props.kPersonelStore.getAllEmployees({
-            id:this.state.sbObjId,
+            id: this.state.sbObjId,
             keyword: '',
             skipCount: 0,
             maxResultCount: 100000,
@@ -218,8 +224,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             },
             {}
         );
-      
+
         this.setState({ groupEmployee });
+
 
     }
 
@@ -233,7 +240,25 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     }
 
 
+    async getCargoDetail(id: string) {
+
+        await this.props.kSubeNormStore.StoreGetComeOutCargo(id); 
+        this.setState({ cargodetail: this.props.kSubeNormStore.kkargo })
+
+    }
+
+
+
     mergeArray = async () => {
+
+        await this.getAllEmployeesForGroupBy();
+        await this.getAllSubeNormForGroupBy().then(() => {
+            this.setAllSubeNormGroupBy()
+        });
+        await this.setAllEmployeesGroupBy();
+
+
+
         let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
             id: i,
             gorev: y,
@@ -241,8 +266,6 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             normCount: 0,
         }));
 
-
- 
         let norms = Object.keys(this.state.groupNorm).map((y, i) => ({
             id: i,
             gorev: y,
@@ -252,7 +275,18 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         let result = [...employees, ...norms];
         let names = result.map((x) => x.gorev);
-        let set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
+
+        let set;
+
+        set = new Set(names);
+        // if(result[0].gorev.includes('Bölge')){
+        //      set = new Set(names);
+        // }else{
+        //      set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
+        // }
+
+
+
 
 
         let groupData = [...set].map((x, i) => {
@@ -269,13 +303,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
             });
 
         });
-            
+
         this.setState({ groupData: groupData });
+
     };
 
     async componentDidMount() {
         if (this.props.isModal) {
-
 
             if (this.props.moment.length > 0) {
 
@@ -304,10 +338,10 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         await this.getAllNormDetails();
 
-        await this.getAllEmployeesForGroupBy();
-        await this.getAllSubeNormForGroupBy();
-        await this.setAllEmployeesGroupBy();
-        await this.setAllSubeNormGroupBy();
+        //await this.getAllEmployeesForGroupBy();
+        //await this.getAllSubeNormForGroupBy();
+        //await this.setAllEmployeesGroupBy();
+        //await this.setAllSubeNormGroupBy();
         //await this.mergeArray();
 
 
@@ -324,7 +358,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         }
     };
 
-    async detailModalOpen(id: number, name: string, subeObjId: number,pozisyon:string) {  
+    async detailModalOpen(id: number, name: string, subeObjId: number, pozisyon: string, subeadi: string) {
+
+
         await this.props.kNormDetailStore.getDetails(id);
         let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
         this.setState({ getAllKNormOutput: norm })
@@ -332,16 +368,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         var tt = subeObjId.toString();
         this.setState({ sbObjId: tt })
-        this.setState({pozisyon:pozisyon})
+        this.setState({ pozisyon: pozisyon })
+        this.setState({ subeadi: subeadi })
 
-        this.getAllEmployeesForGroupBy();//
-        this.getAllSubeNormForGroupBy();//
-        this.setAllEmployeesGroupBy(); /////
-        this.setAllSubeNormGroupBy();
+        this.getCargoDetail(tt);
         this.mergeArray();
-
-
-  
 
     }
 
@@ -519,7 +550,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     {
                         kNormDetails !== undefined && (isGranted('items.knorm.detail.btn')) && (
                             <Tooltip placement="topLeft" title={L('Detail')}>
-                                <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi, norm.subeObjId,norm.pozisyon)} icon={<FileSearchOutlined />} type="primary" > </Button>
+                                <Button className={'info'} onClick={() => this.detailModalOpen(norm.id, norm.subeAdi, norm.subeObjId, norm.pozisyon, norm.subeAdi)} icon={<FileSearchOutlined />} type="primary" > </Button>
                             </Tooltip>)
                     }
 
@@ -547,7 +578,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         return (
             <>
-                
+
                 <Card hoverable={isHoverable} style={{ marginTop: 15 }}>
                     <Row >
                         <Col xs={{ span: 24, offset: 0 }} sm={{ span: 23, offset: 0 }} md={{ span: 23, offset: 0 }} lg={{ span: 23, offset: 0 }} xl={{ span: 23, offset: 0 }} xxl={{ span: 23, offset: 0 }}  >
@@ -604,8 +635,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                     norm={getAllKNormOutput}
                     visible={detaillModalVisible}
                     groupData={this.state.groupData}
-                    onCancel={() => { this.setState({ detaillModalVisible: false, }); }} 
-                    toplam={0}/>
+                    onCancel={() => { this.setState({ detaillModalVisible: false, }); }}
+                    personCount={0}
+                    normCount={0}
+                    normShortfall={0}
+                    cargoDetail={this.state.cargodetail} />
 
                 <NormRejectDescription
                     formRef={this.formRef}

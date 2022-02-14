@@ -15,6 +15,8 @@ export interface ViewClass {
    telefon:string;
    email:string;
 
+   durumu:string;
+
    evaTazmin_Tipi:string;
    evaTalep_Edilen_Tutar:string;
    evaOdenecek_Tutar:string;

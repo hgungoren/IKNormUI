@@ -17,13 +17,15 @@ import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
 import { GetEnumCompensationWhy } from '../services/kDamageCompensations/dto/getEnumCompensationWyh';
 
+import { UpdateNextStatu } from '../services/kDamageCompensations/dto/updateNextStatu';
+
+
 import { Gethistroy } from '../services/kDamageCompensations/dto/gethistroy';
 import { GetCurrent } from '../services/kDamageCompensations/dto/getCurrent';
 import { GetCity} from  '../services/kDamageCompensations/dto/getCity';
 import { GetDistrict } from '../services/kDamageCompensations/dto/getDistrict';
 import { GetCountry } from '../services/kDamageCompensations/dto/getCountry';
 import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
-
 
 
 
@@ -43,12 +45,14 @@ class KDamageCompensationStore {
   @observable updateFile!: string;
   @observable fileDamage!: FileDamage;
   @observable getEnumCompensationWhy !:GetEnumCompensationWhy[]
-  @observable gethistroy !:Gethistroy[]
-  @observable getcurrent !:GetCurrent
-  @observable getAllCity !:GetCity[]
-  @observable getDistrictByIdList !:GetDistrict[] 
-  @observable getCountry !:GetCountry[]
-  @observable getStreet !:GetStreet[]
+  @observable gethistroy !:Gethistroy[];
+  @observable getcurrent !:GetCurrent;
+  @observable getAllCity !:GetCity[];
+  @observable getDistrictByIdList !:GetDistrict[] ;
+  @observable getCountry !:GetCountry[];
+  @observable getStreet !:GetStreet[];
+  @observable resultUpdateNextStatu!:string;
+
 
 
   
@@ -141,6 +145,8 @@ class KDamageCompensationStore {
   async createDamageCompensationEvalutaion(
     damageCompensationEvalutaion: DamageCompensationEvalutainon
   ) {
+
+    console.log('form=>', damageCompensationEvalutaion)
     await KDamageCompensationService.createDamageCompensationEvalutaion(
       damageCompensationEvalutaion
     );
@@ -251,6 +257,20 @@ async  StorePostUpdateFileAfter(id : number){
      return result
   }
  
+
+
+
+ ///UPDATE NEXT STATU
+  @action
+  async StoreUpdateDamageStatus(updateNextStatu: UpdateNextStatu) {
+   
+    let result = await KDamageCompensationService.PostUpdateDamageStatus(
+      updateNextStatu
+    );
+    this.resultUpdateNextStatu = result;   
+    return result;
+  }
+
 
 }
 

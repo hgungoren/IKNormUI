@@ -30,7 +30,9 @@ export const appRouters: any = [
   { path: '/logout',                       key:'menu-item-15', permission: '',                                  title: 'Logout',                       type:'',         name: 'Logout',                                                         showInMenu: false, component: LoadableComponent(() => import('../../components/Logout')), },
   { path: '/exception?:type',              key:'menu-item-16', permission: '',                                  title: 'Exception',                    type:'',         name: 'Exception',                                                      showInMenu: false, component: LoadableComponent(() => import('../../scenes/Exception')), },
   { path: '/knormrequestdetail/:id',       key:'menu-item-17', permission: 'kNormRequestDetail',                title: 'KNormRequestDetail',           type:'hr',       name: 'KNormRequestDetail',           icon: UserOutlined,               showInMenu: false, component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')), },
+
   { path: '/hasartazmin',                  key:'menu-item-18', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin')), }, 
+
   { path: '/hasartazminsorgulama',         key:'menu-item-19', permission: '',                                  title: 'DamageCompensationList',       type:'op',       name: 'HasarTazmin Listesi',          icon: UnorderedListOutlined ,     showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Ops/HasarTazminList')), }, 
   { path: '/damageconmpensationview/:id',  key:'menu-item-20', permission: '',                                  title: 'DamageCompensationView',       type:'op',       name: 'DamageCompensationView',       icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/view')), }, 
 
@@ -42,6 +44,9 @@ export const appRouters: any = [
 
   { path: '/opshierarchytransfer',         key:'menu-item-22',   permission: '',        title: 'Operasyon Hiyearsi', type:'op',       name: 'OperasyonHiyearsi',  icon: PartitionOutlined,                showInMenu: true, component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')), },
 
+
+  { path: '/newindex',                  key:'menu-item-23', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: false,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
+  { path: '/newindex/:stt/:id',                  key:'menu-item-23', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: false,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
 
 ];
 
