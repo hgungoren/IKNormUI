@@ -6,6 +6,7 @@ export interface GetAllDamageCompensation {
   tazminTarihi: string;
   surecSahibiBolge: string;
   eklyenKullanici: string;
+  kargoKabulFisNo:string;
   
   btnDuzenle:boolean;
   btnDegerlendir:boolean;

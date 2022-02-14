@@ -47,6 +47,9 @@ export const appRouters: any = [
   { path: '/opshierarchytransfer',         key:'menu-item-27',   permission: '',        title: 'Operasyon Hiyearsi', type:'op',       name: 'OperasyonHiyearsi',  icon: PartitionOutlined,                showInMenu: true, component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')), },
 
 
+  { path: '/newindex',                  key:'menu-item-23', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: false,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
+  { path: '/newindex/:stt/:id',                  key:'menu-item-23', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: false,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
+
 ];
 
 export const routers = [...userRouter, ...appRouters];

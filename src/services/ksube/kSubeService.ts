@@ -21,6 +21,8 @@ class KSubeService {
         let result = await http.get('iknorm/KSube/GetNormCountById?id=' + id);
         return result.data.result;
     }
+
+
 }
 
 export default new KSubeService();

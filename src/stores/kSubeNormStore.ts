@@ -7,6 +7,7 @@ import { GetKSubeNormOutput } from '../services/kSubeNorm/dto/getKSubeNormOutput
 import { PagedKSubeNormResultRequestDto } from '../services/kSubeNorm/dto/PagedKSubeNormResultRequestDto';
 import { UpdateKSubeNormInput } from '../services/kSubeNorm/dto/updateKSubeNormInput';
 import kSubeNormService from '../services/kSubeNorm/kSubeNormService';
+import { Kkargo } from '../services/kSubeNorm/dto/kkargo';
 
 
 class KSubeNormStore {
@@ -15,6 +16,7 @@ class KSubeNormStore {
   @observable editNorm!: CreateOrUpdateKSubeNormInput;
   @observable normCount!: number;
   @observable count!: number;
+  @observable kkargo !:Kkargo[]
 
   @action
   async create(createKSubeNormInput: CreateOrUpdateKSubeNormInput) {
@@ -65,6 +67,16 @@ class KSubeNormStore {
   async getNormCountById(id: string) {
     let result = await kSubeNormService.getNormCountById(id);
     this.count = result;
+  }
+
+
+    
+  /////gelen giden kargo 
+  @action
+  async StoreGetComeOutCargo(id:string ){
+     let result=  await kSubeNormService.GetComeOutCargo(id);
+     this.kkargo=result;
+     return result
   }
 }
 

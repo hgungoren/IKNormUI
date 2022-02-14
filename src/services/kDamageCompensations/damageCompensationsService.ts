@@ -11,6 +11,8 @@ import { FilterDamageCompensationDto } from './dto/filterDamageCompensationDto';
 import { DamageCompensationEvalutainon } from './dto/damageCompensationEvalutaion';
 import { GetCurrent } from './dto/getCurrent';
 
+import { UpdateNextStatu } from './dto/updateNextStatu';
+
 
 class KDamageCompensationService {
   public async create(createDamageInput: CreateDamageInput) {
@@ -147,6 +149,7 @@ public async postCurrentCreate(createCurrent: GetCurrent){
 
 
 
+
 //il listesi
 public async getAllCity(){
     let result= await http.get('https://localhost:44373/kcity'); 
@@ -177,6 +180,30 @@ public async GetByFindAddress(districtId:number ,districtName:string,myp_adi:str
   let result= await http.get('https://localhost:44373/GetByFindAddress?districtId='+districtId+'&districtName='+districtName+'&myp_adi='+myp_adi+'');
   return result.data
 }
+
+
+
+
+//gelen giden kargo 
+public async GetComeOutCargo(id:number){
+  let result= await http.get('https://localhost:44373/kkargoGetById?id='+id+'');
+  return result.data
+}
+
+
+
+
+
+
+//PostUpdateDamageStatus
+public async PostUpdateDamageStatus(updateNextStatu: UpdateNextStatu) {
+  let result = await http.put('iknorm/DamageCompensation/UpdateDamageStatus',updateNextStatu);
+  return result.data.result;
+}
+
+
+
+
 
 
 

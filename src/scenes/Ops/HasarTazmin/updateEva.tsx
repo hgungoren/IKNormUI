@@ -109,7 +109,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
           
 
         if(this.props.kDamageCompensationStore.damageCompensationViewClass!=undefined ){       
-          if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0")
+          if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar ==="0")
           {
             this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
           }
@@ -145,7 +145,7 @@ kDamageCompensationEvalutaionCreate = () => {
       values.evaEkleyen_Kullanici='Admin'
       values.tazminId=this.props['match'].params['id']
       
-       if(values.evaTazmin_Odeme_Durumu =="Farklı Bir Tutar Ödenecek"){
+       if(values.evaTazmin_Odeme_Durumu ==="Farklı Bir Tutar Ödenecek"){
         values.evaOdenecek_Tutar=values.evaOdenecek_Tutar.replace(',','.')
        }
      
@@ -202,7 +202,7 @@ kDamageCompensationEvalutaionCreate = () => {
     const oncahangeTab=(value)=>{
 
        this.setState({aktiveTab:''+value+''})
-       if(value =="1"){    
+       if(value ==="1"){    
        this.setState({loading:true})  
        this.getdamagePage(this.props['match'].params['id'])
        }

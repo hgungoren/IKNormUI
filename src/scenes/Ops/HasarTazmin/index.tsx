@@ -147,7 +147,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
     tazminStatu: 'Taslak',
     btnkaydet: false,
     TarihTab: true,
-    DegTab: true,
+    DegTab: false,
     btngetir: false,
     loadingBring:false,
     listDataHistroy:[] as any,
@@ -663,7 +663,7 @@ OpsNodesRoleCode = async ()=>{
                               defaultValue={this.state.setradioValue}
                             >
                               <Radio value={1}>{L('Know')}</Radio>
-                              {/* <Radio value={2}>{L('UnKnow')}</Radio> */}
+                               <Radio value={2}>{L('UnKnow')}</Radio> 
                             </Radio.Group>
                           </Form.Item>
                         </Col>

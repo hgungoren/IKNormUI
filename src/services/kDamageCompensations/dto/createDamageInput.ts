@@ -13,6 +13,11 @@ export interface CreateDamageInput {
   Birimi: string;
   Adet: number;
   id?: number;
+
+  Durumu:number;
+  KargoKabulFisNo:string;
+
+
   //tanzim bilgiler
   Surec_Sahibi_Birim_Bolge: number;
   Tazmin_Musteri_Unvan: string;

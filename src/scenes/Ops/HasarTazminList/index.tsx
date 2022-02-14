@@ -65,7 +65,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
       await this.props.kDamageCompensationStore.StoregetAllDamageCompansation();
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
-      });
+      });   
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -110,7 +110,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     });
   };
 
-  //tazmin tüm listesi Filtre
+  //tazmin tum listesi Filtre
   getFilterdamagecompensaationAll = async () => {
     const form = this.formReffilter.current;
     form!.validateFields().then(async (values: any) => {
@@ -181,6 +181,14 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         dataIndex: 'takipNo',
         key: 'takipNo',
         sorter: (a, b) => a.takipNo - b.takipNo,
+        responsive: ['sm'] as Breakpoint[]
+      },
+
+      {
+        title: L('Kargo Kabul Fis No'),
+        dataIndex: 'kargoKabukFisNo',
+        key: 'kargoKabukFisNo',
+        sorter: (a, b) => a.kargoKabukFisNo - b.kargoKabukFisNo,
         responsive: ['sm'] as Breakpoint[]
       },
       {

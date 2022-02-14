@@ -16,7 +16,6 @@ import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
 import { GetEnumCompensationWhy } from '../services/kDamageCompensations/dto/getEnumCompensationWyh';
-
 import { Gethistroy } from '../services/kDamageCompensations/dto/gethistroy';
 import { GetCurrent } from '../services/kDamageCompensations/dto/getCurrent';
 import { GetCity } from '../services/kDamageCompensations/dto/getCity';
@@ -136,6 +135,7 @@ class KDamageCompensationStore {
   async createDamageCompensationEvalutaion(
     damageCompensationEvalutaion: DamageCompensationEvalutainon
   ) {
+    console.log('form=>', damageCompensationEvalutaion);
     await KDamageCompensationService.createDamageCompensationEvalutaion(
       damageCompensationEvalutaion
     );

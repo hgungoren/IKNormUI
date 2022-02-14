@@ -45,6 +45,15 @@ class KSubeNormService {
     let result = await http.get('iknorm/KSubeNorm/GetNormCountById?id=' + id);
     return result.data.result;
   }
+
+
+     
+//gelen giden kargo 
+public async GetComeOutCargo(id:string){
+  let result= await http.get('https://localhost:44373/kkargoGetById?id='+id+'');
+  return result.data
+}
+
 }
 
 export default new KSubeNormService();

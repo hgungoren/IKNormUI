@@ -905,7 +905,10 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             });
           }}
           groupData ={groupData === undefined ? [] : groupData}
-          toplam={0}
+          personCount={0}
+          normCount={0}
+          normShortfall={0}
+          cargoDetail={null}
         />
       </React.Fragment>
     );
