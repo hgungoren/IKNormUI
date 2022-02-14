@@ -9,9 +9,9 @@ import { GetBolgeList } from '../services/kDamageCompensations/dto/getBolgeList'
 import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariListDamage';
 import { CreateDamageInput } from '../services/kDamageCompensations/dto/createDamageInput';
 import { ViewClass } from '../services/kDamageCompensations/dto/viewClass';
-import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/getCreateDamageInput';
+import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/GetCreateDamageInput';
 import KDamageCompensationService from '../services/kDamageCompensations/damageCompensationsService';
-import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/getAllDamageCompensation';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
@@ -19,13 +19,10 @@ import { GetEnumCompensationWhy } from '../services/kDamageCompensations/dto/get
 
 import { Gethistroy } from '../services/kDamageCompensations/dto/gethistroy';
 import { GetCurrent } from '../services/kDamageCompensations/dto/getCurrent';
-import { GetCity} from  '../services/kDamageCompensations/dto/getCity';
+import { GetCity } from '../services/kDamageCompensations/dto/getCity';
 import { GetDistrict } from '../services/kDamageCompensations/dto/getDistrict';
 import { GetCountry } from '../services/kDamageCompensations/dto/getCountry';
 import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
-
-
-
 
 class KDamageCompensationStore {
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
@@ -42,16 +39,14 @@ class KDamageCompensationStore {
   @observable createNev!: string;
   @observable updateFile!: string;
   @observable fileDamage!: FileDamage;
-  @observable getEnumCompensationWhy !:GetEnumCompensationWhy[]
-  @observable gethistroy !:Gethistroy[]
-  @observable getcurrent !:GetCurrent
-  @observable getAllCity !:GetCity[]
-  @observable getDistrictByIdList !:GetDistrict[] 
-  @observable getCountry !:GetCountry[]
-  @observable getStreet !:GetStreet[]
+  @observable getEnumCompensationWhy!: GetEnumCompensationWhy[];
+  @observable gethistroy!: Gethistroy[];
+  @observable getcurrent!: GetCurrent;
+  @observable getAllCity!: GetCity[];
+  @observable getDistrictByIdList!: GetDistrict[];
+  @observable getCountry!: GetCountry[];
+  @observable getStreet!: GetStreet[];
 
-
-  
   @action
   async create(createDamage: CreateDamageInput) {
     await KDamageCompensationService.create(createDamage);
@@ -188,70 +183,61 @@ class KDamageCompensationStore {
     return result;
   }
 
-
-
-//tazmin tarhice
-@action
-async  StoregetCompansationHistroy(id : number){          
-let result = await KDamageCompensationService.getDamageHistroy(id);
-this.gethistroy = result;
-return result
-}
-
-
-// doya güncelleme sonrası servis
-@action
-async  StorePostUpdateFileAfter(id : number){  
- await KDamageCompensationService.postDamageUpdateFileAfter(id);
-}
-
-
-
-  //Cari Kaydetme 
+  //tazmin tarhice
   @action
-  async StoreOpsCurrent(entityDto: GetCurrent){
-      await KDamageCompensationService.postCurrentCreate(entityDto);
+  async StoregetCompansationHistroy(id: number) {
+    let result = await KDamageCompensationService.getDamageHistroy(id);
+    this.gethistroy = result;
+    return result;
   }
 
+  // doya güncelleme sonrası servis
+  @action
+  async StorePostUpdateFileAfter(id: number) {
+    await KDamageCompensationService.postDamageUpdateFileAfter(id);
+  }
 
+  //Cari Kaydetme
+  @action
+  async StoreOpsCurrent(entityDto: GetCurrent) {
+    await KDamageCompensationService.postCurrentCreate(entityDto);
+  }
 
   // city listeisi
   @action
-  async StoreGetCityAll(){
-     let result=  await KDamageCompensationService.getAllCity();
-     this.getAllCity=result;
-     return result
+  async StoreGetCityAll() {
+    let result = await KDamageCompensationService.getAllCity();
+    this.getAllCity = result;
+    return result;
   }
 
+  // ilce ile göre listeisi
+  @action
+  async StoreGetDistrictById(id: number) {
+    let result = await KDamageCompensationService.GetByIdDistrict(id);
+    this.getDistrictByIdList = result;
+    return result;
+  }
 
-    // ilce ile göre listeisi
-    @action
-    async StoreGetDistrictById(id : number){
-       let result=  await KDamageCompensationService.GetByIdDistrict(id);
-       this.getDistrictByIdList=result;
-       return result
-    }
-
-
- // ülke listesi
- @action
- async StoreGetCountryAll(){
-    let result=  await KDamageCompensationService.GetCountry();
-    this.getCountry=result;
-    return result
- }
-
-
+  // ülke listesi
+  @action
+  async StoreGetCountryAll() {
+    let result = await KDamageCompensationService.GetCountry();
+    this.getCountry = result;
+    return result;
+  }
 
   // adres bulma
   @action
-  async StoreGetByFindAddress(districtId:number ,districtName:string,myp_adi:string){
-     let result=  await KDamageCompensationService.GetByFindAddress(districtId,districtName,myp_adi);
-     this.getStreet=result;
-     return result
+  async StoreGetByFindAddress(districtId: number, districtName: string, myp_adi: string) {
+    let result = await KDamageCompensationService.GetByFindAddress(
+      districtId,
+      districtName,
+      myp_adi
+    );
+    this.getStreet = result;
+    return result;
   }
- 
-
 }
 
 export default KDamageCompensationStore;
