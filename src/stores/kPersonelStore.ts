@@ -47,6 +47,12 @@ class KPersonelStore {
     let result = await kPersonelService.getByObjId(id);
     this.kPersonel = result;
   }
+
+  @action
+  public async getByTcNo(tcNo: string) {
+    let result = await kPersonelService.getByTcNo(tcNo);
+    this.kPersonel = result;
+  }
 }
 
 export default KPersonelStore;

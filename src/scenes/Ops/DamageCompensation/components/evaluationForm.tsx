@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 
 import {
@@ -113,17 +114,17 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           cancelText: L('Vazgec'),
           onOk: async () => {
             this.setState({ pageLoding: true })           
-            await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
-            {
-                // UpdateDamageStatus               
-                   this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
-                   tazminId:this.props.urlId,
-                   surecsahibibolge:this.props.processOwnerRegion,
-                   unvan:this.props.title,
-                   file:JSON.stringify(this.props.filesMultitable)
-                });
-            }
-            );
+            // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
+            // {
+            //     // // UpdateDamageStatus               
+            //     //    this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+            //     //    tazminId:this.props.urlId,
+            //     //    surecsahibibolge:this.props.processOwnerRegion,
+            //     //    unvan:this.props.title,
+            //     //    file:JSON.stringify(this.props.filesMultitable)
+            //     // });
+            // }
+            // );
 
 
 

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 export default class Stores {
   
   static AuthenticationStore                 : string = 'authenticationStore';
@@ -17,5 +18,7 @@ export default class Stores {
   static NotificationStore                   : string = 'notificationStore'; 
   static KDamageCompensationStore            : string = 'kDamageCompensationStore';
   static OpsHierarchyStore                   : string = 'opsHierarchyStore';
+  static InkaStore                           : string = 'inkaStore';
+  static SKJobsStore                         : string = 'skJobsStore';
 
 }

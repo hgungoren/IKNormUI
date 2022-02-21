@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { action, observable } from 'mobx';
 
 import { CreateOrUpdateUserInput } from '../services/user/dto/createOrUpdateUserInput';

@@ -21,13 +21,20 @@ import {
 import { Link } from 'react-router-dom';
 import { CheckOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
 import KPersonelStore from '../../stores/kPersonelStore';
+import SessionStore from '../../stores/sessionStore';
 import Stores from '../../stores/storeIdentifier';
 import { inject, observer } from 'mobx-react';
 import QueueAnim from 'rc-queue-anim';
 import './index.less';
+import InkaStore from '../../stores/inkaStore';
+import SKJobsStore from '../../stores/skJobsStore';
+import { SKJobsPromoteRequestDto } from '../../services/skJobs/dto/skJobsPromoteRequestDto';
 
 export interface Props {
   kPersonelStore: KPersonelStore;
+  sessionStore: SessionStore;
+  inkaStore: InkaStore;
+  skJobStore: SKJobsStore;
 }
 
 export interface State {
@@ -39,6 +46,8 @@ export interface State {
   filter: string;
   isLoading: boolean;
   personelDivideVisible: boolean;
+  birimObjId: string;
+  jobsObjId: string;
 }
 
 const { Option } = Select;
@@ -47,17 +56,16 @@ function onChange(value) {
   console.log(`selected ${value}`);
 }
 
-
-
 function onChange2(value) {
   console.log(`selected ${value}`);
 }
 
-function onSearch2(val) {
-  console.log('search:', val);
-}
+function onSearch2(val) {}
 
+@inject(Stores.SKJobsStore)
 @inject(Stores.KPersonelStore)
+@inject(Stores.SessionStore)
+@inject(Stores.InkaStore)
 @observer
 class RequestForPromotion extends AppComponentBase<Props, State> {
   formRef = React.createRef<FormInstance>();
@@ -71,6 +79,8 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     locationId: 0,
     isLoading: true,
     personelDivideVisible: false,
+    birimObjId: '0',
+    jobsObjId: '0',
   };
 
   Modal = () => {
@@ -79,29 +89,54 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     });
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     this.setState({ locationId: this.props['match'].params['id'] });
-    this.getAllEmployeesForGroupBy();
-  }
-
-  getAllEmployeesForGroupBy = async () => {
-    await this.props.kPersonelStore
-      .getAllEmployees({
-        maxResultCount: 10000,
-        skipCount: 0,
-        keyword: '',
-        id: this.state.id,
-      })
-      .then(() => {
-        this.setState({ isLoading: false });
-      });
+    await this.getInkaPersonelByTcNo(await this.props.sessionStore.currentLogin.user.tcKimlikNo);
+    await this.getAllEmployeesForGroupBy(
+      this.state.birimObjId !== undefined ? this.state.birimObjId : ''
+    );
   };
 
-  getEmployeeDetail = async (id: number) => {
-    await this.props.kPersonelStore.getByObjId(id);
+  getInkaPersonelByTcNo = async (tcNo: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByTcNo(tcNo).then(() => {
+        this.setState({
+          birimObjId: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimObjId,
+        });
+      });
+    }
+  };
+
+  getAllEmployeesForGroupBy = async (birimObjId: string) => {
+    await this.props.inkaStore.getAllInkaEmployeesByUnit(birimObjId).then(() => {
+      this.setState({ isLoading: false });
+    });
+  };
+
+  getEmployeeDetail = async (tcNo: string) => {
+    await this.props.kPersonelStore.getByTcNo(tcNo);
+    let formValue = {
+      ...this.props.kPersonelStore.kPersonel,
+      grubaGirisTarihi: new Date(
+        this.props.kPersonelStore.kPersonel.grubaGirisTarihi
+      ).toLocaleDateString(),
+    };
     setTimeout(() => {
-      this.formRef.current?.setFieldsValue({ ...this.props.kPersonelStore.kPersonel });
+      this.formRef.current?.setFieldsValue(formValue);
     }, 100);
+  };
+
+  getEmployeePromotionPositons = async (skJobsPromoteListDto: SKJobsPromoteRequestDto) => {
+    console.log(skJobsPromoteListDto)
+    // if (this.props.skJobStore! !== undefined) {
+      console.log('Metoda girdi.');
+      await this.props.skJobStore!.getAllPositionForTitle({
+        objId: skJobsPromoteListDto.objId,
+        birimObjId: skJobsPromoteListDto.birimObjId,
+      });
+    // }
+    console.log(this.props.skJobStore && this.props.skJobStore.promotionPositions);
   };
 
   handleCreate = async () => {
@@ -113,18 +148,24 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
   }
 
   public render() {
-    const { kAllPersonels } = this.props.kPersonelStore;
+    const { inkaUsersByUnit } = this.props.inkaStore;
+    // const { promotionPositions } = this.props.skJobStore;
 
-    const onChangePersonel = (value) => {
-      this.getEmployeeDetail(value);
-      this.setState({
-        personelDivideVisible: true,
+    const onChangePersonel = async (value: string) => {
+      var data = value.split('_');
+      await this.getEmployeeDetail(data[1].toString()).then(() => {
+        this.setState({
+          personelDivideVisible: true,
+          jobsObjId: data[0].toString(),
+        });
+      });
+      await this.getEmployeePromotionPositons({
+        objId: this.state.jobsObjId,
+        birimObjId: this.state.birimObjId,
       });
     };
 
-    const onSearchPersonel = (value)=>{
-
-    }
+    const onSearchPersonel = (value) => {};
 
     return !this.state.isLoading === true ? (
       <>
@@ -207,10 +248,10 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                             .indexOf(input.toLowerCase()) >= 0
                         }
                       >
-                        {kAllPersonels !== undefined
-                          ? kAllPersonels.items.map((item) => (
-                              <Option value={item.objId}>
-                                {item.ad} {item.soyad}
+                        {inkaUsersByUnit !== undefined
+                          ? inkaUsersByUnit.map((item) => (
+                              <Option value={`${item.gorevObjId}_${item.tcKimlikNo}`}>
+                                {item.adi} {item.soyadi}
                               </Option>
                             ))
                           : ''}
@@ -268,7 +309,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-                          name="iseBaslamaTarihi"
+                          name="grubaGirisTarihi"
                           label={
                             <label style={{ maxWidth: 160, minWidth: 160 }}>
                               {L('promotion.request.personel.dateofstart')}

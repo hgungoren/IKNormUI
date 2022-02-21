@@ -24,6 +24,7 @@ import { GetCountry } from '../services/kDamageCompensations/dto/getCountry';
 import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
 
 class KDamageCompensationStore {
+  [x: string]: any;
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
   @observable getCreateDamageInput!: GetCreateDamageInput;
   @observable getCariListDamage!: GetCariListDamage[];

@@ -45,6 +45,11 @@ class KPersonelService {
     let result = await http.get('iknorm/KPersonel/GetByObjId/?id=' + id);
     return result.data.result;
   }
+
+  public async getByTcNo(tcNo: string): Promise<KPersonelGetDto> {
+    let result = await http.get('personel/getbytcno/' + tcNo);
+    return result.data;
+  }
 }
 
 export default new KPersonelService();

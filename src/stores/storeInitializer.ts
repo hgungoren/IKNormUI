@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import RoleStore                from './roleStore';
 import UserStore                from './userStore';
 import KNormStore               from './kNormStore';
@@ -14,7 +15,9 @@ import NotificationStore        from './notificationStore';
 import AuthenticationStore      from './authenticationStore';
 import KInkaLookUpTableStore    from './kInkaLookUpTableStore'; 
 import KDamageCompensationStore from './kDamageCompensationStore';
-import OpsHierarchyStore from './opsHierarchyStore';
+import OpsHierarchyStore        from './opsHierarchyStore';
+import InkaStore                from './inkaStore';
+import SKJobsStore              from './skJobsStore';
 
 export default function initializeStores() {
   return {
@@ -34,8 +37,9 @@ export default function initializeStores() {
     authenticationStore:        new AuthenticationStore(),
     kInkaLookUpTableStore:      new KInkaLookUpTableStore(),
     kDamageCompensationStore:   new KDamageCompensationStore(),
-    opsHierarchyStore:            new OpsHierarchyStore(),
-
+    opsHierarchyStore:          new OpsHierarchyStore(),
+    inkaStore:                  new InkaStore(),
+    skJobsStore:                new SKJobsStore(),
 
   };
 }

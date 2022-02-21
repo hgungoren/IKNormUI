@@ -2,8 +2,8 @@
 export interface KPersonelGetDto {
   sicilNo: string;
   gorevi: string;
-  iseBaslamaTarihi: Date;
-  sonTerfiTarihi: Date;
+  grubaGirisTarihi: string;
+  sonTerfiTarihi: string;
   ogrenimDurumu: string;
   askerlikDurumu: string;
 }

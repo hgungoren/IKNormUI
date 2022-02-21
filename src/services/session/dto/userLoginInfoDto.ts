@@ -8,4 +8,5 @@ export default class UserLoginInfoDto extends EntityDto {
   emailAddress!: string;
   companyObjId!: string;
   ompanyRelationalObjId!: string;
+  tcKimlikNo!:string;
 }
