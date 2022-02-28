@@ -8,7 +8,10 @@ import AppComponentBase from '../../../components/AppComponentBase';
 import { isGranted, L } from '../../../lib/abpUtility';
 import CompensationForm from './components/compensationForm';
 import CompensationFormDisable from './components/compensationFormDisable';
+
+import CompensationFormUpdate from './components/compensationFormUpdate';
 import EvaluationForm from './components/evaluationForm';
+import InterruptionForm from './components/interruptionForm';
 import EvaluationFormDisable from './components/evaluationFormDisable';
 import KDamageCompensationStore from '../../../stores/kDamageCompensationStore';
 import { inject, observer } from 'mobx-react';
@@ -57,6 +60,10 @@ class DamageCompensationNew extends AppComponentBase<IProps, IState> {
 
 
 
+
+
+
+  
   //#region update evalatuion surec sahibi bolge
   processOwnerRegionFunc = (string) => {
     this.setState({ processOwnerRegion: string })
@@ -251,16 +258,32 @@ class DamageCompensationNew extends AppComponentBase<IProps, IState> {
                     processOwnerRegionFunc={this.processOwnerRegionFunc}
                     filesMultitableFunc={this.filesMultitableFunc}
                   />
-
                   :
-                  <CompensationForm
-                    kDamageCompensationStore={this.props.kDamageCompensationStore}
-                    OdemeBirimiBolgeListe={this.state.OdemeBirimiBolgeListe}
-                    SurecSahiniBolgeListe={this.state.SurecSahibiBolgeListe}
-                    LastIdDamageCompensation={this.state.LastIdDamageCompensation}
-                  />
-
+                     this.state.urlStatusPage ==='up' ?
+                     <CompensationFormUpdate
+                     kDamageCompensationStore={this.props.kDamageCompensationStore}
+                     OdemeBirimiBolgeListe={this.state.OdemeBirimiBolgeListe}
+                     SurecSahiniBolgeListe={this.state.SurecSahibiBolgeListe}
+                     LastIdDamageCompensation={this.state.LastIdDamageCompensation}
+                     urlId={this.state.urlId}
+                     processOwnerRegionFunc={this.processOwnerRegionFunc}
+                     filesMultitableFunc={this.filesMultitableFunc}
+                   />
+                     
+                     :  
+                     <CompensationForm
+                     kDamageCompensationStore={this.props.kDamageCompensationStore}
+                     OdemeBirimiBolgeListe={this.state.OdemeBirimiBolgeListe}
+                     SurecSahiniBolgeListe={this.state.SurecSahibiBolgeListe}
+                     LastIdDamageCompensation={this.state.LastIdDamageCompensation}
+                   />
               }
+
+             
+
+
+           
+
             </TabPane>
             <TabPane tab={<span><SwitcherOutlined /> {L('Degerlendirme')} </span>} key={2} disabled={this.state.tabbane} >
 
@@ -280,9 +303,16 @@ class DamageCompensationNew extends AppComponentBase<IProps, IState> {
               }
 
             </TabPane>
+
             <TabPane tab={<span><SwitcherOutlined /> {L('Tarihce')} </span>} key={3} disabled={this.state.tabbane}>
             </TabPane>
-            <TabPane tab={<span><SwitcherOutlined /> {L('Kesinti')} </span>} key={4} disabled={this.state.tabbane} >
+
+            <TabPane tab={<span><SwitcherOutlined /> {L('Kesinti')} </span>} key={4}  >
+                 <InterruptionForm 
+                 price={'500'}
+                 kDamageCompensationStore={this.props.kDamageCompensationStore}
+                 ></InterruptionForm>
+
             </TabPane>
           </Tabs>
         </Card>

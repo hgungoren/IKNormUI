@@ -132,8 +132,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   //Tanzim  dosya güncelleme Metodu
   kDamageCompensationUpdate = () => {
-      
-
+    
     this.setState({loading:true})
     const form = this.formFileRef.current;            
       form!.validateFields().then(async (values: any) => {

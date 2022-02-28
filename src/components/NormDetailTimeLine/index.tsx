@@ -31,28 +31,28 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, p
 
   const columns = [
     {
-      title: L('gorev'),
+      title: L('Gorev'),
       dataIndex: 'gorev',
       key: 'gorev',
       responsive: ['sm'] as Breakpoint[]
     },
 
     {
-      title: L('employeeCount'),
+      title: L('Personel Sayisi'),
       dataIndex: 'employeeCount',
       key: 'employeeCount',
       responsive: ['sm'] as Breakpoint[]
     },
 
     {
-      title: L('nomrCount'),
+      title: L('Norm Sayisi'),
       dataIndex: 'nomrCount',
       key: 'nomrCount',
       responsive: ['sm'] as Breakpoint[]
     },
 
     {
-      title: L('norm'),
+      title: L('Norm'),
       dataIndex: 'norm',
       key: 'norm',
       responsive: ['sm'] as Breakpoint[]

@@ -9,6 +9,7 @@ import {
     Form,
     FormInstance,
     Input,
+    notification,
     Radio,
     Row,
     Select,
@@ -20,7 +21,7 @@ import {
 import '../index.less';
 import { L } from '../../../../lib/abpUtility';
 import FileBase64 from 'react-file-base64';
-import { SendOutlined } from '@ant-design/icons';
+import { AlertOutlined, CheckCircleTwoTone, SendOutlined } from '@ant-design/icons';
 
 import moment from 'moment';
 import 'moment/locale/tr';
@@ -58,18 +59,16 @@ export interface IState {
     VkInputrequired: boolean,
     KnowUnknownQuery: boolean,
     sistemInsertTime: string,
-    lblEvrakSeriNoAndIrsaliye: string;  
-    tazminTalepTarihi: string;
-    tazminMusteriTipi
+    lblEvrakSeriNoAndIrsaliye: string,
 }
 
-class CompensationForm extends React.Component<ICProps, IState>  {
+class CompensationFormUpdate extends React.Component<ICProps, IState>  {
 
 
 
     formRef = React.createRef<FormInstance>();
     formRefQuery = React.createRef<FormInstance>();
-
+    formFileRef = React.createRef<FormInstance>();
 
 
     state = {
@@ -84,15 +83,15 @@ class CompensationForm extends React.Component<ICProps, IState>  {
         filesMultitable: [],
         TcInputdisable: true,
         VkInputdisable: true,
-        TcInputrequired: true,
-        VkInputrequired: true,
+        TcInputrequired: false,
+        VkInputrequired: false,
         KnowUnknownQuery: false,
         lblQuery: 'Kargo Takip No',
-        sistemInsertTime: '2000-01-01',
+        sistemInsertTime: '2022-01-01',
         lblEvrakSeriNoAndIrsaliye: 'Evrak Seri Sira No',
-        tazminTalepTarihi:'2000-01-01',
-        tazminMusteriTipi:''
     };
+
+
 
     tazminBilgileriGetir = async () => {
 
@@ -100,23 +99,12 @@ class CompensationForm extends React.Component<ICProps, IState>  {
             .StoregetDamageComppensationViewById({ id: this.props.urlId })
             .then(() => {
 
-                console.log('RadioQuery=>', this.props.kDamageCompensationStore.damageCompensationViewClass)
+                console.log('RadioQuery=>', this.props.kDamageCompensationStore.damageCompensationViewClass.durumu)
                 this.setState({ RadioQuery: this.props.kDamageCompensationStore.damageCompensationViewClass.durumu })
                 this.setState({ Ktno: this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo })
                 this.setState({ tazminStatu: this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu })
-                this.setState({ tazminTalepTarihi : this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Talep_Tarihi})
-                this.setState({ sistemInsertTime : this.props.kDamageCompensationStore.damageCompensationViewClass.sistem_InsertTime})
-                
-                if(this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi == 'AliciCari'){
-                    this.setState({tazminMusteriTipi : '2'})
-                }else if(this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi == 'GonderenCari'){
-                    this.setState({tazminMusteriTipi : '1'})
-                }else{
-                    this.setState({tazminMusteriTipi : '3'})
-                }
-
-              
             }).then(() => {
+
                 this.setState({ isLoading: false });
                 this.formRef.current?.setFieldsValue({
                     ...this.props.kDamageCompensationStore.damageCompensationViewClass
@@ -127,6 +115,101 @@ class CompensationForm extends React.Component<ICProps, IState>  {
     componentDidMount = async () => {
         await this.tazminBilgileriGetir();
     }
+
+
+
+
+    //#region  GUNCELLEME 
+    onclickUpdate =async()=>{
+
+        if(this.state.fileControl ===true){
+            this.ValidateMessage(true,'Dosya Hatasi','Lutfen Dosya Uzantisini Kontrol Ediniz Ve Yeniden Yukleyiniz.')
+        }
+        else
+        {
+            const form = this.formFileRef.current;  
+            form!.validateFields().then(async (values: any) => {
+               
+              values.FileTazminDilekcesi = JSON.stringify(this.state.filesMultitable);
+              values.TazminId=this.props.urlId;
+               await this.props.kDamageCompensationStore.StoregetFileUpdateDamageCompansation(values).then(()=>{
+                    this.props.kDamageCompensationStore.StorePostUpdateFileAfter(this.props.urlId).then(()=>{
+                        this.ValidateMessage(false,'Basarili','Dosyalariniz Guncellendi')
+                    });
+               });
+
+              
+
+       
+          }).catch((err) => console.log(err))
+
+        }
+
+      
+        
+
+    };
+
+    //#endregion
+
+
+
+
+
+       //#region  MULTI FILE DOSYASI
+        OnDoneGetFile=(files)=>{
+          console.log('test=>',files[0])
+        var control=false
+        for (let index = 0; index < files.length; index++) {
+             if (
+             files[index].type === '' ||
+             files[index].type === undefined ||
+             files[index].type === 'application/x-msdownload' 
+             
+           ) {
+              control=true
+           }    
+        }
+ 
+        if(control===true){
+         this.ValidateMessage(true,'Dosya Hatasi','Lutfen Dosya Uzantisini Kontrol Ediniz Ve Yeniden Yukleyiniz.')
+         this.setState({fileControl:true})
+        }else  {
+         this.setState({fileControl:false})
+         this.setState({filesMultitable:files})
+         console.log('JSON=>', JSON.stringify(this.state.filesMultitable));
+        }
+ 
+ 
+     
+        
+     }
+     //#endregion
+
+
+    //#region BILGILENDIRME MESAJI METOT
+     ValidateMessage=async(typ:boolean ,headerMsg:string,msg:string)=>{
+
+        if(typ ===true){
+            notification.open({
+                icon: <AlertOutlined style={{ color: 'red' }} />,
+                message: L(headerMsg),      
+                description:L(msg),
+              })
+        }else
+        {
+            notification.open({
+                icon: <CheckCircleTwoTone  style={{ color: 'green' }} />,
+                message: L(headerMsg),      
+                description:L(msg),       
+              })
+        }       
+    }
+
+    //#endregion
+
+
+
 
     render() {
 
@@ -209,7 +292,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                         </Form>
                         <Divider orientation="left">{L('Gonderi Bilgileri')}</Divider>
-                        <Form ref={this.formRef} name="wrap" labelCol={{ flex: '145px' }} labelAlign="right" wrapperCol={{ flex: 1 }} colon={false} >
+                        <Form ref={this.formFileRef} name="wrap" labelCol={{ flex: '145px' }} labelAlign="right" wrapperCol={{ flex: 1 }} colon={false} >
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Evrak Olusturma Tarihi')} name="Sistem_InsertTime"
@@ -230,7 +313,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L(this.state.lblEvrakSeriNoAndIrsaliye)} name="evrakSeriNo"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
@@ -238,14 +321,14 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Gonderici Kodu')} name="gonderenKodu"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]} >
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]} >
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
 
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Gonderici Unvan')} name="gonderenUnvan"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
@@ -254,14 +337,14 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Alici Kodu')} name="aliciKodu"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
 
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Alici Unvan')} name="aliciUnvan"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
@@ -270,14 +353,14 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Cikis Sube Adi')} name="cikis_Sube_Unvan"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
 
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Varis Sube Adi')} name="varis_Sube_Unvan"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
@@ -285,14 +368,14 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Kargo Tipi')} name="birimi"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
 
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Parca Adedi')} name="adet"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Input disabled />
                                     </Form.Item>
                                 </Col>
@@ -301,21 +384,23 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Tazmin Talep Tarihi')} name="Tazmin_Talep_Tarihi"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <DatePicker
                                             disabled
                                             locale={locale}
-                                            
+                                            disabledDate={(d) =>
+                                                !d || d.isAfter(todayFinish) || d.isSameOrBefore('2000-01-01')
+                                            }
                                             format="YYYY-MM-DD"
-                                            defaultPickerValue={moment(this.state.tazminTalepTarihi)}
-                                            placeholder={this.state.tazminTalepTarihi}
+                                            defaultPickerValue={moment(todayFinish)}
+                                            placeholder={L('SelectDate')}
 
-                                        />                                      
+                                        />
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Tazmin Tipi')} name="tazmin_Tipi"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                    <Form.Item label={L('Tazmin Tipi')} name="Tazmin_Tipi"
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             <Select.Option value="1">{L('Hasar')}</Select.Option>
                                             <Select.Option value="2">{L('Kayip')}</Select.Option>
@@ -327,12 +412,9 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    {console.log('tes=>',this.state.tazminMusteriTipi)}
-                                    <Form.Item label={L('Tazmin Musterisi')} name="Tazmin_Musteri_Tipi"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Radio.Group  disabled
-                                         value={this.state.tazminMusteriTipi}  
-                                        defaultValue={this.state.tazminMusteriTipi}
+                                    <Form.Item label={L('Tazmin Musterisi')} name="tazmin_Musteri_Tipi"
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
+                                        <Radio.Group disabled defaultValue={this.state.RadioQuery}
                                         >
                                             <Radio value="1">{L('Gonderen')}</Radio>
                                             <Radio value="2">{L('Alici')}</Radio>
@@ -341,8 +423,8 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Odenecek Musteri Tipi')} name="odeme_Musteri_Tipi"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                    <Form.Item label={L('Odenecek Musteri Tipi')} name="Odeme_Musteri_Tipi"
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" allowClear placeholder={L('PleaseSelect')}
                                         //onChange={OnchangeOdeneekMusteriTipi} 
                                         >
@@ -368,17 +450,17 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    <Form.Item label={L('Odeme Birimi Bolge')} name="odeme_Birimi_Bolge"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
+                                    <Form.Item label={L('Odeme Birimi Bolge')} name="Odeme_Birimi_Bolge"
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" placeholder={L('PleaseSelect')} allowClear  >
                                             {this.props.OdemeBirimiBolgeListe}
                                         </Select>
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Surec Sahibi Bolge')} name="surec_Sahibi_Birim_Bolge"
-                                        rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Select onChange={  this.props.processOwnerRegionFunc}
+                                    <Form.Item label={L('Surec Sahibi Bolge')} name="Surec_Sahibi_Birim_Bolge"
+                                        rules={[{ required: false, message: L('MissingInputEmpty') }]}>
+                                        <Select disabled onChange={  this.props.processOwnerRegionFunc}
                                             className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             {this.props.SurecSahiniBolgeListe}
                                         </Select>
@@ -387,9 +469,9 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    <Form.Item label={L('Talep Edilen Tutar')} name="talep_Edilen_Tutar"
+                                    <Form.Item label={L('Talep Edilen Tutar')} name="Talep_Edilen_Tutar"
                                         rules={[
-                                            { required: true, message: L('MissingInputEmpty') },
+                                            { required: false, message: L('MissingInputEmpty') },
                                             {
                                                 pattern: /^\$?([0-9]{1,1},([0-9]{1,1},)*[0-9]{1,1}|[0-9]+)(.[0-9][0-9])?$/,
                                                 message: L('MissingNumber'),
@@ -418,7 +500,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Email')} name="email"
+                                    <Form.Item label={L('Email')} name="Email"
                                         rules={[
                                             { required: false, message: L('MissingInputEmpty') },
                                             { type: 'email', message: L('MissingInputEmail') }
@@ -431,10 +513,11 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Dosyalar')} name="FileTazminDilekcesi"  >
-                                        <FileBase64 disabled
+                                        <FileBase64 
                                             //onDone={OnDoneGetFile.bind(this)} 
-                                            onDone={this.props.filesMultitableFunc.bind(this)}
+                                           // onDone={this.props.filesMultitableFunc.bind(this)}
                                             //onDone={OnDoneGetFile.bind(this)} 
+                                            onDone={this.OnDoneGetFile.bind(this)} 
                                             multiple={true} />
                                     </Form.Item>
                                 </Col>
@@ -449,14 +532,13 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             <Row style={{ float: 'right' }}>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
                                     <Space style={{ width: '100%' }}>
-                                        <Button
-                                            disabled
+                                        <Button                                           
                                             type="primary"
-                                            //onClick={onclickSaveDamageCompensation}
+                                            onClick={this.onclickUpdate}
                                             icon={<SendOutlined />}
-                                            htmlType="submit"
+                                            htmlType="button"
                                         >
-                                            {L('Kaydet')}
+                                            {L('Guncelle')}
                                         </Button>
                                     </Space>
                                 </Col>
@@ -467,6 +549,6 @@ class CompensationForm extends React.Component<ICProps, IState>  {
     }
 }
 
-export default CompensationForm;
+export default CompensationFormUpdate;
 
 

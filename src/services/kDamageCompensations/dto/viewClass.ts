@@ -15,6 +15,7 @@ export interface ViewClass {
    telefon:string;
    email:string;
 
+
    durumu:string;
 
    evaTazmin_Tipi:string;
@@ -22,7 +23,7 @@ export interface ViewClass {
    evaOdenecek_Tutar:string;
 
 
-
+   sistem_InsertTime:string;
 
 
 

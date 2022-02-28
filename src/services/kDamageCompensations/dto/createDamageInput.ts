@@ -17,6 +17,8 @@ export interface CreateDamageInput {
   Durumu:number;
   KargoKabulFisNo:string;
 
+  web_Siparis_Kodu:string;
+
 
   //tanzim bilgiler
   Surec_Sahibi_Birim_Bolge: number;

@@ -295,22 +295,21 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                 <Menu>
                   {  item.btnDuzenle ?
                     <Menu.Item>
-                    <Link to={{ pathname:`/damageupdate/${item.tazminNo}` }}>{L('DamageCompensationEdit')}</Link>
+                    <Link to={{ pathname:`/newindex/up/${item.tazminNo}` }}>{L('DamageCompensationEdit')}</Link>
                     </Menu.Item> : ''
                   }
-                  
-                  
+                                   
                   {
                     item.btnDegerlendir ?
                     <Menu.Item>
-                    <Link to={{ pathname: `/damageevalutaion/${item.tazminNo}` }}>{L('DamageCompensationEvalution')}</Link>
+                    <Link to={{ pathname: `/newindex/deg/${item.tazminNo}` }}>{L('DamageCompensationEvalution')}</Link>
                   </Menu.Item> :''
                   }
                 
                   {
                     item.btnGoruntule ? 
                     <Menu.Item  >
-                    <Link to={{ pathname: `/damageconmpensationview/${item.tazminNo}` }}>{L('DamageCompensationView')}</Link>
+                    <Link to={{ pathname: `//newindex/view/${item.tazminNo}` }}>{L('DamageCompensationView')}</Link>
                   </Menu.Item> :''
 
                   }

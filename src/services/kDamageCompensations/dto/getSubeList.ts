@@ -1,4 +1,5 @@
 export interface GetSubeList{
     objId:string;
-    adi:string
+    adi:string;
+    kodu:string;
 }
