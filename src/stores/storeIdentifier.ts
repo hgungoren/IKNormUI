@@ -19,6 +19,7 @@ export default class Stores {
   static KDamageCompensationStore            : string = 'kDamageCompensationStore';
   static OpsHierarchyStore                   : string = 'opsHierarchyStore';
   static InkaStore                           : string = 'inkaStore';
-  static SKJobsStore                         : string = 'skJobsStore';
+  static JobStore                            : string = 'jobStore';
+  static PromotionStore                      : string = 'promotionStore';
 
 }

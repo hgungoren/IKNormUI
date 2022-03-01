@@ -17,7 +17,8 @@ import KInkaLookUpTableStore    from './kInkaLookUpTableStore';
 import KDamageCompensationStore from './kDamageCompensationStore';
 import OpsHierarchyStore        from './opsHierarchyStore';
 import InkaStore                from './inkaStore';
-import SKJobsStore              from './skJobsStore';
+import JobStore                 from './jobStore';
+import PromotionStore           from './promotionStore';
 
 export default function initializeStores() {
   return {
@@ -39,7 +40,8 @@ export default function initializeStores() {
     kDamageCompensationStore:   new KDamageCompensationStore(),
     opsHierarchyStore:          new OpsHierarchyStore(),
     inkaStore:                  new InkaStore(),
-    skJobsStore:                new SKJobsStore(),
+    jobStore:                   new JobStore(),
+    promotionStore:             new PromotionStore(),
 
   };
 }

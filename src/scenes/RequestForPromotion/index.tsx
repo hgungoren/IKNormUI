@@ -13,13 +13,15 @@ import {
   Divider,
   Form,
   Input,
+  Modal,
+  notification,
   PageHeader,
   Row,
   Select,
   Space,
 } from 'antd';
 import { Link } from 'react-router-dom';
-import { CheckOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
+import { SendOutlined } from '@ant-design/icons';
 import KPersonelStore from '../../stores/kPersonelStore';
 import SessionStore from '../../stores/sessionStore';
 import Stores from '../../stores/storeIdentifier';
@@ -27,20 +29,28 @@ import { inject, observer } from 'mobx-react';
 import QueueAnim from 'rc-queue-anim';
 import './index.less';
 import InkaStore from '../../stores/inkaStore';
-import SKJobsStore from '../../stores/skJobsStore';
-import { SKJobsPromoteRequestDto } from '../../services/skJobs/dto/skJobsPromoteRequestDto';
+import JobStore from '../../stores/jobStore';
+import { JobPromoteRequestDto } from '../../services/jobs/dto/jobPromoteRequestDto';
+import PromotionStore from '../../stores/promotionStore';
+import { PromotionType } from '../../services/promotion/dto/promotionType';
+import { PromotionStatu } from '../../services/promotion/dto/promotionStatu';
+import UserStore from '../../stores/userStore';
+import { BaseSelectRef } from 'rc-select';
 
 export interface Props {
   kPersonelStore: KPersonelStore;
   sessionStore: SessionStore;
   inkaStore: InkaStore;
-  skJobStore: SKJobsStore;
+  jobStore: JobStore;
+  promotionStore: PromotionStore;
+  userStore: UserStore;
 }
 
 export interface State {
   id: string;
   locationId: number;
   modalVisible: boolean;
+  infoModalVisible: boolean;
   maxResultCount: number;
   skipCount: number;
   filter: string;
@@ -48,31 +58,36 @@ export interface State {
   personelDivideVisible: boolean;
   birimObjId: string;
   jobsObjId: string;
+  unit: string;
+  department: string;
+  departmentObjId:string;
+  chiefObjId: string;
+  hierarchyData: {};
+  userRoles: any[];
+  firstPromotionJob: number;
 }
 
 const { Option } = Select;
 
-function onChange(value) {
-  console.log(`selected ${value}`);
-}
-
-function onChange2(value) {
-  console.log(`selected ${value}`);
-}
+// function onChange2(value) {}
 
 function onSearch2(val) {}
 
-@inject(Stores.SKJobsStore)
+@inject(Stores.UserStore)
+@inject(Stores.PromotionStore)
+@inject(Stores.JobStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.SessionStore)
 @inject(Stores.InkaStore)
 @observer
 class RequestForPromotion extends AppComponentBase<Props, State> {
   formRef = React.createRef<FormInstance>();
+  selectRef = React.createRef<BaseSelectRef>();
 
   state = {
     id: '',
     modalVisible: false,
+    infoModalVisible: false,
     maxResultCount: 10,
     skipCount: 0,
     filter: '',
@@ -81,6 +96,17 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     personelDivideVisible: false,
     birimObjId: '0',
     jobsObjId: '0',
+    unit: '',
+    department: '',
+    departmentObjId:'',
+    chiefObjId: '',
+    hierarchyData: {
+      departmentManager: '',
+      recruitment: '',
+      hrManager: '',
+    },
+    userRoles: [],
+    firstPromotionJob: 0,
   };
 
   Modal = () => {
@@ -89,10 +115,23 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     });
   };
 
+  showInfoModal = () => {
+    this.setState({
+      infoModalVisible: true,
+    });
+  };
+
+  hideInfoModal = () => {
+    this.setState({
+      infoModalVisible: false,
+    });
+  };
+
   componentDidMount = async () => {
     this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     this.setState({ locationId: this.props['match'].params['id'] });
     await this.getInkaPersonelByTcNo(await this.props.sessionStore.currentLogin.user.tcKimlikNo);
+    await this.props.userStore.get({ id: this.props.sessionStore.currentLogin.user.id });
     await this.getAllEmployeesForGroupBy(
       this.state.birimObjId !== undefined ? this.state.birimObjId : ''
     );
@@ -103,6 +142,11 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
       await this.props.inkaStore.getInkaEmployeeByTcNo(tcNo).then(() => {
         this.setState({
           birimObjId: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimObjId,
+          departmentObjId:this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanObjId,
+          unit: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimAdi,
+          department: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanAdi,
+          chiefObjId:
+            this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimAmir_ObjId,
         });
       });
     }
@@ -127,31 +171,150 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     }, 100);
   };
 
-  getEmployeePromotionPositons = async (skJobsPromoteListDto: SKJobsPromoteRequestDto) => {
-    console.log(skJobsPromoteListDto)
-    // if (this.props.skJobStore! !== undefined) {
-      console.log('Metoda girdi.');
-      await this.props.skJobStore!.getAllPositionForTitle({
-        objId: skJobsPromoteListDto.objId,
-        birimObjId: skJobsPromoteListDto.birimObjId,
+  getEmployeePromotionPositons = async (jobsPromoteRequestDto: JobPromoteRequestDto) => {
+    if (this.props.jobStore !== undefined) {
+      await this.props.jobStore.getAllPositionForTitlee({
+        objId: jobsPromoteRequestDto.objId,
+        birimObjId: jobsPromoteRequestDto.birimObjId,
       });
-    // }
-    console.log(this.props.skJobStore && this.props.skJobStore.promotionPositions);
+    }
   };
 
-  handleCreate = async () => {
-    // const form = this.formRef.current;
+  getInkaPersonelByChief = async (chiefId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByChief(chiefId).then(() => {
+        if (this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true) {
+          this.setState({
+            hierarchyData: {
+              departmentManager: ``,
+            },
+          });
+        } else {
+          this.setState({
+            hierarchyData: {
+              departmentManager: `${this.props.inkaStore.inkaUserByChief.departmanAdi} ${this.props.inkaStore.inkaUserByChief.iKGorev}`,
+            },
+          });
+        }
+      });
+    }
+  };
+
+  getInkaPersonelByTitleRecruitment = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            recruitment: `${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
+  };
+
+  getInkaPersonelByTitleHRManager = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].departmanAdi} ${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
   };
 
   async createOrUpdateModalOpen() {
     this.Modal();
   }
 
+  handleCreate = async () => {
+    const form = this.formRef.current;
+
+    form!.validateFields().then(async (values: any) => {
+      await this.props.promotionStore.isAnyPersonel(values.sicilNo.toString());
+
+      if (this.props.promotionStore.isAnyPersonelResult) {
+        this.openInfoNotification('topRight');
+      } else {
+        var splitNames = values.adiSoyadi.split('_');
+        var splitTitles = values.terfiTalepEdilenGorev.split('_');
+        let firstName = splitNames[2].toString();
+        let lastName = splitNames[3].toString();
+        let promotionRequestTitle = splitTitles[0].toString();
+        let Dates = values.grubaGirisTarihi.split('.');
+        let dateOfStartString = `${Dates[1].toString()}/${Dates[0].toString()}/${Dates[2].toString()}`;
+        const description = values.description !== undefined ? values.description.toString() : '';
+        const dateOfStart = new Date(dateOfStartString);
+        const hierarchyStatu =
+          this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true
+            ? PromotionStatu.IseAlim
+            : PromotionStatu.Department;
+        await this.props.promotionStore
+          .create({
+            registrationNumber: values.sicilNo.toString(),
+            firstName: firstName,
+            lastName: lastName,
+            title: values.gorevi.toString(),
+            levelOfEducation: values.ogrenimDurumu.toString(),
+            promotionRequestTitle: promotionRequestTitle,
+            militaryStatus: values.askerlikDurumu.toString(),
+            department: this.state.department,
+            departmentObjId:this.state.departmentObjId,
+            unit: this.state.unit,
+            unitObjId:this.state.birimObjId,
+            description: description,
+            requestDate: new Date(),
+            dateOfStart: dateOfStart,
+            lastPromotionDate: new Date(),
+            statu: PromotionType.OnayaGonderildi,
+            hierarchyStatu: hierarchyStatu,
+          })
+          .then(() => {
+            this.setState({ modalVisible: false });
+            this.formRef.current?.resetFields();
+            this.openSuccessNotification('topRight');
+          })
+          .catch(() => {
+            this.openErrorNotification('topRight');
+          });
+      }
+    });
+  };
+
+  openSuccessNotification = (placement) => {
+    notification.success({
+      message: `Terfi Talebi`,
+      description: 'Belirtmiş olduğunuz personel için terfi talebi başarıyla oluşmuştur.',
+      placement,
+    });
+  };
+
+  openErrorNotification = (placement) => {
+    notification.error({
+      message: `Terfi Talebi`,
+      description: 'İşleminiz sırasında beklenmedik bir hata meydana geldi!',
+      placement,
+    });
+  };
+
+  openInfoNotification = (placement) => {
+    notification.info({
+      message: `Terfi Talebi`,
+      description:
+        'Belirtmiş olduğunuz personel için terfi talebi süreci devam etmektedir. Bu sebepten dolayı terfi talebini gerçekleştiremessiniz.',
+      placement,
+    });
+  };
+
   public render() {
     const { inkaUsersByUnit } = this.props.inkaStore;
-    // const { promotionPositions } = this.props.skJobStore;
+    const { jobPositions } = this.props.jobStore;
 
     const onChangePersonel = async (value: string) => {
+      focusTextInput();
       var data = value.split('_');
       await this.getEmployeeDetail(data[1].toString()).then(() => {
         this.setState({
@@ -163,6 +326,24 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         objId: this.state.jobsObjId,
         birimObjId: this.state.birimObjId,
       });
+      await this.getInkaPersonelByChief(this.state.chiefObjId);
+      await this.getInkaPersonelByTitleRecruitment('5000900100000010228');
+      await this.getInkaPersonelByTitleHRManager('5000750100000000718');
+      this.setState({
+        firstPromotionJob: this.props.jobStore.jobPositions[0].durum,
+      });
+    };
+
+    const onChangeTitle = async (value: string) => {
+      var data = value.split('_');
+      if (Number(data[1]) > this.state.firstPromotionJob) {
+        this.setState({ infoModalVisible: true });
+        console.log('1’den fazla kıdem atlamak istediğinizden emin misiniz?');
+      }
+    };
+
+    const focusTextInput = () => {
+      this.selectRef.current?.focus();
     };
 
     const onSearchPersonel = (value) => {};
@@ -190,77 +371,44 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
 
         <Card>
           <Divider orientation="left">{L('promotion.request.header')}</Divider>
-
           <Form ref={this.formRef}>
-            {this.state.locationId != undefined ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    name="gonderenKodu"
-                    label={
-                      <label style={{ maxWidth: 160, minWidth: 160 }}>
-                        {L('promotion.request.personel')}
-                      </label>
+            <Row>
+              <Col span={12}>
+                <Form.Item
+                  name="adiSoyadi"
+                  label={
+                    <label style={{ maxWidth: 160, minWidth: 160 }}>
+                      {L('promotion.request.personel')}
+                    </label>
+                  }
+                  rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
+                >
+                  <Select
+                    showSearch
+                    placeholder={L('Choose')}
+                    optionFilterProp="children"
+                    onChange={onChangePersonel}
+                    onSearch={onSearchPersonel}
+                    filterOption={(input, option) =>
+                      (option?.children &&
+                        option?.children?.toString().toLowerCase().indexOf(input.toLowerCase()) >=
+                          0) ||
+                      option?.props.value.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                   >
-                    <Select
-                      showSearch
-                      disabled
-                      placeholder={L('Choose')}
-                      optionFilterProp="children"
-                      onChange={onChange}
-                      onSearch={onSearch2}
-                      filterOption={(input, option) =>
-                        option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="tom">Tom</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    name="gonderenKodu"
-                    label={
-                      <label style={{ maxWidth: 160, minWidth: 160 }}>
-                        {L('promotion.request.personel')}
-                      </label>
-                    }
-                  >
-                    <Form.Item>
-                      {' '}
-                      <Select
-                        showSearch
-                        placeholder={L('Choose')}
-                        optionFilterProp="children"
-                        onChange={onChangePersonel}
-                        onSearch={onSearchPersonel}
-                        filterOption={(input, option) =>
-                          option?.children.toString().toLowerCase().indexOf(input.toLowerCase()) >=
-                            0 ||
-                          option?.props.value
-                            .toString()
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        {inkaUsersByUnit !== undefined
-                          ? inkaUsersByUnit.map((item) => (
-                              <Option value={`${item.gorevObjId}_${item.tcKimlikNo}`}>
-                                {item.adi} {item.soyadi}
-                              </Option>
-                            ))
-                          : ''}
-                      </Select>
-                    </Form.Item>
-                  </Form.Item>
-                </Col>
-              </Row>
-            )}
+                    {inkaUsersByUnit !== undefined
+                      ? inkaUsersByUnit.map((item) => (
+                          <Option
+                            value={`${item.gorevObjId}_${item.tcKimlikNo}_${item.adi}_${item.soyadi}`}
+                          >
+                            {item.adi} {item.soyadi}
+                          </Option>
+                        ))
+                      : ''}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
 
             {this.state.personelDivideVisible === true ? (
               <>
@@ -278,6 +426,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                               {L('promotion.request.personel.registrationnumber')}
                             </label>
                           }
+                          rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
                         >
                           <Input
                             type="text"
@@ -297,6 +446,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                               {L('promotion.request.personel.title')}
                             </label>
                           }
+                          rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
                         >
                           <Input
                             disabled
@@ -315,6 +465,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                               {L('promotion.request.personel.dateofstart')}
                             </label>
                           }
+                          rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
                         >
                           <Input
                             disabled
@@ -351,6 +502,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                               {L('promotion.request.personel.educationlevel')}
                             </label>
                           }
+                          rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
                         >
                           <Input
                             disabled
@@ -369,6 +521,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                               {L('promotion.request.personel.militarystatus')}
                             </label>
                           }
+                          rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
                         >
                           <Input
                             disabled
@@ -385,179 +538,102 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
               ''
             )}
 
-            <Divider orientation="left">{L('promotion.request.promotion.information')}</Divider>
-
-            {this.state.locationId !== undefined ? (
+            {this.state.personelDivideVisible === true ? (
               <>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="gonderenKodu"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.title')}
-                        </label>
-                      }
-                    >
-                      <Select
-                        disabled
-                        showSearch
-                        placeholder={L('Choose')}
-                        optionFilterProp="children"
-                        onChange={onChange2}
-                        onSearch={onSearch2}
-                        filterOption={(input, option) =>
-                          option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                {' '}
+                <QueueAnim delay={300} className="queue-simple">
+                  <Divider orientation="left">
+                    {L('promotion.request.promotion.information')}
+                  </Divider>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name="terfiTalepEdilenGorev"
+                        label={
+                          <label style={{ maxWidth: 160, minWidth: 160 }}>
+                            {L('promotion.request.promotion.title')}
+                          </label>
+                        }
+                        rules={[{ required: true, message: L('ThisFieldIsRequired') }]}
+                      >
+                        <Select
+                          showSearch
+                          ref={this.selectRef}
+                          placeholder={L('Choose')}
+                          optionFilterProp="children"
+                          onChange={onChangeTitle}
+                          onSearch={onSearch2}
+                          filterOption={(input, option) =>
+                            (option?.children &&
+                              option?.children
+                                ?.toString()
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0) ||
+                            option?.props.value
+                              .toString()
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {jobPositions !== undefined
+                            ? jobPositions.map((item, index) => (
+                                <Option value={`${item.adi}_${item.durum}`}>{item.adi}</Option>
+                              ))
+                            : ''}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name="description"
+                        label={
+                          <label style={{ maxWidth: 160, minWidth: 160 }}>
+                            {L('promotion.request.promotion.description')}
+                          </label>
                         }
                       >
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="tom">Tom</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.description')}
-                        </label>
-                      }
-                    >
-                      <Input.TextArea disabled />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.unit')}
-                        </label>
-                      }
-                    >
-                      <Input disabled />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.department')}
-                        </label>
-                      }
-                    >
-                      <Input disabled />
-                    </Form.Item>
-                  </Col>
-                </Row>
+                        <Input.TextArea />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name="unit"
+                        label={
+                          <label style={{ maxWidth: 160, minWidth: 160 }}>
+                            {L('promotion.request.promotion.unit')}
+                          </label>
+                        }
+                        hidden={true}
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name="department"
+                        label={
+                          <label style={{ maxWidth: 160, minWidth: 160 }}>
+                            {L('promotion.request.promotion.department')}
+                          </label>
+                        }
+                        hidden={true}
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </QueueAnim>
               </>
             ) : (
-              <>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="gonderenKodu2"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.title')}
-                        </label>
-                      }
-                    >
-                      <Select
-                        showSearch
-                        placeholder={L('Choose')}
-                        optionFilterProp="children"
-                        onChange={onChange2}
-                        onSearch={onSearch2}
-                        filterOption={(input, option) =>
-                          option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="tom">Tom</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.description')}
-                        </label>
-                      }
-                    >
-                      <Input.TextArea />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.unit')}
-                        </label>
-                      }
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      name="personelRegistirationNumber"
-                      label={
-                        <label style={{ maxWidth: 160, minWidth: 160 }}>
-                          {L('promotion.request.promotion.department')}
-                        </label>
-                      }
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </>
+              ''
             )}
-
-            {this.state.locationId != undefined ? (
-              <Row style={{ float: 'right' }}>
-                <Col span={6}>
-                  <Space style={{ width: '100%' }}>
-                    <Button
-                      type="primary"
-                      icon={<CheckOutlined />}
-                      onClick={() => this.createOrUpdateModalOpen()}
-                      style={{ background: 'green' }}
-                    >
-                      {L('promotion.request.header.information.approvedbutton')}
-                    </Button>
-                    <Button
-                      type="primary"
-                      icon={<CloseOutlined />}
-                      onClick={() => this.createOrUpdateModalOpen()}
-                      style={{ background: 'red' }}
-                    >
-                      {L('promotion.request.header.information.rejectbutton')}
-                    </Button>
-                  </Space>
-                </Col>
-              </Row>
-            ) : (
+            {this.state.personelDivideVisible === true ? (
               <Row style={{ float: 'right' }}>
                 <Col span={12}>
                   <Space style={{ width: '100%' }}>
@@ -571,18 +647,33 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                   </Space>
                 </Col>
               </Row>
+            ) : (
+              ''
             )}
           </Form>
           <ApprovalHierarchy
+            formRef={this.formRef}
             visible={this.state.modalVisible}
             modalType="View"
             onCancel={() => {
               this.setState({
                 modalVisible: false,
               });
-              this.formRef.current?.resetFields();
+              // this.formRef.current?.resetFields();
             }}
+            hierarchyData={this.state.hierarchyData}
+            onCreate={this.handleCreate}
           ></ApprovalHierarchy>
+          <Modal
+            title= {L('Warning')}
+            visible={this.state.infoModalVisible}
+            onOk={this.hideInfoModal}
+            onCancel={this.hideInfoModal}
+            okText={L('Yes')}
+            cancelText={L('No')}
+          >
+            <p>1’den fazla kıdem atlamak istediğinizden emin misiniz?</p>
+          </Modal>
         </Card>
       </>
     ) : (

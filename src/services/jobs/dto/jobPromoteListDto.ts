@@ -1,5 +1,5 @@
 /*eslint-disable*/
-export interface SKJobsPromoteListDto {
+export interface JobPromoteListDto {
   durum: number;
   adi: string;
 }
