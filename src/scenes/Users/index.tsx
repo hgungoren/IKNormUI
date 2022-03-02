@@ -67,10 +67,6 @@ class User extends AppComponentBase<IUserProps, IUserState> {
 
   }
 
-  // handleTableChange = (pagination: any) => {
-  //   this.setState({ skipCount: (pagination.current - 1) * this.state.maxResultCount! }, async () => await this.getAll());
-  // };
-
   Modal = () => {
     this.setState({
       modalVisible: !this.state.modalVisible,

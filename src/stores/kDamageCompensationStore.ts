@@ -9,14 +9,17 @@ import { GetBolgeList } from '../services/kDamageCompensations/dto/getBolgeList'
 import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariListDamage';
 import { CreateDamageInput } from '../services/kDamageCompensations/dto/createDamageInput';
 import { ViewClass } from '../services/kDamageCompensations/dto/viewClass';
-import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/getCreateDamageInput';
+import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/GetCreateDamageInput';
 import KDamageCompensationService from '../services/kDamageCompensations/damageCompensationsService';
-import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/getAllDamageCompensation';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
 import { GetEnumCompensationWhy } from '../services/kDamageCompensations/dto/getEnumCompensationWyh';
+<<<<<<< HEAD
 import { UpdateNextStatu } from '../services/kDamageCompensations/dto/updateNextStatu';
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 import { Gethistroy } from '../services/kDamageCompensations/dto/gethistroy';
 import { GetCurrent } from '../services/kDamageCompensations/dto/getCurrent';
 import { GetCity } from '../services/kDamageCompensations/dto/getCity';
@@ -26,9 +29,13 @@ import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
 import { KcariFind } from '../services/kDamageCompensations/dto/kcariFind';
 import { GetWebSiparisKodu } from '../services/kDamageCompensations/dto/getWebSiparis';
 
+<<<<<<< HEAD
 import { InterruptionModalCreate } from '../services/kDamageCompensations/dto/interruptionModalCreate';
 
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 class KDamageCompensationStore {
+  [x: string]: any;
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
   @observable getCreateDamageInput!: GetCreateDamageInput;
   @observable getCariListDamage!: GetCariListDamage[];
@@ -50,12 +57,15 @@ class KDamageCompensationStore {
   @observable getDistrictByIdList!: GetDistrict[];
   @observable getCountry!: GetCountry[];
   @observable getStreet!: GetStreet[];
+<<<<<<< HEAD
   @observable resultUpdateNextStatu!: string;
   @observable getKcariFind!: KcariFind[];
   @observable getWebSiparisKod!: GetWebSiparisKodu;
   @observable interruptionList!: PagedResultDto<InterruptionModalCreate>;
 
   @observable websipariskontrol!: string;
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 
   @action
   async create(createDamage: CreateDamageInput) {
@@ -225,6 +235,7 @@ class KDamageCompensationStore {
   }
 
   // ilce ile göre listeisi
+<<<<<<< HEAD
   @action
   async StoreGetDistrictById(id: number) {
     let result = await KDamageCompensationService.GetByIdDistrict(id);
@@ -315,6 +326,34 @@ class KDamageCompensationStore {
       (x: InterruptionModalCreate) => x.id !== entityDto.id
     );
   }
+=======
+  @action
+  async StoreGetDistrictById(id: number) {
+    let result = await KDamageCompensationService.GetByIdDistrict(id);
+    this.getDistrictByIdList = result;
+    return result;
+  }
+
+  // ülke listesi
+  @action
+  async StoreGetCountryAll() {
+    let result = await KDamageCompensationService.GetCountry();
+    this.getCountry = result;
+    return result;
+  }
+
+  // adres bulma
+  @action
+  async StoreGetByFindAddress(districtId: number, districtName: string, myp_adi: string) {
+    let result = await KDamageCompensationService.GetByFindAddress(
+      districtId,
+      districtName,
+      myp_adi
+    );
+    this.getStreet = result;
+    return result;
+  }
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 }
 
 export default KDamageCompensationStore;
