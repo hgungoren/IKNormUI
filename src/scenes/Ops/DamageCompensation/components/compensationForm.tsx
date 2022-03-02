@@ -1,4 +1,3 @@
-
 import React  from 'react';
 
 import {   
@@ -15,8 +14,7 @@ import {
     Row,
     Select,
     Space,
-    Spin,
-  
+    Spin,  
   } from 'antd';
 
   import '../index.less';
@@ -29,7 +27,7 @@ import 'moment/locale/tr';
 import locale from 'antd/es/date-picker/locale/tr_TR';
 import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
 import DifferentCari from '../components/differentCari';
-
+import uuid from 'react-uuid'
 
   export interface ICProps {
     kDamageCompensationStore:KDamageCompensationStore,
@@ -40,6 +38,7 @@ import DifferentCari from '../components/differentCari';
 
   
 export interface IState {
+
 }
  
 
@@ -58,13 +57,23 @@ class CompensationForm extends React.Component<ICProps,IState>  {
     VkInputrequired:true,
     Ktno:0,
     GetirLoding:false,
-    sistemInsertTime:'2022-01-01',
+    sistemInsertTime:'01-01-2020',
     pageLoding:false,
     lblQuery:'Kargo Takip No',
     lblEvrakSeriNoAndIrsaliye:'Evrak Seri Sira No',
     fileControl:false,
     filesMultitable:[],
-    differentCari:false
+    differentCari:false,
+    differentCariObJ :'',
+    tazminMusteriRadio:'0',
+    webSiparisKodu:'',
+
+    dataCariList: this.props.kDamageCompensationStore.getKcariFind,
+    dataCariListKod: this.props.kDamageCompensationStore.getKcariFind,
+    dataCikisSube:this.props.kDamageCompensationStore.getSubeListDamage,
+    dataVarisSube:this.props.kDamageCompensationStore.getSubeListDamage,
+    fetchingKcari: true,
+    kcariKodu:''
    };
 
 
@@ -72,10 +81,150 @@ class CompensationForm extends React.Component<ICProps,IState>  {
     render() {
         const { Option } = Select;
 
-        const dateFormat = 'YYYY-MM-DD';
+        const dateFormat = 'DD-MM-YYYY';
         var today = new Date();
         const todayFinish = moment(today).format(dateFormat);
         
+
+
+    
+        const optionsCariList = this.state.dataCariList !== undefined && this.state.dataCariList.map(d => <Option key={'c' + d.objId + ''} value={d.unvan} >{d.unvan}</Option>);
+
+        const optionsCariListKod = this.state.dataCariListKod !== undefined && this.state.dataCariListKod.map(d => <Option key={uuid()} value={d.kodu} >{d.kodu}</Option>);
+
+        const optionsCikisSube = this.state.dataCikisSube !== undefined && this.state.dataCikisSube.map(d => <Option key={uuid()} value={d.adi} >{d.adi}</Option>);
+
+        const optionsVarisSube = this.state.dataCikisSube !== undefined && this.state.dataCikisSube.map(d => <Option key={uuid()} value={d.adi} >{d.adi}</Option>);
+
+
+
+
+
+//#region   
+const OnSelectCikisSube = async()=>{
+    await this.props.kDamageCompensationStore.getSubeListDamageComppensation();
+    this.setState({dataCikisSube :this.props.kDamageCompensationStore.getSubeListDamage})
+}
+
+
+const OnSelectVarisSube = async()=>{
+    await this.props.kDamageCompensationStore.getSubeListDamageComppensation();
+    this.setState({dataCikisSube :this.props.kDamageCompensationStore.getSubeListDamage})
+}
+
+
+//#endregion
+
+
+
+
+        
+ //#region cari listeleme
+
+  const OnSearchCari = async (value) => {
+
+    if (value) {
+      if (value.length > 4) {
+        await this.props.kDamageCompensationStore.StoreGetKcariFind(value,1);
+        this.setState({ dataCariList: this.props.kDamageCompensationStore.getKcariFind })
+      }
+    }
+    //console.log('test=>',this.state.data)
+  }
+
+
+
+  const OnSearchCariAlici = async (value) => {
+
+    if (value) {
+      if (value.length > 4) {
+        await this.props.kDamageCompensationStore.StoreGetKcariFind(value,1);
+        this.setState({ dataCariList: this.props.kDamageCompensationStore.getKcariFind })
+      }
+    }
+    //console.log('test=>',this.state.data)
+  }
+
+
+
+  const OnSearchCariKod = async (value) => {
+
+    if (value) {
+      if (value.length > 4) {
+        await this.props.kDamageCompensationStore.StoreGetKcariFind(value,2);
+        this.setState({ dataCariListKod: this.props.kDamageCompensationStore.getKcariFind })
+      }
+    }
+    console.log('test=>',this.state.dataCariListKod)
+  }
+
+
+
+  const OnSearchCariKodAlici = async (value) => {
+
+    if (value) {
+      if (value.length > 4) {
+        await this.props.kDamageCompensationStore.StoreGetKcariFind(value,2);
+        this.setState({ dataCariListKod: this.props.kDamageCompensationStore.getKcariFind })
+      }
+    }
+    console.log('test=>',this.state.dataCariListKod)
+  }
+
+
+
+  
+
+
+
+  //#endregion
+
+
+
+  //#region Cari secme
+  const OnSelectCari = (id) => {
+     
+    var resultData = this.props.kDamageCompensationStore.getKcariFind.filter(x => x.unvan === id);
+       this.formRef.current?.setFieldsValue({
+      'gonderenKodu':resultData[0].kodu
+      });
+       
+ }
+
+ const OnSelectCariAlici = (id) => {
+     
+    var resultData = this.props.kDamageCompensationStore.getKcariFind.filter(x => x.unvan === id);
+       this.formRef.current?.setFieldsValue({
+      'aliciKodu':resultData[0].kodu
+      });
+       
+ }
+
+
+
+ const OnSelectCariKod = (id) => {
+     
+    var resultData = this.props.kDamageCompensationStore.getKcariFind.filter(x => x.kodu === id);
+       this.formRef.current?.setFieldsValue({
+      'gonderenUnvan':resultData[0].unvan
+      });
+       
+ }
+
+
+ const OnSelectCariKodAlici = (id) => {
+     
+    var resultData = this.props.kDamageCompensationStore.getKcariFind.filter(x => x.kodu === id);
+   
+       this.formRef.current?.setFieldsValue({
+      'aliciUnvan':resultData[0].unvan
+      });
+       
+ }
+
+
+ //#endregion
+
 
 
 
@@ -87,9 +236,10 @@ class CompensationForm extends React.Component<ICProps,IState>  {
        this.setState({KnowUnknownQuery:false}) 
        this.formRef.current?.resetFields()
        this.formRefQuery.current?.resetFields()
-       this.setState({ sistemInsertTime:'2022-01-01'})
+       this.setState({ sistemInsertTime:'01-01-2020'})
        this.setState({lblQuery:'Kargo Takip No'})
        this.setState({lblEvrakSeriNoAndIrsaliye:'Evrak Seri Sira No'})
+
  
 
     }else{
@@ -97,9 +247,11 @@ class CompensationForm extends React.Component<ICProps,IState>  {
         this.setState({KnowUnknownQuery:true})   
         this.formRef.current?.resetFields() 
         this.formRefQuery.current?.resetFields()
-        this.setState({ sistemInsertTime:'2022-01-01'})
+        this.setState({ sistemInsertTime:'01-01-2020'})
         this.setState({lblQuery:'Kargo Kabul Fis No'})
         this.setState({lblEvrakSeriNoAndIrsaliye:'Sevk Irsaliye No'})
+
+
    
     }
 
@@ -161,32 +313,48 @@ class CompensationForm extends React.Component<ICProps,IState>  {
         try{
 
             await this.props.kDamageCompensationStore.getDamageComppensation({id:id})
+
+
            var response=this.props.kDamageCompensationStore.getCreateDamageInput
+
           if(response !==null && response !==undefined){
                     
             
            if(response.takipNo ==="0"){
 
-
+               
             ValidateMessage(true,'Uyari',''+this.state.Ktno+' Takip Numarali  '+response.gonderenKodu+' Nolu Bagli Hasar Tazmin Bulunmaktadir.')
 
             this.setState({GetirLoding:false})
            }else{
+
+
+            await this.props.kDamageCompensationStore.StoreGetWebSiparis(response.takipNo);
+            this.setState({
+                webSiparisKodu: this.props.kDamageCompensationStore.getWebSiparisKod.webSiparisKodu !==undefined ? this.props.kDamageCompensationStore.getWebSiparisKod.webSiparisKodu :''
+            })
+               
+
+            console.log('this.state.webSiparisKodu',this.state.webSiparisKodu)
+
 
             setTimeout(() => {
                
                 this.setState({
                     sistemInsertTime: moment(
                       this.props.kDamageCompensationStore.getCreateDamageInput.sistem_InsertTime
-                    ).format('YYYY-MM-DD'),
+                    ).format('DD-MM-YYYY'),
                   });
                  
                 this.formRef.current?.setFieldsValue({
                   ...this.props.kDamageCompensationStore.getCreateDamageInput,
-
+                'web_siparis_kodu':this.state.webSiparisKodu
                 });
+
+        
+                
                 this.setState({GetirLoding:false})
-              }, 500);
+              }, 1000);
 
            }     
           }else{          
@@ -222,6 +390,7 @@ class CompensationForm extends React.Component<ICProps,IState>  {
 
     //#region TAZMIN KAYDETME
      const onclickSaveDamageCompensation=()=>{
+
         const form = this.formRef.current;
           
           if(this.state.fileControl ===true){
@@ -239,50 +408,86 @@ class CompensationForm extends React.Component<ICProps,IState>  {
             values.TakipNo=this.state.Ktno;
          }
 
+                   // farkli cari secili gelirse  
+                     //cari obji tazmin musteri unvana set et                          
+                     if(this.state.tazminMusteriRadio === '3'){         
+                       values.Tazmin_Musteri_Kodu=this.state.differentCariObJ
+                      }
+                                
+                    values.Web_Siparis_Kodu=this.state.webSiparisKodu 
+                    values.Web_Siparis_Kodu =values.web_siparis_kodu         
+                   await this.props.kDamageCompensationStore.StoreGetWebSiparisKontrol(values.web_siparis_kodu);
+                   var text=this.props.kDamageCompensationStore.websipariskontrol;
+
           //dosya kontrolu
           if(values.FileTazminDilekcesi ==='[]' || values.FileTazminDilekcesi ===undefined ){
-            confirm({
-                icon: <ExclamationCircleOutlined />,
-                content:L('Tazmin Belgelerini Bos Biraktiniz. Eksik Evrak Olarak Kaydedilsinmi.'),
-                okText: L('Kaydet'),
-                cancelText: L('Vazgec'),
-                onOk: () => {  
-                  this.setState({pageLoding:true})
-
-                    this.props.kDamageCompensationStore.create(values); 
+                      
+                    if(text==="true"){
+                        this.setState({pageLoding:true})                         
+                        confirm({
+                            icon: <ExclamationCircleOutlined />,
+                            content:L('Tazmin Belgelerini Bos Biraktiniz. Eksik Evrak Olarak Kaydedilsin mi?'),
+                            okText: L('Yeni Form'),
+                            cancelText: L('Vazgec'),
+                            onOk: () => {  
+                            this.setState({pageLoding:true})
                              
-                  setTimeout(() => {
-                   window.location.href='/hasartazminsorgulama';
-                   }, 5000);                    
-                   
-                },
-                onCancel() {
-                  console.log(L('Cancel'));
-                },
-              });
+                            this.props.kDamageCompensationStore.create(values);
+                                            
+                            setTimeout(() => {
+                            window.location.href='/newindex';
+                            }, 300);                                           
+                            },
+                            onCancel() {
+                            console.log(L('Cancel'));
+                            },
+                        });
+                    }else{
+
+                        ValidateMessage(true,'Uyari',''+values.web_siparis_kodu+' web siparis Numarali Tazmin Formu Bulunmaktadir  ')                  
+                    }  
 
           }
           else{
-              confirm({
-                icon: <ExclamationCircleOutlined />,
-                content: 'Hasar Tazmin Kaydedilsinmi.',
-                okText: L('Kaydet'),
-                cancelText: L('Vazgec'),
-                onOk: () => {   
-                    this.setState({pageLoding:true})
-                 
-                    this.props.kDamageCompensationStore.create(values); 
+
+            if(text ==="true"){
+                this.setState({pageLoding:true})  
+
+                setTimeout(() => {                   
+                    this.props.kDamageCompensationStore.create(values);
+                    confirm({
+                        icon: <ExclamationCircleOutlined />,
+                        content: 'Hasar Tazmin Formu Kaydedilmistir',
+                        okText: L('Yeni Form'),
+                        cancelText: L('Vazgec'),
+                        onOk: () => {   
+        
+                                                                
+                            setTimeout(() => {
+                                window.location.href='/newindex';         
+                            }, 300);   
+                                                
+                        },  
+                        onCancel: () => {
+                            setTimeout(() => {
+                                window.location.href='/newindex/deg/'+this.props.LastIdDamageCompensation+'';         
+                            }, 300);   
+        
+                        },
+                        });
+                }, 5000);
                    
-                    setTimeout(() => {
-                        window.location.href='/hasartazminsorgulama';
-          
-                   }, 5000);   
-                                         
-                },
-                onCancel: () => {
-                    console.log(L('Cancel'));
-                },
-              });
+                        
+
+            }
+            else{
+
+                var text=this.props.kDamageCompensationStore.websipariskontrol;
+                ValidateMessage(true,'Uyari',''+values.web_siparis_kodu+' web siparis Numarali  '+text.split('-')[1]+' Tazmin Formu Bulunmaktadir  ')                  
+            }  
+
+
+         
 
           }
            
@@ -318,8 +523,6 @@ class CompensationForm extends React.Component<ICProps,IState>  {
     //#endregion
 
 
-  
-
 
     //#region  MULTI FILE DOSYASI
     const OnDoneGetFile=(files)=>{
@@ -340,7 +543,7 @@ class CompensationForm extends React.Component<ICProps,IState>  {
        }else  {
         this.setState({fileControl:false})
         this.setState({filesMultitable:files})
-        console.log('JSON=>', JSON.stringify(this.state.filesMultitable));
+        // console.log('JSON=>', JSON.stringify(this.state.filesMultitable));
        }
 
 
@@ -354,6 +557,9 @@ class CompensationForm extends React.Component<ICProps,IState>  {
    //#region  TAZMIN MUSTERI ONCHANGE
     const OnchangeTazminMusteri=(values)=>{
     
+
+     this.setState({tazminMusteriRadio :values.target.value})
+
      if(values.target.value==="3"){
         this.setState({differentCari:true})
      }else{
@@ -365,18 +571,23 @@ class CompensationForm extends React.Component<ICProps,IState>  {
 
 
 
+//#region farkli cari tutma 
+const processDiffrentCarObjFunc = (string) => {
+    this.setState({ differentCariObJ: string })
+  }
+  //#endregion 
+
+
        
       return (
-        <> 
-
-               
-                          
+        <>                      
                     <Spin  spinning={this.state.pageLoding}
-                     tip='Isleminiz Tamamlaniyor.Listeleme Sayfasina Yonlendiriliyorsunuz.'
+                    
                      size='large'>
 
                     <Divider orientation="left">{L('Tazmin Bilgileri')}</  Divider>
-                              
+                                
+
                             <Form labelCol={{ flex: '145px' }} labelAlign="right" wrapperCol={{ flex: 5 }} colon={false} >
                        
                                 <Row> 
@@ -419,28 +630,36 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                 </Row>   
 
 
-                                <Row>
-                                        <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
-                                            <Form.Item label={L(this.state.lblQuery)}  name="takipNo"    >
-                                            <Input  
-                                            onChange={OnchangeTakipNo}/>
-                                            </Form.Item>
-                                        </Col>
+                                    {
+                                        this.state.RadioQuery === 1 ?
 
-                                        <Col span={8} xs={{ order: 12 ,offset:1}} sm={{ order: 12 ,offset:1}} md={{ order: 3 ,offset:1}} lg={{ order: 4 ,offset:1}} >                                    
-                                              <Button 
-                                              type="primary"
-                                              icon={<SendOutlined />}
-                                              disabled={this.state.KnowUnknownQuery}
-                                              onClick={OnclickGetir}
-                                              loading={this.state.GetirLoding}
-                                              
-                                               >
-                                                {L('Getir')}
-                                            </Button>
-                                        </Col>
+                                        <Row>
+                                                    
+                                                    <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
+                                                        <Form.Item label={L(this.state.lblQuery)}  name="takipNo"    >
+                                                        <Input  
+                                                        onChange={OnchangeTakipNo}/>
+                                                        </Form.Item>
+                                                    </Col> 
+                                                    
+                                                    <Col span={8} xs={{ order: 12 ,offset:1}} sm={{ order: 12 ,offset:1}} md={{ order: 3 ,offset:1}} lg={{ order: 4 ,offset:1}} >                                    
+                                                            <Button 
+                                                            type="primary"
+                                                            icon={<SendOutlined />}
+                                                            disabled={this.state.KnowUnknownQuery}
+                                                            onClick={OnclickGetir}
+                                                            loading={this.state.GetirLoding}
+                                                            
+                                                            >
+                                                            {L('Getir')}
+                                                        </Button>
+                                                    </Col>
 
-                                </Row>
+                                     </Row>  : null
+                                
+                                    }
+
+                            
                             </Form>
 
 
@@ -455,17 +674,29 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                              rules={[{ required: false, message: L('MissingInputEmpty')}]}
                                             >
                                                  
-                                            <DatePicker   
+                                                {/* <DatePicker   
                                                     className="formInputDate"
                                                     locale={locale}
                                                     disabledDate={(d) =>
                                                         !d || d.isAfter(todayFinish) || d.isSameOrBefore('2000-01-01')
                                                     }
-                                                    format="YYYY-MM-DD"
+                                                    format="DD-MM-YYYY"
                                                     
                                                     placeholder={L(this.state.sistemInsertTime)}
                                                     disabled={this.state.KnowUnknown}
-                                                    />
+                                                    /> */}
+
+                                           
+
+                                            <DatePicker 
+                                             placeholder={this.state.sistemInsertTime}
+                                             disabled={this.state.KnowUnknown}
+                                             className="formInputDate"
+                                             locale={locale}                                           
+                                             format={dateFormat}
+                                             disabledDate={(d) =>
+                                                !d || d.isAfter(todayFinish) || d.isSameOrBefore('01-01-2000')
+                                            } />
 
 
                                                     
@@ -485,14 +716,47 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('Gonderici Kodu')}  name="gonderenKodu" 
                                              rules={[{ required: true, message: L('MissingInputEmpty')}]} >
-                                            <Input   disabled={this.state.KnowUnknown}/>
+                                                <Select
+                                                                    allowClear
+                                                                    disabled={this.state.KnowUnknown}
+                                                                    showSearch
+                                                                    placeholder={L('PleaseSelect')}
+                                                                    notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                    onSearch={OnSearchCariKod}
+                                                                    showArrow={false}
+                                                                    filterOption={false}
+                                                                    defaultActiveFirstOption={false}
+                                                                    onSelect={OnSelectCariKod}
+                                                                    >
+                                                                    {optionsCariListKod}
+                                                                    
+                                                </Select>
+
+                                        
                                             </Form.Item>
                                         </Col>
                                     
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                         <Form.Item label={L('Gonderici Unvan')}  name="gonderenUnvan" 
                                          rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.KnowUnknown} />
+                                         
+
+                                            <Select
+                                                disabled={this.state.KnowUnknown}
+                                                                showSearch
+                                                                placeholder={L('PleaseSelect')}
+                                                                notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                onSearch={OnSearchCari}
+                                                                showArrow={true}
+                                                                filterOption={false}
+                                                                defaultActiveFirstOption={false}
+                                                                onSelect={OnSelectCari}
+                                                                >
+                                                                {optionsCariList}
+                                                                
+                                        </Select>
+
+
                                             </Form.Item>
                                         </Col>                                
                                 </Row>   
@@ -501,14 +765,47 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('Alici Kodu')}  name="aliciKodu" 
                                             rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.KnowUnknown} />
+                                        
+
+
+                                            <Select
+                                                                    allowClear
+                                                                    disabled={this.state.KnowUnknown}
+                                                                    showSearch
+                                                                    placeholder={L('PleaseSelect')}
+                                                                    notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                    onSearch={OnSearchCariKodAlici}
+                                                                    showArrow={false}
+                                                                    filterOption={false}
+                                                                    defaultActiveFirstOption={false}
+                                                                    onSelect={OnSelectCariKodAlici}
+                                                                    >
+                                                                    {optionsCariListKod}
+                                                                    
+                                                </Select>
+
+
+
                                             </Form.Item>
                                         </Col>
                                     
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                         <Form.Item label={L('Alici Unvan')}  name="aliciUnvan" 
                                          rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.KnowUnknown} />
+                                                <Select
+                                                disabled={this.state.KnowUnknown}
+                                                                showSearch
+                                                                placeholder={L('PleaseSelect')}
+                                                                notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                onSearch={OnSearchCariAlici}
+                                                                showArrow={true}
+                                                                filterOption={false}
+                                                                defaultActiveFirstOption={false}
+                                                                onSelect={OnSelectCariAlici}
+                                                                >
+                                                                {optionsCariList}
+                                                                
+                                                  </Select>
                                             </Form.Item>
                                         </Col>                                
                                 </Row>
@@ -517,14 +814,48 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('Cikis Sube Adi')}  name="cikis_Sube_Unvan" 
                                             rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input   disabled={this.state.KnowUnknown}/>
+                                       
+                                            <Select
+                                                disabled={this.state.KnowUnknown}
+                                                                showSearch
+                                                                placeholder={L('PleaseSelect')}
+                                                                notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                //onSearch={OnSearchCariAlici}
+                                                                showArrow={true}
+                                                                filterOption={false}
+                                                                defaultActiveFirstOption={false}
+                                                                // onSelect={OnSelectCikisSube}
+                                                                onClick={OnSelectCikisSube}
+                                                                >
+                                                                {optionsCikisSube}
+                                                                
+                                                  </Select>
+
                                             </Form.Item>
                                         </Col>
                                     
+
+
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                         <Form.Item label={L('Varis Sube Adi')}  name="varis_Sube_Unvan" 
                                          rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input   disabled={this.state.KnowUnknown}/>
+                                            
+                                            <Select
+                                                disabled={this.state.KnowUnknown}
+                                                                showSearch
+                                                                placeholder={L('PleaseSelect')}
+                                                                notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                showArrow={true}
+                                                                filterOption={false}
+                                                                defaultActiveFirstOption={false}                                                    
+                                                                onClick={OnSelectVarisSube}
+                                                                >
+                                                                {optionsVarisSube}
+                                                                
+                                                  </Select>
+
+
+
                                             </Form.Item>
                                         </Col>                                
                                 </Row>
@@ -534,16 +865,51 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('Kargo Tipi')}  name="birimi" 
                                              rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.KnowUnknown} />
+                                                
+                                                <Select
+                                                               disabled={this.state.KnowUnknown}
+                                                                showSearch={false}
+                                                                placeholder={L('PleaseSelect')}
+                                                                notFoundContent={this.state.fetchingKcari ? <Spin size="small" /> : null}
+                                                                showArrow={true}
+                                                                filterOption={false}
+                                                                                                              
+                                                                >
+                                                   <Option key={'B3120000100000000001'} value={'Mİ'}>{L('Mİ')}</Option>
+                                                   <Option key={'B3120000100000000014'} value={'PALET'}>{L('PALET')}</Option>
+                                                   <Option key={'B4000100100000000002'} value={'DOSYA'}>{L('DOSYA')}</Option>
+                                                   <Option key={'B4000100100000000003'} value={'PAKET'}>{L('PAKET')}</Option>
+                                                   <Option key={'B4000100100000000004'} value={'KOLİ'}>{L('KOLİ')}</Option>
+                                                           
+                                                                
+                                                  </Select>
+
                                             </Form.Item>
                                         </Col>
                                     
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                         <Form.Item label={L('Parca Adedi')}  name="adet" 
-                                        rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.KnowUnknown} />
+                                        rules={[{ required: true, message: L('MissingInputEmpty')},
+                                                { pattern:new RegExp(/\d+/g), message: L('Sadece Sayisal Degerler')} ]}>
+                                            <Input  disabled={this.state.KnowUnknown}  maxLength={4}/>
                                             </Form.Item>
                                         </Col>                                
+                                </Row>
+
+
+
+                                <Row>
+                                <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                   
+                
+                                            <Form.Item label={L('Web Siparis Kodu')}  name="web_siparis_kodu"  
+                                             rules={[{ required: false, message: L('MissingInputEmpty')}]}>
+                                            <Input 
+                                              disabled={this.state.KnowUnknown}  
+                                            
+                                              value={this.state.webSiparisKodu} />
+                                           
+                                            </Form.Item>
+                                        </Col>
                                 </Row>
                            
 
@@ -554,17 +920,20 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                         <Col span={8} xs={{ order: 12}} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('Tazmin Talep Tarihi')}  name="Tazmin_Talep_Tarihi" 
                                              rules={[{ required: true, message: L('MissingInputEmpty')}]}>
-                                             <DatePicker  
-                                                    
-                                                    locale={locale}
-                                                    disabledDate={(d) =>
-                                                        !d || d.isAfter(todayFinish) || d.isSameOrBefore('2000-01-01')
-                                                    }
-                                                    format="YYYY-MM-DD"
-                                                    defaultPickerValue={moment(todayFinish)}
-                                                    placeholder={L('SelectDate')}
-                                                  
-                                                    />
+                                         
+
+                                            <DatePicker 
+                                             className="formInputDate"
+                                             locale={locale}
+                                             defaultValue={moment(todayFinish, dateFormat)} 
+                                             format={dateFormat}
+                                             disabledDate={(d) =>
+                                                !d || d.isAfter(todayFinish) || d.isSameOrBefore('01-01-2000')
+                                            } />
+
+
+
+
                                             </Form.Item>
                                         </Col>
                                     
@@ -598,7 +967,9 @@ class CompensationForm extends React.Component<ICProps,IState>  {
 
                                         
                                         {this.state.differentCari ?                      
-                                        <DifferentCari                       
+                                        <DifferentCari 
+                                        
+                                        differentCariObJ={processDiffrentCarObjFunc}
                                         kDamageCompensationStore={this.props.kDamageCompensationStore}   /> 
                                         : ''}
 
@@ -620,15 +991,19 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                 <Row> 
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >                                    
                                             <Form.Item label={L('TC Kimlik No')}  name="TCK_NO" 
-                                             rules={[{ required: this.state.TcInputrequired, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.TcInputdisable}/>
+                                             rules={[{ required: this.state.TcInputrequired,
+                                             pattern: /^\d*\.?\d{11,11}$/,
+                                             message: L('MissingInputEmpty')}]}>
+                                            <Input  disabled={this.state.TcInputdisable} maxLength={11} />
                                             </Form.Item>
                                         </Col>
                                     
                                         <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                         <Form.Item label={L('Vergi Kimlik No')}  name="VK_NO" 
-                                         rules={[{ required: this.state.VkInputrequired, message: L('MissingInputEmpty')}]}>
-                                            <Input  disabled={this.state.VkInputdisable} />
+                                         rules={[{ required: this.state.VkInputrequired, 
+                                         pattern: /^\d*\.?\d{10,12}$/,
+                                         message: L('MissingInputEmpty')}]}>
+                                            <Input  disabled={this.state.VkInputdisable} maxLength={12} minLength={10} />
                                             </Form.Item>
                                         </Col>                                
                                 </Row>
@@ -670,6 +1045,9 @@ class CompensationForm extends React.Component<ICProps,IState>  {
                                             <Input />
                                             </Form.Item>
                                         </Col>
+
+
+                                        
                                                       
                                 </Row>
 
@@ -753,3 +1131,4 @@ class CompensationForm extends React.Component<ICProps,IState>  {
 
 
   export default  CompensationForm
+

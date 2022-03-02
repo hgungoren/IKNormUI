@@ -33,8 +33,8 @@ export interface ICProps {
   urlId: number
   UserNameSurname: any;
   processOwnerRegion: string;
-  filesMultitable:any;
-  title:any;
+  filesMultitable: any;
+  title: any;
 }
 
 
@@ -100,19 +100,32 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
         }
         values.tazminId = this.props.urlId;
         values.evaEkleyen_Kullanici = this.props.UserNameSurname
-        
+
         values.file = JSON.stringify(this.props.filesMultitable);
-        values.surecSahibiBolge=this.props.processOwnerRegion;
+        values.surecSahibiBolge = this.props.processOwnerRegion;
 
         console.log(JSON.stringify(this.props.filesMultitable));
         console.log(this.props.processOwnerRegion);
-        
+
         confirm({
           icon: <ExclamationCircleOutlined />,
           content: 'Tazmin Degerlendirme Yapilacaktir.',
           okText: L('Kaydet'),
           cancelText: L('Vazgec'),
           onOk: async () => {
+<<<<<<< HEAD
+            this.setState({ pageLoding: true })
+            await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => {
+              // UpdateDamageStatus               
+              this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+                tazminId: this.props.urlId,
+                surecsahibibolge: this.props.processOwnerRegion,
+                unvan: this.props.title,
+                file: JSON.stringify(this.props.filesMultitable)
+              });
+            }
+            );
+=======
             this.setState({ pageLoding: true })           
             // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
             // {
@@ -125,6 +138,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             //     // });
             // }
             // );
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 
 
 
@@ -163,6 +177,17 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
     }
   }
 
+  //#endregion
+
+
+
+
+  //#region  REVIZEYE GONDER
+
+  OnclickEvalutaionRevize=()=>{
+    alert('test')
+    this.props.kDamageCompensationStore.StorePostRevize( this.props.urlId.toString());
+  }
   //#endregion
 
 
@@ -375,18 +400,30 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             }
 
             <Row style={{ float: 'right' }}>
-              <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
-                <Space style={{ width: '100%' }}>
+              <Space style={{ width: '100%' }}>
+                <Col xs={{ order: 12, offset: 1 }} sm={{ order: 12, offset: 1 }} md={{ order: 3, offset: 1 }} lg={{ order: 4, offset: 1 }} > 
+                    <Button
+                      type="primary"
+                      onClick={this.OnclickEvalutaionCreate}
+                      icon={<SendOutlined />}
+                      htmlType="submit"
+                    >
+                      {L('Gonder')}
+                    </Button>
+                </Col>
+                <Col xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 8 }} >
+
                   <Button
-                    type="primary"
-                    onClick={this.OnclickEvalutaionCreate}
+                    type="default"
+                    onClick={this.OnclickEvalutaionRevize}
                     icon={<SendOutlined />}
-                    htmlType="submit"
+                    htmlType="button"
                   >
-                    {L('Gonder')}
+                    {L('Revize')}
                   </Button>
-                </Space>
-              </Col>
+                </Col>
+              </Space>
+
             </Row>
           </Form>
         </Spin>

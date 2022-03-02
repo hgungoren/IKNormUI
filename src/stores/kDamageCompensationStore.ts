@@ -16,13 +16,24 @@ import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
 import { GetEnumCompensationWhy } from '../services/kDamageCompensations/dto/getEnumCompensationWyh';
+<<<<<<< HEAD
+import { UpdateNextStatu } from '../services/kDamageCompensations/dto/updateNextStatu';
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 import { Gethistroy } from '../services/kDamageCompensations/dto/gethistroy';
 import { GetCurrent } from '../services/kDamageCompensations/dto/getCurrent';
 import { GetCity } from '../services/kDamageCompensations/dto/getCity';
 import { GetDistrict } from '../services/kDamageCompensations/dto/getDistrict';
 import { GetCountry } from '../services/kDamageCompensations/dto/getCountry';
 import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
+import { KcariFind } from '../services/kDamageCompensations/dto/kcariFind';
+import { GetWebSiparisKodu } from '../services/kDamageCompensations/dto/getWebSiparis';
 
+<<<<<<< HEAD
+import { InterruptionModalCreate } from '../services/kDamageCompensations/dto/interruptionModalCreate';
+
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 class KDamageCompensationStore {
   [x: string]: any;
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
@@ -46,11 +57,19 @@ class KDamageCompensationStore {
   @observable getDistrictByIdList!: GetDistrict[];
   @observable getCountry!: GetCountry[];
   @observable getStreet!: GetStreet[];
+<<<<<<< HEAD
+  @observable resultUpdateNextStatu!: string;
+  @observable getKcariFind!: KcariFind[];
+  @observable getWebSiparisKod!: GetWebSiparisKodu;
+  @observable interruptionList!: PagedResultDto<InterruptionModalCreate>;
+
+  @observable websipariskontrol!: string;
+=======
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 
   @action
   async create(createDamage: CreateDamageInput) {
     await KDamageCompensationService.create(createDamage);
-    //console.log('CreateNew Store=>',result)
     //this.createNev=result
   }
 
@@ -63,7 +82,6 @@ class KDamageCompensationStore {
   @action
   async getCariListDamageComppensation(entityDto: EntityDto) {
     let result = await KDamageCompensationService.getCariListDamageCompensation(entityDto);
-    // console.log('store.result=>',result)
     this.getCariListDamage = result;
   }
 
@@ -72,7 +90,13 @@ class KDamageCompensationStore {
   async getSubeListDamageComppensation() {
     let result = await KDamageCompensationService.getSubeListDamageComppensation();
     this.getSubeListDamage = result;
-    // console.log('store.result.Sube=>',result)
+  }
+
+  //sube VE aktarma  listesi
+  @action
+  async getSubeAktarmaListDamageComppensation() {
+    let result = await KDamageCompensationService.getSubeAktarmaListDamageComppensation();
+    this.getSubeListDamage = result;
   }
 
   //bolge listesi
@@ -93,7 +117,6 @@ class KDamageCompensationStore {
   @action
   async GetDamageComppensationLastId() {
     let result = await KDamageCompensationService.getDamageComppensationLastId();
-    //   console.log('STORE=>',result.data)
     this.lastIdDamage = result.data.result;
 
     return result.data;
@@ -104,7 +127,6 @@ class KDamageCompensationStore {
   async StoregetAllDamageCompansation() {
     let result = await KDamageCompensationService.getAllDamageCompensationService();
     this.getAllDamageCompensationStoreClass = result;
-    //console.log('STORE=>',result)
     return result;
   }
 
@@ -213,6 +235,7 @@ class KDamageCompensationStore {
   }
 
   // ilce ile göre listeisi
+<<<<<<< HEAD
   @action
   async StoreGetDistrictById(id: number) {
     let result = await KDamageCompensationService.GetByIdDistrict(id);
@@ -239,6 +262,98 @@ class KDamageCompensationStore {
     this.getStreet = result;
     return result;
   }
+
+  ///UPDATE NEXT STATU
+  @action
+  async StoreUpdateDamageStatus(updateNextStatu: UpdateNextStatu) {
+    let result = await KDamageCompensationService.PostUpdateDamageStatus(updateNextStatu);
+    this.resultUpdateNextStatu = result;
+    return result;
+  }
+
+  // CARI LISTESI ARAMA SERVISI
+  @action
+  async StoreGetKcariFind(kcarifind: string, tip: number) {
+    let result = await KDamageCompensationService.ServiceGetKcariFind(kcarifind, tip);
+    this.getKcariFind = result;
+    return result;
+  }
+
+  // WEB siparis getir
+  @action
+  async StoreGetWebSiparis(sipariskodu: string) {
+    let result = await KDamageCompensationService.ServiceGetWebSiparisKodu(sipariskodu);
+    this.getWebSiparisKod = result;
+    return result;
+  }
+
+  /// REVIZE
+  @action
+  async StorePostRevize(tazminid: string) {
+    await KDamageCompensationService.ServicePostRevize(tazminid);
+  }
+
+  /// web siparis kontrol
+  @action
+  async StoreGetWebSiparisKontrol(websipariskodu: string) {
+    let result = await KDamageCompensationService.ServiceGetWebSiparisKontrol(websipariskodu);
+    this.websipariskontrol = result;
+    return result;
+  }
+
+  // kesinti modal kaydet
+  @action
+  async StorePostKesintiModalCreate(iterruptionModalCreate: InterruptionModalCreate) {
+    await KDamageCompensationService.ServicePostKesintiModalCreate(iterruptionModalCreate);
+  }
+
+  //kesinti listesi
+  @action
+  async StoreGetKesintiListesi(tazminId: number) {
+    let result = await KDamageCompensationService.ServicePostKesintiList(tazminId);
+    this.interruptionList = result;
+
+    return result;
+  }
+
+  //kesinti silme ServiceKesintiDelete
+
+  @action
+  async delete(entityDto: EntityDto) {
+    await KDamageCompensationService.delete(entityDto);
+
+    this.interruptionList.items = this.interruptionList.items.filter(
+      (x: InterruptionModalCreate) => x.id !== entityDto.id
+    );
+  }
+=======
+  @action
+  async StoreGetDistrictById(id: number) {
+    let result = await KDamageCompensationService.GetByIdDistrict(id);
+    this.getDistrictByIdList = result;
+    return result;
+  }
+
+  // ülke listesi
+  @action
+  async StoreGetCountryAll() {
+    let result = await KDamageCompensationService.GetCountry();
+    this.getCountry = result;
+    return result;
+  }
+
+  // adres bulma
+  @action
+  async StoreGetByFindAddress(districtId: number, districtName: string, myp_adi: string) {
+    let result = await KDamageCompensationService.GetByFindAddress(
+      districtId,
+      districtName,
+      myp_adi
+    );
+    this.getStreet = result;
+    return result;
+  }
+>>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 }
 
 export default KDamageCompensationStore;

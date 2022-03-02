@@ -288,16 +288,10 @@ class User extends AppComponentBase<IUserProps, IUserState> {
                  loading={this.state.tableloding}
                 dataSource={users === undefined ? [] : users.items}
                 onChange={this.handlePaginationTable}
-                pagination={tablePaginationTable}
-                
-                
+                pagination={tablePaginationTable} 
               />
             </Col>
-          </Row>
-
-          {
-            console.log(this.state.userId)
-          }
+          </Row> 
           <CreateOrUpdateUser
             formRef={this.formRef}
             visible={this.state.modalVisible}

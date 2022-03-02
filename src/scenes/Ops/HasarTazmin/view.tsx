@@ -251,8 +251,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                             <Form.Item
                               
                               name="ktno"
-                            >
-                              {console.log(this.state.takipNo)}
+                            > 
                               <Input
                                 disabled
                                 className="formInput"
@@ -739,8 +738,7 @@ class DamageCompensationView extends AppComponentBase<IProps, IState> {
                               {L('RequestedAmount')}
                             </label>
                           }
-                        >
-                          {console.log(this.state.evaTalepEdilenTutar)}
+                        > 
                           <Input
                             className="formInput"
                             value={this.state.evaTalepEdilenTutar}

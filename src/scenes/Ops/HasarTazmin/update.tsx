@@ -132,8 +132,7 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   //Tanzim  dosya güncelleme Metodu
   kDamageCompensationUpdate = () => {
-      
-
+    
     this.setState({loading:true})
     const form = this.formFileRef.current;            
       form!.validateFields().then(async (values: any) => {
@@ -274,8 +273,7 @@ async componentDidMount() {
                               label={<label>{L('CompensationStatus')}</label>}
                               labelCol={{ span: 12 }}
                               wrapperCol={{ span: 16 }}
-                            >
-                              {console.log(this.state.tazminStatu)}
+                            > 
                               <Input
                                 disabled
                                 className="formInput"

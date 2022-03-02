@@ -53,8 +53,7 @@ class KHierarchyStore {
   }
 
   @action
-  async updateOrderNodes(ids: any) { 
-    console.log(ids)
+  async updateOrderNodes(ids: any) {  
     let result = await kHierarchyService.updateOrderNodes(ids);
     this.status = result;
   }

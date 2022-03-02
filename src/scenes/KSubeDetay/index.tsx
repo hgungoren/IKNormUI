@@ -333,6 +333,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   mergeArray = async () => {
+
+     alert('dasdasdsa')
     let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
       id: i,
       gorev: y,
@@ -347,9 +349,15 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       normCount: [...this.state.groupNorm[y]].length,
     }));
 
+
+
     let result = [...employees, ...norms];
+    console.log('result=>',result)
     let names = result.map((x) => x.gorev);
     let set = new Set(names);
+
+     
+
 
     let groupData = [...set].map((x, i) => {
       let gorev = x;
