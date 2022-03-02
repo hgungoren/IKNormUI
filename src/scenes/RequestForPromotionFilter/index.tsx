@@ -43,10 +43,6 @@ export interface State {
   unitObjId: string;
 }
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
 function onChange(date, dateString) {
   console.log(date, dateString);
 }
@@ -73,9 +69,10 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   componentDidMount = async () => {
     this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     await this.getInkaPersonelByTcNo(await this.props.sessionStore.currentLogin.user.tcKimlikNo);
-    console.log('Id', this.props.sessionStore.currentLogin.user.id);
     await this.props.userStore.get({ id: this.props.sessionStore.currentLogin.user.id });
     await this.getAllPromotionFilter();
+    await this.getAllStatus();
+    await this.getAllTitles();
   };
 
   getInkaPersonelByTcNo = async (tcNo: string) => {
@@ -92,12 +89,24 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
 
   getAllPromotionFilter = async () => {
     if ((await this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER')) === true) {
-      console.log('Filter1');
       this.props.promotionStore.getIKPromotionFilterByDepartment(this.state.departmentObjId);
+      this.props.promotionStore.getIKPromotionFilterByDepartmentCount(this.state.departmentObjId);
     } else if ((await this.props.userStore.editUser.roleNames.includes('UNITMANAGER')) === true) {
-      console.log('Filter2');
       this.props.promotionStore.getIKPromotionFilterByUnit(this.state.unitObjId);
+      this.props.promotionStore.getIKPromotionFilterByUnitCount(this.state.unitObjId);
     }
+  };
+
+  getAllStatus = async () => {
+    await this.props.promotionStore.getIKPromotionStatus();
+  };
+
+  getAllTitles = async () => {
+    await this.props.promotionStore.getIKPromotionTitles();
+  };
+
+  getAllRequestTitle = async (title: string) => {
+    await this.props.promotionStore.getIKPromotionRequestTitles(title);
   };
 
   public render() {
@@ -106,7 +115,20 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
       return shortDate;
     }
 
-    const { filterPromotion } = this.props.promotionStore;
+    const handleChangeStatu = async (value: string) => {};
+    const handleChangeTitle = async (value: string) => {
+      await this.getAllRequestTitle(value);
+    };
+    const onSearchTitle = (value) => {};
+    const handleChangeRequestTitle = async (value: string) => {};
+    const onSearchRequestTitle = (value) => {};
+    const {
+      filterPromotion,
+      filterPromotionCount,
+      promotionStatus,
+      promotionTitles,
+      promotionRequestTitles,
+    } = this.props.promotionStore;
     //Sayfada oluşacak olan tablonun kolon isimlerini belirtir.
     const columns = [
       {
@@ -208,9 +230,24 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                   </label>
                 }
               >
-                <Select style={{ width: 180 }} placeholder={L('Choose')} onChange={handleChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
+                <Select
+                  style={{ width: 180 }}
+                  placeholder={L('Choose')}
+                  onChange={handleChangeStatu}
+                >
+                  {promotionStatus !== undefined
+                    ? promotionStatus.status.map((item, index) => (
+                        <Option value={`${item}`} key={index}>
+                          {Number(item) === 1
+                            ? 'Onaya Gönderildi'
+                            : '' || Number(item) === 2
+                            ? 'Onaylandı'
+                            : '' || Number(item) === 3
+                            ? 'Reddedildi'
+                            : ''}
+                        </Option>
+                      ))
+                    : ''}
                 </Select>
               </Form.Item>
             </Col>
@@ -225,9 +262,26 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                   </label>
                 }
               >
-                <Select style={{ width: 180 }} placeholder={L('Choose')} onChange={handleChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
+                <Select
+                  showSearch
+                  style={{ width: 180 }}
+                  placeholder={L('Choose')}
+                  onChange={handleChangeTitle}
+                  onSearch={onSearchTitle}
+                  filterOption={(input, option) =>
+                    (option?.children &&
+                      option?.children?.toString().toLowerCase().indexOf(input.toLowerCase()) >=
+                        0) ||
+                    option?.props.value.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {promotionTitles !== undefined
+                    ? promotionTitles.titles.map((item, index) => (
+                        <Option value={`${item}`} key={index}>
+                          {item}
+                        </Option>
+                      ))
+                    : ''}
                 </Select>
               </Form.Item>
             </Col>
@@ -242,9 +296,26 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                   </label>
                 }
               >
-                <Select style={{ width: 180 }} placeholder={L('Choose')} onChange={handleChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
+                <Select
+                  showSearch
+                  style={{ width: 180 }}
+                  placeholder={L('Choose')}
+                  onChange={handleChangeRequestTitle}
+                  onSearch={onSearchRequestTitle}
+                  filterOption={(input, option) =>
+                    (option?.children &&
+                      option?.children?.toString().toLowerCase().indexOf(input.toLowerCase()) >=
+                        0) ||
+                    option?.props.value.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {promotionRequestTitles !== undefined
+                    ? promotionRequestTitles.promotionRequestTitles.map((item, index) => (
+                        <Option value={`${item}`} key={index}>
+                          {item}
+                        </Option>
+                      ))
+                    : ''}
                 </Select>
               </Form.Item>
             </Col>
@@ -330,9 +401,10 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               rowKey={'1'}
               bordered={true}
               columns={columns}
+              loading={filterPromotion === undefined ? true : false}
               pagination={{
                 pageSize: 10,
-                total: 10,
+                total: filterPromotionCount > 0 ? filterPromotionCount : 0,
                 defaultCurrent: 1,
               }}
               dataSource={filterPromotion === undefined ? [] : filterPromotion}

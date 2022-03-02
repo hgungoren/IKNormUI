@@ -60,7 +60,7 @@ export interface State {
   jobsObjId: string;
   unit: string;
   department: string;
-  departmentObjId:string;
+  departmentObjId: string;
   chiefObjId: string;
   hierarchyData: {};
   userRoles: any[];
@@ -98,7 +98,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     jobsObjId: '0',
     unit: '',
     department: '',
-    departmentObjId:'',
+    departmentObjId: '',
     chiefObjId: '',
     hierarchyData: {
       departmentManager: '',
@@ -142,7 +142,8 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
       await this.props.inkaStore.getInkaEmployeeByTcNo(tcNo).then(() => {
         this.setState({
           birimObjId: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimObjId,
-          departmentObjId:this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanObjId,
+          departmentObjId:
+            this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanObjId,
           unit: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.birimAdi,
           department: this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanAdi,
           chiefObjId:
@@ -262,9 +263,9 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
             promotionRequestTitle: promotionRequestTitle,
             militaryStatus: values.askerlikDurumu.toString(),
             department: this.state.department,
-            departmentObjId:this.state.departmentObjId,
+            departmentObjId: this.state.departmentObjId,
             unit: this.state.unit,
-            unitObjId:this.state.birimObjId,
+            unitObjId: this.state.birimObjId,
             description: description,
             requestDate: new Date(),
             dateOfStart: dateOfStart,
@@ -397,9 +398,10 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                     }
                   >
                     {inkaUsersByUnit !== undefined
-                      ? inkaUsersByUnit.map((item) => (
+                      ? inkaUsersByUnit.map((item, index) => (
                           <Option
                             value={`${item.gorevObjId}_${item.tcKimlikNo}_${item.adi}_${item.soyadi}`}
+                            key={index}
                           >
                             {item.adi} {item.soyadi}
                           </Option>
@@ -577,7 +579,9 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
                         >
                           {jobPositions !== undefined
                             ? jobPositions.map((item, index) => (
-                                <Option value={`${item.adi}_${item.durum}`}>{item.adi}</Option>
+                                <Option value={`${item.adi}_${item.durum}`} key={index}>
+                                  {item.adi}
+                                </Option>
                               ))
                             : ''}
                         </Select>
@@ -665,7 +669,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
             onCreate={this.handleCreate}
           ></ApprovalHierarchy>
           <Modal
-            title= {L('Warning')}
+            title={L('Warning')}
             visible={this.state.infoModalVisible}
             onOk={this.hideInfoModal}
             onCancel={this.hideInfoModal}

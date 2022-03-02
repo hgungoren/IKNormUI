@@ -22,10 +22,39 @@ class PromotionService {
     return result.data.result;
   }
 
+  public async getIKPromotionFilterByDepartmentCount(departmentObjId: string) {
+    let result = await http.get(
+      'iknorm/IKPromotion/GetKPromotionFilterByDepartmentCount?departmentObjId=' + departmentObjId
+    );
+    return result.data.result;
+  }
+
   public async getIKPromotionFilterByUnit(unitObjId: string) {
     let result = await http.get(
       'iknorm/IKPromotion/GetKPromotionFilterByUnit?unitObjId=' + unitObjId
     );
+    return result.data.result;
+  }
+
+  public async getIKPromotionFilterByUnitCount(unitObjId: string) {
+    let result = await http.get(
+      'iknorm/IKPromotion/GetKPromotionFilterByUnitCount?unitObjId=' + unitObjId
+    );
+    return result.data.result;
+  }
+
+  public async getIKPromotionStatus() {
+    let result = await http.get('iknorm/IKPromotion/GetIKPromotionStatus');
+    return result.data.result;
+  }
+
+  public async getIKPromotionTitles() {
+    let result = await http.get('iknorm/IKPromotion/GetIKPromotionTitles');
+    return result.data.result;
+  }
+
+  public async getIKPromotionRequestTitles(title: string) {
+    let result = await http.get('iknorm/IKPromotion/GetIKPromotionRequestTitles?title=' + title);
     return result.data.result;
   }
 }
