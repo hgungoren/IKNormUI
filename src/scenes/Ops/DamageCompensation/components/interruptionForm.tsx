@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-
   Button,
   Col,
   Divider,
@@ -11,6 +10,7 @@ import {
   notification,
   Popconfirm,
   Row,
+  Space,
   Spin,
   Table,
 } from 'antd';
@@ -20,20 +20,28 @@ import { L } from '../../../../lib/abpUtility';
 import { AlertOutlined, CheckCircleTwoTone, DeleteOutlined } from '@ant-design/icons';
 import InterruptionFormModal from '../components/interruptionFormModal';
 import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
-
-
+import moment from 'moment';
 
 
 export interface ICProps {
-  price: string;
-  kDamageCompensationStore:KDamageCompensationStore;
+  kDamageCompensationStore: KDamageCompensationStore;
+  urlId: number;
+  title:string;
+  urlStatusPage:string;
 }
-
 
 export interface IState {
   pageLoding: boolean;
   modalVisible: boolean;
+  price: string;
+  list:any;
+  urlStatusPage:string
 }
+
+
+
+
+
 
 
 class InterruptionForm extends React.Component<ICProps, IState>  {
@@ -42,28 +50,75 @@ class InterruptionForm extends React.Component<ICProps, IState>  {
   formRef = React.createRef<FormInstance>();
   state = {
     pageLoding: false,
-    modalVisible: false
+    modalVisible: false,
+    price: '0',
+    list:[],
+    urlStatusPage:''
   };
+   
 
-  componentDidMount = async () => { }
+
+
+
+  componentDidMount = async () => {
+    
+    await this.getAllKesintiListe()
+    await this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: this.props.urlId })
+
+    if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar != null) {
+      this.setState({ price: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
+    }
+    else {
+      this.setState({ price: this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar })
+    }
+ 
+
+  }
+
+
+  
+
+  //#region  KesintiLsitesi
+  getAllKesintiListe = async () => {
+    await this.props.kDamageCompensationStore.StoreGetKesintiListesi(this.props.urlId);
+  }
+  //#endregion
+
+
+  //#region   
+  onConfirmDelete = async (e) => {
+    await this.props.kDamageCompensationStore.delete({
+      id: e
+    }).then(()=>{
+      this.setState({ modalVisible: false })      
+      this.getAllKesintiListe();
+   
+    });
+  }
+  //#endregion
+
 
   render() {
 
+    const { interruptionList } = this.props.kDamageCompensationStore;
 
     //#region  SATIR EKLE ONCLICK
+    const closeModal = () => {
+      this.setState({ modalVisible: false })        
+       this.getAllKesintiListe().then(()=>{
+        this.setState({ modalVisible: false })      
+        this.getAllKesintiListe();
+       });
 
-
-    const closeModal = () => { 
-      this.setState({ modalVisible: false })
     }
 
-
     const OnClickAdd = () => {
-      var kesintioraniSum = (dataSourceTable.reduce((a, v) => a = a + v.kesintiorani, 0))
+      var kesintioraniSum = (this.props.kDamageCompensationStore.interruptionList.items.reduce((a, v) => a = a + v.kesintiorani, 0))
       if (kesintioraniSum >= 100) {
         ValidateMessage(true, 'Bilgilendirme', 'Kesinti Orani %100 Gecmektedir.')
       } else {
-        this.setState({ modalVisible: true })
+        this.setState({ modalVisible: true })  
+        this.getAllKesintiListe();
       }
     }
 
@@ -92,40 +147,58 @@ class InterruptionForm extends React.Component<ICProps, IState>  {
 
 
 
+    //#region OnClickOnayaGonder
+    const OnClickOnayaGonder=()=>{
+
+      this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+        tazminId: this.props.urlId,
+        surecsahibibolge: '',
+        unvan: this.props.title,
+        file: ''
+      }).then(()=>{      
+        setTimeout(() => {
+          this.setState({pageLoding :true}) 
+          window.location.href='/hasartazminsorgulama'; 
+        }, 1000);
+ 
+      });
+      
+    }
+    //#endregion
 
 
-    const dataSourceTable = [
-      {
-        key: '0',
-        kesintibirimi: 'Edward King 0',
-        kesintibirimkodu: '32',
-        kesintiyapilacaksube: 'London, Park Lane no. 0',
-        calismabaslangictarihi: '14.05.2021',
-        calismabitistarihi: '14.05.2021',
-        kesintiorani: 50,
-        kesintitutari: '250'
 
-      },
-      {
-        key: '1',
-        kesintibirimi: 'Edward King 1',
-        kesintibirimkodu: '32',
-        kesintiyapilacaksube: 'London, Park Lane no. 1',
-        calismabaslangictarihi: '14.05.2021',
-        calismabitistarihi: '14.05.2021',
-        kesintiorani: 10,
-        kesintitutari: '250'
-      },
-    ];
+
+    //#region OnClickOnayla
+    const OnClickOnaylaGonder=()=>{
+
+      this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+        tazminId: this.props.urlId,
+        surecsahibibolge: '',
+        unvan: this.props.title,
+        file: ''
+      }).then(()=>{
+        setTimeout(() => {
+          this.setState({pageLoding :true}) 
+          window.location.href='/hasartazminsorgulama'; 
+        }, 1000);
+      });
+    }
+    //#endregion
+
+    
+
+
+
 
     const columnsTable = [
       {
         title: 'Islem',
-        dataIndex: 'operation',
+        dataIndex: 'id',
         width: '3%',
         render: (_, record) =>
-          dataSourceTable.length >= 1 ? (
-            <Popconfirm title="Silinsin mi?" onConfirm={() => console.log()}>
+          interruptionList.items.length >= 1 ? (
+            <Popconfirm okText='Evet' cancelText='Hayir'  title="Silinsin mi?" onConfirm={() => this.onConfirmDelete(record.id)}>
               <DeleteOutlined />
             </Popconfirm>
           ) : null,
@@ -135,96 +208,212 @@ class InterruptionForm extends React.Component<ICProps, IState>  {
         title: 'Kesinti Birimi',
         dataIndex: 'kesintibirimi',
         width: '10%',
-        editable: true,
+
       },
       {
         title: 'Kesinti Birim Kodu',
         dataIndex: 'kesintibirimkodu',
         width: '10%',
-        editable: true,
+
 
       },
       {
         title: 'Kesinti Yapilacak Sube',
-        dataIndex: 'kesintiyapilacaksube',
+        dataIndex: 'kesintiyapilacakunvan',
         width: '10%',
-        editable: true,
+
       },
 
       {
         title: 'Calisma Baslangic Tarihi',
         dataIndex: 'calismabaslangictarihi',
         width: '10%',
-        editable: true,
+        render: (text) => moment(text).format('DD-MM-YYYY')
       },
 
       {
         title: 'Calisma Bitis Tarihi',
         dataIndex: 'calismabitistarihi',
         width: '10%',
-        editable: true,
+        render: (text) => moment(text).format('DD-MM-YYYY')
+
       },
       {
         title: 'Kesinti Orani',
         dataIndex: 'kesintiorani',
         width: '10%',
-        editable: true,
-      },
 
+      },
       {
         title: 'Kesinti Tutari',
-        dataIndex: 'kesintitutari',
+        dataIndex: 'tutar',
         width: '10%',
-        editable: true,
+
       }
-
     ];
-
-
 
     return (
       <>
-
         <Spin spinning={this.state.pageLoding}
           tip='Isleminiz Tamamlaniyor.Havuza Yonlendiriliyorsunuz.'
           size='large'>
-
-
           <Divider orientation="left">{L('Odeme Bilgisi')}</  Divider>
-
-
           <Form labelCol={{ flex: '145px' }} labelAlign="right" wrapperCol={{ flex: 5 }} colon={false}>
             <Row>
               <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                 <Form.Item label={L('Odenecek Tutar')} name="odenecek_tutar">
-                  <Input disabled defaultValue={this.props.price} />
+                  {console.log(this.state.price)}
+                  <Input disabled value={this.state.price} />
                 </Form.Item>
               </Col>
-
-
             </Row>
           </Form>
-
           <Divider orientation="left">{L('Kesinti Tablosu')}</  Divider>
-          <Table dataSource={dataSourceTable} columns={columnsTable} />
-          <Button
-            onClick={OnClickAdd}
-            type="primary"
-            style={{
-              marginBottom: 16,
-            }}
-          >
-            Satir Ekle
-          </Button>
 
-        
-          < InterruptionFormModal
-            closeModal={closeModal}
-            visible={this.state.modalVisible}
-            // formRef={this.formRef} 
-            kDamageCompensationStore={this.props.kDamageCompensationStore}
+          <Table 
+            loading={interruptionList === undefined ? true : false}
+            columns={columnsTable}
+            dataSource={interruptionList === undefined ? [] : interruptionList.items}
+          />
+
+
+    < InterruptionFormModal
+                closeModal={closeModal}
+                visible={this.state.modalVisible}
+                // formRef={this.formRef} 
+                kDamageCompensationStore={this.props.kDamageCompensationStore}
+                tutar={this.state.price}
+                urlId={1}
+              />
+
+           
+
+
+          <Space style={{ width: '100%' }}>
             
-            />
+              <Button 
+               disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                onClick={OnClickAdd}
+                type="primary"
+                style={{
+                  marginBottom: 16,
+                }}
+              >
+                Satir Ekle
+              </Button>
+          </Space>
+         
+          <Row style={{ float: 'right' }}>
+          <Space style={{ width: '100%'  ,float:'right'}}>
+                  
+                  {
+                    this.props.title === 'Hasar Tazmin Uzman Yrd.'  ?              
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnayaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onaya Gonder
+                     </Button> : null
+       
+                  }
+       
+       
+                 {
+                    this.props.title === 'Hasar Tazmin Uzmanı' ?              
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnayaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onaya Gonder
+                     </Button> : null
+       
+                  }
+       
+          
+                  
+                 {
+                    this.props.title === 'Hasar Tazmin Müdür Yrd.' ?              
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnayaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onaya Gonder
+                     </Button> : null
+       
+                  }
+       
+       
+       
+        
+                   {
+                   this.props.title ===  'Genel Müdür Yrd.'
+                     ?             
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnaylaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onayla
+                     </Button> :
+                     null          
+                   }
+       
+       
+       
+                   
+                 {
+                   this.props.title ===  'Müşteri Deneyimi Müdürü'
+                     ?             
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnaylaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onayla
+                     </Button> :
+                     null
+                   
+                   }
+                        
+                 {
+                   this.props.title ===  'Satış Müdürü'
+                     ?             
+                         <Button
+                         disabled ={this.props.urlStatusPage === 'view' ? true : false}
+                         onClick={OnClickOnaylaGonder}
+                         type="default"
+                         style={{
+                           marginBottom: 16,
+                         }}
+                       >
+                       Onayla
+                     </Button> :
+                     null
+                   
+                   }
+                 </Space>
+            
+          </Row>
+              
+
 
         </Spin>
       </>);

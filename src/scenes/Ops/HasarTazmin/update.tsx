@@ -273,8 +273,7 @@ async componentDidMount() {
                               label={<label>{L('CompensationStatus')}</label>}
                               labelCol={{ span: 12 }}
                               wrapperCol={{ span: 16 }}
-                            >
-                              {console.log(this.state.tazminStatu)}
+                            > 
                               <Input
                                 disabled
                                 className="formInput"

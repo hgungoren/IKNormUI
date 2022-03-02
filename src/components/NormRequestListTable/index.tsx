@@ -250,6 +250,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
     mergeArray = async () => {
+        console.log('girdi')
 
         await this.getAllEmployeesForGroupBy();
         await this.getAllSubeNormForGroupBy().then(() => {
@@ -257,7 +258,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         });
         await this.setAllEmployeesGroupBy();
 
-
+   
 
         let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
             id: i,
@@ -279,11 +280,13 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         let set;
 
         set = new Set(names);
-        // if(result[0].gorev.includes('Bölge')){
-        //      set = new Set(names);
-        // }else{
-        //      set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
-        // }
+
+        console.log('result=>',result) 
+        if(result[0].gorev.includes('Bölge')){
+             set = new Set(names);
+        }else{
+             set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
+        }
 
 
 

@@ -57,8 +57,7 @@ class FarkliCari extends React.Component<ICProps, IState> {
 
   getcountry = async () => {
     try {
-      await this.props.kDamageCompensationStore.StoreGetCountryAll();
-      // console.log('this.props.kDamageCompensationStore.getAllCity',this.props.kDamageCompensationStore.getAllCity)
+      await this.props.kDamageCompensationStore.StoreGetCountryAll(); 
     } catch (error) {
       console.log('Error=>', error)
     }

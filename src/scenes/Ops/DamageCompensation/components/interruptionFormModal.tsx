@@ -1,10 +1,13 @@
-import { Col, Form, FormInstance, Input, Modal, Row, Select, Spin, Tabs } from 'antd';
+import { Col, DatePicker, Form, FormInstance, Input, Modal, notification, Row, Select, Spin, Tabs } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { L } from '../../../../lib/abpUtility';
 import Stores from '../../../../stores/storeIdentifier';
 import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
-import uuid from 'react-uuid'
+//import uuid from 'react-uuid'
+import locale from 'antd/es/date-picker/locale/tr_TR';
+import moment from 'moment';
+import { AlertOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 
 
 export interface ICProps {
@@ -12,19 +15,28 @@ export interface ICProps {
     closeModal: () => void; 
     //formRef: React.RefObject<FormInstance>;
     kDamageCompensationStore:KDamageCompensationStore,
+    tutar:string
+    urlId:number;
     
 }
 
 export interface IState {
     selectNotFound:boolean;
     datakesintibirim:any;
-    kesintibirimkodu:string;
+    kesintibirimkodu?:string;
     kesintiyapilacakunvan:string;
+    tutar:string;
+    calismabaslangictarihi:string;
+    calismabitisctarihi:string;
 }
 
 //const { Option } = Select;
 const TabPane = Tabs.TabPane;
 
+const { Option } = Select;
+const dateFormat = 'DD-MM-YYYY';
+//var today = new Date();
+//const todayFinish = moment(today).format(dateFormat);
 
 @inject(Stores.KDamageCompensationStore)
 
@@ -37,15 +49,21 @@ class InterruptionFormModal extends React.Component<ICProps, IState> {
         selectNotFound:true,
         datakesintibirim:this.props.kDamageCompensationStore.getSubeListDamage,
         kesintibirimkodu:'',
-        kesintiyapilacakunvan:''
+        kesintiyapilacakunvan:'',
+        tutar:'0',
+        calismabaslangictarihi:'',
+        calismabitisctarihi:''
     }; 
 
 
 
      //#region Sube ve aktarma listesi
      OnSelectKesintiBirim = async ()=>{
-         await this.props.kDamageCompensationStore.getSubeAktarmaListDamageComppensation();
-        this.setState({datakesintibirim :this.props.kDamageCompensationStore.getSubeListDamage})
+         setTimeout(() => {
+             this.props.kDamageCompensationStore.getSubeAktarmaListDamageComppensation();
+             this.setState({selectNotFound:false})
+         }, 3000);
+      
     }
 
     //#endregion  
@@ -55,18 +73,26 @@ class InterruptionFormModal extends React.Component<ICProps, IState> {
 //#region   
 OnselectKesintiBirim =(e)=>{
     
-    //e=> 3120000100000000000-1701
-    this.setState({kesintibirimkodu: e.split('-')[1] })
+ 
+    var unvan=this.props.kDamageCompensationStore.getSubeListDamage.find(x=>x.adi ===e)?.adi
+    var kodu=this.props.kDamageCompensationStore.getSubeListDamage.find(x=>x.adi ===e)?.kodu
+     var baslangictarihi=this.props.kDamageCompensationStore.getSubeListDamage.find(x=>x.adi ===e)?.sistem_InsertTime
+    var bitistarihi=this.props.kDamageCompensationStore.getSubeListDamage.find(x=>x.adi ===e)?.kapatilmaTarihi
 
+    var calismabaslangictarihi=  moment(baslangictarihi).format(dateFormat);
+     var calismabitistarihi=  moment(bitistarihi).format(dateFormat);
+      
+      
+          
 
-    console.log('kesintibirimkodu=>',this.state.kesintibirimkodu)
-    this.formRef.current?.setFieldsValue({
-        'kesintibirimkodu':this.state.kesintibirimkodu,
-        'kesintiyapilacakunvan':'test'
+        this.setState({calismabaslangictarihi:calismabaslangictarihi})
+        this.setState({calismabitisctarihi:calismabitistarihi})
+      this.setState({kesintibirimkodu:unvan})
+       this.formRef.current?.setFieldsValue({
+        'kesintibirimkodu':kodu,
+         'kesintiyapilacakunvan':unvan !==undefined ? unvan.includes('AKTARMA') ? 'AKTARMA':'Sube' :'',
+    
         });
-
-
-
 }
  //#endregion
 
@@ -78,21 +104,89 @@ OnselectKesintiBirim =(e)=>{
 
 
 
+  //#region  keyup oran     
+  OnkeyupOran =(e)=>{  
 
- 
-    render() {
+     if(e.target.value >100){
+        
+        this.formRef.current?.setFieldsValue({
+           'tutar':0,      
+           });
 
-        const { Option } = Select;
-   
+     }else{
+        var result=(Number.parseFloat(this.props.tutar) * e.target.value)/100;     
+        this.formRef.current?.setFieldsValue({
+           'tutar':result,      
+           });
+
+     }
     
 
-     const optionsKesintiBirimList = this.state.datakesintibirim !== undefined && this.state.datakesintibirim.map(d =>
-         <Option key={uuid()} value={d.objId+'-'+d.kodu} >{d.adi}</Option>);
 
+  } 
+  //#endregion
+
+
+  
+//#region KAYDET
+  
+onCreate=()=>{ 
+    
+
+    var kesintioraniSum = (this.props.kDamageCompensationStore.interruptionList.items.reduce((a, v) => a = a + v.kesintiorani, 0))
+    this.formRef!.current!.validateFields().then(async(values:any)=>{  
         
+         var gelenoran=values.kesintiorani
+         var sum=parseInt(kesintioraniSum.toString())+ parseInt(gelenoran)
+         if(sum > 100){
+            this.ValidateMessage(true,'Uyari',' Toplam Kesinti Orani %100 Gecemez.')
+         }else{
+
+            values.tazminId=this.props.urlId; 
+            values.kesintibirimi=this.state.kesintibirimkodu;
+            values.calismabaslangictarihi=this.state.calismabaslangictarihi;
+            values.calismabitistarihi=this.state.calismabitisctarihi;
+            await this.props.kDamageCompensationStore.StorePostKesintiModalCreate(values); 
+            this.props.closeModal();
+         }
+   
+       
+       
+    })
+
+
+}
+
+//#endregion
+
+  //#region BILGILENDIRME MESAJI METOT
+   ValidateMessage = async (typ: boolean, headerMsg: string, msg: string) => {
+
+    if (typ === true) {
+      notification.open({
+        icon: <AlertOutlined style={{ color: 'red' }} />,
+        message: L(headerMsg),
+        description: L(msg),
+      })
+    } else {
+      notification.open({
+        icon: <CheckCircleTwoTone style={{ color: 'green' }} />,
+        message: L(headerMsg),
+        description: L(msg),
+      })
+    }
+  }
+
+  //#endregion
 
 
 
+
+
+
+    render() {
+
+  
         const formItemLayout = {
             labelCol: {
                 xs: { span: 10 },
@@ -120,8 +214,7 @@ OnselectKesintiBirim =(e)=>{
                     cancelText={L('GiveUp')}
                     okText={L('Save')}
                     onCancel={() => this.props.closeModal() }
-                    //onOk={this.onCreate}
-
+                    onOk={this.onCreate}
                     destroyOnClose={true}
                 >
                     <Form ref={this.formRef}>
@@ -150,7 +243,15 @@ OnselectKesintiBirim =(e)=>{
                                                          defaultActiveFirstOption={false}                                                                                 //onClick={this.OnSelectKesintiBirim}
                                                          onSelect={this.OnselectKesintiBirim}                                
                                                                 >
-                                                                {optionsKesintiBirimList}
+                                                              
+
+                                                                {
+                                                                     this.props.kDamageCompensationStore.getSubeListDamage === undefined
+                                                                     ? []
+                                                                     : this.props.kDamageCompensationStore.getSubeListDamage.map(
+                                                                         (d) => <Option key={d.kodu} value={d.adi} > {d.adi} </Option>
+                                                                     )
+                                                                }
                                                                 
                                                   </Select>
                                         </Form.Item>
@@ -169,29 +270,47 @@ OnselectKesintiBirim =(e)=>{
                                             <Input disabled />
                                         </Form.Item>
 
-                                        <Form.Item label={L('Calisma Baslangic Tarihi')}  {...formItemLayout} name={'adres'}
+                                        <Form.Item label={L('Calisma Baslangic Tarihi')}  {...formItemLayout} name={'calismabaslangictarihi'}
+                                            rules={[
+                                                { required: false, message: L('MissingInputEmpty') },
+                                            ]}>
+                                            <DatePicker 
+                                            disabled
+                                             placeholder={this.state.calismabaslangictarihi}
+                                             className="formInputDate"
+                                             locale={locale}                                           
+                                             format={dateFormat}
+                                            //  disabledDate={(d) =>
+                                            //     !d || d.isAfter(todayFinish) || d.isSameOrBefore('01-01-2000')
+                                            // } 
+                                            />
+
+                                        </Form.Item>
+
+                                        <Form.Item label={L('Calisma Bitis Tarihi')}  {...formItemLayout} name={'calismabitistarihi'}  >
+                                        <DatePicker 
+                                             disabled
+                                             placeholder={this.state.calismabitisctarihi.toString()}                                          
+                                             className="formInputDate"
+                                             locale={locale}                                           
+                                             format={dateFormat}
+                                            //  disabledDate={(d) =>
+                                            //     !d || d.isAfter(todayFinish) || d.isSameOrBefore('01-01-2000')
+                                            //   } 
+                                            />
+                                        </Form.Item>
+
+                                        <Form.Item label={L('Kesinti Orani')}  {...formItemLayout} name={'kesintiorani'}
+                                            rules={[{ required: true, message: L('MissingInputEmpty')},
+                                            { pattern:new RegExp("^[1-9][0-9]?$|^100$"), message: L('En Fazla 100 oran girilebilir')} ]}>
+                                            <Input type={'number'} maxLength={3}  onKeyUp={this.OnkeyupOran} />
+                                        </Form.Item>
+
+                                        <Form.Item label={L('Kesinti Tutari')}  {...formItemLayout} name={'tutar'}
                                             rules={[
                                                 { required: true, message: L('MissingInputEmpty') },
                                             ]}>
-                                            <Input />
-                                        </Form.Item>
-
-                                        <Form.Item label={L('Calisma Bitis Tarihi')}  {...formItemLayout} name={'mahallesi'}  >
-                                            <Input  />
-                                        </Form.Item>
-
-                                        <Form.Item label={L('Kesinti Orani')}  {...formItemLayout} name={'cadde'}
-                                            rules={[
-                                                { required: true, message: L('MissingInputEmpty') },
-                                            ]}>
-                                            <Input />
-                                        </Form.Item>
-
-                                        <Form.Item label={L('Kesinti Tutari')}  {...formItemLayout} name={'sokagi'}
-                                            rules={[
-                                                { required: true, message: L('MissingInputEmpty') },
-                                            ]}>
-                                            <Input disabled placeholder='otomatik hesaplanacak' />
+                                            <Input disabled  />
                                         </Form.Item>
                                     </Col>
                                 </Row>

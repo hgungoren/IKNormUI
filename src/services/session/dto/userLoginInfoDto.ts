@@ -7,5 +7,6 @@ export default class UserLoginInfoDto extends EntityDto {
   userName!: string;
   emailAddress!: string;
   companyObjId!: string;
-  ompanyRelationalObjId!: string;
+  companyRelationalObjId!: string;
+  companyRelationObjId!: string;
 }

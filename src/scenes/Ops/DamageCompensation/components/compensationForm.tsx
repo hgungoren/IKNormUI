@@ -421,13 +421,9 @@ const OnSelectVarisSube = async()=>{
 
           //dosya kontrolu
           if(values.FileTazminDilekcesi ==='[]' || values.FileTazminDilekcesi ===undefined ){
-                       
-       
-
+                      
                     if(text==="true"){
-                        this.setState({pageLoding:true})  
-
-                        
+                        this.setState({pageLoding:true})                         
                         confirm({
                             icon: <ExclamationCircleOutlined />,
                             content:L('Tazmin Belgelerini Bos Biraktiniz. Eksik Evrak Olarak Kaydedilsin mi?'),

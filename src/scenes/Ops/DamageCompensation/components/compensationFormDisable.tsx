@@ -38,6 +38,7 @@ export interface ICProps {
     urlId: number;
     processOwnerRegionFunc: (string) => void;
     filesMultitableFunc:([])=>void;
+    SurecSahiniBolgeVisable:boolean;
 }
 
 
@@ -375,15 +376,18 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                         </Select>
                                     </Form.Item>
                                 </Col>
+
+                                            
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Surec Sahibi Bolge')} name="surec_Sahibi_Birim_Bolge"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Select onChange={  this.props.processOwnerRegionFunc}
+                                        <Select disabled={this.props.SurecSahiniBolgeVisable} onChange={  this.props.processOwnerRegionFunc}
                                             className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             {this.props.SurecSahiniBolgeListe}
                                         </Select>
                                     </Form.Item>
                                 </Col>
+
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >

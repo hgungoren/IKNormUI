@@ -470,8 +470,7 @@ OpsNodesRoleCode = async ()=>{
         setTimeout(() => {
             this.setState({loadingBring :false})
         }, 500);  
-      } else {
-        console.log('EnterTrackingNumber=>',L('EnterTrackingNumber'))
+      } else { 
         notification.open({
           icon: <AlertOutlined style={{ color: 'red' }} />,
           message: L('Warning'),      
@@ -620,8 +619,7 @@ OpsNodesRoleCode = async ()=>{
                             label={<label>{L('CompensationNumber')}</label>}
                             labelCol={{ span: 12 }}
                             wrapperCol={{ span: 16 }}
-                          >
-                            {console.log(this.state.lastId)}
+                          > 
                             <Input disabled className="formInput" value={this.state.lastId} />
                           </Form.Item>
                         </Col>
@@ -631,8 +629,7 @@ OpsNodesRoleCode = async ()=>{
                             label={<label>{L('CompensationStatus')}</label>}
                             labelCol={{ span: 12 }}
                             wrapperCol={{ span: 16 }}
-                          >
-                            {console.log(this.state.tazminStatu)}
+                          > 
                             <Input
                               disabled
                               className="formInput"
@@ -732,8 +729,7 @@ OpsNodesRoleCode = async ()=>{
                             {L('DocumentationHistory')}
                           </label>
                         }
-                      >
-                        {console.log(this.state.evrakolusturmatarihi)}
+                      > 
                         <Input
                           disabled
                           className="formInput"

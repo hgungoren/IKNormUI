@@ -257,6 +257,7 @@ class DamageCompensationNew extends AppComponentBase<IProps, IState> {
                     urlId={this.state.urlId}
                     processOwnerRegionFunc={this.processOwnerRegionFunc}
                     filesMultitableFunc={this.filesMultitableFunc}
+                    SurecSahiniBolgeVisable={true}
                   />
                   :
                      this.state.urlStatusPage ==='up' ?
@@ -307,13 +308,23 @@ class DamageCompensationNew extends AppComponentBase<IProps, IState> {
             <TabPane tab={<span><SwitcherOutlined /> {L('Tarihce')} </span>} key={3} disabled={this.state.tabbane}>
             </TabPane>
 
-            <TabPane tab={<span><SwitcherOutlined /> {L('Kesinti')} </span>} key={4}  >
-                 <InterruptionForm 
-                 price={'500'}
-                 kDamageCompensationStore={this.props.kDamageCompensationStore}
-                 ></InterruptionForm>
+            {
+               
+                this.props.sessionStore.currentLogin.user.companyRelationObjId ==='3120000100000000001'  && this.state.urlId !==undefined
+                  ?                       
+                  <TabPane tab={<span><SwitcherOutlined /> {L('Kesinti')} </span>} key={4}   >
+                  <InterruptionForm                   
+                      kDamageCompensationStore={this.props.kDamageCompensationStore}
+                      urlId={this.state.urlId}
+                      title={this.props.sessionStore.currentLogin.user.title}
+                      urlStatusPage={this.state.urlStatusPage}
+                      ></InterruptionForm>
 
-            </TabPane>
+                  </TabPane>
+                :                
+                null}
+
+
           </Tabs>
         </Card>
       </React.Fragment>

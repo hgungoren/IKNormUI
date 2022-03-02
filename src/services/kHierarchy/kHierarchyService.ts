@@ -72,8 +72,7 @@ class KHierarchyService {
   }
   
   public async getNodes(id: string): Promise<NodeDto[]> {
-    let result = await http.get('iknorm/Node/GetNodes?id' + id);
-    console.log("Result => ",result);
+    let result = await http.get('iknorm/Node/GetNodes?id' + id); 
     return result.data.result;
   }
 }

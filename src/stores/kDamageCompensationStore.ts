@@ -26,6 +26,8 @@ import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
 import { KcariFind } from '../services/kDamageCompensations/dto/kcariFind';
 import { GetWebSiparisKodu } from '../services/kDamageCompensations/dto/getWebSiparis';
 
+import { InterruptionModalCreate } from '../services/kDamageCompensations/dto/interruptionModalCreate';
+
 class KDamageCompensationStore {
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
   @observable getCreateDamageInput!: GetCreateDamageInput;
@@ -51,13 +53,13 @@ class KDamageCompensationStore {
   @observable resultUpdateNextStatu!: string;
   @observable getKcariFind!: KcariFind[];
   @observable getWebSiparisKod!: GetWebSiparisKodu;
+  @observable interruptionList!: PagedResultDto<InterruptionModalCreate>;
 
   @observable websipariskontrol!: string;
 
   @action
   async create(createDamage: CreateDamageInput) {
     await KDamageCompensationService.create(createDamage);
-    //console.log('CreateNew Store=>',result)
     //this.createNev=result
   }
 
@@ -70,7 +72,6 @@ class KDamageCompensationStore {
   @action
   async getCariListDamageComppensation(entityDto: EntityDto) {
     let result = await KDamageCompensationService.getCariListDamageCompensation(entityDto);
-    // console.log('store.result=>',result)
     this.getCariListDamage = result;
   }
 
@@ -81,17 +82,12 @@ class KDamageCompensationStore {
     this.getSubeListDamage = result;
   }
 
-
- //sube VE aktarma  listesi
- @action
- async getSubeAktarmaListDamageComppensation() {
-   let result = await KDamageCompensationService.getSubeAktarmaListDamageComppensation();
-   this.getSubeListDamage = result;
- }
-
-
-
-
+  //sube VE aktarma  listesi
+  @action
+  async getSubeAktarmaListDamageComppensation() {
+    let result = await KDamageCompensationService.getSubeAktarmaListDamageComppensation();
+    this.getSubeListDamage = result;
+  }
 
   //bolge listesi
   @action
@@ -111,7 +107,6 @@ class KDamageCompensationStore {
   @action
   async GetDamageComppensationLastId() {
     let result = await KDamageCompensationService.getDamageComppensationLastId();
-    //   console.log('STORE=>',result.data)
     this.lastIdDamage = result.data.result;
 
     return result.data;
@@ -122,7 +117,6 @@ class KDamageCompensationStore {
   async StoregetAllDamageCompansation() {
     let result = await KDamageCompensationService.getAllDamageCompensationService();
     this.getAllDamageCompensationStoreClass = result;
-    //console.log('STORE=>',result)
     return result;
   }
 
@@ -285,15 +279,41 @@ class KDamageCompensationStore {
   /// REVIZE
   @action
   async StorePostRevize(tazminid: string) {
-    console.log('StorePostRevize=>', tazminid);
     await KDamageCompensationService.ServicePostRevize(tazminid);
   }
 
   /// web siparis kontrol
+  @action
   async StoreGetWebSiparisKontrol(websipariskodu: string) {
     let result = await KDamageCompensationService.ServiceGetWebSiparisKontrol(websipariskodu);
     this.websipariskontrol = result;
     return result;
+  }
+
+  // kesinti modal kaydet
+  @action
+  async StorePostKesintiModalCreate(iterruptionModalCreate: InterruptionModalCreate) {
+    await KDamageCompensationService.ServicePostKesintiModalCreate(iterruptionModalCreate);
+  }
+
+  //kesinti listesi
+  @action
+  async StoreGetKesintiListesi(tazminId: number) {
+    let result = await KDamageCompensationService.ServicePostKesintiList(tazminId);
+    this.interruptionList = result;
+
+    return result;
+  }
+
+  //kesinti silme ServiceKesintiDelete
+
+  @action
+  async delete(entityDto: EntityDto) {
+    await KDamageCompensationService.delete(entityDto);
+
+    this.interruptionList.items = this.interruptionList.items.filter(
+      (x: InterruptionModalCreate) => x.id !== entityDto.id
+    );
   }
 }
 

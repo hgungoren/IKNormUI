@@ -172,8 +172,10 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('CompensationNumber') ,
         dataIndex: 'tazminNo',
         key: 'tazminNo',
+        width: '5%',
         sorter: (a, b) => a.tazminNo - b.tazminNo,
         responsive: ['sm'] as Breakpoint[]
+  
       },
 
       {
@@ -185,10 +187,10 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
       },
 
       {
-        title: L('Kargo Kabul Fis No'),
-        dataIndex: 'kargoKabukFisNo',
-        key: 'kargoKabukFisNo',
-        sorter: (a, b) => a.kargoKabukFisNo - b.kargoKabukFisNo,
+        title: L('Web Siparis Kodu'),
+        dataIndex: 'webSiparisKodu',
+        key: 'webSiparisKodu',
+        sorter: (a, b) => a.webSiparisKodu - b.webSiparisKodu,
         responsive: ['sm'] as Breakpoint[]
       },
       {
@@ -309,7 +311,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                   {
                     item.btnGoruntule ? 
                     <Menu.Item  >
-                    <Link to={{ pathname: `//newindex/view/${item.tazminNo}` }}>{L('DamageCompensationView')}</Link>
+                    <Link to={{ pathname: `/newindex/view/${item.tazminNo}` }}>{L('DamageCompensationView')}</Link>
                   </Menu.Item> :''
 
                   }
