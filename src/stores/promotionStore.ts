@@ -5,6 +5,7 @@ import { PromotionFilterDto } from '../services/promotion/dto/promotionFilterDto
 import { PromotionRequestTitleDto } from '../services/promotion/dto/promotionRequestTitleDto';
 import { PromotionStatuDto } from '../services/promotion/dto/promotionStatuDto';
 import { PromotionTitleDto } from '../services/promotion/dto/promotionTitleDto';
+import { PromotionUseFilterDto } from '../services/promotion/dto/promotionUseFilterDto';
 import promotionService from '../services/promotion/promotionService';
 
 class PromotionStore {
@@ -65,5 +66,27 @@ class PromotionStore {
     this.promotionRequestTitles = result;
   }
 
+  @action
+  public async filterPromotionData(promotionUseFilterDto: PromotionUseFilterDto) {
+    this.filterPromotion = this.filterPromotion
+      .filter((x) =>
+        promotionUseFilterDto.statu === undefined ? true : x.statu === promotionUseFilterDto.statu
+      )
+      .filter((x) =>
+        promotionUseFilterDto.title === undefined ? true : x.title === promotionUseFilterDto.title
+      )
+      .filter((x) =>
+        promotionUseFilterDto.promotionRequestTitle === undefined
+          ? true
+          : x.promotionRequestTitle === promotionUseFilterDto.promotionRequestTitle
+      )
+      .filter((x) =>
+        promotionUseFilterDto.firstRequestDate === undefined &&
+        promotionUseFilterDto.secondRequestDate === undefined
+          ? true
+          : x.requestDate <= promotionUseFilterDto.secondRequestDate &&
+            x.requestDate >= promotionUseFilterDto.secondRequestDate
+      );
+  }
 }
 export default PromotionStore;

@@ -13,9 +13,10 @@ import {
   Form,
   DatePicker,
   Space,
+  Tag,
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { ReloadOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { L } from '../../lib/abpUtility';
 import 'moment/locale/tr';
 import locale from 'antd/es/date-picker/locale/tr_TR';
@@ -65,7 +66,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     unitObjId: '0',
     departmentObjId: '0',
   };
-
+  
   componentDidMount = async () => {
     this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     await this.getInkaPersonelByTcNo(await this.props.sessionStore.currentLogin.user.tcKimlikNo);
@@ -88,6 +89,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   };
 
   getAllPromotionFilter = async () => {
+    this.formRef.current?.resetFields();
     if ((await this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER')) === true) {
       this.props.promotionStore.getIKPromotionFilterByDepartment(this.state.departmentObjId);
       this.props.promotionStore.getIKPromotionFilterByDepartmentCount(this.state.departmentObjId);
@@ -95,6 +97,22 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
       this.props.promotionStore.getIKPromotionFilterByUnit(this.state.unitObjId);
       this.props.promotionStore.getIKPromotionFilterByUnitCount(this.state.unitObjId);
     }
+  };
+
+  handleFilter = async () => {
+    const form = this.formRef.current;
+    form!.validateFields().then(async (values: any) => {
+      await this.props.promotionStore.filterPromotionData({
+        statu: values.durum !== undefined ? values.durum : undefined,
+        title: values.title !== undefined ? values.title : undefined,
+        promotionRequestTitle:
+          values.promationRequest !== undefined ? values.promationRequest : undefined,
+        firstRequestDate:
+          values.firstRequestDate !== undefined ? values.firstRequestDate : undefined,
+        secondRequestDate:
+          values.secondRequestDate !== undefined ? values.secondRequestDate : undefined,
+      });
+    });
   };
 
   getAllStatus = async () => {
@@ -180,13 +198,15 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
         width: 150,
         render: (text: string, item: any) => (
           <div>
-            {item.statu === 1
-              ? 'Onaya Gönderildi'
-              : '' || item.statu === 2
-              ? 'Onaylandı'
-              : '' || item.statu === 3
-              ? 'Reddedildi'
-              : ''}
+            {item.statu === 1 ? (
+              <Tag color="warning">Onaya Gönderildi</Tag>
+            ) : '' || item.statu === 2 ? (
+              <Tag color="success">Onaylandı</Tag>
+            ) : '' || item.statu === 3 ? (
+              <Tag color="error">Reddedildi</Tag>
+            ) : (
+              ''
+            )}
           </div>
         ),
       },
@@ -219,11 +239,11 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     return (
       <Card>
         <h2 style={{ width: '360px' }}>{L('FilterForPromotion')}</h2>
-        <Form initialValues={{ remember: false }}>
+        <Form ref={this.formRef} initialValues={{ remember: false }}>
           <Row>
             <Col span={12}>
               <Form.Item
-                name="durum"
+                name="statu"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.statu')}
@@ -255,7 +275,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={12}>
               <Form.Item
-                name="gorev"
+                name="title"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.title')}
@@ -289,7 +309,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={12}>
               <Form.Item
-                name="terfitalebi"
+                name="promationRequest"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.promationrequest')}
@@ -323,7 +343,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={5}>
               <Form.Item
-                name="taleptarihi"
+                name="firstRequestDate"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.requestdate')}
@@ -343,7 +363,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
             </Col>
             <Col span={5}>
               <Form.Item
-                name="taleptarihi"
+                name="secondRequestDate"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.requestdate')}
@@ -361,10 +381,21 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 </Space>
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={2}>
               <Space style={{ width: '100%' }}>
-                <Button type="primary" icon={<SearchOutlined />}>
+                <Button type="primary" icon={<SearchOutlined />} onClick={this.handleFilter}>
                   {L('promotion.filter.button')}
+                </Button>
+              </Space>
+            </Col>
+            <Col span={2}>
+              <Space style={{ width: '100%' }}>
+                <Button
+                  type="primary"
+                  icon={<ReloadOutlined />}
+                  onClick={this.getAllPromotionFilter}
+                >
+                  Yenile
                 </Button>
               </Space>
             </Col>
@@ -403,7 +434,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               columns={columns}
               loading={filterPromotion === undefined ? true : false}
               pagination={{
-                pageSize: 10,
+                pageSize: 5,
                 total: filterPromotionCount > 0 ? filterPromotionCount : 0,
                 defaultCurrent: 1,
               }}
