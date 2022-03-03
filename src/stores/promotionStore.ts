@@ -67,26 +67,10 @@ class PromotionStore {
   }
 
   @action
-  public async filterPromotionData(promotionUseFilterDto: PromotionUseFilterDto) {
-    this.filterPromotion = this.filterPromotion
-      .filter((x) =>
-        promotionUseFilterDto.statu === undefined ? true : x.statu === promotionUseFilterDto.statu
-      )
-      .filter((x) =>
-        promotionUseFilterDto.title === undefined ? true : x.title === promotionUseFilterDto.title
-      )
-      .filter((x) =>
-        promotionUseFilterDto.promotionRequestTitle === undefined
-          ? true
-          : x.promotionRequestTitle === promotionUseFilterDto.promotionRequestTitle
-      )
-      .filter((x) =>
-        promotionUseFilterDto.firstRequestDate === undefined &&
-        promotionUseFilterDto.secondRequestDate === undefined
-          ? true
-          : x.requestDate <= promotionUseFilterDto.secondRequestDate &&
-            x.requestDate >= promotionUseFilterDto.secondRequestDate
-      );
+  public async getIKPromotionUseFilter(promotionUseFilterDto: PromotionUseFilterDto) {
+    console.log('DTO =>', promotionUseFilterDto);
+    let result = await promotionService.getIKPromotionUseFilter(promotionUseFilterDto);
+    this.filterPromotion = result;
   }
 }
 export default PromotionStore;

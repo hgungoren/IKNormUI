@@ -5,6 +5,8 @@ export interface PromotionUseFilterDto {
   statu: PromotionType;
   title: string;
   promotionRequestTitle: string;
-  firstRequestDate: Date;
-  secondRequestDate: Date;
+  firstRequestDate: Date | undefined;
+  secondRequestDate: Date | undefined;
+  departmentObjId: string;
+  unitObjId: string;
 }

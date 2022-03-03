@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import http from '../httpService';
 import { CreateOrUpdateIKPromotionInput } from './dto/createOrUpdateIKPromotionInput';
+import { PromotionUseFilterDto } from './dto/promotionUseFilterDto';
 
 class PromotionService {
   public async create(input: CreateOrUpdateIKPromotionInput) {
@@ -55,6 +56,13 @@ class PromotionService {
 
   public async getIKPromotionRequestTitles(title: string) {
     let result = await http.get('iknorm/IKPromotion/GetIKPromotionRequestTitles?title=' + title);
+    return result.data.result;
+  }
+
+  public async getIKPromotionUseFilter(promotionUseFilterDto: PromotionUseFilterDto) {
+    let result = await http.get('iknorm/IKPromotion/GetKPromotionFilterData', {
+      params: promotionUseFilterDto,
+    });
     return result.data.result;
   }
 }

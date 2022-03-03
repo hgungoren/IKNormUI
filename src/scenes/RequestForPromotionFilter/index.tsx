@@ -26,6 +26,7 @@ import Stores from '../../stores/storeIdentifier';
 import InkaStore from '../../stores/inkaStore';
 import UserStore from '../../stores/userStore';
 import PromotionStore from '../../stores/promotionStore';
+import { PromotionType } from '../../services/promotion/dto/promotionType';
 
 const { Option } = Select;
 export interface Props {
@@ -42,10 +43,11 @@ export interface State {
   filter: string;
   departmentObjId: string;
   unitObjId: string;
-}
-
-function onChange(date, dateString) {
-  console.log(date, dateString);
+  statu: any;
+  firstRequestDate: Date | undefined;
+  firstDateStatu: boolean;
+  secondRequestDate: Date | undefined;
+  secondDateStatu: boolean;
 }
 
 const dateFormat = 'DD.MM.YYYY';
@@ -65,8 +67,21 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     filter: '',
     unitObjId: '0',
     departmentObjId: '0',
+    statu: PromotionType.OnayaGonderildi,
+    firstRequestDate: new Date(),
+    firstDateStatu: false,
+    secondRequestDate: new Date(),
+    secondDateStatu: false,
   };
-  
+
+  onChangeFirstRequestDate = async (date, dateString) => {
+    this.setState({ firstRequestDate: date._d, firstDateStatu: true });
+  };
+
+  onChangeSecondRequestDate = (date, dateString) => {
+    this.setState({ secondRequestDate: date._d, secondDateStatu: true });
+  };
+
   componentDidMount = async () => {
     this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     await this.getInkaPersonelByTcNo(await this.props.sessionStore.currentLogin.user.tcKimlikNo);
@@ -102,15 +117,35 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   handleFilter = async () => {
     const form = this.formRef.current;
     form!.validateFields().then(async (values: any) => {
-      await this.props.promotionStore.filterPromotionData({
-        statu: values.durum !== undefined ? values.durum : undefined,
+      switch (Number(values.statu)) {
+        case 1:
+          this.setState({ statu: PromotionType.OnayaGonderildi });
+          break;
+        case 2:
+          this.setState({ statu: PromotionType.Onaylandi });
+          break;
+        case 3:
+          this.setState({ statu: PromotionType.Reddedildi });
+          break;
+        default:
+          this.setState({ statu: undefined });
+          break;
+      }
+      await this.props.promotionStore.getIKPromotionUseFilter({
+        statu: this.state.statu,
         title: values.title !== undefined ? values.title : undefined,
         promotionRequestTitle:
           values.promationRequest !== undefined ? values.promationRequest : undefined,
-        firstRequestDate:
-          values.firstRequestDate !== undefined ? values.firstRequestDate : undefined,
-        secondRequestDate:
-          values.secondRequestDate !== undefined ? values.secondRequestDate : undefined,
+        firstRequestDate: this.state.firstDateStatu ? this.state.firstRequestDate : undefined,
+        secondRequestDate: this.state.secondDateStatu ? this.state.secondRequestDate : undefined,
+        departmentObjId:
+          this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true
+            ? this.state.departmentObjId
+            : '0',
+        unitObjId:
+          this.props.userStore.editUser.roleNames.includes('UNITMANAGER') === true
+            ? this.state.unitObjId
+            : '0',
       });
     });
   };
@@ -353,7 +388,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 <Space direction="vertical">
                   <DatePicker
                     style={{ width: 180 }}
-                    onChange={onChange}
+                    onChange={this.onChangeFirstRequestDate}
                     format={dateFormat}
                     placeholder={L('Choose')}
                     locale={locale}
@@ -373,7 +408,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 <Space direction="vertical">
                   <DatePicker
                     style={{ width: 180 }}
-                    onChange={onChange}
+                    onChange={this.onChangeSecondRequestDate}
                     format={dateFormat}
                     placeholder={L('Choose')}
                     locale={locale}
