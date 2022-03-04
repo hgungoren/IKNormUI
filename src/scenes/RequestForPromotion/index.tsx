@@ -135,8 +135,6 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
     await this.getAllEmployeesForGroupBy(
       this.state.birimObjId !== undefined ? this.state.birimObjId : ''
     );
-    await this.props.jobStore.getAllPositionForUnit('5000750100000000454')
-    console.log("Deneme Result", this.props.jobStore.jobNames);
   };
 
   getInkaPersonelByTcNo = async (tcNo: string) => {
