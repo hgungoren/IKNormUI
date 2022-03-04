@@ -7,4 +7,5 @@ export interface GetKPersonelOutput {
     aktif: string,
     isYeri_ObjId: string,
     sicilNo: string,
+    
 }

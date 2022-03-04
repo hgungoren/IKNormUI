@@ -525,7 +525,7 @@ class CompensationFormUpdate extends React.Component<ICProps, IState>  {
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
                                     <Form.Item label={L('Link')} name="url"  >
-                                        <Input disabled type='text' />
+                                        <Input  type='text' />
                                     </Form.Item>
                                 </Col>
                             </Row>

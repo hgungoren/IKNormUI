@@ -357,7 +357,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
                     onChange={OnchangeOdemeDurumu}
                   >
                     <Select.Option value="1">{L('Odenecek')}</Select.Option>
-                    <Select.Option value="2">{L('Odenmicek')}</Select.Option>
+                    <Select.Option value="2">{L('Odenmeyecek')}</Select.Option>
                     <Select.Option value="3">
                       {L('Farkli Bir Tutar Odenecek')}
                     </Select.Option>

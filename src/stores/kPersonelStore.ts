@@ -53,6 +53,10 @@ class KPersonelStore {
     let result = await kPersonelService.getByTcNo(tcNo);
     this.kPersonel = result;
   }
+
+
+
+
 }
 
 export default KPersonelStore;

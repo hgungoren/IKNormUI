@@ -27,6 +27,8 @@ import AppComponentBase from '../../components/AppComponentBase';
 import AuthenticationStore from '../../stores/authenticationStore';
 import NormDetailTimeLine from '../../components/NormDetailTimeLine';
 import KInkaLookUpTableStore from '../../stores/kInkaLookUpTableStore';
+import InkaStore from '../../stores/inkaStore';
+import JobStore from '../../stores/jobStore';
 import {
   notification,
   Card,
@@ -60,6 +62,8 @@ export interface IKsubeDatayProps {
   kNormDetailStore: KNormDetailStore;
   authenticationStore?: AuthenticationStore;
   kInkaLookUpTableStore: KInkaLookUpTableStore;
+  inkaStore: InkaStore;
+  jobStore: JobStore;
 }
 
 export interface State {
@@ -88,13 +92,18 @@ export interface State {
   filterTable1: { offset: number; limit: number; current: number };
   filterTable2: { offset: number; limit: number; current: number };
   filterTable3: { offset: number; limit: number; current: number };
-  tablelodingPerson:boolean;
-  tablelodingNorm:boolean;
+  tablelodingPerson: boolean;
+  tablelodingNorm: boolean;
+  titleStringArray: string[];
+  //credentialsList: any[];
 
 }
 
 const Search = Input.Search;
 
+
+@inject(Stores.JobStore)
+@inject(Stores.InkaStore)
 @inject(Stores.KSubeStore)
 @inject(Stores.KBolgeStore)
 @inject(Stores.KNormStore)
@@ -146,12 +155,13 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     totalSizeTable2: 0,
     totalSizeTable3: 0,
     searchFilter: '',
-    tablelodingPerson:true,
-    tablelodingNorm:true
+    tablelodingPerson: true,
+    tablelodingNorm: true,
+    titleStringArray: []
   };
 
   async getPosition(key: string) {
-    console.log('key=>',key)
+    console.log('key=>', key)
     await this.props.kInkaLookUpTableStore.getAll({
       maxResultCount: 20000,
       keyword: key,
@@ -169,7 +179,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       type: 'subedetail',
     });
 
-    this.setState({tablelodingNorm:false})
+    this.setState({ tablelodingNorm: false })
 
   }
 
@@ -219,8 +229,8 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       keyword: this.state.searchFilter,
       id: this.state.id,
     });
-   
-    this.setState({tablelodingPerson:false})
+
+    this.setState({ tablelodingPerson: false })
 
   }
 
@@ -230,7 +240,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
   pageSettings = async () => {
 
-     let tur = this.props.kSubeStore.editKSube.tur;  
+    let tur = this.props.kSubeStore.editKSube.tur;
     if (tur === 'Acente') {
       this.setState({ tip: tur });
     } else {
@@ -242,20 +252,20 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     });
 
     if (isGranted('items.kareas.menu.view')) {
-      await this.props.kSubeStore.get({ id: this.props['match'].params['id'] }); 
-      await this.props.kBolgeStore.get({ id: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId });  
-      this.setState({     
-          breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
-          breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
-       
+      await this.props.kSubeStore.get({ id: this.props['match'].params['id'] });
+      await this.props.kBolgeStore.get({ id: this.props.kSubeStore.editKSube.bagliOlduguSube_ObjId });
+      this.setState({
+        breadcrumbBolgeAdi: this.props.kBolgeStore.editKBolge.adi,
+        breadcrumbSubeAdi: this.props.kSubeStore.editKSube.adi
+
       });
     }
 
   };
 
   setPageState = async () => {
-      this.setState({ id: this.props['match'].params['id'] });  
-      this.props.kSubeStore.get({ id: this.props['match'].params['id'] }).then(() => {     
+    this.setState({ id: this.props['match'].params['id'] });
+    this.props.kSubeStore.get({ id: this.props['match'].params['id'] }).then(() => {
       this.pageSettings();
     });
   };
@@ -284,25 +294,29 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   };
 
   handleSearch = (value: string) => {
-    this.setState({tablelodingPerson:true})
+    this.setState({ tablelodingPerson: true })
     this.setState({ searchFilter: value }, async () => await this.getAllEmployees());
   };
 
   handleNormSearch = (value: string) => {
-    this.setState({tablelodingNorm:true})
+    this.setState({ tablelodingNorm: true })
 
     this.setState({ normFilter: value }, async () => await this.getNormRequests());
   };
 
   async createOrUpdateModalOpen(entityDto: EntityDto) {
     this.setState({ modalVisible: !this.state.modalVisible });
-    console.log("tip=>" + this.state.tip);
     this.getPosition(this.state.tip);
   }
 
   async detailModalOpen(id: number) {
+
     await this.props.kNormStore.getById({ id: id });
     await this.props.kNormDetailStore.getDetails(id);
+
+
+    this.mergeArrayTwo(this.props.kNormStore.editKNorm.pozisyon)
+
     this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
   }
 
@@ -334,7 +348,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
   mergeArray = async () => {
 
-     alert('dasdasdsa')
     let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
       id: i,
       gorev: y,
@@ -349,20 +362,18 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       normCount: [...this.state.groupNorm[y]].length,
     }));
 
-
-
     let result = [...employees, ...norms];
-    console.log('result=>',result)
     let names = result.map((x) => x.gorev);
     let set = new Set(names);
 
-     
+
 
 
     let groupData = [...set].map((x, i) => {
       let gorev = x;
       let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
       let norm = norms.find((x) => x.gorev === gorev)?.normCount;
+
 
       return Object.assign({
         id: i,
@@ -375,6 +386,89 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
     this.setState({ groupData: groupData });
   };
+
+
+
+  mergeArrayTwo = async (poz: string) => {
+
+
+
+    //console.log('this.state.groupEmployee',this.state.groupEmployee.find(x => x === poz))
+
+    const asArray = Object.entries(this.state.groupEmployee);
+    const Sonuc = asArray.filter(([key, value]) => key === poz);
+
+    const doubled = Array(Sonuc.map((x) => x[1]));
+
+    var lastArray = doubled.map(function (item) {
+      return item[0];
+    });
+
+    let sicilNo = "";
+    lastArray.forEach(myFunction);
+    function myFunction(item) {
+      sicilNo = item[0].sicilNo;
+    }
+
+
+    await this.props.inkaStore.getInkaEmployeeByPersonelNo(sicilNo);
+    var birimObjId = this.props.inkaStore.inkaUserByPersonelNo.birimObjId
+    await this.props.jobStore.getAllPositionForUnit(birimObjId)
+    var titles = this.props.jobStore.jobNames
+    var stringTitleList = new Array("");
+
+
+    for (let index = 0; index < titles.length; index++) {
+      const element = titles[index];
+      stringTitleList.push(element.adi);
+    }
+
+
+    console.log("Array", stringTitleList);
+
+    let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
+      id: i,
+      gorev: y,
+      employeeCount: [...this.state.groupEmployee[y]].length,
+      normCount: 0,
+    }));
+
+
+    let norms = Object.keys(this.state.groupNorm).map((y, i) => ({
+      id: i,
+      gorev: y,
+      employeeCount: 0,
+      normCount: [...this.state.groupNorm[y]].length,
+    }));
+
+
+    let result = [...employees, ...norms];
+    let names = result.map((x) => x.gorev);
+
+    let set = names.filter(name => stringTitleList.includes(name));
+
+
+    let groupData = [...set].map((x, i) => {
+      let gorev = x;
+      let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
+      let norm = norms.find((x) => x.gorev === gorev)?.normCount;
+
+
+      return Object.assign({
+        id: i,
+        gorev: x,
+        employeeCount: employee !== undefined ? employee : 0,
+        nomrCount: norm !== undefined ? norm : 0,
+        norm: (norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0),
+      });
+    });
+
+    this.setState({ groupData: groupData });
+  };
+
+
+
+
 
   getHierarchy = async (subeId: string, bolgeId: string, tip: string, pozisyon: string) => {
     await this.props.kHierarchyStore.generateHierarchy({
@@ -738,9 +832,9 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
                 {
                   isGranted('items_branch_menu_view') && <Breadcrumb.Item> <Link to="/bolgemudurluk">{L('RegionalOffices')}</Link> </Breadcrumb.Item>
                 }
-          
+
                 {
-                 
+
                   breadcrumbBolgeAdi !== '' && <Breadcrumb.Item> {breadcrumbBolgeAdi} </Breadcrumb.Item>
                 }
                 {
@@ -811,7 +905,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             </Row>
           </Card>
         }
-     
+
         {isGranted('subitems.branch.detail.norm.request.table.view') && (
           <Card hoverable style={{ marginTop: 15 }}>
             <Row>
@@ -868,7 +962,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
                   rowKey={(record) => record.id}
                   //loading={kNorms === undefined ? true : false}
                   loading={this.state.tablelodingNorm}
-
                   dataSource={kNorms === undefined ? [] : kNorms.items}
                   pagination={tablePaginationTable3}
                 />
@@ -876,7 +969,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             </Row>
           </Card>
         )}
-       
+
         <CreateNormForm
           tip={tip}
           subeId={id}
@@ -901,7 +994,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
             });
             form!.resetFields();
           }} />
-          
+
         <NormDetailTimeLine
           norm={editKNorm}
           data={kNormAllDetails}
@@ -912,7 +1005,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
               detaillModalVisible: false,
             });
           }}
-          groupData ={groupData === undefined ? [] : groupData}
+          groupData={groupData === undefined ? [] : groupData}
           personCount={0}
           normCount={0}
           normShortfall={0}

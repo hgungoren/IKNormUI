@@ -50,6 +50,10 @@ class KPersonelService {
     let result = await http.get('personel/getbytcno/' + tcNo);
     return result.data;
   }
+
+
+
+  
 }
 
 export default new KPersonelService();
