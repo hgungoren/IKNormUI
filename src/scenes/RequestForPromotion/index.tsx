@@ -69,8 +69,6 @@ export interface State {
 
 const { Option } = Select;
 
-// function onChange2(value) {}
-
 function onSearch2(val) {}
 
 @inject(Stores.UserStore)
@@ -270,7 +268,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
             requestDate: new Date(),
             dateOfStart: dateOfStart,
             lastPromotionDate: new Date(),
-            statu: PromotionType.OnayaGonderildi,
+            statu: PromotionType.None,
             hierarchyStatu: hierarchyStatu,
           })
           .then(() => {

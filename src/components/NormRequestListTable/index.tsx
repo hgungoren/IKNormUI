@@ -276,6 +276,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         let result = [...employees, ...norms];
         let names = result.map((x) => x.gorev);
+        console.log("Filtrenen Data => ",names);
 
         let set;
 

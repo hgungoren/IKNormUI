@@ -1,11 +1,17 @@
 /*eslint-disable*/
 import http from '../httpService';
 import { CreateOrUpdateIKPromotionInput } from './dto/createOrUpdateIKPromotionInput';
+import { PromotionDto } from './dto/promotionDto';
 import { PromotionUseFilterDto } from './dto/promotionUseFilterDto';
 
 class PromotionService {
   public async create(input: CreateOrUpdateIKPromotionInput) {
     let result = await http.post('iknorm/IKPromotion/Create', input);
+    return result.data.result;
+  }
+
+  public async getIKPromotionHiearchyStatu(id: string): Promise<PromotionDto> {
+    let result = await http.get('iknorm/IKPromotion/GetIKPromotionHiearchyStatu?id=' + id);
     return result.data.result;
   }
 
@@ -63,6 +69,11 @@ class PromotionService {
     let result = await http.get('iknorm/IKPromotion/GetKPromotionFilterData', {
       params: promotionUseFilterDto,
     });
+    return result.data.result;
+  }
+
+  public async getIKPromotion(id: string) {
+    let result = await http.get('iknorm/IKPromotion/Get?Id=' + id);
     return result.data.result;
   }
 }
