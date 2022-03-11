@@ -280,6 +280,10 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         let set;
 
         set = new Set(names);
+<<<<<<< HEAD
+
+=======
+>>>>>>> 79d72518a60b53c8400c53edc2f13c547c3ce356
         console.log('result=>',result) 
         if(result[0].gorev.includes('Bölge')){
              set = new Set(names);
