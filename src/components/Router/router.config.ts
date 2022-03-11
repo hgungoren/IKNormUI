@@ -1,6 +1,10 @@
 /* eslint-disable */
 import LoadableComponent from './../Loadable/index';
+<<<<<<< HEAD
 import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined } from '@ant-design/icons';
+=======
+import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined, FileDoneOutlined, BarChartOutlined } from '@ant-design/icons';
+>>>>>>> 79d72518a60b53c8400c53edc2f13c547c3ce356
 
 export const userRouter: any = [
   { path: '/user', name: 'User', title: 'User', component: LoadableComponent(() => import('../../components/Layout/UserLayout')), isLayout: true, showInMenu: false, },
@@ -26,6 +30,12 @@ export const appRouters: any = [
   { path: '/bolgemudurluk',                key:'menu-item-11', permission: 'items.kareas.menu.view',            title: 'KBolge',                       type:'hr',       name: 'KBolge',                       icon: TableOutlined,              showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KBolge')), },
   
   { path: '/probationperiod',              key:'menu-item-12', permission: '',                                  title: 'ProbationPeriod',              type:'hr',       name: 'ProbationPeriod',              icon: UsergroupAddOutlined,       showInMenu: false,  component: LoadableComponent(() => import('../../scenes/ProbationPeriod')), },
+  { path: '/requestforpromotion',          key:'menu-item-13', permission: 'items.requestforpromotion.create.menu.view',                                  title: 'RequestForPromotion',          type:'hr',       name: 'RequestForPromotion',          icon: UsergroupAddOutlined,       showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotion')), },
+  { path: '/promotionconfirmotion',      key:'menu-item-14', permission: 'items.requestforpromotion.create.menu.view',                                  title: 'RequestForPromotion',          type:'hr',       name: 'PromotionConfirmotion',          icon: UsergroupAddOutlined,       showInMenu: true, component: LoadableComponent(() => import('../../scenes/PromotionConfirmation')), },
+  { path: '/requestforpromotionfilter',    key:'menu-item-15', permission: 'items.requestforpromotion.search.menu.view',                                  title: 'FilterForPromotion',           type:'hr',       name: 'FilterForPromotion',           icon: FileDoneOutlined,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotionFilter')), },
+  { path: '/requestforpromotionreport',    key:'menu-item-16', permission: 'items.requestforpromotion.report.menu.view',                                  title: 'ReportForPromotion',           type:'hr',       name: 'ReportForPromotion',           icon: BarChartOutlined ,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotionReport')), },
+
+
   { path: '/users',                        key:'menu-item-13', permission: 'items.user.menu.view',              title: 'Users',                        type:'settings', name: 'Users',                        icon: UsergroupAddOutlined,       showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Users')), },
   { path: '/roles',                        key:'menu-item-14', permission: 'items.role.menu.view',              title: 'Roles',                        type:'settings', name: 'Roles',                        icon: TagsOutlined,               showInMenu: true,  component: LoadableComponent(() => import('../../scenes/Roles')), }, 
   { path: '/logout',                       key:'menu-item-15', permission: '',                                  title: 'Logout',                       type:'',         name: 'Logout',                                                         showInMenu: false, component: LoadableComponent(() => import('../../components/Logout')), },
@@ -38,7 +48,7 @@ export const appRouters: any = [
 
   { path: '/damageconmpensationview/:id',  key:'menu-item-20', permission: '',                                  title: 'DamageCompensationView',       type:'op',       name: 'DamageCompensationView',       icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/view')), }, 
 
-  { path: '/damageupdate/:id',         key:'menu-item-26', permission: '',                                  title: 'DamageCompensationUpdate', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')), },
+  { path: '/damageevalutaion/:id',         key:'menu-item-20', permission: '',                                  title: 'DamageCompensationEvaluation', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/updateEva')), },
 
 
   { path: '/damageupdate/:id',         key:'menu-item-21', permission: '',                                  title: 'DamageCompensationUpdate', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')), },

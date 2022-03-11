@@ -76,10 +76,10 @@ class InterruptionForm extends React.Component<ICProps, IState>  {
   }
 
 
-  
 
   //#region  KesintiLsitesi
   getAllKesintiListe = async () => {
+   
     await this.props.kDamageCompensationStore.StoreGetKesintiListesi(this.props.urlId);
   }
   //#endregion

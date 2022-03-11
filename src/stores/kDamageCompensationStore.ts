@@ -29,7 +29,6 @@ import { GetWebSiparisKodu } from '../services/kDamageCompensations/dto/getWebSi
 import { InterruptionModalCreate } from '../services/kDamageCompensations/dto/interruptionModalCreate';
 
 class KDamageCompensationStore {
-  [x: string]: any;
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
   @observable getCreateDamageInput!: GetCreateDamageInput;
   @observable getCariListDamage!: GetCariListDamage[];

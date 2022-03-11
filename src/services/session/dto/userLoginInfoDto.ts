@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { EntityDto } from './../../dto/entityDto';
 
 export default class UserLoginInfoDto extends EntityDto {

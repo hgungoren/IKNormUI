@@ -261,12 +261,6 @@ const OnchangeOdemeDurumu=(values)=>{
 
                    
 
-
-
-
-
-
-
                             </Form> 
 
 

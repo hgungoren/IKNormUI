@@ -8,6 +8,9 @@ class InkaStore {
   @observable inkaUserByChief!: IKGenelPersonelListReponseDto;
   @observable inkaUsersByUnit!: IKGenelPersonelListReponseDto[];
   @observable inkaUsersByTitle!: IKGenelPersonelListReponseDto[];
+  @observable inkaUserByPersonelNo!: IKGenelPersonelListReponseDto;
+
+
 
   @action
   async getAllInkaEmployeesByUnit(id: string) {
@@ -31,5 +34,14 @@ class InkaStore {
     let result = await inkaService.getInkaEmployeeByChief(chiefId);
     this.inkaUserByChief = result;
   }
+
+
+  @action
+  async getInkaEmployeeByPersonelNo(personelNo: string) {
+    let result = await inkaService.getInkaEmployeeByPersonelNo(personelNo);
+    this.inkaUserByPersonelNo = result;
+  }
+
+
 }
 export default InkaStore;

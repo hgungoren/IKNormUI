@@ -32,6 +32,7 @@ import {
 import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation'
 import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import moment from 'moment';
 
 export interface IProps {
   kDamageCompensationStore: KDamageCompensationStore;
@@ -239,7 +240,8 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('CompensationRequestDate'),
         dataIndex: 'tazminTarihi',
         key: 'tazminTarihi',
-        responsive: ['sm'] as Breakpoint[]
+        responsive: ['sm'] as Breakpoint[],
+        render: (text) => moment(text).format('DD-MM-YYYY')
       },
       {
         title: L('ProcessOwnerRegion'),
@@ -487,7 +489,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
               </Form>
             </Card>
 
-            <Card hoverable title={L('DamageCompensationCardHeader')}>
+            <Card hoverable title={L('Hasar Tazmin Listesi')}>
               <Table
                 loading={getAllDamageCompensationStoreClass === undefined ? true : false}
                 columns={columns}

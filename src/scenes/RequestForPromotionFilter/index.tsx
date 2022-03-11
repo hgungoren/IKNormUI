@@ -13,9 +13,10 @@ import {
   Form,
   DatePicker,
   Space,
+  Tag,
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { ReloadOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { L } from '../../lib/abpUtility';
 import 'moment/locale/tr';
 import locale from 'antd/es/date-picker/locale/tr_TR';
@@ -25,6 +26,9 @@ import Stores from '../../stores/storeIdentifier';
 import InkaStore from '../../stores/inkaStore';
 import UserStore from '../../stores/userStore';
 import PromotionStore from '../../stores/promotionStore';
+import DeparmentStore from '../../stores/departmentStore';
+import { PromotionType } from '../../services/promotion/dto/promotionType';
+import PromotionResultStatuHierarchy from './components/promotionResultStatuHierarchy';
 
 const { Option } = Select;
 export interface Props {
@@ -32,6 +36,7 @@ export interface Props {
   inkaStore: InkaStore;
   userStore: UserStore;
   promotionStore: PromotionStore;
+  departmentStore: DeparmentStore;
 }
 
 export interface State {
@@ -41,14 +46,21 @@ export interface State {
   filter: string;
   departmentObjId: string;
   unitObjId: string;
-}
-
-function onChange(date, dateString) {
-  console.log(date, dateString);
+  statu: any;
+  firstRequestDate: Date | undefined;
+  firstDateStatu: boolean;
+  secondRequestDate: Date | undefined;
+  secondDateStatu: boolean;
+  chiefObjId: string;
+  hierarchyData: {};
+  registrationNumber: string;
+  userDepartmentObjId: string;
+  departmentManagerObjId: string;
 }
 
 const dateFormat = 'DD.MM.YYYY';
 
+@inject(Stores.DepartmentStore)
 @inject(Stores.SessionStore)
 @inject(Stores.InkaStore)
 @inject(Stores.UserStore)
@@ -64,6 +76,34 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     filter: '',
     unitObjId: '0',
     departmentObjId: '0',
+    statu: PromotionType.OnayaGonderildi,
+    firstRequestDate: new Date(),
+    firstDateStatu: false,
+    secondRequestDate: new Date(),
+    secondDateStatu: false,
+    chiefObjId: '',
+    hierarchyData: {
+      departmentManager: '',
+      recruitment: '',
+      hrManager: '',
+    },
+    registrationNumber: '',
+    userDepartmentObjId: '',
+    departmentManagerObjId: '',
+  };
+
+  Modal = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible,
+    });
+  };
+
+  onChangeFirstRequestDate = async (date, dateString) => {
+    this.setState({ firstRequestDate: date._d, firstDateStatu: true });
+  };
+
+  onChangeSecondRequestDate = (date, dateString) => {
+    this.setState({ secondRequestDate: date._d, secondDateStatu: true });
   };
 
   componentDidMount = async () => {
@@ -87,7 +127,14 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     }
   };
 
+  getInkaEmployeeByPersonelNo = async (registrationNumber: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByPersonelNo(registrationNumber);
+    }
+  };
+
   getAllPromotionFilter = async () => {
+    this.formRef.current?.resetFields();
     if ((await this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER')) === true) {
       this.props.promotionStore.getIKPromotionFilterByDepartment(this.state.departmentObjId);
       this.props.promotionStore.getIKPromotionFilterByDepartmentCount(this.state.departmentObjId);
@@ -95,6 +142,42 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
       this.props.promotionStore.getIKPromotionFilterByUnit(this.state.unitObjId);
       this.props.promotionStore.getIKPromotionFilterByUnitCount(this.state.unitObjId);
     }
+  };
+
+  handleFilter = async () => {
+    const form = this.formRef.current;
+    form!.validateFields().then(async (values: any) => {
+      switch (Number(values.statu)) {
+        case 1:
+          this.setState({ statu: PromotionType.OnayaGonderildi });
+          break;
+        case 2:
+          this.setState({ statu: PromotionType.Onaylandi });
+          break;
+        case 3:
+          this.setState({ statu: PromotionType.Reddedildi });
+          break;
+        default:
+          this.setState({ statu: undefined });
+          break;
+      }
+      await this.props.promotionStore.getIKPromotionUseFilter({
+        statu: this.state.statu,
+        title: values.title !== undefined ? values.title : undefined,
+        promotionRequestTitle:
+          values.promationRequest !== undefined ? values.promationRequest : undefined,
+        firstRequestDate: this.state.firstDateStatu ? this.state.firstRequestDate : undefined,
+        secondRequestDate: this.state.secondDateStatu ? this.state.secondRequestDate : undefined,
+        departmentObjId:
+          this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true
+            ? this.state.departmentObjId
+            : '0',
+        unitObjId:
+          this.props.userStore.editUser.roleNames.includes('UNITMANAGER') === true
+            ? this.state.unitObjId
+            : '0',
+      });
+    });
   };
 
   getAllStatus = async () => {
@@ -108,6 +191,76 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   getAllRequestTitle = async (title: string) => {
     await this.props.promotionStore.getIKPromotionRequestTitles(title);
   };
+
+  getInkaPersonelByChief = async (chiefId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByChief(chiefId).then(() => {
+        if (this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true) {
+          this.setState({
+            hierarchyData: {
+              ...this.state.hierarchyData,
+              departmentManager: ``,
+            },
+          });
+        } else {
+          this.setState({
+            hierarchyData: {
+              ...this.state.hierarchyData,
+              departmentManager: `${this.props.inkaStore.inkaUserByChief.departmanAdi} ${this.props.inkaStore.inkaUserByChief.iKGorev}`,
+            },
+          });
+        }
+      });
+    }
+  };
+
+  getInkaPersonelByTitleRecruitment = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            recruitment: `${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
+  };
+
+  getInkaPersonelByTitleHRManager = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].departmanAdi} ${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
+  };
+
+  async createOrUpdateModalOpen(id: string) {
+    await this.props.promotionStore.getIKPromotionHiearchyStatu(id);
+    await this.props.promotionStore.getIKPromotion(id).then(() => {
+      this.setState({
+        registrationNumber: this.props.promotionStore.getPromotion.registrationNumber,
+        userDepartmentObjId: this.props.promotionStore.getPromotion.departmentObjId,
+      });
+    });
+    await this.getInkaEmployeeByPersonelNo(await this.state.registrationNumber);
+    await this.props.departmentStore.getManagerObjId(this.state.userDepartmentObjId).then(() => {
+      this.setState({
+        departmentManagerObjId:
+          this.props.departmentStore.departmantDtoByManager[0].yoneticiObjId.toString(),
+      });
+    });
+    await this.getInkaPersonelByChief(this.state.departmentManagerObjId);
+    await this.getInkaPersonelByTitleRecruitment('5000900100000010228');
+    await this.getInkaPersonelByTitleHRManager('5000750100000000718');
+
+    this.Modal();
+  }
 
   public render() {
     function converToShortDate(dateString) {
@@ -180,13 +333,17 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
         width: 150,
         render: (text: string, item: any) => (
           <div>
-            {item.statu === 1
-              ? 'Onaya Gönderildi'
-              : '' || item.statu === 2
-              ? 'Onaylandı'
-              : '' || item.statu === 3
-              ? 'Reddedildi'
-              : ''}
+            {item.statu === 0 ? (
+              <Tag color="warning">Onaya Gönderildi</Tag>
+            ) : '' || item.statu === 1 ? (
+              <Tag color="warning">Onaya Gönderildi</Tag>
+            ) : '' || item.statu === 2 ? (
+              <Tag color="success">Onaylandı</Tag>
+            ) : '' || item.statu === 3 ? (
+              <Tag color="error">Reddedildi</Tag>
+            ) : (
+              ''
+            )}
           </div>
         ),
       },
@@ -200,7 +357,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               overlay={
                 <Menu>
                   <Menu.Item>Değerlendir</Menu.Item>
-                  <Menu.Item>Detay</Menu.Item>
+                  <Menu.Item onClick={() => this.createOrUpdateModalOpen(item.id)}>Detay</Menu.Item>
                   {/* <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
                   <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item> */}
                 </Menu>
@@ -219,11 +376,11 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     return (
       <Card>
         <h2 style={{ width: '360px' }}>{L('FilterForPromotion')}</h2>
-        <Form initialValues={{ remember: false }}>
+        <Form ref={this.formRef} initialValues={{ remember: false }}>
           <Row>
             <Col span={12}>
               <Form.Item
-                name="durum"
+                name="statu"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.statu')}
@@ -255,7 +412,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={12}>
               <Form.Item
-                name="gorev"
+                name="title"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.title')}
@@ -289,7 +446,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={12}>
               <Form.Item
-                name="terfitalebi"
+                name="promationRequest"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.promationrequest')}
@@ -323,7 +480,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           <Row>
             <Col span={5}>
               <Form.Item
-                name="taleptarihi"
+                name="firstRequestDate"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.requestdate')}
@@ -333,7 +490,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 <Space direction="vertical">
                   <DatePicker
                     style={{ width: 180 }}
-                    onChange={onChange}
+                    onChange={this.onChangeFirstRequestDate}
                     format={dateFormat}
                     placeholder={L('Choose')}
                     locale={locale}
@@ -343,7 +500,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
             </Col>
             <Col span={5}>
               <Form.Item
-                name="taleptarihi"
+                name="secondRequestDate"
                 label={
                   <label style={{ maxWidth: 160, minWidth: 70 }}>
                     {L('promotion.filter.table.requestdate')}
@@ -353,7 +510,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 <Space direction="vertical">
                   <DatePicker
                     style={{ width: 180 }}
-                    onChange={onChange}
+                    onChange={this.onChangeSecondRequestDate}
                     format={dateFormat}
                     placeholder={L('Choose')}
                     locale={locale}
@@ -361,10 +518,21 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 </Space>
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={2}>
               <Space style={{ width: '100%' }}>
-                <Button type="primary" icon={<SearchOutlined />}>
+                <Button type="primary" icon={<SearchOutlined />} onClick={this.handleFilter}>
                   {L('promotion.filter.button')}
+                </Button>
+              </Space>
+            </Col>
+            <Col span={2}>
+              <Space style={{ width: '100%' }}>
+                <Button
+                  type="primary"
+                  icon={<ReloadOutlined />}
+                  onClick={this.getAllPromotionFilter}
+                >
+                  Yenile
                 </Button>
               </Space>
             </Col>
@@ -403,7 +571,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               columns={columns}
               loading={filterPromotion === undefined ? true : false}
               pagination={{
-                pageSize: 10,
+                pageSize: 5,
                 total: filterPromotionCount > 0 ? filterPromotionCount : 0,
                 defaultCurrent: 1,
               }}
@@ -411,6 +579,19 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
             />
           </Col>
         </Row>
+        <PromotionResultStatuHierarchy
+          formRef={this.formRef}
+          visible={this.state.modalVisible}
+          modalType="View"
+          onCancel={() => {
+            this.setState({
+              modalVisible: false,
+            });
+            // this.formRef.current?.resetFields();
+          }}
+          hierarchyData={this.props.promotionStore.promotion}
+          hierarchyDataView={this.state.hierarchyData}
+        ></PromotionResultStatuHierarchy>
       </Card>
     );
   }

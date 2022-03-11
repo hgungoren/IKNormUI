@@ -12,7 +12,6 @@ import {
     Radio,
     Row,
     Select,
-    Space,
     Spin,
 
 } from 'antd';
@@ -451,7 +450,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                 </Col>
                             </Row>
                             <Row style={{ float: 'right' }}>
-                                <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
+                                {/* <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
                                     <Space style={{ width: '100%' }}>
                                         <Button
                                             disabled
@@ -463,7 +462,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                             {L('Kaydet')}
                                         </Button>
                                     </Space>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </Form>
                     </Spin>
