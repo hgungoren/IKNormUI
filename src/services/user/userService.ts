@@ -16,13 +16,7 @@ class UserService {
   }
 
   public async update(updateUserInput: UpdateUserInput) {
-<<<<<<< HEAD
     let result = await http.put('iknorm/User/Update', updateUserInput);
-=======
-    console.log('service girdi=>', updateUserInput);
-    let result = await http.put('iknorm/User/Update', updateUserInput);
-    console.log('service sonuc=>', result);
->>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
     return result.data.result;
   }
 

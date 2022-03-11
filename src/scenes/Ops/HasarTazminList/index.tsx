@@ -29,7 +29,7 @@ import {
   Table,
   Tag,
 } from 'antd'
-import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/GetAllDamageCompensation'
+import { GetAllDamageCompensation } from '../../../services/kDamageCompensations/dto/getAllDamageCompensation'
 import CompensationStatus from  '../../../services/kDamageCompensations/dto/compensationStatus'
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 

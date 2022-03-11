@@ -113,7 +113,6 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           okText: L('Kaydet'),
           cancelText: L('Vazgec'),
           onOk: async () => {
-<<<<<<< HEAD
             this.setState({ pageLoding: true })
             await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => {
               // UpdateDamageStatus               
@@ -125,20 +124,6 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
               });
             }
             );
-=======
-            this.setState({ pageLoding: true })           
-            // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
-            // {
-            //     // // UpdateDamageStatus               
-            //     //    this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
-            //     //    tazminId:this.props.urlId,
-            //     //    surecsahibibolge:this.props.processOwnerRegion,
-            //     //    unvan:this.props.title,
-            //     //    file:JSON.stringify(this.props.filesMultitable)
-            //     // });
-            // }
-            // );
->>>>>>> 1b532f97ac59962c7bc78a27056975aee1a2e311
 
 
 
