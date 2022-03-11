@@ -1,4 +1,5 @@
 /*eslint-disable*/
+import { PromotionStatu } from './promotionStatu';
 import { PromotionType } from './promotionType';
 
 export interface PromotionFilterDto {
@@ -10,5 +11,6 @@ export interface PromotionFilterDto {
   description: string;
   requestDate: Date;
   statu: PromotionType;
+  hierarchyStatu: PromotionStatu;
   id: number;
 }

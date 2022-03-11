@@ -29,6 +29,9 @@ import PromotionStore from '../../stores/promotionStore';
 import DeparmentStore from '../../stores/departmentStore';
 import { PromotionType } from '../../services/promotion/dto/promotionType';
 import PromotionResultStatuHierarchy from './components/promotionResultStatuHierarchy';
+import { Link } from 'react-router-dom';
+import { PromotionFilterDto } from '../../services/promotion/dto/promotionFilterDto';
+import { PromotionStatu } from '../../services/promotion/dto/promotionStatu';
 
 const { Option } = Select;
 export interface Props {
@@ -56,6 +59,7 @@ export interface State {
   registrationNumber: string;
   userDepartmentObjId: string;
   departmentManagerObjId: string;
+  filterPromotion: PromotionFilterDto[];
 }
 
 const dateFormat = 'DD.MM.YYYY';
@@ -90,6 +94,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     registrationNumber: '',
     userDepartmentObjId: '',
     departmentManagerObjId: '',
+    filterPromotion: [],
   };
 
   Modal = () => {
@@ -113,6 +118,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     await this.getAllPromotionFilter();
     await this.getAllStatus();
     await this.getAllTitles();
+    await this.getFilterPromotion();
   };
 
   getInkaPersonelByTcNo = async (tcNo: string) => {
@@ -240,6 +246,21 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     }
   };
 
+  getFilterPromotion = async () => {
+    let departmentData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.None)
+    );
+    console.log('DepartmanData', departmentData);
+    let hireData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.Department)
+    );
+    console.log('HireData', hireData);
+    let hrManagerData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.IseAlim)
+    );
+    console.log('hrManagerData', hrManagerData);
+  };
+
   async createOrUpdateModalOpen(id: string) {
     await this.props.promotionStore.getIKPromotionHiearchyStatu(id);
     await this.props.promotionStore.getIKPromotion(id).then(() => {
@@ -356,10 +377,20 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               trigger={['click']}
               overlay={
                 <Menu>
-                  <Menu.Item>Değerlendir</Menu.Item>
+                  {item.statu === 2 || item.statu === 3 ? (
+                    ''
+                  ) : this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') ===
+                    true ? (
+                    <Menu.Item>
+                      <Link to={{ pathname: `/promotionconfirmotion/${item.id}` }}>
+                        Değerlendir
+                      </Link>
+                    </Menu.Item>
+                  ) : (
+                    ''
+                  )}
+
                   <Menu.Item onClick={() => this.createOrUpdateModalOpen(item.id)}>Detay</Menu.Item>
-                  {/* <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
-                  <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item> */}
                 </Menu>
               }
               placement="bottomLeft"

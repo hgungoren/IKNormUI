@@ -51,6 +51,7 @@ class PromotionConfirmation extends AppComponentBase<Props, State> {
   };
 
   componentDidMount = async () => {
+    this.setState({ id: this.props['match'].params['id'] });
     this.props.sessionStore && (await this.props.sessionStore.getCurrentLoginInformations());
     await this.props.userStore
       .get({ id: this.props.sessionStore.currentLogin.user.id })
@@ -62,7 +63,7 @@ class PromotionConfirmation extends AppComponentBase<Props, State> {
               : false,
         });
       });
-    await this.getPromotionById('4');
+    await this.getPromotionById(this.state.id);
   };
 
   getPromotionById = async (id: string) => {
@@ -110,7 +111,7 @@ class PromotionConfirmation extends AppComponentBase<Props, State> {
         </Card>
 
         <Card>
-          <Divider orientation="left">{L('promotion.request.header')}</Divider>
+          <Divider orientation="left">Terfi Talep Değerlendir</Divider>
           <Form ref={this.formRef}>
             <Row>
               <Col span={12}>

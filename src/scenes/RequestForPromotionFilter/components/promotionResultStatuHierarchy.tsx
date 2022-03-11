@@ -41,19 +41,19 @@ class PromotionResultStatuHierarchy extends React.Component<IPromotionResultStat
       if (Number(hierarchyData.statu) === Number(PromotionType.OnayaGonderildi)) {
         switch (Number(hierarchyData.hierarchyStatu)) {
           case Number(PromotionStatu.Department):
-            firstItem = <Item color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
+            hierarchyDataView.departmentManager !== "" ?firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
             secondItem = <Item key={2}>{hierarchyDataView.recruitment}</Item>;
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
             modalHeader = L('promotion.request.header.information.statu.title')
             break;
           case Number(PromotionStatu.IseAlim):
-            firstItem = <Item color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
+            hierarchyDataView.departmentManager !== ""  ? firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
             secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
             modalHeader = L('promotion.request.header.information.statu.title')
             break;
           case Number(PromotionStatu.IkMudur):
-            firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
+            hierarchyDataView.departmentManager !== ""  ?firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
             secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
             thirdItem = <Item  color="green" key={3}>{hierarchyDataView.hrManager}</Item>;
             modalHeader = L('promotion.request.header.information.statu.title')

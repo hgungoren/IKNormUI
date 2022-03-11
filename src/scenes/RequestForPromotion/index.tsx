@@ -249,8 +249,8 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         const dateOfStart = new Date(dateOfStartString);
         const hierarchyStatu =
           this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true
-            ? PromotionStatu.IseAlim
-            : PromotionStatu.Department;
+            ? PromotionStatu.Department
+            : PromotionStatu.None;
         await this.props.promotionStore
           .create({
             registrationNumber: values.sicilNo.toString(),

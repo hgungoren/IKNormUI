@@ -30,7 +30,8 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
                     isHoverable={false}
                     tableTitle={title}
                     isModal={true}
-                    table={table} />
+                    table={table} 
+                    />
             </Modal>
         </>
     )

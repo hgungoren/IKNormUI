@@ -71,8 +71,6 @@ interface INormRequestListTableProps {
     authenticationStore?: AuthenticationStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
-
-
 }
 
 
@@ -84,7 +82,8 @@ const Search = Input.Search;
 @inject(Stores.SessionStore)
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore)
-
+@inject(Stores.InkaStore)
+@inject(Stores.JobStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 
@@ -365,6 +364,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
         await this.props.kNormDetailStore.getDetails(id);
+        
         let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
         this.setState({ getAllKNormOutput: norm })
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });
