@@ -1,15 +1,17 @@
 export interface GetAllDamageCompensation {
-  tazminNo: number;
+
+
   takipNo: number;
+  tazminId: number;
+  webSiparisKodu: string;
   tazminTipi: string;
-  tazminStatusu: string;
-  tazminTarihi: string;
-  surecSahibiBolge: string;
-  eklyenKullanici: string;
-  kargoKabulFisNo:string;
-  webSiparisKodu:string;
+  gelecekTazminStatu: string;
+  gelecekTazminStatuNext: number;
+  tazminTalepTarihi: Date;
+  surecSahibiBolge:string;
+  ekleyenKullanici:string;
   
+  btnGoruntule:boolean;
   btnDuzenle:boolean;
   btnDegerlendir:boolean;
-  btnGoruntule:boolean;
 }

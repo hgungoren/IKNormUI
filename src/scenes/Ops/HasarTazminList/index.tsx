@@ -63,10 +63,13 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
   //tazmin listesi
   getalldamagecompensaation = async () => {
     try {
-      await this.props.kDamageCompensationStore.StoregetAllDamageCompansation();
+      await this.props.kDamageCompensationStore.StoregetAllDamageCompansation(129);
       this.setState({
         listdata: this.props.kDamageCompensationStore.getAllDamageCompensationStoreClass,
       });   
+
+    console.log('gelenListe=>',this.state.listdata)
+
     } catch (e) {
       console.log('ERROR', e);
     }
@@ -171,8 +174,8 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
     const columns = [
       {
         title: L('CompensationNumber') ,
-        dataIndex: 'tazminNo',
-        key: 'tazminNo',
+        dataIndex: 'tazminId',
+        key: 'tazminId',
         width: '5%',
         sorter: (a, b) => a.tazminNo - b.tazminNo,
         responsive: ['sm'] as Breakpoint[]
@@ -183,6 +186,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('CargoTrackingNumber'),
         dataIndex: 'takipNo',
         key: 'takipNo',
+        width: '15%',
         sorter: (a, b) => a.takipNo - b.takipNo,
         responsive: ['sm'] as Breakpoint[]
       },
@@ -191,6 +195,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         title: L('Web Siparis Kodu'),
         dataIndex: 'webSiparisKodu',
         key: 'webSiparisKodu',
+        width: '15%',
         sorter: (a, b) => a.webSiparisKodu - b.webSiparisKodu,
         responsive: ['sm'] as Breakpoint[]
       },
@@ -211,11 +216,12 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
       {
         title: L('CompensationStatus'),
-        dataIndex: 'tazminStatusu',
-        key: 'tazminStatusu',
+        dataIndex: 'gelecekTazminStatu',
+        key: 'gelecekTazminStatu',
         responsive: ['sm'] as Breakpoint[],
+        width: '20%',
         render: (text : string) =>
-           
+          
           text === "Taslak" ? (           
             <Tag style={{ padding: 5 }} color="#fa541c">
              {CompensationStatus.Taslak}   
@@ -230,8 +236,9 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                  {CompensationStatus.TazminOlusturuldu}
                </Tag>
               ) :
-              <Tag style={{ padding: '2px 5px' }} color="#faad14">     
-                 { CompensationStatus[text] }
+              <Tag style={{ padding: '2px 5px' }} color="#faad14"> 
+                    {text} 
+                 {/* { CompensationStatus[text] } */}
                </Tag>
  
             
@@ -276,8 +283,8 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
       {
         title: L('AddedUser'),
-        dataIndex: 'eklyenKullanici',
-        key: 'eklyenKullanici',
+        dataIndex: 'ekleyenKullanici',
+        key: 'ekleyenKullanici',
         
         responsive: ['sm'] as Breakpoint[]
       },
@@ -287,15 +294,12 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
         key: 'islemler',
         render: (text: string, item: any) => (
           <div>
-                                         
-           { console.log('text',item) }
+                                                   
             <Dropdown
 
               trigger={['click']}
               overlay=
-              {       
-                
-                
+              {            
                 <Menu>
                   {  item.btnDuzenle ?
                     <Menu.Item>
@@ -308,6 +312,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
                     <Menu.Item>
                     <Link to={{ pathname: `/newindex/deg/${item.tazminNo}` }}>{L('DamageCompensationEvalution')}</Link>
                   </Menu.Item> :''
+                    
                   }
                 
                   {

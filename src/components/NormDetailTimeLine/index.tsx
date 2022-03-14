@@ -8,7 +8,7 @@ import { L } from '../../lib/abpUtility';
 //import Status from '../../services/kNormDetail/dto/status';
 import NormStatus from '../../services/kNorm/dto/normStatus';
 import TalepDurumu from '../../services/kNorm/dto/talepDurumu';
-import { Col, Descriptions, Modal, Row, Table, Tag, Tooltip } from 'antd';
+import { Col, Descriptions, Modal, Row, Spin, Table, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, StopOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
@@ -18,7 +18,7 @@ import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, personCount, normCount, normShortfall, cargoDetail }) => {
 
 
-   const [spin, setSpin] = useState(true)
+   const [spin, setSpin] = useState(false)
    console.log(spin)
   console.log(setSpin)
   for (let index = 0; index < groupData.length; index++) {
@@ -60,29 +60,40 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, p
   ];
 
 
-// for (let index = 0; index < cargoDetail.length; index++) {
- 
-//   var incomingMonthOne = cargoDetail[0].incomingMonthOne;
-//   var incomingMonthOneAverage = cargoDetail[0].incomingMonthOneAverage;
+  console.log('cargoDetail=>',cargoDetail)
+if(cargoDetail !==undefined)
+{
 
-//   var incomingMonthTwo = cargoDetail[0].incomingMonthTwo;
-//   var incomingMonthTwoAverage = cargoDetail[0].incomingMonthTwoAverage;
+    
 
-//   var incomingMonthThree = cargoDetail[0].incomingMonthThree;
-//   var incomingMonthThreeAverage = cargoDetail[0].incomingMonthThreeAverage;
+    var incomingMonthOne = cargoDetail.incomingMonthOne;
+    var incomingMonthOneAverage = cargoDetail.incomingMonthOneAverage;
+  
+    var incomingMonthTwo = cargoDetail.incomingMonthTwo;
+    var incomingMonthTwoAverage = cargoDetail.incomingMonthTwoAverage;
+  
+    var incomingMonthThree = cargoDetail.incomingMonthThree;
+    var incomingMonthThreeAverage = cargoDetail.incomingMonthThreeAverage;
+  
+  
+    var outcomingMonthOne = cargoDetail.outcomingMonthOne;
+    var outcomingMonthOneAverage = cargoDetail.outcomingMonthOneAverage;
+  
+  
+    var outcomingMonthTwo = cargoDetail.outcomingMonthTwo;
+    var outcomingMonthTwoAverage = cargoDetail.outcomingMonthTwoAverage;
+  
+    var outcomingMonthThree = cargoDetail.outcomingMonthThree;
+    var outcomingMonthThreeAverage = cargoDetail.outcomingMonthThreeAverage;
+     
+  
 
 
-//   var outcomingMonthOne = cargoDetail[0].outcomingMonthOne;
-//   var outcomingMonthOneAverage = cargoDetail[0].outcomingMonthOneAverage;
 
 
-//   var outcomingMonthTwo = cargoDetail[0].outcomingMonthTwo;
-//   var outcomingMonthTwoAverage = cargoDetail[0].outcomingMonthTwoAverage;
+}
 
-//   var outcomingMonthThree = cargoDetail[0].outcomingMonthThree;
-//   var outcomingMonthThreeAverage = cargoDetail[0].outcomingMonthThreeAverage;
 
-// }
 
 
 
@@ -151,11 +162,16 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, p
           </Row>
 
 
-
-
-          {/* <Spin spinning={spin}>
-            <Row>
-              <Descriptions title="Son3aygunlukgelenortalamakargosayisi" bordered>
+          <Spin spinning={spin}>
+            <Row >
+              
+              <Col  xs={{ span: 6, offset: 9 }}
+                sm={{ span: 6, offset: 9 }}
+                md={{ span: 6, offset: 9 }}
+                lg={{ span: 6, offset: 9 }}
+                xl={{ span: 6, offset: 9 }}
+                xxl={{ span: 6, offset: 9 }}>
+              <Descriptions title="Son 3 Ay Gelen Ortalama" bordered>
                 <Descriptions.Item >{incomingMonthOne}</Descriptions.Item>
                 <Descriptions.Item >{incomingMonthTwo}</Descriptions.Item>
                 <Descriptions.Item >{incomingMonthThree}</Descriptions.Item>
@@ -163,7 +179,16 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, p
                 <Descriptions.Item >{incomingMonthTwoAverage}</Descriptions.Item>
                 <Descriptions.Item >{incomingMonthThreeAverage}</Descriptions.Item>
               </Descriptions>
-              <Descriptions title="Son3aygunlukgidennortalamakargosayisi" bordered>
+
+              </Col>
+              <Col
+               xs={{ span: 6, offset: 1 }}
+               sm={{ span: 6, offset: 1 }}
+               md={{ span: 6, offset: 1 }}
+               lg={{ span: 6, offset: 1 }}
+               xl={{ span: 6, offset: 1 }}
+               xxl={{ span: 6, offset: 1 }}>
+              <Descriptions title="Son 3 Ay Giden Ortalama" bordered>
                 <Descriptions.Item >{outcomingMonthOne}</Descriptions.Item>
                 <Descriptions.Item >{outcomingMonthTwo}</Descriptions.Item>
                 <Descriptions.Item >{outcomingMonthThree}</Descriptions.Item>
@@ -171,9 +196,11 @@ const NormDetailTimeLine = ({ visible, onCancel, title, data, groupData, norm, p
                 <Descriptions.Item >{outcomingMonthTwoAverage}</Descriptions.Item>
                 <Descriptions.Item >{outcomingMonthThreeAverage}</Descriptions.Item>
               </Descriptions>
+              </Col>
+             
             </Row>
 
-          </Spin> */}
+          </Spin>
 
 
 

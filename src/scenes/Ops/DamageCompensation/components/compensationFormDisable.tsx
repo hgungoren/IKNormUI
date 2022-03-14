@@ -380,7 +380,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
                                     <Form.Item label={L('Surec Sahibi Bolge')} name="surec_Sahibi_Birim_Bolge"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Select disabled={this.props.SurecSahiniBolgeVisable} onChange={  this.props.processOwnerRegionFunc}
+                                        <Select  onChange={  this.props.processOwnerRegionFunc}
                                             className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             {this.props.SurecSahiniBolgeListe}
                                         </Select>

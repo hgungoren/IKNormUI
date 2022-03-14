@@ -315,9 +315,11 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
     await this.props.kNormDetailStore.getDetails(id);
 
 
-    this.mergeArrayTwo(this.props.kNormStore.editKNorm.pozisyon)
+    await this.props.kSubeNormStore.StoreGetComeOutCargo('3120000100000000297')
 
+    this.mergeArrayTwo(this.props.kNormStore.editKNorm.pozisyon)
     this.setState({ detaillModalVisible: !this.state.detaillModalVisible });
+
   }
 
   openNotificationWithIcon = (type) => {
@@ -392,9 +394,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
   mergeArrayTwo = async (poz: string) => {
 
 
-
-    //console.log('this.state.groupEmployee',this.state.groupEmployee.find(x => x === poz))
-
     const asArray = Object.entries(this.state.groupEmployee);
     const Sonuc = asArray.filter(([key, value]) => key === poz);
 
@@ -422,9 +421,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
       const element = titles[index];
       stringTitleList.push(element.adi);
     }
-
-
-    console.log("Array", stringTitleList);
 
     let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
       id: i,
@@ -465,8 +461,6 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
     this.setState({ groupData: groupData });
   };
-
-
 
 
 
@@ -1009,7 +1003,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
           personCount={0}
           normCount={0}
           normShortfall={0}
-          cargoDetail={null}
+          cargoDetail={this.props.kSubeNormStore.kkargo}
         />
       </React.Fragment>
     );

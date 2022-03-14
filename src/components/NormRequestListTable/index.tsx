@@ -26,6 +26,8 @@ import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import DateCart from '../DateCart';
 import KPersonelStore from '../../stores/kPersonelStore';
 import KSubeNormStore from '../../stores/kSubeNormStore';
+import InkaStore from '../../stores/inkaStore';
+import JobStore from '../../stores/jobStore';
 
 
 export interface INormRequestListTableState {
@@ -51,6 +53,7 @@ export interface INormRequestListTableState {
     pozisyon: string;
     subeadi: string;
     cargodetail: any;
+
 }
 
 
@@ -71,6 +74,8 @@ interface INormRequestListTableProps {
     authenticationStore?: AuthenticationStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
+    inkaStore?: InkaStore;
+    jobStore?: JobStore;
 
 
 }
@@ -79,6 +84,9 @@ interface INormRequestListTableProps {
 const { confirm } = Modal;
 const Search = Input.Search;
 
+
+@inject(Stores.JobStore)
+@inject(Stores.InkaStore)
 @inject(Stores.KNormStore)
 @inject(Stores.AccountStore)
 @inject(Stores.SessionStore)
@@ -217,7 +225,9 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
     }
 
     async setAllEmployeesGroupBy() {
-        let groupEmployee = this.props.kPersonelStore.kAllPersonels.items.reduce(
+    
+
+        let groupEmployee = this.props.kPersonelStore.kAllPersonels &&  this.props.kPersonelStore.kAllPersonels.items.reduce(
             (result, currentValue) => {
                 (result[currentValue['gorevi']] = result[currentValue['gorevi']] || []).push(currentValue);
                 return result;
@@ -227,7 +237,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         this.setState({ groupEmployee });
 
-
+      
     }
 
     async getAllEmployees() {
@@ -242,7 +252,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     async getCargoDetail(id: string) {
 
-        await this.props.kSubeNormStore.StoreGetComeOutCargo(id); 
+        await this.props.kSubeNormStore.StoreGetComeOutCargo(id);
         this.setState({ cargodetail: this.props.kSubeNormStore.kkargo })
 
     }
@@ -250,7 +260,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
 
     mergeArray = async () => {
-        console.log('girdi')
+
 
         await this.getAllEmployeesForGroupBy();
         await this.getAllSubeNormForGroupBy().then(() => {
@@ -258,7 +268,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         });
         await this.setAllEmployeesGroupBy();
 
-   
+
 
         let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
             id: i,
@@ -278,19 +288,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         let names = result.map((x) => x.gorev);
 
         let set;
-
         set = new Set(names);
-        console.log('result=>',result) 
-        if(result[0].gorev.includes('Bölge')){
-             set = new Set(names);
-        }else{
-             set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
-        }
-
-
-
-
-
         let groupData = [...set].map((x, i) => {
             let gorev = x;
             let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
@@ -307,8 +305,100 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         });
 
         this.setState({ groupData: groupData });
-
+         
     };
+
+
+    mergeArrayTwo = async (poz: string) => {
+
+        await this.getAllEmployeesForGroupBy();
+        await this.getAllSubeNormForGroupBy().then(() => {
+            this.setAllSubeNormGroupBy()
+        });
+        await this.setAllEmployeesGroupBy();
+        console.log('his.state.groupEmployee',this.state.groupEmployee)
+
+        const asArray = Object.entries(this.state.groupEmployee);
+     
+         console.log('asArray',asArray)
+
+        const Sonuc = asArray.filter(([key, value]) => key === poz);
+
+        const doubled = Array(Sonuc.map((x) => x[1]));
+
+        var lastArray = doubled.map(function (item) {
+            return item[0];
+        });
+
+        let sicilNo = "";
+        lastArray.forEach(myFunction);
+        function myFunction(item) {
+            sicilNo = item[0].sicilNo;
+        }
+
+
+        await this.props.inkaStore?.getInkaEmployeeByPersonelNo(sicilNo);
+        var birimObjId = this.props.inkaStore?.inkaUserByPersonelNo.birimObjId
+        await this.props.jobStore?.getAllPositionForUnit(birimObjId !== undefined ? birimObjId : "")
+        var titles = this.props.jobStore?.jobNames
+        var stringTitleList = new Array("");
+        var titlesArray;
+        if(titles !== undefined){
+            titlesArray = titles
+        }
+        
+
+        for (let index = 0; index < titlesArray.length; index++) {
+            const element = titlesArray[index];
+            stringTitleList.push(element.adi);
+        }
+
+
+
+        let employees = Object.keys(this.state.groupEmployee).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: [...this.state.groupEmployee[y]].length,
+            normCount: 0,
+        }));
+
+
+        let norms = Object.keys(this.state.groupNorm).map((y, i) => ({
+            id: i,
+            gorev: y,
+            employeeCount: 0,
+            normCount: [...this.state.groupNorm[y]].length,
+        }));
+
+
+        let result = [...employees, ...norms];
+        let names = result.map((x) => x.gorev);
+
+        let set = names.filter(name => stringTitleList.includes(name));
+
+
+        let groupData = [...set].map((x, i) => {
+            let gorev = x;
+            let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
+            let norm = norms.find((x) => x.gorev === gorev)?.normCount;
+
+
+            return Object.assign({
+                id: i,
+                gorev: x,
+                employeeCount: employee !== undefined ? employee : 0,
+                nomrCount: norm !== undefined ? norm : 0,
+                norm: (norm !== undefined ? norm : 0) - (employee !== undefined ? employee : 0),
+            });
+        });
+
+        this.setState({ groupData: groupData });
+    };
+
+
+
+
+
 
     async componentDidMount() {
         if (this.props.isModal) {
@@ -340,10 +430,10 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         await this.getAllNormDetails();
 
-        //await this.getAllEmployeesForGroupBy();
-        //await this.getAllSubeNormForGroupBy();
-        //await this.setAllEmployeesGroupBy();
-        //await this.setAllSubeNormGroupBy();
+        await this.getAllEmployeesForGroupBy();
+        await this.getAllSubeNormForGroupBy();
+        await this.setAllEmployeesGroupBy();
+        await this.setAllSubeNormGroupBy();
         //await this.mergeArray();
 
 
@@ -362,7 +452,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
     async detailModalOpen(id: number, name: string, subeObjId: number, pozisyon: string, subeadi: string) {
 
-
+        await this.props.kNormStore.getById({ id: id });
         await this.props.kNormDetailStore.getDetails(id);
         let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
         this.setState({ getAllKNormOutput: norm })
@@ -373,9 +463,12 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         this.setState({ pozisyon: pozisyon })
         this.setState({ subeadi: subeadi })
 
-        this.getCargoDetail(tt);
-        this.mergeArray();
-
+      // this.mergeArray();
+       // this.getCargoDetail(tt);
+        this. mergeArrayTwo(this.props.kNormStore.editKNorm.pozisyon)
+      
+      
+      
     }
 
     async normRejectDescriptionModalOpen(id: number) {
@@ -631,6 +724,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
                         </Col>
                     </Row>
                 </Card>
+                
                 <NormDetailTimeLine
                     data={kNormAllDetails}
                     title={subeOrBolgeAdi}

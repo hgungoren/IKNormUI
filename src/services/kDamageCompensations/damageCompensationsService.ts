@@ -5,6 +5,8 @@ import { FileDamage } from './dto/fileDamage';
 import { GetCariListDamage } from './dto/getCariListDamage';
 import { CreateDamageInput } from './dto/createDamageInput';
 import { ViewClass } from './dto/viewClass';
+
+import { GetEvaBy } from './dto/getEvaBy';
 import { GetCreateDamageInput } from './dto/GetCreateDamageInput';
 import { UpdateDamageCompensationClass } from './dto/updateDamageCompensation';
 import { FilterDamageCompensationDto } from './dto/filterDamageCompensationDto';
@@ -60,10 +62,14 @@ class KDamageCompensationService {
     return result;
   }
 
-  public async getAllDamageCompensationService() {
-    let result = await http.get('iknorm/DamageCompensation/GetAllDamageCompensation');
-    return result.data.result;
+
+  //hasar tazmin listesi kullanıcıya gore
+  public async getAllDamageCompensationService(id: number) {
+    let result = await http.get('/kdamage/GetDamageList?id=' + id + '');
+    return result.data;
   }
+
+
 
   public async getDamageComppensationByIdService(
     entityDto: EntityDto
@@ -225,6 +231,21 @@ class KDamageCompensationService {
     let result = await http.delete('/iknorm/OpsInterruption/Delete', { params: entityDto });
     return result.data;
   }
+
+
+ ///eva getirme 
+ public async getEvaViewByIdService(entityDto: EntityDto): Promise<GetEvaBy> {
+  let result = await http.get('iknorm/DamageCompensationEvalutaion/GetById', {
+    params: entityDto,
+  });
+  return result.data.result;
 }
+
+
+}
+
+
+
+
 
 export default new KDamageCompensationService();

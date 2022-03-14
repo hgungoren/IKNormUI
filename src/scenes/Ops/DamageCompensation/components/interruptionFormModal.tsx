@@ -1,4 +1,4 @@
-import { Col, DatePicker, Form, FormInstance, Input, Modal, notification, Row, Select, Spin, Tabs } from 'antd';
+import { Checkbox, Col, DatePicker, Form, FormInstance, Input, Modal, notification, Row, Select, Spin, Tabs } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { L } from '../../../../lib/abpUtility';
@@ -28,6 +28,9 @@ export interface IState {
     tutar:string;
     calismabaslangictarihi:string;
     calismabitisctarihi:string;
+    kesintitxt:string;
+    kesintiorani:boolean;
+    check:boolean;
 }
 
 //const { Option } = Select;
@@ -52,7 +55,10 @@ class InterruptionFormModal extends React.Component<ICProps, IState> {
         kesintiyapilacakunvan:'',
         tutar:'0',
         calismabaslangictarihi:'',
-        calismabitisctarihi:''
+        calismabitisctarihi:'',
+        kesintitxt:'Evet',
+        kesintiorani:false,
+        check:true
     }; 
 
 
@@ -81,9 +87,7 @@ OnselectKesintiBirim =(e)=>{
 
     var calismabaslangictarihi=  moment(baslangictarihi).format(dateFormat);
      var calismabitistarihi=  moment(bitistarihi).format(dateFormat);
-      
-      
-          
+             
 
         this.setState({calismabaslangictarihi:calismabaslangictarihi})
         this.setState({calismabitisctarihi:calismabitistarihi})
@@ -180,7 +184,28 @@ onCreate=()=>{
   //#endregion
 
 
+  onSearch=(val)=>{
 
+  }
+
+  onChange = e => {
+  
+    if(e.target.checked == true){
+        this.setState({kesintiorani:false})
+        this.setState({kesintitxt:'Evet'})
+        this.setState({check:true})
+    }else{
+        this.setState({kesintitxt:'Hayır'})
+        this.setState({kesintiorani:true})
+        this.setState({check:false})
+        this.formRef.current?.setFieldsValue({
+            'kesintiorani':0,
+             'tutar':0
+        
+            });
+
+    }
+  };
 
 
 
@@ -234,17 +259,24 @@ onCreate=()=>{
                                                 { required: true, message: L('MissingInputEmpty') },
                                             ]}
                                         >
-                                              <Select                                                           
+                                              <Select          
+                                                              filterOption={(input, option) =>
+                                                                (option?.children &&
+                                                                  option?.children?.toString().toLocaleUpperCase().indexOf(input.toLocaleUpperCase()) >=
+                                                                    0) ||
+                                                                option?.props.value.toString().toLocaleUpperCase().indexOf(input.toLocaleUpperCase()) >= 0
+                                                              }
+
                                                                 showSearch
                                                                 placeholder={L('PleaseSelect')}
                                                                 notFoundContent={this.state.selectNotFound ? <Spin size="small" /> : null}
                                                                 showArrow={true}
-                                                                filterOption={false}
+                                                                //filterOption={true}
                                                          defaultActiveFirstOption={false}                                                                                 //onClick={this.OnSelectKesintiBirim}
-                                                         onSelect={this.OnselectKesintiBirim}                                
+                                                         onSelect={this.OnselectKesintiBirim}   
+                                                         onSearch={this.onSearch}                    
                                                                 >
-                                                              
-
+                                                 
                                                                 {
                                                                      this.props.kDamageCompensationStore.getSubeListDamage === undefined
                                                                      ? []
@@ -300,10 +332,17 @@ onCreate=()=>{
                                             />
                                         </Form.Item>
 
+                                        <Form.Item label={L('Kesinti Durumu')}  {...formItemLayout} name={'kesintidurumu'}  >
+                                        
+                                            <Checkbox onChange={this.onChange} checked={this.state.check}>{this.state.kesintitxt}</Checkbox>
+                                        </Form.Item>
+
+
+
                                         <Form.Item label={L('Kesinti Orani')}  {...formItemLayout} name={'kesintiorani'}
                                             rules={[{ required: true, message: L('MissingInputEmpty')},
-                                            { pattern:new RegExp("^[1-9][0-9]?$|^100$"), message: L('En Fazla 100 oran girilebilir')} ]}>
-                                            <Input type={'number'} maxLength={3}  onKeyUp={this.OnkeyupOran} />
+                                            { pattern:new RegExp("^[0-9][0-9]?$|^100$"), message: L('En Fazla 100 oran girilebilir')} ]}>
+                                            <Input  disabled={this.state.kesintiorani}  type={'number'} maxLength={3}  onKeyUp={this.OnkeyupOran} />
                                         </Form.Item>
 
                                         <Form.Item label={L('Kesinti Tutari')}  {...formItemLayout} name={'tutar'}
