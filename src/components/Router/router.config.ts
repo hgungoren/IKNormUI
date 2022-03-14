@@ -1,10 +1,6 @@
 /* eslint-disable */
 import LoadableComponent from './../Loadable/index';
-<<<<<<< HEAD
-import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined } from '@ant-design/icons';
-=======
 import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined, FileDoneOutlined, BarChartOutlined } from '@ant-design/icons';
->>>>>>> 79d72518a60b53c8400c53edc2f13c547c3ce356
 
 export const userRouter: any = [
   { path: '/user', name: 'User', title: 'User', component: LoadableComponent(() => import('../../components/Layout/UserLayout')), isLayout: true, showInMenu: false, },

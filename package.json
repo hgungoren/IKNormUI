@@ -76,6 +76,7 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "prettier": "^2.0.5",
+    "sass-loader": "^7.1.0",
     "ts-import-plugin": "^1.6.1",
     "typescript": "^3.7.2"
   },
