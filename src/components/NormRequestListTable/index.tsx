@@ -74,10 +74,13 @@ interface INormRequestListTableProps {
     authenticationStore?: AuthenticationStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
+<<<<<<< HEAD
     inkaStore?: InkaStore;
     jobStore?: JobStore;
 
 
+=======
+>>>>>>> 9e1d182b888d8564d93a931d091297ba598612b7
 }
 
 
@@ -92,7 +95,8 @@ const Search = Input.Search;
 @inject(Stores.SessionStore)
 @inject(Stores.KNormDetailStore)
 @inject(Stores.AuthenticationStore)
-
+@inject(Stores.InkaStore)
+@inject(Stores.JobStore)
 @inject(Stores.KPersonelStore)
 @inject(Stores.KSubeNormStore)
 
@@ -286,9 +290,11 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         let result = [...employees, ...norms];
         let names = result.map((x) => x.gorev);
+        console.log("Filtrenen Data => ",names);
 
         let set;
         set = new Set(names);
+<<<<<<< HEAD
         let groupData = [...set].map((x, i) => {
             let gorev = x;
             let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
@@ -334,6 +340,17 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         lastArray.forEach(myFunction);
         function myFunction(item) {
             sicilNo = item[0].sicilNo;
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 79d72518a60b53c8400c53edc2f13c547c3ce356
+        console.log('result=>',result) 
+        if(result[0].gorev.includes('Bölge')){
+             set = new Set(names);
+        }else{
+             set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
+>>>>>>> 9e1d182b888d8564d93a931d091297ba598612b7
         }
 
 
@@ -454,6 +471,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         await this.props.kNormStore.getById({ id: id });
         await this.props.kNormDetailStore.getDetails(id);
+        
         let norm = this.props.kNormStore[this.props.table].filter(x => x.id === id)[0];
         this.setState({ getAllKNormOutput: norm })
         this.setState({ detaillModalVisible: !this.state.detaillModalVisible, subeOrBolgeAdi: name });

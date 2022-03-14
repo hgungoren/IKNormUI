@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import { action, observable } from 'mobx';
 import { CreateOrUpdateIKPromotionInput } from '../services/promotion/dto/createOrUpdateIKPromotionInput';
+import { PromotionDto } from '../services/promotion/dto/promotionDto';
 import { PromotionFilterDto } from '../services/promotion/dto/promotionFilterDto';
 import { PromotionRequestTitleDto } from '../services/promotion/dto/promotionRequestTitleDto';
 import { PromotionStatuDto } from '../services/promotion/dto/promotionStatuDto';
@@ -15,6 +16,8 @@ class PromotionStore {
   @observable promotionStatus!: PromotionStatuDto;
   @observable promotionTitles!: PromotionTitleDto;
   @observable promotionRequestTitles!: PromotionRequestTitleDto;
+  @observable promotion!: PromotionDto;
+  @observable getPromotion!: PromotionDto;
 
   @action
   async create(createPromotionInput: CreateOrUpdateIKPromotionInput) {
@@ -68,9 +71,20 @@ class PromotionStore {
 
   @action
   public async getIKPromotionUseFilter(promotionUseFilterDto: PromotionUseFilterDto) {
-    console.log('DTO =>', promotionUseFilterDto);
     let result = await promotionService.getIKPromotionUseFilter(promotionUseFilterDto);
     this.filterPromotion = result;
+  }
+
+  @action
+  public async getIKPromotionHiearchyStatu(id: string) {
+    let result = await promotionService.getIKPromotionHiearchyStatu(id);
+    this.promotion = result;
+  }
+
+  @action
+  public async getIKPromotion(id: string) {
+    let result = await promotionService.getIKPromotion(id);
+    this.getPromotion = result;
   }
 }
 export default PromotionStore;

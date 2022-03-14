@@ -26,7 +26,12 @@ import Stores from '../../stores/storeIdentifier';
 import InkaStore from '../../stores/inkaStore';
 import UserStore from '../../stores/userStore';
 import PromotionStore from '../../stores/promotionStore';
+import DeparmentStore from '../../stores/departmentStore';
 import { PromotionType } from '../../services/promotion/dto/promotionType';
+import PromotionResultStatuHierarchy from './components/promotionResultStatuHierarchy';
+import { Link } from 'react-router-dom';
+import { PromotionFilterDto } from '../../services/promotion/dto/promotionFilterDto';
+import { PromotionStatu } from '../../services/promotion/dto/promotionStatu';
 
 const { Option } = Select;
 export interface Props {
@@ -34,6 +39,7 @@ export interface Props {
   inkaStore: InkaStore;
   userStore: UserStore;
   promotionStore: PromotionStore;
+  departmentStore: DeparmentStore;
 }
 
 export interface State {
@@ -48,10 +54,17 @@ export interface State {
   firstDateStatu: boolean;
   secondRequestDate: Date | undefined;
   secondDateStatu: boolean;
+  chiefObjId: string;
+  hierarchyData: {};
+  registrationNumber: string;
+  userDepartmentObjId: string;
+  departmentManagerObjId: string;
+  filterPromotion: PromotionFilterDto[];
 }
 
 const dateFormat = 'DD.MM.YYYY';
 
+@inject(Stores.DepartmentStore)
 @inject(Stores.SessionStore)
 @inject(Stores.InkaStore)
 @inject(Stores.UserStore)
@@ -72,6 +85,22 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     firstDateStatu: false,
     secondRequestDate: new Date(),
     secondDateStatu: false,
+    chiefObjId: '',
+    hierarchyData: {
+      departmentManager: '',
+      recruitment: '',
+      hrManager: '',
+    },
+    registrationNumber: '',
+    userDepartmentObjId: '',
+    departmentManagerObjId: '',
+    filterPromotion: [],
+  };
+
+  Modal = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible,
+    });
   };
 
   onChangeFirstRequestDate = async (date, dateString) => {
@@ -89,6 +118,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
     await this.getAllPromotionFilter();
     await this.getAllStatus();
     await this.getAllTitles();
+    await this.getFilterPromotion();
   };
 
   getInkaPersonelByTcNo = async (tcNo: string) => {
@@ -100,6 +130,12 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
             this.props.inkaStore.inkaUser && this.props.inkaStore.inkaUser.departmanObjId,
         });
       });
+    }
+  };
+
+  getInkaEmployeeByPersonelNo = async (registrationNumber: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByPersonelNo(registrationNumber);
     }
   };
 
@@ -161,6 +197,91 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   getAllRequestTitle = async (title: string) => {
     await this.props.promotionStore.getIKPromotionRequestTitles(title);
   };
+
+  getInkaPersonelByChief = async (chiefId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getInkaEmployeeByChief(chiefId).then(() => {
+        if (this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true) {
+          this.setState({
+            hierarchyData: {
+              ...this.state.hierarchyData,
+              departmentManager: ``,
+            },
+          });
+        } else {
+          this.setState({
+            hierarchyData: {
+              ...this.state.hierarchyData,
+              departmentManager: `${this.props.inkaStore.inkaUserByChief.departmanAdi} ${this.props.inkaStore.inkaUserByChief.iKGorev}`,
+            },
+          });
+        }
+      });
+    }
+  };
+
+  getInkaPersonelByTitleRecruitment = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            recruitment: `${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
+  };
+
+  getInkaPersonelByTitleHRManager = async (titleObjId: string) => {
+    if (this.props.inkaStore !== undefined) {
+      await this.props.inkaStore.getAllIKPersonelByTitle(titleObjId).then(() => {
+        this.setState({
+          hierarchyData: {
+            ...this.state.hierarchyData,
+            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].departmanAdi} ${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+          },
+        });
+      });
+    }
+  };
+
+  getFilterPromotion = async () => {
+    let departmentData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.None)
+    );
+    console.log('DepartmanData', departmentData);
+    let hireData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.Department)
+    );
+    console.log('HireData', hireData);
+    let hrManagerData = this.props.promotionStore.filterPromotion.filter(
+      (x) => Number(x.hierarchyStatu) === Number(PromotionStatu.IseAlim)
+    );
+    console.log('hrManagerData', hrManagerData);
+  };
+
+  async createOrUpdateModalOpen(id: string) {
+    await this.props.promotionStore.getIKPromotionHiearchyStatu(id);
+    await this.props.promotionStore.getIKPromotion(id).then(() => {
+      this.setState({
+        registrationNumber: this.props.promotionStore.getPromotion.registrationNumber,
+        userDepartmentObjId: this.props.promotionStore.getPromotion.departmentObjId,
+      });
+    });
+    await this.getInkaEmployeeByPersonelNo(await this.state.registrationNumber);
+    await this.props.departmentStore.getManagerObjId(this.state.userDepartmentObjId).then(() => {
+      this.setState({
+        departmentManagerObjId:
+          this.props.departmentStore.departmantDtoByManager[0].yoneticiObjId.toString(),
+      });
+    });
+    await this.getInkaPersonelByChief(this.state.departmentManagerObjId);
+    await this.getInkaPersonelByTitleRecruitment('5000900100000010228');
+    await this.getInkaPersonelByTitleHRManager('5000750100000000718');
+
+    this.Modal();
+  }
 
   public render() {
     function converToShortDate(dateString) {
@@ -233,7 +354,9 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
         width: 150,
         render: (text: string, item: any) => (
           <div>
-            {item.statu === 1 ? (
+            {item.statu === 0 ? (
+              <Tag color="warning">Onaya Gönderildi</Tag>
+            ) : '' || item.statu === 1 ? (
               <Tag color="warning">Onaya Gönderildi</Tag>
             ) : '' || item.statu === 2 ? (
               <Tag color="success">Onaylandı</Tag>
@@ -254,10 +377,20 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
               trigger={['click']}
               overlay={
                 <Menu>
-                  <Menu.Item>Değerlendir</Menu.Item>
-                  <Menu.Item>Detay</Menu.Item>
-                  {/* <Menu.Item onClick={() => this.createOrUpdateModalOpen({ id: item.id })}>{L('Edit')}</Menu.Item>
-                  <Menu.Item onClick={() => this.delete({ id: item.id })}>{L('Delete')}</Menu.Item> */}
+                  {item.statu === 2 || item.statu === 3 ? (
+                    ''
+                  ) : this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') ===
+                    true ? (
+                    <Menu.Item>
+                      <Link to={{ pathname: `/promotionconfirmotion/${item.id}` }}>
+                        Değerlendir
+                      </Link>
+                    </Menu.Item>
+                  ) : (
+                    ''
+                  )}
+
+                  <Menu.Item onClick={() => this.createOrUpdateModalOpen(item.id)}>Detay</Menu.Item>
                 </Menu>
               }
               placement="bottomLeft"
@@ -477,6 +610,19 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
             />
           </Col>
         </Row>
+        <PromotionResultStatuHierarchy
+          formRef={this.formRef}
+          visible={this.state.modalVisible}
+          modalType="View"
+          onCancel={() => {
+            this.setState({
+              modalVisible: false,
+            });
+            // this.formRef.current?.resetFields();
+          }}
+          hierarchyData={this.props.promotionStore.promotion}
+          hierarchyDataView={this.state.hierarchyData}
+        ></PromotionResultStatuHierarchy>
       </Card>
     );
   }

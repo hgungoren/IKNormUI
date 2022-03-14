@@ -21,5 +21,6 @@ export default class Stores {
   static InkaStore                           : string = 'inkaStore';
   static JobStore                            : string = 'jobStore';
   static PromotionStore                      : string = 'promotionStore';
+  static DepartmentStore                     : string = 'departmentStore';
 
 }

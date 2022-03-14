@@ -19,6 +19,7 @@ import OpsHierarchyStore        from './opsHierarchyStore';
 import InkaStore                from './inkaStore';
 import JobStore                 from './jobStore';
 import PromotionStore           from './promotionStore';
+import DepartmentStore          from './departmentStore';
 
 export default function initializeStores() {
   return {
@@ -42,6 +43,7 @@ export default function initializeStores() {
     inkaStore:                  new InkaStore(),
     jobStore:                   new JobStore(),
     promotionStore:             new PromotionStore(),
+    departmentStore:            new DepartmentStore(),
 
   };
 }

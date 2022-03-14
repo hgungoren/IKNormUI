@@ -69,8 +69,6 @@ export interface State {
 
 const { Option } = Select;
 
-// function onChange2(value) {}
-
 function onSearch2(val) {}
 
 @inject(Stores.UserStore)
@@ -251,8 +249,8 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         const dateOfStart = new Date(dateOfStartString);
         const hierarchyStatu =
           this.props.userStore.editUser.roleNames.includes('DEPARTMENTMANAGER') === true
-            ? PromotionStatu.IseAlim
-            : PromotionStatu.Department;
+            ? PromotionStatu.Department
+            : PromotionStatu.None;
         await this.props.promotionStore
           .create({
             registrationNumber: values.sicilNo.toString(),
@@ -270,7 +268,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
             requestDate: new Date(),
             dateOfStart: dateOfStart,
             lastPromotionDate: new Date(),
-            statu: PromotionType.OnayaGonderildi,
+            statu: PromotionType.None,
             hierarchyStatu: hierarchyStatu,
           })
           .then(() => {
