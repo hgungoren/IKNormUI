@@ -9,9 +9,9 @@ import { GetBolgeList } from '../services/kDamageCompensations/dto/getBolgeList'
 import { GetCariListDamage } from '../services/kDamageCompensations/dto/getCariListDamage';
 import { CreateDamageInput } from '../services/kDamageCompensations/dto/createDamageInput';
 import { ViewClass } from '../services/kDamageCompensations/dto/viewClass';
-import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/getCreateDamageInput';
+import { GetCreateDamageInput } from '../services/kDamageCompensations/dto/GetCreateDamageInput';
 import KDamageCompensationService from '../services/kDamageCompensations/damageCompensationsService';
-import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/getAllDamageCompensation';
+import { GetAllDamageCompensation } from '../services/kDamageCompensations/dto/GetAllDamageCompensation';
 import { UpdateDamageCompensationClass } from '../services/kDamageCompensations/dto/updateDamageCompensation';
 import { DamageCompensationEvalutainon } from '../services/kDamageCompensations/dto/damageCompensationEvalutaion';
 import { FilterDamageCompensationDto } from '../services/kDamageCompensations/dto/filterDamageCompensationDto';
