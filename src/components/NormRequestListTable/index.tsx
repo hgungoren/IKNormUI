@@ -291,7 +291,17 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         let set;
         set = new Set(names);
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 8ddcfa20fac0dd451e998eecbcdc2aa887979833
+>>>>>>> 14d0b2e8eb7a1541f14fc4cbe47e087aa76e50cb
         let groupData = [...set].map((x, i) => {
             let gorev = x;
             let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
@@ -337,6 +347,8 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         lastArray.forEach(myFunction);
         function myFunction(item) {
             sicilNo = item[0].sicilNo;
+<<<<<<< HEAD
+=======
 =======
 <<<<<<< HEAD
 
@@ -349,6 +361,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
         }else{
              set = new Set(names.filter(x=>x.includes(this.state.pozisyon)));
 >>>>>>> 9e1d182b888d8564d93a931d091297ba598612b7
+>>>>>>> 8ddcfa20fac0dd451e998eecbcdc2aa887979833
         }
 
 
