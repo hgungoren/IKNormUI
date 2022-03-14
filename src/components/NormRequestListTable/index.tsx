@@ -74,13 +74,10 @@ interface INormRequestListTableProps {
     authenticationStore?: AuthenticationStore;
     kPersonelStore: KPersonelStore;
     kSubeNormStore: KSubeNormStore;
-<<<<<<< HEAD
     inkaStore?: InkaStore;
     jobStore?: JobStore;
 
 
-=======
->>>>>>> 9e1d182b888d8564d93a931d091297ba598612b7
 }
 
 
@@ -294,9 +291,7 @@ class NormRequestListTable extends React.Component<INormRequestListTableProps, I
 
         let set;
         set = new Set(names);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
         let groupData = [...set].map((x, i) => {
             let gorev = x;
             let employee = employees.find((x) => x.gorev === gorev)?.employeeCount;
