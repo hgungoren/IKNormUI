@@ -17,7 +17,7 @@ function NormRequestListTableModal({ title, table, onCancel, kNormStore, subeObj
                 visible={visible}
                 onCancel={onCancel} >
                
-                <NormRequestListTable
+                <NormRequestListTable                
                     moment={moment}
                     bolgeId={bolgeId}
                     type={type}

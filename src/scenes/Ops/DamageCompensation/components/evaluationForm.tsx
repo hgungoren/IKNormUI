@@ -60,22 +60,33 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
   };
 
   componentDidMount = async () => {
-    await this.GetTalepEdilenTutar(this.props.urlId);
-    if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar != null) {
-      this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
-    }
-    else {
-      this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar })
-    }
+    await this.GetTalepEdilenTutar(this.props.urlId); 
+    setTimeout(() => {       
+       this.GetEva(this.props.urlId);
+    }, 500);
+
+    // if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar != null) {
+    //   this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
+    
+    // }
+    // else {
+    //   this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar })
+    // }
+  
   }
 
 
+   // son değerlendirme
+
+   //#endregion
 
 
   //#region TALEP EDILEN TUTAR CEKME
 
   GetTalepEdilenTutar = async (id: number) => {
     await this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id })
+
+     
   }
 
 
@@ -104,8 +115,6 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
         values.file = JSON.stringify(this.props.filesMultitable);
         values.surecSahibiBolge = this.props.processOwnerRegion;
 
-        console.log(JSON.stringify(this.props.filesMultitable));
-        console.log(this.props.processOwnerRegion);
 
         confirm({
           icon: <ExclamationCircleOutlined />,
@@ -114,6 +123,19 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           cancelText: L('Vazgec'),
           onOk: async () => {
             this.setState({ pageLoding: true })           
+<<<<<<< HEAD
+            await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
+            {
+                // UpdateDamageStatus               
+                   this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+                   tazminId:this.props.urlId,
+                   surecsahibibolge:this.props.processOwnerRegion,
+                   unvan:this.props.title,
+                   file:JSON.stringify(this.props.filesMultitable)
+                });
+            }
+            );
+=======
             // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
             // {
             //     // // UpdateDamageStatus               
@@ -128,6 +150,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
 
 
 
+>>>>>>> 9e1d182b888d8564d93a931d091297ba598612b7
             setTimeout(() => {
               window.location.href = '/hasartazminsorgulama'
             }, 5000);
@@ -167,18 +190,58 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
 
 
 
-
   //#region  REVIZEYE GONDER
 
   OnclickEvalutaionRevize=()=>{
-    alert('test')
     this.props.kDamageCompensationStore.StorePostRevize( this.props.urlId.toString());
   }
   //#endregion
 
 
 
+//#region  EVA GETİRME
+  GetEva= async(id: number)=>{
+ 
+      await this.props.kDamageCompensationStore.StoreGetEvaById({id:id})
+          
+    if( this.props.kDamageCompensationStore.eva  !== null )
+    {
+    
+            await this.props.kDamageCompensationStore.StoreGetEvaById({id:id}).then(()=>{        
+              this.formRefEvalution.current?.setFieldsValue({
+                ...this.props.kDamageCompensationStore.eva        
+              })    
 
+       })
+  
+       await this.props.kDamageCompensationStore.StoregetCompansationWhy(this.props.kDamageCompensationStore.eva.evaTazmin_Tipi);
+       var tt=this.props.kDamageCompensationStore.eva.evaTazmin_Nedeni
+      var tazminNedeni=  await this.props.kDamageCompensationStore.getEnumCompensationWhy.find((x)=>x.id.toString()===tt.toString())?.name
+       
+          
+         var tutar=this.props.kDamageCompensationStore.eva.evaOdenecek_Tutar
+         var farkli=this.props.kDamageCompensationStore.eva.evaTalep_Edilen_Tutar;
+    
+        if(tutar !== undefined || tutar !==null){
+         this.setState({Tutar:tutar})
+     
+        }else{
+          this.setState({Tutar:farkli})
+          
+        }
+    
+
+        this.formRefEvalution.current?.setFieldsValue({
+          'evaTazmin_Nedeni':tazminNedeni
+          });
+      
+
+    }
+    
+     
+     
+  }
+//#endregion 
 
   render() {
 
@@ -208,7 +271,6 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
         this.setState({ odenecekTutar: false })
     }
     //#endregion
-
 
 
     return (
@@ -242,14 +304,12 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
                   <Select
                     placeholder={L('Lutfen Seciniz')}
                   >
-
                     {
                       this.state.CompensationWhyList !== undefined &&
                       this.state.CompensationWhyList.map((item) => (
                         <Select.Option key={'id ' + item.id + ''} value={item.id}>
                           {item.name}
                         </Select.Option>
-
                       ))
                     }
 

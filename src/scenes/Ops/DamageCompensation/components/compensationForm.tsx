@@ -82,8 +82,11 @@ class CompensationForm extends React.Component<ICProps,IState>  {
         const { Option } = Select;
 
         const dateFormat = 'DD-MM-YYYY';
+        const todayFinishtwoFormat = 'YYY-MM-DD';
         var today = new Date();
+
         const todayFinish = moment(today).format(dateFormat);
+        const todayFinishtwo = moment(today).format(todayFinishtwoFormat);
         
 
 
@@ -168,7 +171,7 @@ const OnSelectVarisSube = async()=>{
         this.setState({ dataCariListKod: this.props.kDamageCompensationStore.getKcariFind })
       }
     }
-    console.log('test=>',this.state.dataCariListKod)
+ 
   }
 
 
@@ -928,7 +931,7 @@ const processDiffrentCarObjFunc = (string) => {
                                              defaultValue={moment(todayFinish, dateFormat)} 
                                              format={dateFormat}
                                              disabledDate={(d) =>
-                                                !d || d.isAfter(todayFinish) || d.isSameOrBefore('01-01-2000')
+                                                !d || d.isAfter(todayFinishtwo) || d.isSameOrBefore('01-01-2000')
                                             } />
 
 
@@ -1045,9 +1048,6 @@ const processDiffrentCarObjFunc = (string) => {
                                             <Input />
                                             </Form.Item>
                                         </Col>
-
-
-                                        
                                                       
                                 </Row>
 

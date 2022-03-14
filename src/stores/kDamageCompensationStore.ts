@@ -25,8 +25,8 @@ import { GetCountry } from '../services/kDamageCompensations/dto/getCountry';
 import { GetStreet } from '../services/kDamageCompensations/dto/getStreet';
 import { KcariFind } from '../services/kDamageCompensations/dto/kcariFind';
 import { GetWebSiparisKodu } from '../services/kDamageCompensations/dto/getWebSiparis';
-
 import { InterruptionModalCreate } from '../services/kDamageCompensations/dto/interruptionModalCreate';
+import { GetEvaBy } from '../services/kDamageCompensations/dto/getEvaBy';
 
 class KDamageCompensationStore {
   @observable kdamage!: PagedResultDto<CreateDamageInput>;
@@ -54,8 +54,8 @@ class KDamageCompensationStore {
   @observable getKcariFind!: KcariFind[];
   @observable getWebSiparisKod!: GetWebSiparisKodu;
   @observable interruptionList!: PagedResultDto<InterruptionModalCreate>;
-
   @observable websipariskontrol!: string;
+  @observable eva!: GetEvaBy;
 
   @action
   async create(createDamage: CreateDamageInput) {
@@ -112,10 +112,10 @@ class KDamageCompensationStore {
     return result.data;
   }
 
-  //tazmin listesi cekme
+ //hasar tazmin listesi kullanıcıya gore
   @action
-  async StoregetAllDamageCompansation() {
-    let result = await KDamageCompensationService.getAllDamageCompensationService();
+  async StoregetAllDamageCompansation(id: number) {
+    let result = await KDamageCompensationService.getAllDamageCompensationService(id);
     this.getAllDamageCompensationStoreClass = result;
     return result;
   }
@@ -139,7 +139,6 @@ class KDamageCompensationStore {
       filterDamageCompensationDto
     );
     this.getAllDamageCompensationStoreClass = result;
-    //console.log('STORE=>',result)
     return result;
   }
 
@@ -148,7 +147,6 @@ class KDamageCompensationStore {
   async createDamageCompensationEvalutaion(
     damageCompensationEvalutaion: DamageCompensationEvalutainon
   ) {
-    console.log('form=>', damageCompensationEvalutaion);
     await KDamageCompensationService.createDamageCompensationEvalutaion(
       damageCompensationEvalutaion
     );
@@ -315,6 +313,20 @@ class KDamageCompensationStore {
       (x: InterruptionModalCreate) => x.id !== entityDto.id
     );
   }
+
+
+ //get compensationEva View ById
+ @action
+ async StoreGetEvaById(entityDto: EntityDto) {
+   let result = await KDamageCompensationService.getEvaViewByIdService(
+     entityDto
+   );
+   this.eva = result;
+ 
+ }
+  
+
+
 }
 
 export default KDamageCompensationStore;
