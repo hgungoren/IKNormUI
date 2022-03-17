@@ -191,7 +191,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         } else {
           this.setState({
             hierarchyData: {
-              departmentManager: `${this.props.inkaStore.inkaUserByChief.departmanAdi} ${this.props.inkaStore.inkaUserByChief.iKGorev}`,
+              departmentManager: `${this.props.inkaStore.inkaUserByChief.iKGorev}`,
             },
           });
         }
@@ -218,7 +218,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         this.setState({
           hierarchyData: {
             ...this.state.hierarchyData,
-            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].departmanAdi} ${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
           },
         });
       });
@@ -326,8 +326,8 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
         birimObjId: this.state.birimObjId,
       });
       await this.getInkaPersonelByChief(this.state.chiefObjId);
-      await this.getInkaPersonelByTitleRecruitment('5000900100000010228');
-      await this.getInkaPersonelByTitleHRManager('5000750100000000718');
+      await this.getInkaPersonelByTitleRecruitment('5000900100000010483');
+      await this.getInkaPersonelByTitleHRManager('5000900100000010476');
       this.setState({
         firstPromotionJob: this.props.jobStore.jobPositions[0].durum,
       });
@@ -337,7 +337,6 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
       var data = value.split('_');
       if (Number(data[1]) > this.state.firstPromotionJob) {
         this.setState({ infoModalVisible: true });
-        console.log('1’den fazla kıdem atlamak istediğinizden emin misiniz?');
       }
     };
 

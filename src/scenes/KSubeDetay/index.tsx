@@ -1004,6 +1004,7 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
           normCount={0}
           normShortfall={0}
           cargoDetail={this.props.kSubeNormStore.kkargo}
+          cargoAvgVisible={true}
         />
       </React.Fragment>
     );

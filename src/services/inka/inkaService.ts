@@ -33,8 +33,6 @@ class InkaService {
     return result.data;
   }
 
-
-
   public async getInkaEmployeeByPersonelNo(personelNo: string): Promise<IKGenelPersonelListReponseDto> {
     let result = await http.get(
       'inka/getinkaemployeesbypersonelno/' + personelNo

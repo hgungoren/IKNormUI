@@ -122,7 +122,10 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           okText: L('Kaydet'),
           cancelText: L('Vazgec'),
           onOk: async () => {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
             this.setState({ pageLoding: true })
             await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => {
@@ -136,6 +139,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             }
             );
 
+<<<<<<< HEAD
 
             this.setState({ pageLoding: true })           
             // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
@@ -149,6 +153,8 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             //     // });
             // }
             // );
+=======
+>>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
             setTimeout(() => {
               window.location.href = '/hasartazminsorgulama'
