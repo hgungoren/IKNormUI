@@ -212,7 +212,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
           this.setState({
             hierarchyData: {
               ...this.state.hierarchyData,
-              departmentManager: `${this.props.inkaStore.inkaUserByChief.departmanAdi} ${this.props.inkaStore.inkaUserByChief.iKGorev}`,
+              departmentManager: `${this.props.inkaStore.inkaUserByChief.iKGorev}`,
             },
           });
         }
@@ -239,7 +239,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
         this.setState({
           hierarchyData: {
             ...this.state.hierarchyData,
-            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].departmanAdi} ${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
+            hrManager: `${this.props.inkaStore.inkaUsersByTitle[0].iKGorev}`,
           },
         });
       });
@@ -277,8 +277,8 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
       });
     });
     await this.getInkaPersonelByChief(this.state.departmentManagerObjId);
-    await this.getInkaPersonelByTitleRecruitment('5000900100000010228');
-    await this.getInkaPersonelByTitleHRManager('5000750100000000718');
+    await this.getInkaPersonelByTitleRecruitment('5000900100000010483');
+    await this.getInkaPersonelByTitleHRManager('5000900100000010476');
 
     this.Modal();
   }
