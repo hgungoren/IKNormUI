@@ -8,9 +8,9 @@ module.exports = {
       plugin: CracoAntDesignPlugin,
       options: {
         customizeTheme: {
-          '@primary-color' : '#03387b',
-          '@link-color'    : '#03387b',
-          '@back-color'    : '#03387b',
+          '@primary-color': '#03387b',
+          '@link-color': '#03387b',
+          '@back-color': '#03387b',
           '@skcancel-color': '#fa541c'
         },
       },
@@ -26,7 +26,8 @@ module.exports = {
 
       webpackConfig.plugins.push(
         process.env.NODE_ENV === 'production'
-          ? new CopyWebpackPlugin([
+          ? new CopyWebpackPlugin({
+            patterns: [
               {
                 from: 'node_modules/@aspnet/signalr/dist/browser/signalr.min.js',
               },
@@ -36,23 +37,25 @@ module.exports = {
               {
                 from: 'src/lib/abp.js',
               },
-            ])
-          : new CopyWebpackPlugin([
+            ]
+          })
+          : new CopyWebpackPlugin({
+            patterns: [
               {
                 from: 'node_modules/@aspnet/signalr/dist/browser/signalr.min.js',
               },
               {
                 from: 'node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js',
-                to:'dist/abp.signalr-client.js'
+                to: 'dist/abp.signalr-client.js'
               },
               {
                 from: 'src/lib/abp.js',
               },
-            ])
+            ]
+          })
       );
 
       return webpackConfig;
     },
   },
 };
- 
