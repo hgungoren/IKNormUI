@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { action, observable } from 'mobx';
 
 import { CreateOrUpdateUserInput } from '../services/user/dto/createOrUpdateUserInput';
@@ -13,18 +14,19 @@ class UserStore {
   @observable users!: PagedResultDto<GetUserOutput>;
   @observable editUser!: CreateOrUpdateUserInput;
   @observable roles: GetRoles[] = [];
+  @observable getUsersById!: GetUserOutput;
 
   @action
-  async create(createUserInput: CreateOrUpdateUserInput) { 
+  async create(createUserInput: CreateOrUpdateUserInput) {
     let result = await userService.create(createUserInput);
-    this.users.items.push(result); 
+    this.users.items.push(result);
   }
 
   @action
   async update(updateUserInput: UpdateUserInput) {
-    console.log('store girdi')
-    let result = await userService.update(updateUserInput);   
-    
+    console.log('store girdi');
+    let result = await userService.update(updateUserInput);
+
     this.users.items = this.users.items.map((x: GetUserOutput) => {
       if (x.id === updateUserInput.id) x = result;
       return x;
@@ -59,10 +61,10 @@ class UserStore {
       surname: '',
       password: '',
       userName: '',
-      roleNames: [], 
+      roleNames: [],
       isActive: false,
-      emailAddress: '',   
-      confirm:''
+      emailAddress: '',
+      confirm: '',
     };
     this.roles = [];
   }
@@ -71,6 +73,11 @@ class UserStore {
   async getAll(pagedFilterAndSortedRequest: PagedUserResultRequestDto) {
     let result = await userService.getAll(pagedFilterAndSortedRequest);
     this.users = result;
+  }
+
+  public async getById(id: string) {
+    let result = await userService.getById(id);
+    this.getUsersById = result;
   }
 
   async changeLanguage(languageName: string) {

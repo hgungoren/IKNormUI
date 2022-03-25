@@ -40,10 +40,7 @@ class DamageCompensationList extends AppComponentBase<IProps, IState> {
 
 
   public render() {
-
-
-    console.log('test=>',this.props.listdata)
-
+ 
     const { Option } = Select;
     const columns = [
       {

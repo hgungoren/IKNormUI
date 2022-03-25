@@ -50,7 +50,7 @@ class KSubeNormService {
      
 //gelen giden kargo 
 public async GetComeOutCargo(id:string){
-  let result= await http.get('https://localhost:44373/kkargoGetById?id='+id+'');
+  let result= await http.get('/cargoAvg/'+id+'');
   return result.data
 }
 

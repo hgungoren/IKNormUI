@@ -12,7 +12,6 @@ import {
     Radio,
     Row,
     Select,
-    Space,
     Spin,
 
 } from 'antd';
@@ -38,6 +37,7 @@ export interface ICProps {
     urlId: number;
     processOwnerRegionFunc: (string) => void;
     filesMultitableFunc:([])=>void;
+    SurecSahiniBolgeVisable:boolean;
 }
 
 
@@ -58,7 +58,9 @@ export interface IState {
     VkInputrequired: boolean,
     KnowUnknownQuery: boolean,
     sistemInsertTime: string,
-    lblEvrakSeriNoAndIrsaliye: string,
+    lblEvrakSeriNoAndIrsaliye: string;  
+    tazminTalepTarihi: string;
+    tazminMusteriTipi
 }
 
 class CompensationForm extends React.Component<ICProps, IState>  {
@@ -86,8 +88,10 @@ class CompensationForm extends React.Component<ICProps, IState>  {
         VkInputrequired: true,
         KnowUnknownQuery: false,
         lblQuery: 'Kargo Takip No',
-        sistemInsertTime: '2022-01-01',
+        sistemInsertTime: '2000-01-01',
         lblEvrakSeriNoAndIrsaliye: 'Evrak Seri Sira No',
+        tazminTalepTarihi:'2000-01-01',
+        tazminMusteriTipi:''
     };
 
     tazminBilgileriGetir = async () => {
@@ -96,12 +100,23 @@ class CompensationForm extends React.Component<ICProps, IState>  {
             .StoregetDamageComppensationViewById({ id: this.props.urlId })
             .then(() => {
 
-                console.log('RadioQuery=>', this.props.kDamageCompensationStore.damageCompensationViewClass.durumu)
+                console.log('RadioQuery=>', this.props.kDamageCompensationStore.damageCompensationViewClass)
                 this.setState({ RadioQuery: this.props.kDamageCompensationStore.damageCompensationViewClass.durumu })
                 this.setState({ Ktno: this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo })
                 this.setState({ tazminStatu: this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu })
-            }).then(() => {
+                this.setState({ tazminTalepTarihi : this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Talep_Tarihi})
+                this.setState({ sistemInsertTime : this.props.kDamageCompensationStore.damageCompensationViewClass.sistem_InsertTime})
+                
+                if(this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi == 'AliciCari'){
+                    this.setState({tazminMusteriTipi : '2'})
+                }else if(this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi == 'GonderenCari'){
+                    this.setState({tazminMusteriTipi : '1'})
+                }else{
+                    this.setState({tazminMusteriTipi : '3'})
+                }
 
+              
+            }).then(() => {
                 this.setState({ isLoading: false });
                 this.formRef.current?.setFieldsValue({
                     ...this.props.kDamageCompensationStore.damageCompensationViewClass
@@ -290,18 +305,16 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                         <DatePicker
                                             disabled
                                             locale={locale}
-                                            disabledDate={(d) =>
-                                                !d || d.isAfter(todayFinish) || d.isSameOrBefore('2000-01-01')
-                                            }
+                                            
                                             format="YYYY-MM-DD"
-                                            defaultPickerValue={moment(todayFinish)}
-                                            placeholder={L('SelectDate')}
+                                            defaultPickerValue={moment(this.state.tazminTalepTarihi)}
+                                            placeholder={this.state.tazminTalepTarihi}
 
-                                        />
+                                        />                                      
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Tazmin Tipi')} name="Tazmin_Tipi"
+                                    <Form.Item label={L('Tazmin Tipi')} name="tazmin_Tipi"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             <Select.Option value="1">{L('Hasar')}</Select.Option>
@@ -314,9 +327,12 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    <Form.Item label={L('Tazmin Musterisi')} name="tazmin_Musteri_Tipi"
+                                    {console.log('tes=>',this.state.tazminMusteriTipi)}
+                                    <Form.Item label={L('Tazmin Musterisi')} name="Tazmin_Musteri_Tipi"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Radio.Group disabled defaultValue={this.state.RadioQuery}
+                                        <Radio.Group  disabled
+                                         value={this.state.tazminMusteriTipi}  
+                                        defaultValue={this.state.tazminMusteriTipi}
                                         >
                                             <Radio value="1">{L('Gonderen')}</Radio>
                                             <Radio value="2">{L('Alici')}</Radio>
@@ -325,7 +341,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Odenecek Musteri Tipi')} name="Odeme_Musteri_Tipi"
+                                    <Form.Item label={L('Odenecek Musteri Tipi')} name="odeme_Musteri_Tipi"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" allowClear placeholder={L('PleaseSelect')}
                                         //onChange={OnchangeOdeneekMusteriTipi} 
@@ -352,26 +368,29 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    <Form.Item label={L('Odeme Birimi Bolge')} name="Odeme_Birimi_Bolge"
+                                    <Form.Item label={L('Odeme Birimi Bolge')} name="odeme_Birimi_Bolge"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
                                         <Select disabled className="formInput" placeholder={L('PleaseSelect')} allowClear  >
                                             {this.props.OdemeBirimiBolgeListe}
                                         </Select>
                                     </Form.Item>
                                 </Col>
+
+                                            
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Surec Sahibi Bolge')} name="Surec_Sahibi_Birim_Bolge"
+                                    <Form.Item label={L('Surec Sahibi Bolge')} name="surec_Sahibi_Birim_Bolge"
                                         rules={[{ required: true, message: L('MissingInputEmpty') }]}>
-                                        <Select onChange={  this.props.processOwnerRegionFunc}
+                                        <Select  onChange={  this.props.processOwnerRegionFunc}
                                             className="formInput" placeholder={L('PleaseSelect')} allowClear>
                                             {this.props.SurecSahiniBolgeListe}
                                         </Select>
                                     </Form.Item>
                                 </Col>
+
                             </Row>
                             <Row>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} >
-                                    <Form.Item label={L('Talep Edilen Tutar')} name="Talep_Edilen_Tutar"
+                                    <Form.Item label={L('Talep Edilen Tutar')} name="talep_Edilen_Tutar"
                                         rules={[
                                             { required: true, message: L('MissingInputEmpty') },
                                             {
@@ -402,7 +421,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                     </Form.Item>
                                 </Col>
                                 <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 4 }} offset={1} >
-                                    <Form.Item label={L('Email')} name="Email"
+                                    <Form.Item label={L('Email')} name="email"
                                         rules={[
                                             { required: false, message: L('MissingInputEmpty') },
                                             { type: 'email', message: L('MissingInputEmail') }
@@ -431,7 +450,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                 </Col>
                             </Row>
                             <Row style={{ float: 'right' }}>
-                                <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
+                                {/* <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
                                     <Space style={{ width: '100%' }}>
                                         <Button
                                             disabled
@@ -443,7 +462,7 @@ class CompensationForm extends React.Component<ICProps, IState>  {
                                             {L('Kaydet')}
                                         </Button>
                                     </Space>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </Form>
                     </Spin>

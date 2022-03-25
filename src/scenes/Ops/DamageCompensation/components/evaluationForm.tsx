@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 
 import {
@@ -37,8 +38,8 @@ export interface ICProps {
   urlId: number
   UserNameSurname: any;
   processOwnerRegion: string;
-  filesMultitable:any;
-  title:any;
+  filesMultitable: any;
+  title: any;
 }
 
 
@@ -64,22 +65,33 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
   };
 
   componentDidMount = async () => {
-    await this.GetTalepEdilenTutar(this.props.urlId);
-    if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar != null) {
-      this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
-    }
-    else {
-      this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar })
-    }
+    await this.GetTalepEdilenTutar(this.props.urlId); 
+    setTimeout(() => {       
+       this.GetEva(this.props.urlId);
+    }, 500);
+
+    // if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar != null) {
+    //   this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
+    
+    // }
+    // else {
+    //   this.setState({ Tutar: this.props.kDamageCompensationStore.damageCompensationViewClass.talep_Edilen_Tutar })
+    // }
+  
   }
 
 
+   // son değerlendirme
+
+   //#endregion
 
 
   //#region TALEP EDILEN TUTAR CEKME
 
   GetTalepEdilenTutar = async (id: number) => {
     await this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id })
+
+     
   }
 
 
@@ -104,19 +116,18 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
         }
         values.tazminId = this.props.urlId;
         values.evaEkleyen_Kullanici = this.props.UserNameSurname
-        
-        values.file = JSON.stringify(this.props.filesMultitable);
-        values.surecSahibiBolge=this.props.processOwnerRegion;
 
-        console.log(JSON.stringify(this.props.filesMultitable));
-        console.log(this.props.processOwnerRegion);
-        
+        values.file = JSON.stringify(this.props.filesMultitable);
+        values.surecSahibiBolge = this.props.processOwnerRegion;
+
+
         confirm({
           icon: <ExclamationCircleOutlined />,
           content: 'Tazmin Degerlendirme Yapilacaktir.',
           okText: L('Kaydet'),
           cancelText: L('Vazgec'),
           onOk: async () => {
+<<<<<<< HEAD
             this.setState({ pageLoding: true })           
             // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
             // {
@@ -129,8 +140,41 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             //     });
             // }
             // );
+=======
+<<<<<<< HEAD
 
+=======
+>>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
+            this.setState({ pageLoding: true })
+            await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => {
+              // UpdateDamageStatus               
+              this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+                tazminId: this.props.urlId,
+                surecsahibibolge: this.props.processOwnerRegion,
+                unvan: this.props.title,
+                file: JSON.stringify(this.props.filesMultitable)
+              });
+            }
+            );
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
+
+<<<<<<< HEAD
+
+            this.setState({ pageLoding: true })           
+            // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
+            // {
+            //     // // UpdateDamageStatus               
+            //     //    this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+            //     //    tazminId:this.props.urlId,
+            //     //    surecsahibibolge:this.props.processOwnerRegion,
+            //     //    unvan:this.props.title,
+            //     //    file:JSON.stringify(this.props.filesMultitable)
+            //     // });
+            // }
+            // );
+=======
+>>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
             setTimeout(() => {
               window.location.href = '/hasartazminsorgulama'
@@ -171,7 +215,58 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
 
 
 
+  //#region  REVIZEYE GONDER
 
+  OnclickEvalutaionRevize=()=>{
+    this.props.kDamageCompensationStore.StorePostRevize( this.props.urlId.toString());
+  }
+  //#endregion
+
+
+
+//#region  EVA GETİRME
+  GetEva= async(id: number)=>{
+ 
+      await this.props.kDamageCompensationStore.StoreGetEvaById({id:id})
+          
+    if( this.props.kDamageCompensationStore.eva  !== null )
+    {
+    
+            await this.props.kDamageCompensationStore.StoreGetEvaById({id:id}).then(()=>{        
+              this.formRefEvalution.current?.setFieldsValue({
+                ...this.props.kDamageCompensationStore.eva        
+              })    
+
+       })
+  
+       await this.props.kDamageCompensationStore.StoregetCompansationWhy(this.props.kDamageCompensationStore.eva.evaTazmin_Tipi);
+       var tt=this.props.kDamageCompensationStore.eva.evaTazmin_Nedeni
+      var tazminNedeni=  await this.props.kDamageCompensationStore.getEnumCompensationWhy.find((x)=>x.id.toString()===tt.toString())?.name
+       
+          
+         var tutar=this.props.kDamageCompensationStore.eva.evaOdenecek_Tutar
+         var farkli=this.props.kDamageCompensationStore.eva.evaTalep_Edilen_Tutar;
+    
+        if(tutar !== undefined || tutar !==null){
+         this.setState({Tutar:tutar})
+     
+        }else{
+          this.setState({Tutar:farkli})
+          
+        }
+    
+
+        this.formRefEvalution.current?.setFieldsValue({
+          'evaTazmin_Nedeni':tazminNedeni
+          });
+      
+
+    }
+    
+     
+     
+  }
+//#endregion 
 
   render() {
 
@@ -201,7 +296,6 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
         this.setState({ odenecekTutar: false })
     }
     //#endregion
-
 
 
     return (
@@ -235,14 +329,12 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
                   <Select
                     placeholder={L('Lutfen Seciniz')}
                   >
-
                     {
                       this.state.CompensationWhyList !== undefined &&
                       this.state.CompensationWhyList.map((item) => (
                         <Select.Option key={'id ' + item.id + ''} value={item.id}>
                           {item.name}
                         </Select.Option>
-
                       ))
                     }
 
@@ -350,7 +442,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
                     onChange={OnchangeOdemeDurumu}
                   >
                     <Select.Option value="1">{L('Odenecek')}</Select.Option>
-                    <Select.Option value="2">{L('Odenmicek')}</Select.Option>
+                    <Select.Option value="2">{L('Odenmeyecek')}</Select.Option>
                     <Select.Option value="3">
                       {L('Farkli Bir Tutar Odenecek')}
                     </Select.Option>
@@ -379,18 +471,30 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             }
 
             <Row style={{ float: 'right' }}>
-              <Col span={8} xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 3 }} >
-                <Space style={{ width: '100%' }}>
+              <Space style={{ width: '100%' }}>
+                <Col xs={{ order: 12, offset: 1 }} sm={{ order: 12, offset: 1 }} md={{ order: 3, offset: 1 }} lg={{ order: 4, offset: 1 }} > 
+                    <Button
+                      type="primary"
+                      onClick={this.OnclickEvalutaionCreate}
+                      icon={<SendOutlined />}
+                      htmlType="submit"
+                    >
+                      {L('Gonder')}
+                    </Button>
+                </Col>
+                <Col xs={{ order: 12 }} sm={{ order: 12 }} md={{ order: 3 }} lg={{ order: 8 }} >
+
                   <Button
-                    type="primary"
-                    onClick={this.OnclickEvalutaionCreate}
+                    type="default"
+                    onClick={this.OnclickEvalutaionRevize}
                     icon={<SendOutlined />}
-                    htmlType="submit"
+                    htmlType="button"
                   >
-                    {L('Gonder')}
+                    {L('Revize')}
                   </Button>
-                </Space>
-              </Col>
+                </Col>
+              </Space>
+
             </Row>
           </Form>
         </Spin>

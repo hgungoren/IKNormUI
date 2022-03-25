@@ -334,10 +334,8 @@ kDamageCompensationEvalutaionCreate = () => {
                                       name="TazminNoDisable"
                                       label={
                                         <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin No</label>
-                                      }
-                                   
-                                    >
-                                      {console.log(this.props['match'].params['id'])}
+                                      } 
+                                    > 
                                       <Input value={this.props['match'].params['id']}  disabled  className="formInput"   />
                                </Form.Item>
                           </Col>     
@@ -348,8 +346,7 @@ kDamageCompensationEvalutaionCreate = () => {
                                           label={<label>Tanzim Statüsü</label>}
                                           labelCol={{ span: 10 }}
                                           wrapperCol={{ span: 16 }}
-                                        >
-                                  {console.log(this.state.tazminStatu)}
+                                        > 
                                   <Input disabled className="formInput"   
                                    value={this.state.tazminStatu}
                                   ></Input>
@@ -392,8 +389,7 @@ kDamageCompensationEvalutaionCreate = () => {
                                         { pattern: /^(?:\d*)$/, message: 'Sadece sayısal değerler girilebilir' }
                                       ]
                                     }               
-                                   name="ktno" >
-                                     {console.log(this.state.takipNo)}
+                                   name="ktno" > 
                                   <Input disabled
                                   className='formInput'
                                   value={this.state.takipNo}
@@ -651,8 +647,7 @@ kDamageCompensationEvalutaionCreate = () => {
                         label={
                           <label style={{ maxWidth: 150, minWidth: 150 }}>Tazmin Müşterisi</label>
                         }
-                      >
-                        {console.log(this.state.tazminMusteriTipi)}
+                      > 
                         <Radio.Group
                           disabled
                           value={this.state.tazminMusteriTipi}
@@ -1052,8 +1047,7 @@ kDamageCompensationEvalutaionCreate = () => {
     
                         label={
                           <label style={{ maxWidth: 155, minWidth: 155 }}>Talep Edilen Tutar</label>
-                        }>
-                           {console.log(this.state.evaTalepEdilenTutar)}
+                        }> 
                           <Input  className="formInput" disabled value={this.state.evaTalepEdilenTutar}
                           ></Input>
                         </Form.Item>

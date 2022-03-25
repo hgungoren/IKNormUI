@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { action, observable } from 'mobx';
 import { GetKSubeOutput } from '../services/ksube/dto/getKSubeOutput';
 import kSubeService from '../services/ksube/kSubeService';
@@ -6,14 +7,10 @@ import { PagedKSubeResultRequestDto } from '../services/ksube/dto/PagedKSubeResu
 import { EntityDto } from '../services/dto/entityDto';
 import { CreateOrUpdateKSubeInput } from '../services/ksube/dto/createOrUpdateKSubeInput';
 
-
-
 class KSubeStore {
   @observable kSubes!: PagedResultDto<GetKSubeOutput>;
   @observable editKSube!: CreateOrUpdateKSubeInput;
   @observable normCount!: number;
-
-
 
   @action
   async getAll(pagedFilterAndSortedRequest: PagedKSubeResultRequestDto) {
@@ -27,17 +24,11 @@ class KSubeStore {
     this.editKSube = result;
   }
 
-
   @action
   async getNormCount(id: string) {
     let result = await kSubeService.getNormCount(id);
     this.normCount = result;
   }
-
-
-
-
- 
 }
 
 export default KSubeStore;

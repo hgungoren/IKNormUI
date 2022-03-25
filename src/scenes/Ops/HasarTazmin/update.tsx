@@ -35,7 +35,7 @@ import TextArea from 'rc-textarea';
 import 'moment/locale/tr';
 import DamageHistory from './components/damageHistory';
 import FileBase64 from 'react-file-base64';
- 
+
 
 
 
@@ -45,84 +45,83 @@ export interface IProps {
 }
 
 export interface IState {
-  urlid:number;
-  tazminStatu:string;
-  takipNo:string;
-  tazminMusteriTipi:string;
-  loading:boolean;
-  evaTalepEdilenTutar:string;
+  urlid: number;
+  tazminStatu: string;
+  takipNo: string;
+  tazminMusteriTipi: string;
+  loading: boolean;
+  evaTalepEdilenTutar: string;
 
   filesTazminDilekcesi: any;
-  filesFatura:  any;
-  filesSevkirsaliye:  any;
-  filesTcVkno:  any;
-  listDataHistroy:any;
+  filesFatura: any;
+  filesSevkirsaliye: any;
+  filesTcVkno: any;
+  listDataHistroy: any;
 }
- 
+
 @inject(Stores.KDamageCompensationStore)
 @observer
 class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   formRef = React.createRef<FormInstance>();
   formRefDeg = React.createRef<FormInstance>();
-   formFileRef = React.createRef<FormInstance>();
-  
-  
-  state = {
-  urlid:0,
-  tazminStatu:'',
-  takipNo:'',
-  tazminMusteriTipi:'',
-  loading:true,
-  evaTalepEdilenTutar:'',
+  formFileRef = React.createRef<FormInstance>();
 
-  filesTazminDilekcesi:[],
-  filesFatura:  [],
-  filesSevkirsaliye:  [],
-  filesTcVkno:[],
-  listDataHistroy:[] as any
+
+  state = {
+    urlid: 0,
+    tazminStatu: '',
+    takipNo: '',
+    tazminMusteriTipi: '',
+    loading: true,
+    evaTalepEdilenTutar: '',
+
+    filesTazminDilekcesi: [],
+    filesFatura: [],
+    filesSevkirsaliye: [],
+    filesTcVkno: [],
+    listDataHistroy: [] as any
   };
 
 
   //gelen url idden sayfayı yükleme
   getdamagePage = async (id: number) => {
-         
-    this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id }) 
 
-     setTimeout(() => {  
-    
-      this.setState({tazminStatu:this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu})
-      this.setState({takipNo:this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo})
-      this.setState({tazminMusteriTipi:this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi})
+    this.props.kDamageCompensationStore.StoregetDamageComppensationViewById({ id: id })
+
+    setTimeout(() => {
+
+      this.setState({ tazminStatu: this.props.kDamageCompensationStore.damageCompensationViewClass.tazminStatu })
+      this.setState({ takipNo: this.props.kDamageCompensationStore.damageCompensationViewClass.takipNo })
+      this.setState({ tazminMusteriTipi: this.props.kDamageCompensationStore.damageCompensationViewClass.tazmin_Musteri_Tipi })
       //this.setState({tazminMusteriTipi:'AliciCari'})
-      this.formRef.current?.setFieldsValue({               
-            ...this.props.kDamageCompensationStore.damageCompensationViewClass,
+      this.formRef.current?.setFieldsValue({
+        ...this.props.kDamageCompensationStore.damageCompensationViewClass,
       });
 
-  
-      this.setState({loading:false})
-    }, 2000)   
+
+      this.setState({ loading: false })
+    }, 2000)
   };
 
   //gelen url idden Eva sayfayı yükleme
   getdamagePageEva = async (id: number) => {
-   await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id })    
-      setTimeout(() => {   
-      
-            if(this.props.kDamageCompensationStore.damageCompensationViewClass !=null)
-            {
-                if(this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar =="0"){
-                  this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar})    
-                }else {
-                  this.setState({evaTalepEdilenTutar:this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar})    
-                }  
-                this.formRefDeg.current?.setFieldsValue({               
-                  ...this.props.kDamageCompensationStore.damageCompensationViewClass,
-            });
-         } 
-     
-       this.setState({loading:false})
-     }, 500)
+    await this.props.kDamageCompensationStore.StoregetDamageComppensationEvaViewById({ id: id })
+    setTimeout(() => {
+
+      if (this.props.kDamageCompensationStore.damageCompensationViewClass != null) {
+        if (this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar == "0") {
+          this.setState({ evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaTalep_Edilen_Tutar })
+        } else {
+          this.setState({ evaTalepEdilenTutar: this.props.kDamageCompensationStore.damageCompensationViewClass.evaOdenecek_Tutar })
+        }
+        this.formRefDeg.current?.setFieldsValue({
+          ...this.props.kDamageCompensationStore.damageCompensationViewClass,
+        });
+      }
+
+      this.setState({ loading: false })
+    }, 500)
 
 
   };
@@ -132,123 +131,103 @@ class DamageCompensation extends AppComponentBase<IProps, IState> {
 
   //Tanzim  dosya güncelleme Metodu
   kDamageCompensationUpdate = () => {
-      
 
-    this.setState({loading:true})
-    const form = this.formFileRef.current;            
-      form!.validateFields().then(async (values: any) => {
-       values.FileTazminDilekcesi = JSON.stringify(this.state.filesTazminDilekcesi )
-       values.FileFatura = JSON.stringify(this.state.filesFatura )
-       values.FileSevkirsaliye = JSON.stringify(this.state.filesSevkirsaliye )
-       values.FileTcVkno = JSON.stringify(this.state.filesTcVkno )
-       values.TazminId=this.props['match'].params['id']
-        await this.props.kDamageCompensationStore.StoregetFileUpdateDamageCompansation(values) 
-        try {
-          await this.props.kDamageCompensationStore.StorePostUpdateFileAfter(this.props['match'].params['id'])
+    this.setState({ loading: true })
+    const form = this.formFileRef.current;
+    form!.validateFields().then(async (values: any) => {
+      values.FileTazminDilekcesi = JSON.stringify(this.state.filesTazminDilekcesi)
+      values.FileFatura = JSON.stringify(this.state.filesFatura)
+      values.FileSevkirsaliye = JSON.stringify(this.state.filesSevkirsaliye)
+      values.FileTcVkno = JSON.stringify(this.state.filesTcVkno)
+      values.TazminId = this.props['match'].params['id']
+      await this.props.kDamageCompensationStore.StoregetFileUpdateDamageCompansation(values)
+      try {
+        await this.props.kDamageCompensationStore.StorePostUpdateFileAfter(this.props['match'].params['id'])
 
-        } catch (error) {
-          console.log('error=>',error)
-        }
-        notification.open({
-          icon: <CheckCircleTwoTone style={{ color: 'red' }} />,
-          message: L('Information'),
-          description: L('FileUpdateOk'),
-        });
+      } catch (error) {
+        console.log('error=>', error)
+      }
+      notification.open({
+        icon: <CheckCircleTwoTone style={{ color: 'red' }} />,
+        message: L('Information'),
+        description: L('FileUpdateOk'),
+      });
 
 
-       this.setState({loading:false})
-   
+      this.setState({ loading: false })
+
     }).catch((err) => console.log(err))
   };
 
-
-
-
-
-
-
-
-
-async componentDidMount() {
-  this.getdamagePage(this.props['match'].params['id'])
-}
-
-
+  async componentDidMount() {
+    this.getdamagePage(this.props['match'].params['id'])
+  }
   public render() {
     const { TabPane } = Tabs
-    const oncahangeTab=(value)=>{
-       if(value =="2"){    
-       this.setState({loading:true})  
-       this.getdamagePageEva(this.props['match'].params['id'])
-       }
- }
-
-
-
-
-      // Callback~
-      const getFileTazminDilekcesi = (files) => {
-        if(files.type ==='' || files.type===undefined || files.type==='application/x-msdownload'){
-          notification.open({
-                          icon: <AlertOutlined style={{ color: 'red' }} />,
-                          message: 'Uyarı',
-                          description:L('MissingInputFile'),
-                        })
-        }
-        else
-        {this.setState({ filesTazminDilekcesi: files })}
-        
+    const oncahangeTab = (value) => {
+      if (value == "2") {
+        this.setState({ loading: true })
+        this.getdamagePageEva(this.props['match'].params['id'])
       }
- 
+    }
+    // Callback~
+    const getFileTazminDilekcesi = (files) => {
+      if (files.type === '' || files.type === undefined || files.type === 'application/x-msdownload') {
+        notification.open({
+          icon: <AlertOutlined style={{ color: 'red' }} />,
+          message: 'Uyarı',
+          description: L('MissingInputFile'),
+        })
+      }
+      else { this.setState({ filesTazminDilekcesi: files }) }
 
-
-
+    } 
     return (
       <>
         <React.Fragment>
-            
-        <Spin spinning={this.state.loading}>
 
-          <Card style={{ marginBottom: 20 }}>
-            <PageHeader
-              ghost={false}
-              onBack={() => window.history.back()}
-              title={
-                <Breadcrumb>
-                  <Breadcrumb.Item>
-                    {isGranted('items.dashboard.view') ? (
-                      <Link to="/dashboard">{L('Dashboard')}</Link>
-                    ) : (
-                      <Link to="/home">{L('Dashboard')}</Link>
-                    )}{' '}
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
-                  <Breadcrumb.Item>{L('DamageCompensationForm')}</Breadcrumb.Item>
-                </Breadcrumb>
-              }
-            ></PageHeader>
-          </Card>
+          <Spin spinning={this.state.loading}>
 
-          <Card>
-            <Tabs
-              defaultActiveKey="1"           
-              tabBarGutter={50}
-              // type="card"
-              tabPosition="top"
-              size="large"
-              onChange={oncahangeTab}
-        
-            >
-              <TabPane
-                tab={
-                  <span>
-                    <SwitcherOutlined />
-                    Tanzim Bilgileri
-                  </span>
+            <Card style={{ marginBottom: 20 }}>
+              <PageHeader
+                ghost={false}
+                onBack={() => window.history.back()}
+                title={
+                  <Breadcrumb>
+                    <Breadcrumb.Item>
+                      {isGranted('items.dashboard.view') ? (
+                        <Link to="/dashboard">{L('Dashboard')}</Link>
+                      ) : (
+                        <Link to="/home">{L('Dashboard')}</Link>
+                      )}{' '}
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item> {L('DamageCompensation')} </Breadcrumb.Item>
+                    <Breadcrumb.Item>{L('DamageCompensationForm')}</Breadcrumb.Item>
+                  </Breadcrumb>
                 }
-                key="1"
+              ></PageHeader>
+            </Card>
+
+            <Card>
+              <Tabs
+                defaultActiveKey="1"
+                tabBarGutter={50}
+                // type="card"
+                tabPosition="top"
+                size="large"
+                onChange={oncahangeTab}
+
               >
-               <Row>
+                <TabPane
+                  tab={
+                    <span>
+                      <SwitcherOutlined />
+                      Tanzim Bilgileri
+                    </span>
+                  }
+                  key="1"
+                >
+                  <Row>
                     <Col span={24}>
                       <Form>
                         <Row>
@@ -275,7 +254,6 @@ async componentDidMount() {
                               labelCol={{ span: 12 }}
                               wrapperCol={{ span: 16 }}
                             >
-                              {console.log(this.state.tazminStatu)}
                               <Input
                                 disabled
                                 className="formInput"
@@ -286,11 +264,11 @@ async componentDidMount() {
                         </Row>
                       </Form>
                     </Col>
-               </Row>
+                  </Row>
 
-               <Divider orientation="left">{L('Questioning')}</Divider>
+                  <Divider orientation="left">{L('Questioning')}</Divider>
 
-               <Row>
+                  <Row>
                     <Col span={24}>
                       <Form>
                         <Row>
@@ -314,7 +292,7 @@ async componentDidMount() {
                         <Row>
                           <Col offset={2}>
                             <Form.Item
-                              
+
                               name="ktno"
                             >
                               {console.log(this.state.takipNo)}
@@ -322,7 +300,7 @@ async componentDidMount() {
                                 disabled
                                 className="formInput"
                                 value={this.state.takipNo}
-                               
+
                               ></Input>
                             </Form.Item>
                           </Col>
@@ -337,22 +315,22 @@ async componentDidMount() {
                         </Row>
                       </Form>
                     </Col>
-               </Row>
+                  </Row>
 
 
-               <Divider orientation="left">{L('ShipmentInformation')}</Divider>
+                  <Divider orientation="left">{L('ShipmentInformation')}</Divider>
 
-                <Form
-                  ref={this.formRef}
-                  initialValues={{ remember: false }}
-                  autoComplete="off" >
-                  <Row>
+                  <Form
+                    ref={this.formRef}
+                    initialValues={{ remember: false }}
+                    autoComplete="off" >
+                    <Row>
                       <Col span={12}>
                         <Form.Item hidden name="takipNo">
                           <Input />
                         </Form.Item>
                         <Form.Item
-                         
+
                           name="sistem_InsertTime"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
@@ -388,7 +366,7 @@ async componentDidMount() {
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('SenderCode')}</label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -414,7 +392,7 @@ async componentDidMount() {
                           name="aliciUnvan"
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('BuyerTitle')}</label>}
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -431,15 +409,15 @@ async componentDidMount() {
                         </Form.Item>
 
                         <Form.Item hidden name="ilkGondericiSube_ObjId">
-                    
+
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item hidden name="varisSube_ObjId">
-                        
+
                         </Form.Item>
                         <Form.Item
-                          
+
                           name="varis_Sube_Unvan"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('ArrivalBranchName')}</label>
@@ -453,14 +431,14 @@ async componentDidMount() {
                     <Row>
                       <Col span={12}>
                         <Form.Item hidden name="birimi_ObjId">
-                  
+
                         </Form.Item>
                         <Form.Item
                           rules={rules.birimi}
                           name="birimi"
                           label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('CargoTyp')}</label>}
                         >
-                          <Input  className="formInput" disabled />
+                          <Input className="formInput" disabled />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -477,7 +455,7 @@ async componentDidMount() {
                             type="number"
                             min={1}
                             max={1000}
-                            
+
                           />
                         </Form.Item>
                       </Col>
@@ -487,7 +465,7 @@ async componentDidMount() {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-                    
+
                           name="tazmin_Talep_Tarihi"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
@@ -495,7 +473,7 @@ async componentDidMount() {
                             </label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -505,7 +483,7 @@ async componentDidMount() {
                             <label style={{ maxWidth: 150, minWidth: 150 }}>{L('CompensationType')}</label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -528,7 +506,7 @@ async componentDidMount() {
                       </Col>
                       <Col span={12}>
                         <Form.Item
-                        
+
                           name="odeme_Musteri_Tipi"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
@@ -536,7 +514,7 @@ async componentDidMount() {
                             </label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -553,7 +531,7 @@ async componentDidMount() {
                             disabled
                             className="formInput"
                             maxLength={11}
-                            
+
                           />
                         </Form.Item>
                       </Col>
@@ -576,15 +554,15 @@ async componentDidMount() {
                     <Row>
                       <Col span={12}>
                         <Form.Item
-                    
+
                           name="odeme_Birimi_Bolge"
                           label={
                             <label style={{ maxWidth: 150, minWidth: 150 }}>
-                             {L('PaymentUnitBranchs')}
+                              {L('PaymentUnitBranchs')}
                             </label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -599,7 +577,7 @@ async componentDidMount() {
                           <Input
                             disabled
                             className="formInput"
-                          
+
                           />
                         </Form.Item>
                       </Col>
@@ -646,42 +624,42 @@ async componentDidMount() {
                             </label>
                           }
                         >
-                          <Input disabled className="formInput"  />
+                          <Input disabled className="formInput" />
                         </Form.Item>
                       </Col>
                     </Row>
-                  <Divider orientation="left">{L('CompensationFiles')}</Divider>
+                    <Divider orientation="left">{L('CompensationFiles')}</Divider>
 
-                   {/* file formm */}
-                  <Form  ref={this.formFileRef}>                 
-                    <Row>
-                    <Col span={12}>
-                        <Form.Item
-                        name='FileTazminDilekcesi'
-                        label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('DamageFile')}</label>}
-                        >             
-                                <FileBase64  multiple={false}onDone={getFileTazminDilekcesi.bind(this)} /> 
-                        </Form.Item>
-                    </Col>                    
-                    </Row>              
-                  <Row style={{ float: 'right' }}>
-                    <Col span={12}>
-                      <Space style={{ width: '100%' }}>
-                        <Button type="primary"  icon={<SendOutlined />} onClick={this.kDamageCompensationUpdate}   htmlType="submit">
-                         {L('FileSave')}                    
-                        </Button>
-                      </Space>
-                    </Col>
-                  </Row>
+                    {/* file formm */}
+                    <Form ref={this.formFileRef}>
+                      <Row>
+                        <Col span={12}>
+                          <Form.Item
+                            name='FileTazminDilekcesi'
+                            label={<label style={{ maxWidth: 150, minWidth: 150 }}>{L('DamageFile')}</label>}
+                          >
+                            <FileBase64 multiple={false} onDone={getFileTazminDilekcesi.bind(this)} />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row style={{ float: 'right' }}>
+                        <Col span={12}>
+                          <Space style={{ width: '100%' }}>
+                            <Button type="primary" icon={<SendOutlined />} onClick={this.kDamageCompensationUpdate} htmlType="submit">
+                              {L('FileSave')}
+                            </Button>
+                          </Space>
+                        </Col>
+                      </Row>
+
+                    </Form>
 
                   </Form>
 
-                </Form>
-
-              </TabPane>
+                </TabPane>
 
 
-              <TabPane
+                <TabPane
                   tab={
                     <span>
                       <SwitcherOutlined />
@@ -734,7 +712,7 @@ async componentDidMount() {
                           name="evaKusurlu_Birim"
                           label={
                             <label style={{ maxWidth: 155, minWidth: 155 }}>
-                             {L('IsThereDefectiveUnit')}
+                              {L('IsThereDefectiveUnit')}
                             </label>
                           }
                         >
@@ -883,10 +861,10 @@ async componentDidMount() {
                   }
                   key="3"
                 >
-                  <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore}  listdata={this.state.listDataHistroy}/>
+                  <DamageHistory kDamageCompensationStore={this.props.kDamageCompensationStore} listdata={this.state.listDataHistroy} />
                 </TabPane>
-            </Tabs>
-          </Card>
+              </Tabs>
+            </Card>
           </Spin>
 
         </React.Fragment>

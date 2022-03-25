@@ -51,10 +51,21 @@ class KPersonelStore {
   }
 
   @action
+<<<<<<< HEAD
   public async getEtsHavalePersonel() {
     let result = await kPersonelService.getEtsHavalePersonel();
     this.getAllEtsDto = result;
   }
+=======
+  public async getByTcNo(tcNo: string) {
+    let result = await kPersonelService.getByTcNo(tcNo);
+    this.kPersonel = result;
+  }
+
+
+
+
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
 }
 
 export default KPersonelStore;
