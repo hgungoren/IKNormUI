@@ -425,11 +425,11 @@ class KBolge extends AppComponentBase<Props, State> {
 
 
 
-            { title: L('table.area.name'), dataIndex: 'adi', key: 'adi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.type'), dataIndex: 'tip', key: 'tip', width: 150, render: (text: string) => <div>{BolgeTip[text]}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi', width: 150, render: (text: string) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.normcount'), dataIndex: 'normSayisi', key: 'normSayisi', width: 150, render: (text: number) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
-            { title: L('table.area.normgap'), dataIndex: 'normEksigi', key: 'normEksigi', width: 150, render: (text: number) => <div>{text}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.name'),          dataIndex: 'adi',            key: 'adi',             width: 150, render: (text: string) => <div>{text}</div>,           responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.type'),          dataIndex: 'tip',            key: 'tip',             width: 150, render: (text: string) => <div>{BolgeTip[text]}</div>, responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.employeecount'), dataIndex: 'personelSayisi', key: 'personelSayisi',  width: 150, render: (text: string) => <div>{text}</div>,           responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.normcount'),     dataIndex: 'normSayisi',     key: 'normSayisi',      width: 150, render: (text: number) => <div>{text}</div>,           responsive: ['sm'] as Breakpoint[] },
+            { title: L('table.area.normgap'),       dataIndex: 'normEksigi',     key: 'normEksigi',      width: 150, render: (text: number) => <div>{text}</div>,           responsive: ['sm'] as Breakpoint[] },
             {
                 title: L('Actions'),
                 width: 150,

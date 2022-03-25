@@ -238,6 +238,8 @@ class KDamageCompensationStore {
     this.getStreet = result;
     return result;
   }
+
+  
 }
 
 export default KDamageCompensationStore;

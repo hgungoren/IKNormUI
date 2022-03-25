@@ -19,10 +19,15 @@ import '../index.less';
 import { L } from '../../../../lib/abpUtility';
 
 import KDamageCompensationStore from '../../../../stores/kDamageCompensationStore';
+
 import CargoLocations from '../../../../services/kDamageCompensations/dto/cargoLocations';
+
 import TextArea from 'antd/lib/input/TextArea';
+
 import { GetEnumCompensationWhy } from '../../../../services/kDamageCompensations/dto/getEnumCompensationWyh';
+
 import { AlertOutlined, CheckCircleTwoTone, ExclamationCircleOutlined, SendOutlined } from '@ant-design/icons';
+
 
 
 
@@ -113,17 +118,17 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           cancelText: L('Vazgec'),
           onOk: async () => {
             this.setState({ pageLoding: true })           
-            await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
-            {
-                // UpdateDamageStatus               
-                   this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
-                   tazminId:this.props.urlId,
-                   surecsahibibolge:this.props.processOwnerRegion,
-                   unvan:this.props.title,
-                   file:JSON.stringify(this.props.filesMultitable)
-                });
-            }
-            );
+            // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
+            // {
+            //     // UpdateDamageStatus               
+            //        this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
+            //        tazminId:this.props.urlId,
+            //        surecsahibibolge:this.props.processOwnerRegion,
+            //        unvan:this.props.title,
+            //        file:JSON.stringify(this.props.filesMultitable)
+            //     });
+            // }
+            // );
 
 
 

@@ -45,6 +45,11 @@ class KPersonelService {
     let result = await http.get('iknorm/KPersonel/GetByObjId/?id=' + id);
     return result.data.result;
   }
+
+  public async getEtsHavalePersonel() {
+    let result = await http.get('iknorm/ets/KPersonel/GetAllPersonnel');
+    return result.data.result;
+  }
 }
 
 export default new KPersonelService();
