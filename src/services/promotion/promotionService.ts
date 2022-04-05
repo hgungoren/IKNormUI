@@ -1,10 +1,22 @@
 /*eslint-disable*/
+import { PagedResultDto } from '../dto/pagedResultDto';
 import http from '../httpService';
 import { CreateOrUpdateIKPromotionInput } from './dto/createOrUpdateIKPromotionInput';
+import { GetAllPromotionOutput } from './dto/getAllPromotionOutput';
+import { PagedPromotionResultRequestDto } from './dto/pagedPromotionResultRequestDto';
 import { PromotionDto } from './dto/promotionDto';
 import { PromotionUseFilterDto } from './dto/promotionUseFilterDto';
 
 class PromotionService {
+
+  public async getAll(
+    pagedFilterAndSortedRequest: PagedPromotionResultRequestDto
+  ): Promise<PagedResultDto<GetAllPromotionOutput>> {
+    let result = await http.get('iknorm/IKPromotion/GetAll', { params: pagedFilterAndSortedRequest });
+    return result.data.result;
+  }
+
+
   public async create(input: CreateOrUpdateIKPromotionInput) {
     let result = await http.post('iknorm/IKPromotion/Create', input);
     return result.data.result;
@@ -57,6 +69,11 @@ class PromotionService {
 
   public async getIKPromotionTitles() {
     let result = await http.get('iknorm/IKPromotion/GetIKPromotionTitles');
+    return result.data.result;
+  }
+
+  public async getIKPromotionUnits() {
+    let result = await http.get('iknorm/IKPromotion/GetIKPromotionUnits');
     return result.data.result;
   }
 

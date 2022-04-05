@@ -305,12 +305,7 @@ class NormRequestListTable extends React.Component<
       this.setAllSubeNormGroupBy();
     });
     await this.setAllEmployeesGroupBy();
-    console.log('his.state.groupEmployee', this.state.groupEmployee);
-
     const asArray = Object.entries(this.state.groupEmployee);
-
-    console.log('asArray', asArray);
-
     const Sonuc = asArray.filter(([key, value]) => key === poz);
 
     const doubled = Array(Sonuc.map((x) => x[1]));
@@ -319,10 +314,13 @@ class NormRequestListTable extends React.Component<
       return item[0];
     });
 
+    console.log(lastArray);
     let sicilNo = '';
     lastArray.forEach(myFunction);
     function myFunction(item) {
+      console.log(item);
       sicilNo = item[0].sicilNo;
+      console.log("Sicil No",sicilNo);
     }
 
     await this.props.inkaStore?.getInkaEmployeeByPersonelNo(sicilNo);

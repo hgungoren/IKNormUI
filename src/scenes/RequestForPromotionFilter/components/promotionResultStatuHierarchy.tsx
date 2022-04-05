@@ -38,25 +38,67 @@ class PromotionResultStatuHierarchy extends React.Component<IPromotionResultStat
     var thirdItem;
 
     if (hierarchyData !== undefined && hierarchyDataView !== null) {
-      if (Number(hierarchyData.statu) === Number(PromotionType.OnayaGonderildi)) {
+      if (
+        Number(hierarchyData.statu) === Number(PromotionType.OnayaGonderildi) ||
+        Number(hierarchyData.statu) === Number(PromotionType.None)
+      ) {
         switch (Number(hierarchyData.hierarchyStatu)) {
-          case Number(PromotionStatu.Department):
-            hierarchyDataView.departmentManager !== "" ?firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
+          case Number(PromotionStatu.None):
+            console.log('girdi');
+            hierarchyDataView.departmentManager !== ''
+              ? (firstItem = <Item key={1}>{hierarchyDataView.departmentManager}</Item>)
+              : '';
             secondItem = <Item key={2}>{hierarchyDataView.recruitment}</Item>;
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = L('promotion.request.header.information.statu.title')
+            modalHeader = L('promotion.request.header.information.statu.title');
+            break;
+          case Number(PromotionStatu.Department):
+            hierarchyDataView.departmentManager !== ''
+              ? (firstItem = (
+                  <Item color="green" key={1}>
+                    {hierarchyDataView.departmentManager}
+                  </Item>
+                ))
+              : '';
+            secondItem = <Item key={2}>{hierarchyDataView.recruitment}</Item>;
+            thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
+            modalHeader = L('promotion.request.header.information.statu.title');
             break;
           case Number(PromotionStatu.IseAlim):
-            hierarchyDataView.departmentManager !== ""  ? firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
-            secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
+            hierarchyDataView.departmentManager !== ''
+              ? (firstItem = (
+                  <Item color="green" key={1}>
+                    {hierarchyDataView.departmentManager}
+                  </Item>
+                ))
+              : '';
+            secondItem = (
+              <Item color="green" key={2}>
+                {hierarchyDataView.recruitment}
+              </Item>
+            );
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = L('promotion.request.header.information.statu.title')
+            modalHeader = L('promotion.request.header.information.statu.title');
             break;
           case Number(PromotionStatu.IkMudur):
-            hierarchyDataView.departmentManager !== ""  ?firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>:'' 
-            secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
-            thirdItem = <Item  color="green" key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = L('promotion.request.header.information.statu.title')
+            hierarchyDataView.departmentManager !== ''
+              ? (firstItem = (
+                  <Item color="green" key={1}>
+                    {hierarchyDataView.departmentManager}
+                  </Item>
+                ))
+              : '';
+            secondItem = (
+              <Item color="green" key={2}>
+                {hierarchyDataView.recruitment}
+              </Item>
+            );
+            thirdItem = (
+              <Item color="green" key={3}>
+                {hierarchyDataView.hrManager}
+              </Item>
+            );
+            modalHeader = L('promotion.request.header.information.statu.title');
             break;
           default:
             break;
@@ -65,34 +107,70 @@ class PromotionResultStatuHierarchy extends React.Component<IPromotionResultStat
       if (Number(hierarchyData.statu) === Number(PromotionType.Reddedildi)) {
         switch (Number(hierarchyData.hierarchyStatu)) {
           case Number(PromotionStatu.Department):
-            firstItem = <Item color="red" key={1}>{hierarchyDataView.departmentManager}</Item>;
+            firstItem = (
+              <Item color="red" key={1}>
+                {hierarchyDataView.departmentManager}
+              </Item>
+            );
             secondItem = <Item key={2}>{hierarchyDataView.recruitment}</Item>;
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = "Oluşturulan terfi formu için süreç reddedilmiştir."
+            modalHeader = 'Oluşturulan terfi formu için süreç reddedilmiştir.';
             break;
           case Number(PromotionStatu.IseAlim):
-            firstItem = <Item color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
-            secondItem = <Item color="red" key={2}>{hierarchyDataView.recruitment}</Item>;
+            firstItem = (
+              <Item color="green" key={1}>
+                {hierarchyDataView.departmentManager}
+              </Item>
+            );
+            secondItem = (
+              <Item color="red" key={2}>
+                {hierarchyDataView.recruitment}
+              </Item>
+            );
             thirdItem = <Item key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = "Oluşturulan terfi formu için süreç reddedilmiştir."
+            modalHeader = 'Oluşturulan terfi formu için süreç reddedilmiştir.';
             break;
           case Number(PromotionStatu.IkMudur):
-            firstItem = <Item color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
-            secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
-            thirdItem = <Item  color="red" key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = "Oluşturulan terfi formu için süreç reddedilmiştir."
+            firstItem = (
+              <Item color="green" key={1}>
+                {hierarchyDataView.departmentManager}
+              </Item>
+            );
+            secondItem = (
+              <Item color="green" key={2}>
+                {hierarchyDataView.recruitment}
+              </Item>
+            );
+            thirdItem = (
+              <Item color="red" key={3}>
+                {hierarchyDataView.hrManager}
+              </Item>
+            );
+            modalHeader = 'Oluşturulan terfi formu için süreç reddedilmiştir.';
             break;
           default:
             break;
         }
       }
-      if((Number(hierarchyData.statu) === Number(PromotionType.Onaylandi))){
-        switch (Number(hierarchyData.hierarchyStatu)){
+      if (Number(hierarchyData.statu) === Number(PromotionType.Onaylandi)) {
+        switch (Number(hierarchyData.hierarchyStatu)) {
           case Number(PromotionStatu.IkMudur):
-            firstItem = <Item  color="green" key={1}>{hierarchyDataView.departmentManager}</Item>;
-            secondItem = <Item color="green" key={2}>{hierarchyDataView.recruitment}</Item>;
-            thirdItem = <Item  color="green" key={3}>{hierarchyDataView.hrManager}</Item>;
-            modalHeader = "Oluşturulan terfi formu için süreç onaylanmıştır."
+            firstItem = (
+              <Item color="green" key={1}>
+                {hierarchyDataView.departmentManager}
+              </Item>
+            );
+            secondItem = (
+              <Item color="green" key={2}>
+                {hierarchyDataView.recruitment}
+              </Item>
+            );
+            thirdItem = (
+              <Item color="green" key={3}>
+                {hierarchyDataView.hrManager}
+              </Item>
+            );
+            modalHeader = 'Oluşturulan terfi formu için süreç onaylanmıştır.';
             break;
         }
       }

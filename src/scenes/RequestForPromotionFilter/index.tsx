@@ -262,6 +262,7 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
   };
 
   async createOrUpdateModalOpen(id: string) {
+    console.log(id);
     await this.props.promotionStore.getIKPromotionHiearchyStatu(id);
     await this.props.promotionStore.getIKPromotion(id).then(() => {
       this.setState({
@@ -425,8 +426,10 @@ class RequestForPromotionFilter extends AppComponentBase<Props, State> {
                 >
                   {promotionStatus !== undefined
                     ? promotionStatus.status.map((item, index) => (
-                        <Option value={`${item}`} key={index}>
-                          {Number(item) === 1
+                        <Option value={`${Number(item) === 0 ? '' : item}`} key={index}>
+                          {Number(item) === 0
+                            ? ''
+                            : '' || Number(item) === 1
                             ? 'Onaya Gönderildi'
                             : '' || Number(item) === 2
                             ? 'Onaylandı'

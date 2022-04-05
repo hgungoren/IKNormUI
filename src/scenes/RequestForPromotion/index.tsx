@@ -234,8 +234,7 @@ class RequestForPromotion extends AppComponentBase<Props, State> {
 
     form!.validateFields().then(async (values: any) => {
       await this.props.promotionStore.isAnyPersonel(values.sicilNo.toString());
-
-      if (this.props.promotionStore.isAnyPersonelResult) {
+      if (this.props.promotionStore.isAnyPersonelResult && this.props.promotionStore.isAnyPersonelResult) {
         this.openInfoNotification('topRight');
       } else {
         var splitNames = values.adiSoyadi.split('_');

@@ -396,16 +396,19 @@ class KSubeDetay extends AppComponentBase<IKsubeDatayProps, State> {
 
     const asArray = Object.entries(this.state.groupEmployee);
     const Sonuc = asArray.filter(([key, value]) => key === poz);
-
+    console.log("Employee Data => ",Sonuc);
     const doubled = Array(Sonuc.map((x) => x[1]));
 
     var lastArray = doubled.map(function (item) {
       return item[0];
     });
+    console.log(lastArray);
 
     let sicilNo = "";
     lastArray.forEach(myFunction);
+
     function myFunction(item) {
+      console.log(item);
       sicilNo = item[0].sicilNo;
     }
 

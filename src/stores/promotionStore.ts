@@ -1,24 +1,36 @@
 /*eslint-disable*/
 import { action, observable } from 'mobx';
+import { PagedResultDto } from '../services/dto/pagedResultDto';
 import { CreateOrUpdateIKPromotionInput } from '../services/promotion/dto/createOrUpdateIKPromotionInput';
+import { GetAllPromotionOutput } from '../services/promotion/dto/getAllPromotionOutput';
+import { PagedPromotionResultRequestDto } from '../services/promotion/dto/pagedPromotionResultRequestDto';
 import { PromotionDto } from '../services/promotion/dto/promotionDto';
 import { PromotionFilterDto } from '../services/promotion/dto/promotionFilterDto';
 import { PromotionRequestTitleDto } from '../services/promotion/dto/promotionRequestTitleDto';
 import { PromotionStatuDto } from '../services/promotion/dto/promotionStatuDto';
 import { PromotionTitleDto } from '../services/promotion/dto/promotionTitleDto';
+import { PromotionUnitDto } from '../services/promotion/dto/promotionUnitDto';
 import { PromotionUseFilterDto } from '../services/promotion/dto/promotionUseFilterDto';
 import promotionService from '../services/promotion/promotionService';
 
 class PromotionStore {
+  @observable promotions!: PagedResultDto<GetAllPromotionOutput>;
   @observable isAnyPersonelResult!: boolean;
   @observable filterPromotion!: PromotionFilterDto[];
   @observable filterPromotionCount!: number;
   @observable promotionStatus!: PromotionStatuDto;
   @observable promotionTitles!: PromotionTitleDto;
+  @observable promotionUnits!: PromotionUnitDto;
   @observable promotionRequestTitles!: PromotionRequestTitleDto;
   @observable promotion!: PromotionDto;
   @observable getPromotion!: PromotionDto;
 
+
+  @action
+  async getAll(pagedFilterAndSortedRequest: PagedPromotionResultRequestDto) {
+    let result = await promotionService.getAll(pagedFilterAndSortedRequest);
+    this.promotions = result;
+  }
   @action
   async create(createPromotionInput: CreateOrUpdateIKPromotionInput) {
     await promotionService.create(createPromotionInput);
@@ -61,6 +73,12 @@ class PromotionStore {
   public async getIKPromotionTitles() {
     let result = await promotionService.getIKPromotionTitles();
     this.promotionTitles = result;
+  }
+
+  @action
+  public async getIKPromotionUnits() {
+    let result = await promotionService.getIKPromotionUnits();
+    this.promotionUnits = result;
   }
 
   @action
