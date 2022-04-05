@@ -7,9 +7,7 @@ import ShortAbpLogo from '../../images/surat_kisa_logo.png';
 import { appRouters } from '../../components/Router/router.config';
 import utils from '../../utils/utils';
 import SubMenu from 'antd/lib/menu/SubMenu';
-import { AppstoreAddOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
-
-
+import { AppstoreAddOutlined, ProfileOutlined, SettingOutlined, FolderOpenOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -73,28 +71,46 @@ const SiderMenu = (props: ISiderMenuProps) => {
               );
             })}
         </SubMenu>
-
-        <SubMenu key="sub2" icon={<AppstoreAddOutlined />} title={L('sk.menu.operations')}>
-              <SubMenu icon={<AppstoreAddOutlined />}  key="sub4"  title={L('DamageCompensation')}>
-                    {appRouters
-                  .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'op')
-                  .map((route: any, index: number) => {
-                    if (route.permission && !isGranted(route.permission)) return null;
-                    return (
-                      <>
-                        <Menu.Item key={route.key} onClick={() => history.push(route.path)}>
-                          <route.icon />
-                          <span> {' ' + L(route.title)} </span>
-                        </Menu.Item>
-                      </>
-                    );
-                  })}
-             </SubMenu>  
+ 
+          <SubMenu icon={<AppstoreAddOutlined />} key="sub3" title={L('DamageCompensation')}>
+            {appRouters
+              .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'op')
+              .map((route: any, index: number) => {
+                if (route.permission && !isGranted(route.permission)) return null;
+                return (
+                  <>
+                    <Menu.Item key={route.key} onClick={() => history.push(route.path)}>
+                      <route.icon />
+                      <span> {' ' + L(route.title)} </span>
+                    </Menu.Item>
+                  </>
+                );
+              })} 
         </SubMenu>
 
-        <SubMenu key="sub3" icon={<SettingOutlined />} title={L('sk.menu.settings')}>
+        <SubMenu key="sub4" icon={<SettingOutlined />} title={L('sk.menu.settings')}>
           {appRouters
             .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'settings')
+            .map((route: any, index: number) => {
+              if (route.permission && !isGranted(route.permission)) return null;
+              return (
+                <>
+                  <Menu.Item key={route.key} onClick={() => history.push(route.path)}>
+                    <route.icon />
+                    <span> {' ' + L(route.title)} </span>
+                  </Menu.Item>
+                </>
+              );
+            })}
+        </SubMenu>
+
+        <SubMenu
+          key="sub5"
+          icon={<FolderOpenOutlined />}
+          title={L('sk.menu.documenttrackingsystem')}
+        >
+          {appRouters
+            .filter((item: any) => !item.isLayout && item.showInMenu && item.type === 'dts')
             .map((route: any, index: number) => {
               if (route.permission && !isGranted(route.permission)) return null;
               return (

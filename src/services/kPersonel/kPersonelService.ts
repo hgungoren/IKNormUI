@@ -46,6 +46,12 @@ class KPersonelService {
     return result.data.result;
   }
 
+<<<<<<< HEAD
+  public async getEtsHavalePersonel() {
+    let result = await http.get('iknorm/ets/KPersonel/GetAllPersonnel');
+    return result.data.result;
+  }
+=======
   public async getByTcNo(tcNo: string): Promise<KPersonelGetDto> {
     let result = await http.get('personel/getbytcno/' + tcNo);
     return result.data;
@@ -54,6 +60,7 @@ class KPersonelService {
 
 
   
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
 }
 
 export default new KPersonelService();

@@ -1,6 +1,10 @@
 /* eslint-disable */
 import LoadableComponent from './../Loadable/index';
+<<<<<<< HEAD
 // FileDoneOutlined, BarChartOutlined
+=======
+<<<<<<< HEAD
+>>>>>>> de4917faa12c494f714933f6f14c43206cc19e1f
 import {
   HomeOutlined,
   UserOutlined,
@@ -12,7 +16,17 @@ import {
   UnorderedListOutlined,
   FileDoneOutlined,
   BarChartOutlined,
+<<<<<<< HEAD
 } from '@ant-design/icons';
+=======
+  FileOutlined,
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+} from '@ant-design/icons';
+=======
+import { HomeOutlined, UserOutlined, TagsOutlined,  PartitionOutlined, TableOutlined, UsergroupAddOutlined,AimOutlined, UnorderedListOutlined, FileDoneOutlined, BarChartOutlined } from '@ant-design/icons';
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
+>>>>>>> de4917faa12c494f714933f6f14c43206cc19e1f
 
 export const userRouter: any = [
   {
@@ -158,6 +172,7 @@ export const appRouters: any = [
     showInMenu: true,
     component: LoadableComponent(() => import('../../scenes/KBolge')),
   },
+<<<<<<< HEAD
 
   {
     path: '/probationperiod',
@@ -214,6 +229,187 @@ export const appRouters: any = [
     showInMenu: true,
     component: LoadableComponent(() => import('../../scenes/RequestForPromotionReport')),
   },
+=======
+  {
+    path: '/probationperiod',
+    key: 'menu-item-12',
+    permission: '',
+    title: 'ProbationPeriod',
+    type: 'hr',
+    name: 'ProbationPeriod',
+    icon: UsergroupAddOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/ProbationPeriod')),
+  },
+  {
+    path: '/requestforpromotion',
+    key: 'menu-item-13',
+    permission: 'pages.requestforpromotion',
+    title: 'RequestForPromotion',
+    type: 'hr',
+    name: 'RequestForPromotion',
+    icon: UsergroupAddOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/RequestForPromotion')),
+  },
+  {
+    path: '/requestforpromotion/:id',
+    key: 'menu-item-14',
+    permission: 'pages.requestforpromotion',
+    title: 'RequestForPromotion',
+    type: 'hr',
+    name: 'RequestForPromotion',
+    icon: UsergroupAddOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/RequestForPromotion')),
+  },
+  {
+    path: '/requestforpromotionfilter',
+    key: 'menu-item-15',
+    permission: 'pages.requestforpromotion',
+    title: 'FilterForPromotion',
+    type: 'hr',
+    name: 'FilterForPromotion',
+    icon: FileDoneOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/RequestForPromotionFilter')),
+  },
+  {
+    path: '/requestforpromotionreport',
+    key: 'menu-item-16',
+    permission: 'pages.requestforpromotion',
+    title: 'ReportForPromotion',
+    type: 'hr',
+    name: 'ReportForPromotion',
+    icon: BarChartOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/RequestForPromotionReport')),
+  },
+  {
+    path: '/users',
+    key: 'menu-item-17',
+    permission: 'items.user.menu.view',
+    title: 'Users',
+    type: 'settings',
+    name: 'Users',
+    icon: UsergroupAddOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/Users')),
+  },
+  {
+    path: '/roles',
+    key: 'menu-item-18',
+    permission: 'items.role.menu.view',
+    title: 'Roles',
+    type: 'settings',
+    name: 'Roles',
+    icon: TagsOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/Roles')),
+  },
+  {
+    path: '/logout',
+    key: 'menu-item-19',
+    permission: '',
+    title: 'Logout',
+    type: '',
+    name: 'Logout',
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../components/Logout')),
+  },
+  {
+    path: '/exception?:type',
+    key: 'menu-item-20',
+    permission: '',
+    title: 'Exception',
+    type: '',
+    name: 'Exception',
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Exception')),
+  },
+  {
+    path: '/knormrequestdetail/:id',
+    key: 'menu-item-21',
+    permission: 'kNormRequestDetail',
+    title: 'KNormRequestDetail',
+    type: 'hr',
+    name: 'KNormRequestDetail',
+    icon: UserOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/KNormRequestDetail')),
+  },
+  {
+    path: '/hasartazmin',
+    key: 'menu-item-22',
+    permission: '',
+    title: 'DamageCompensationForm',
+    type: 'op',
+    name: 'HasarTazmin',
+    icon: AimOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin')),
+  },
+  {
+    path: '/hasartazminsorgulama',
+    key: 'menu-item-23',
+    permission: '',
+    title: 'DamageCompensationList',
+    type: 'op',
+    name: 'HasarTazmin Listesi',
+    icon: UnorderedListOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/Ops/HasarTazminList')),
+  },
+  {
+    path: '/damageconmpensationview/:id',
+    key: 'menu-item-24',
+    permission: '',
+    title: 'DamageCompensationView',
+    type: 'op',
+    name: 'DamageCompensationView',
+    icon: AimOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/view')),
+  },
+
+<<<<<<< HEAD
+  {
+    path: '/damageevalutaion/:id',
+    key: 'menu-item-25',
+    permission: '',
+    title: 'DamageCompensationEvaluation',
+    type: 'op',
+    name: 'DamageCompensationEvaUpdate',
+    icon: AimOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/updateEva')),
+  },
+
+  {
+    path: '/damageupdate/:id',
+    key: 'menu-item-26',
+    permission: '',
+    title: 'DamageCompensationUpdate',
+    type: 'op',
+    name: 'DamageCompensationEvaUpdate',
+    icon: AimOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')),
+  },
+=======
+  { path: '/ksube/:id',                    key:'menu-item-6',  permission: 'subitems.kareas.table.areas.btn',   title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
+  { path: '/ksube/:id',                    key:'menu-item-7',  permission: 'kbolge.branches',                   title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSube')), },
+  { path: '/ksubedetay',                   key:'menu-item-8',  permission: 'items.branch.menu.view',            title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/ksubedetay/:id',               key:'menu-item-9',  permission: 'items.branch.menu.view',            title: 'KSubeDetay',                   type:'hr',       name: 'KSubeDetay',                   icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/ksubedetay/:id',               key:'menu-item-10', permission: 'items.branch.menu.view',            title: 'KSube',                        type:'hr',       name: 'KSube',                        icon: TableOutlined,              showInMenu: false, component: LoadableComponent(() => import('../../scenes/KSubeDetay')), },
+  { path: '/bolgemudurluk',                key:'menu-item-11', permission: 'items.kareas.menu.view',            title: 'KBolge',                       type:'hr',       name: 'KBolge',                       icon: TableOutlined,              showInMenu: true,  component: LoadableComponent(() => import('../../scenes/KBolge')), },
+  
+  { path: '/probationperiod',              key:'menu-item-12', permission: '',                                  title: 'ProbationPeriod',              type:'hr',       name: 'ProbationPeriod',              icon: UsergroupAddOutlined,       showInMenu: false,  component: LoadableComponent(() => import('../../scenes/ProbationPeriod')), },
+  { path: '/requestforpromotion',          key:'menu-item-13', permission: 'items.requestforpromotion.create.menu.view',                                  title: 'RequestForPromotion',          type:'hr',       name: 'RequestForPromotion',          icon: UsergroupAddOutlined,       showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotion')), },
+  { path: '/promotionconfirmotion/:id',      key:'menu-item-14', permission: 'items.requestforpromotion.create.menu.view',                                  title: 'RequestForPromotion',          type:'hr',       name: 'PromotionConfirmotion',          icon: UsergroupAddOutlined,       showInMenu: false, component: LoadableComponent(() => import('../../scenes/PromotionConfirmation')), },
+  { path: '/requestforpromotionfilter',    key:'menu-item-15', permission: 'items.requestforpromotion.search.menu.view',                                  title: 'FilterForPromotion',           type:'hr',       name: 'FilterForPromotion',           icon: FileDoneOutlined,           showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotionFilter')), },
+  { path: '/requestforpromotionreport',    key:'menu-item-16', permission: 'items.requestforpromotion.report.menu.view',                                  title: 'ReportForPromotion',           type:'hr',       name: 'ReportForPromotion',           icon: BarChartOutlined ,          showInMenu: true,  component: LoadableComponent(() => import('../../scenes/RequestForPromotionReport')), },
+>>>>>>> de4917faa12c494f714933f6f14c43206cc19e1f
 
   {
     path: '/users',
@@ -341,14 +537,41 @@ export const appRouters: any = [
     component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')),
   },
 
+<<<<<<< HEAD
   {
     path: '/newindex',
     key: 'menu-item-19',
+=======
+  { path: '/damageupdate/:id',         key:'menu-item-21', permission: '',                                  title: 'DamageCompensationUpdate', type:'op',       name: 'DamageCompensationEvaUpdate',  icon: AimOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/HasarTazmin/update')), },
+
+
+  { path: '/opshierarchytransfer',         key:'menu-item-22',   permission: '',        title: 'Operasyon Hiyearsi', type:'op',       name: 'OperasyonHiyearsi',  icon: PartitionOutlined,                showInMenu: false, component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')), },
+
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
+
+  {
+    path: '/opshierarchytransfer',
+    key: 'menu-item-27',
+    permission: '',
+    title: 'Operasyon Hiyearsi',
+    type: 'op',
+    name: 'OperasyonHiyearsi',
+    icon: PartitionOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/Ops/OpsHierarchyTransfer/index')),
+  },
+
+<<<<<<< HEAD
+  {
+    path: '/newindex',
+    key: 'menu-item-28',
+>>>>>>> de4917faa12c494f714933f6f14c43206cc19e1f
     permission: '',
     title: 'DamageCompensationForm',
     type: 'op',
     name: 'HasarTazmin',
     icon: AimOutlined,
+<<<<<<< HEAD
     showInMenu: true,
     component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')),
   },
@@ -364,6 +587,84 @@ export const appRouters: any = [
     showInMenu: false,
     component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')),
   },
+=======
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')),
+  },
+  {
+    path: '/newindex/:stt/:id',
+    key: 'menu-item-29',
+    permission: '',
+    title: 'DamageCompensationForm',
+    type: 'op',
+    name: 'HasarTazmin',
+    icon: AimOutlined,
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')),
+  },
+  {
+    path: '/index/:stt/:id',
+    key: 'menu-item-30',
+    permission: '',
+    title: 'Evrak Takip Sistemi',
+    type: 'dts',
+    name: 'EvrakTakipSistemi',
+    icon: FileOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/DTS/Home')),
+  },
+  {
+    path: '/incoming/:stt/:id',
+    key: 'menu-item-31',
+    permission: '',
+    title: 'Gelen Evrak',
+    type: 'dts',
+    name: 'GelenEvrak',
+    icon: ArrowDownOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/DTS/Incoming')),
+  },
+  {
+    path: '/outgoing/:stt/:id',
+    key: 'menu-item-32',
+    permission: '',
+    title: 'Giden Evrak',
+    type: 'dts',
+    name: 'GidenEvrak',
+    icon: ArrowUpOutlined,
+    showInMenu: true,
+    component: LoadableComponent(() => import('../../scenes/DTS/Outgoing')),
+  },
+  {
+    path: '/incomingpaperinsert',
+    key: 'menu-item-33',
+    permission: '',
+    title: 'Gelen Evrak Kayıt',
+    type: 'dts',
+    name: 'GelenEvrakKayıt',
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/DTS/IncomingPaperInsert')),
+  },
+  {
+    path: '/outgoingpaperinsert',
+    key: 'menu-item-34',
+    permission: '',
+    title: 'Giden Evrak Kayıt',
+    type: 'dts',
+    name: 'GidenEvrakKayıt',
+    showInMenu: false,
+    component: LoadableComponent(() => import('../../scenes/DTS/OutgoingPaperInsert')),
+  },
+=======
+
+  { path: '/newindex',                  key:'menu-item-19', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: true,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
+
+
+
+  { path: '/newindex/:stt/:id',                  key:'menu-item-23', permission: '',                                  title: 'DamageCompensationForm',       type:'op',       name: 'HasarTazmin',                  icon: AimOutlined,                showInMenu: false,   component: LoadableComponent(() => import('../../scenes/Ops/DamageCompensation')), }, 
+
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
+>>>>>>> de4917faa12c494f714933f6f14c43206cc19e1f
 ];
 
 export const routers = [...userRouter, ...appRouters];

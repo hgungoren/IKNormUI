@@ -5,12 +5,14 @@ import kPersonelService from '../services/kPersonel/kPersonelService';
 import { PagedResultDto } from '../services/dto/pagedResultDto';
 import { PagedKPersonelResultRequestDto } from '../services/kPersonel/dto/PagedKPersonelResultRequestDto';
 import { KPersonelGetDto } from '../services/kPersonel/dto/kPersonelGetDto';
+import { GetAllEtsDto } from '../services/kPersonel/dto/getAllEtsDto';
 
 class KPersonelStore {
   @observable kPersonels!: PagedResultDto<GetKPersonelOutput>;
   @observable kAllPersonels!: PagedResultDto<GetKPersonelOutput>;
   @observable kPersonelCount!: number;
   @observable kPersonel!: KPersonelGetDto;
+  @observable getAllEtsDto!:GetAllEtsDto[];
 
   @action
   async getAll(pagedFilterAndSortedRequest: PagedKPersonelResultRequestDto) {
@@ -49,6 +51,12 @@ class KPersonelStore {
   }
 
   @action
+<<<<<<< HEAD
+  public async getEtsHavalePersonel() {
+    let result = await kPersonelService.getEtsHavalePersonel();
+    this.getAllEtsDto = result;
+  }
+=======
   public async getByTcNo(tcNo: string) {
     let result = await kPersonelService.getByTcNo(tcNo);
     this.kPersonel = result;
@@ -57,6 +65,7 @@ class KPersonelStore {
 
 
 
+>>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
 }
 
 export default KPersonelStore;
