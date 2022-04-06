@@ -250,9 +250,6 @@ class KDamageCompensationStore {
     return result;
   }
 
-<<<<<<< HEAD
-  
-=======
   ///UPDATE NEXT STATU
   @action
   async StoreUpdateDamageStatus(updateNextStatu: UpdateNextStatu) {
@@ -330,7 +327,6 @@ class KDamageCompensationStore {
   
 
 
->>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
 }
 
 export default KDamageCompensationStore;

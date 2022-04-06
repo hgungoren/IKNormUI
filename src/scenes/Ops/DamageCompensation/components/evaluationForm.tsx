@@ -127,7 +127,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
           okText: L('Kaydet'),
           cancelText: L('Vazgec'),
           onOk: async () => {
-<<<<<<< HEAD
+
             this.setState({ pageLoding: true })           
             // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
             // {
@@ -140,11 +140,7 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
             //     });
             // }
             // );
-=======
-<<<<<<< HEAD
 
-=======
->>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
             this.setState({ pageLoding: true })
             await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => {
@@ -157,24 +153,8 @@ class EvalutionForm extends React.Component<ICProps, IState>  {
               });
             }
             );
->>>>>>> 273beb584fb7ba0a27f07a2250a3d229ea021dcc
 
-<<<<<<< HEAD
 
-            this.setState({ pageLoding: true })           
-            // await this.props.kDamageCompensationStore.createDamageCompensationEvalutaion(values).then(() => 
-            // {
-            //     // // UpdateDamageStatus               
-            //     //    this.props.kDamageCompensationStore.StoreUpdateDamageStatus({
-            //     //    tazminId:this.props.urlId,
-            //     //    surecsahibibolge:this.props.processOwnerRegion,
-            //     //    unvan:this.props.title,
-            //     //    file:JSON.stringify(this.props.filesMultitable)
-            //     // });
-            // }
-            // );
-=======
->>>>>>> 706c89042bc9f0fe020d5175c04212d0e0427226
 
             setTimeout(() => {
               window.location.href = '/hasartazminsorgulama'
